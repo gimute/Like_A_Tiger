@@ -12,6 +12,7 @@
       <Filter>system</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameSceneManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -19,5 +20,8 @@
       <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameSceneManager.h" />
+    <ClInclude Include="CRC32.h" />
+    <ClInclude Include="IGameSceneState.h" />
   </ItemGroup>
 </Project>

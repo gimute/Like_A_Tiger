@@ -1,9 +1,12 @@
 #include "stdafx.h"
 #include "Game.h"
 
+#include "GameScene\GameSceneManager.h"
+
 bool Game::Start()
 {
 
+	GameSceneManager::GetSceneManagerInstance()->InitGameSceneManager();
 
 	return true;
 }
