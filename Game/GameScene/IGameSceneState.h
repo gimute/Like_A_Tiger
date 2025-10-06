@@ -33,6 +33,6 @@ public:
 	/// </summary>
 	/// <param name="nextState"></param>
 	/// <returns></returns>
-	virtual bool ReqestSceneState(uint32_t nextState) = 0;
+	virtual bool ReqestSceneState(uint32_t& nextState) = 0;
 };
 

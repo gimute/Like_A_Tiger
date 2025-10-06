@@ -29,5 +29,4 @@ void GameSceneManager::UpdateGameSceneState()
 	}
 	//ステートを更新
 	m_currentState->UpdateScene();
-
 }

@@ -1,20 +1,19 @@
 #pragma once
-
 #include "GameScene\IGameSceneState.h"
 
-class GameTitleScene :
+class GameInScene :
     public IGameSceneState
 {
-    appState(GameTitleScene);
-    public:
+	appState(GameInScene);
+public:
     /// <summary>
     /// コンストラクタ
     /// </summary>
-    GameTitleScene() = default;
+    GameInScene() = default;
     /// <summary>
     /// デストラクタ
     /// </summary>
-    ~GameTitleScene() = default;
+    ~GameInScene() = default;
     /// <summary>
     /// 純粋仮想関数、ステートに入るときに呼ばれる
     /// </summary>
@@ -32,6 +31,6 @@ class GameTitleScene :
     /// </summary>
     /// <param name="nextState"></param>
     /// <returns></returns>
-	bool ReqestSceneState(uint32_t& nextState) override;
+    bool ReqestSceneState(uint32_t& nextState) override;
 };
 

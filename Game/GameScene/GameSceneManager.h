@@ -7,9 +7,9 @@ class IGameSceneState;
 public:\
 	static constexpr uint32_t ID(){ return Hash32(#name); }
 
-class GameSceneStateMachine
+class GameSceneManager 
 {
-protected:
+private:
 	///名前定義
 	/// <summary>
 	/// ステートマップ
@@ -19,7 +19,6 @@ protected:
 	/// ステートペア
 	/// </summary>
 	using StatePair = std::pair<uint32_t, IGameSceneState*>;
-protected:
 	/// <summary>
 	/// ステートマップ変数
 	/// </summary>
@@ -28,31 +27,6 @@ protected:
 	/// 現在のステート変数
 	/// </summary>
 	IGameSceneState* m_currentState = nullptr;
-public:
-	/// <summary>
-	/// コンストラクタ
-	/// </summary>
-	GameSceneStateMachine() 
-		: m_currentState(nullptr)
-	{
-		m_stateMap.clear();
-	}
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
-	virtual ~GameSceneStateMachine()
-	{
-		for (auto statePtr : m_stateMap)
-		{
-			delete statePtr.second;
-			statePtr.second = nullptr;
-		}
-		m_stateMap.clear();
-	}
-};
-
-class GameSceneManager : public GameSceneStateMachine
-{
 private:
 	///シングルトーンパターンを採用するため、コンストラクタをprivateにする
 	/// <summary>
@@ -62,7 +36,10 @@ private:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	GameSceneManager() = default;
+	GameSceneManager() : m_currentState(nullptr)
+	{
+		m_stateMap.clear();
+	}
 	/// <summary>
 	/// コピー禁止にする
 	/// </summary>
@@ -78,7 +55,15 @@ public:
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~GameSceneManager() = default;
+	~GameSceneManager()
+	{
+		for (auto statePtr : m_stateMap)
+		{
+			delete statePtr.second;
+			statePtr.second = nullptr;
+		}
+		m_stateMap.clear();
+	}
 	/// <summary>
 	/// ゲームシーンマネージャーインスタンス取得関数
 	/// </summary>
@@ -116,7 +101,7 @@ public:
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	template<typename T>
-	inline void ReqestSceneState()
+	inline void ReqestInitSceneState()
 	{
 		m_currentState = FindState(T::ID());
 	}
@@ -131,6 +116,7 @@ private:
 		const auto& it = m_stateMap.find(stateID);
 		if (it == m_stateMap.end())
 		{
+			//念のため
 			return nullptr;
 		}
 		return it->second;

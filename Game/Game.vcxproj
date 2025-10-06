@@ -224,7 +224,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="GameSceneManager.cpp" />
+    <ClCompile Include="GameScene\GameInScene.cpp" />
+    <ClCompile Include="GameScene\GameSceneManager.cpp" />
+    <ClCompile Include="GameScene\GameTitleScene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -236,8 +238,10 @@
   <ItemGroup>
     <ClInclude Include="CRC32.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="GameSceneManager.h" />
-    <ClInclude Include="IGameSceneState.h" />
+    <ClInclude Include="GameScene\GameInScene.h" />
+    <ClInclude Include="GameScene\GameSceneManager.h" />
+    <ClInclude Include="GameScene\IGameSceneState.h" />
+    <ClInclude Include="GameScene\GameTitleScene.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
   </ItemGroup>
