@@ -75,6 +75,7 @@ using namespace Microsoft::WRL;
 #include "graphics/Model.h"
 #include "HID/GamePad.h"
 //’Ç‰Á‚µ‚½
+#include "Transform.h"
 #include "IRenderer.h"
 #include "ModelRender.h"
 #include "SceneLight.h"
