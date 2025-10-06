@@ -105,22 +105,6 @@ public:
 	{
 		//ステートを探して変更
 		m_currentState = FindState(T::ID());
-		//ステートの初期化処理を実行
-		m_currentState->EnterScene();
-	}
-	/// <summary>
-	/// おためし作成、現在のステートがTと同じかどうかを返す
-	/// </summary>
-	/// <typeparam name="T"></typeparam>
-	/// <returns></returns>
-	template<typename T>
-	inline bool IsCurrentState()
-	{
-		if (m_currentState == nullptr)
-		{
-			return false;
-		}
-		return m_currentState->ID() == T::ID();
 	}
 private:
 	/// <summary>
