@@ -133,6 +133,17 @@ namespace nsK2EngineLow
 			SetScale(scale);
 		}
 
+		/// <summary>
+		/// Transformクラスで座標・拡大・回転を設定
+		/// </summary>
+		/// <param name="transform"></param>
+		void SetTransform(const Transform& transform)
+		{
+			SetPosition(transform.m_position);
+			SetRotation(transform.m_rotation);
+			SetScale(transform.m_scale);
+		}
+
 		const Matrix& GetLigCameraViewProjection()
 		{
 			return m_shadow.GetLigCameraViewProjection();
