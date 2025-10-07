@@ -32,7 +32,7 @@ private:
 	/// <summary>
 	/// インスタンス
 	/// </summary>
-	static GameSceneManager* m_SceneManagerInstance;
+	static GameSceneManager* m_sceneManagerInstance;
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
@@ -70,12 +70,12 @@ public:
 	/// <returns></returns>
 	static GameSceneManager* GetSceneManagerInstance()
 	{
-		if (m_SceneManagerInstance == nullptr)
+		if (m_sceneManagerInstance == nullptr)
 		{
-			m_SceneManagerInstance = new GameSceneManager();
+			m_sceneManagerInstance = new GameSceneManager();
 		}
 
-		return m_SceneManagerInstance;
+		return m_sceneManagerInstance;
 	}
 	/// <summary>
 	/// ゲームシーンマネージャー初期化関数

@@ -15,6 +15,7 @@
     <ClCompile Include="GameScene\GameSceneManager.cpp" />
     <ClCompile Include="GameScene\GameTitleScene.cpp" />
     <ClCompile Include="GameScene\GameInScene.cpp" />
+    <ClCompile Include="EventManager\EventManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -27,5 +28,7 @@
     <ClInclude Include="GameScene\IGameSceneState.h" />
     <ClInclude Include="GameScene\GameTitleScene.h" />
     <ClInclude Include="GameScene\GameInScene.h" />
+    <ClInclude Include="EventManager\EventManager.h" />
+    <ClInclude Include="EventManager\IEventDataStruct.h" />
   </ItemGroup>
 </Project>

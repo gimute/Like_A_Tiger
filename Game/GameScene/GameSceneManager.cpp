@@ -22,7 +22,7 @@
 */
 
 //インスタンスの初期化
-GameSceneManager* GameSceneManager::m_SceneManagerInstance = nullptr;
+GameSceneManager* GameSceneManager::m_sceneManagerInstance = nullptr;
 
 void GameSceneManager::InitGameSceneManager()
 {
