@@ -64,7 +64,7 @@ namespace nsK2EngineLow {
 		{
 			initData.m_psEntryPointFunc = "PSNormalMain";
 		}
-		if (animationClips != nullptr) {
+		if (m_skeleton.IsInited()) {
 			initData.m_skeleton = &m_skeleton;
 		}
 
