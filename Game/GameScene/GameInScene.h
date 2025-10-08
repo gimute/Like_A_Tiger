@@ -1,6 +1,10 @@
 #pragma once
 #include "GameScene\IGameSceneState.h"
 
+#include "TestPlayer.h"
+
+#include "TestEnemy.h"
+
 class GameInScene :
     public IGameSceneState
 {
@@ -32,5 +36,11 @@ public:
     /// <param name="nextState"></param>
     /// <returns></returns>
     bool ReqestSceneState(uint32_t& nextState) override;
+
+
+    TestPlayer* m_player = nullptr;
+
+	TestEnemy* m_enemy = nullptr;
+
 };
 

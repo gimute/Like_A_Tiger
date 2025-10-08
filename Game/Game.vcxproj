@@ -235,10 +235,13 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="system\system.cpp" />
+    <ClCompile Include="TestEnemy.cpp" />
+    <ClCompile Include="TestPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CRC32.h" />
     <ClInclude Include="EventManager\EventManager.h" />
+    <ClInclude Include="EventManager\EventTest.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameScene\GameInScene.h" />
     <ClInclude Include="GameScene\GameSceneManager.h" />
@@ -247,6 +250,8 @@
     <ClInclude Include="EventManager\IEventDataStruct.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
+    <ClInclude Include="TestEnemy.h" />
+    <ClInclude Include="TestPlayer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

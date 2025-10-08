@@ -5,6 +5,10 @@
 void GameInScene::EnterScene()
 {
 
+	m_player = NewGO<TestPlayer>(0, "testplayer");
+
+	m_enemy = NewGO<TestEnemy>(0, "testenemy");
+
 }
 
 //ステート更新関数
