@@ -1,9 +1,13 @@
 #include "stdafx.h"
 #include "GameInScene.h"
 
+#include "Actor\Player\Player.h"
+
 //ステート侵入関数
 void GameInScene::EnterScene()
 {
+
+	NewGO<Player>(0, "player");
 
 }
 

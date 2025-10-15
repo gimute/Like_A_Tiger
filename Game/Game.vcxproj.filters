@@ -15,6 +15,12 @@
     <ClCompile Include="GameScene\GameSceneManager.cpp" />
     <ClCompile Include="GameScene\GameTitleScene.cpp" />
     <ClCompile Include="GameScene\GameInScene.cpp" />
+    <ClCompile Include="Actor\Player\Player.cpp" />
+    <ClCompile Include="Actor\Actor.cpp" />
+    <ClCompile Include="Actor\ActorStatus.cpp" />
+    <ClCompile Include="Actor\Character.cpp" />
+    <ClCompile Include="Actor\Player\PlayerStateMachine.cpp" />
+    <ClCompile Include="Actor\Player\PlayerStates.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -27,5 +33,13 @@
     <ClInclude Include="GameScene\IGameSceneState.h" />
     <ClInclude Include="GameScene\GameTitleScene.h" />
     <ClInclude Include="GameScene\GameInScene.h" />
+    <ClInclude Include="Actor\Player\Player.h" />
+    <ClInclude Include="Actor\Actor.h" />
+    <ClInclude Include="Actor\ActorStatus.h" />
+    <ClInclude Include="Actor\Character.h" />
+    <ClInclude Include="StateMachineComponents\IStateMachine.h" />
+    <ClInclude Include="StateMachineComponents\IState.h" />
+    <ClInclude Include="Actor\Player\PlayerStateMachine.h" />
+    <ClInclude Include="Actor\Player\PlayerStates.h" />
   </ItemGroup>
 </Project>
