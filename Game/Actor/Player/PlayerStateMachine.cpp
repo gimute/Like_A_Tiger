@@ -6,13 +6,28 @@
 //コンストラクタ
 PlayerStateMachine::PlayerStateMachine()
 {
-	AddState<PlayerIdleState>();
-	AddState<PlayerWalkState>();
+	AddState<PlayerIdleState>(this);
+	AddState<PlayerWalkState>(this);
 
 	ReqestState<PlayerIdleState>();
 }
 
 IStateBase* PlayerStateMachine::GetNextState()
 {
-	return FindClassNameState<PlayerWalkState>();
+	if (CanChangeWalk())
+	{
+		return FindClassNameState<PlayerWalkState>();
+	}
+
+	return FindClassNameState<PlayerIdleState>();
+}
+
+bool PlayerStateMachine::CanChangeWalk()
+{
+	if (m_stickAmount > 0.01f)
+	{
+		return true;
+	}
+
+	return false;
 }

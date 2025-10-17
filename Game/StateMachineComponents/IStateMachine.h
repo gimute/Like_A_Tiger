@@ -81,6 +81,7 @@ private:
 		return it->second.get();
 	}
 protected:
+	//クラス名でステート探索
 	template<typename ClassName>
 	inline IStateBase* FindClassNameState()
 	{
@@ -92,6 +93,19 @@ protected:
 			return nullptr;
 		}
 		return it->second.get();
+	}
+	//引数に設定したステートクラスが現在のステートと同じかどうかを判定
+	template<typename ClassName>
+	inline bool IsNowStateClassName()
+	{
+		uint32_t id = ClassName::ID();
+		const auto& it = m_stateMap.find(id);
+
+		if (it->second.get() == m_currentState)
+		{
+			return true;
+		}
+		return false;
 	}
 };
 

@@ -20,5 +20,9 @@ public:
 	void Update() override;
 	//•`‰æŠÖ”
 	void Render(RenderContext& rc) override;
+
+public:
+
+	PlayerStateMachine* GetStateMachine() { return m_stateMachine.get(); }
 };
 

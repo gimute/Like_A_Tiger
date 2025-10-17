@@ -1,6 +1,9 @@
 #pragma once
 #include "GameScene\IGameSceneState.h"
 
+class Player;
+class PlayerController;
+
 class GameInScene :
     public IGameSceneState
 {
@@ -32,5 +35,11 @@ public:
     /// <param name="nextState"></param>
     /// <returns></returns>
     bool ReqestSceneState(uint32_t& nextState) override;
+private:
+    ///プレイヤーのポインタ
+    Player* m_player = nullptr;
+    ///プレイヤーコントローラーのポインタ
+    PlayerController* m_playerController = nullptr;
+    
 };
 

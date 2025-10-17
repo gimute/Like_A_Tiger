@@ -13,9 +13,11 @@ class PlayerStateMachine;
 class PlayerIdleState : public IStateBase
 {
 	appState(PlayerIdleState)
+protected:
+	PlayerStateMachine* m_owner = nullptr;
 public:
 	//コンストラクタ
-	PlayerIdleState() = default;
+	PlayerIdleState(PlayerStateMachine* stateMachine) : m_owner(stateMachine) {}
 	//デストラクタ
 	~PlayerIdleState() = default;
 
@@ -30,9 +32,11 @@ public:
 class PlayerWalkState : public IStateBase
 {
 	appState(PlayerWalkState)
+protected:
+	PlayerStateMachine* m_owner = nullptr;
 public:
 	//コンストラクタ
-	PlayerWalkState() = default;
+	PlayerWalkState(PlayerStateMachine* stateMachine) : m_owner(stateMachine) {}
 	//デストラクタ
 	~PlayerWalkState() = default;
 

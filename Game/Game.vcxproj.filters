@@ -21,6 +21,7 @@
     <ClCompile Include="Actor\Character.cpp" />
     <ClCompile Include="Actor\Player\PlayerStateMachine.cpp" />
     <ClCompile Include="Actor\Player\PlayerStates.cpp" />
+    <ClCompile Include="Actor\Player\PlayerController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -41,5 +42,6 @@
     <ClInclude Include="StateMachineComponents\IState.h" />
     <ClInclude Include="Actor\Player\PlayerStateMachine.h" />
     <ClInclude Include="Actor\Player\PlayerStates.h" />
+    <ClInclude Include="Actor\Player\PlayerController.h" />
   </ItemGroup>
 </Project>
