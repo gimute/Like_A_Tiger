@@ -11,7 +11,7 @@ void GameInScene::EnterScene()
 	m_player = NewGO<Player>(0, "player");
 	//プレイヤーコントローラー設定
 	m_playerController = NewGO<PlayerController>(0, "playercontroller");
-	m_playerController->TargetSet(m_player->GetStateMachine());
+	m_playerController->TargetSet(m_player);
 }
 
 //ステート更新関数

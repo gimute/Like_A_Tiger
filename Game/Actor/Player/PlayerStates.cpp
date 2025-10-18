@@ -28,7 +28,7 @@ void PlayerWalkState::OnEnter()
 
 void PlayerWalkState::OnUpdate()
 {
-	
+
 }
 
 void PlayerWalkState::OnExit()

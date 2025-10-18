@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "PlayerController.h"
 
+#include "Player.h"
 #include "PlayerStateMachine.h"
 
 namespace
@@ -24,7 +25,12 @@ bool PlayerController::Start()
 
 void PlayerController::Update()
 {
-	auto* targetStateMachine = m_controllTarget;
+	auto* targetStateMachine = m_controllTarget->GetStateMachine();
+
+	if (!targetStateMachine)
+	{
+		return;
+	}
 
 	//フィニッシュブロウの条件文を付けるならここ
 	targetStateMachine->SetFinishBrowButtonY(g_pad[0]->IsTrigger(enButtonY));

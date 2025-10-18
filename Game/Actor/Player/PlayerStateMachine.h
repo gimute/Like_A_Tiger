@@ -54,5 +54,8 @@ public:
 
 	///s“®‰Â”\‚©‚ğ”»’è‚·‚éŠÖ”
 private:
+	//ˆÚ“®‚·‚é‚±‚Æ‚ª‚Å‚«‚é‚©‚Ç‚¤‚©
 	bool CanChangeWalk();
+	//Ši“¬UŒ‚‚ğs‚¦‚é‚©‚Ç‚¤‚©
+	bool CanChangeAttack();
 };
