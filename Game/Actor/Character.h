@@ -12,8 +12,10 @@ private:
 	//ステートマシンのポインタ格納変数
 	std::unique_ptr<IStateMachine> m_stateMachine = nullptr;
 
-	//アニメーションのリスト
-	std::vector<AnimationClip*> m_animetionList;
+	//アニメーションクリップリストのポインタ格納変数
+	AnimationClip* m_animationClipListPtr = nullptr;
+
+	int m_animationMaxNum = 0;
 
 protected:
 
@@ -32,7 +34,10 @@ public:
 	//コンストラクタ
 	Character() = default;
 	//デストラクタ
-	~Character() = default;
+	~Character()
+	{
+		delete[] m_animationClipListPtr;
+	}
 
 	//スタート関数
 	virtual bool Start() override;
@@ -50,23 +55,22 @@ public:
 	template<size_t N>
 	inline void InitAnimationClipList(int animationMaxNum,const AnimationData (&animationData)[N])
 	{
-		uint8_t uint8AnimationMax = static_cast<uint8_t>(animationMaxNum);
+		m_animationMaxNum = animationMaxNum;
 
-		//アニメーションの最大数でリストをリサイズ
-		m_animetionList.resize(uint8AnimationMax);
+		uint8_t uint8AnimationMax = static_cast<uint8_t>(m_animationMaxNum);
+
+		m_animationClipListPtr = new AnimationClip[uint8AnimationMax];
 
 		for (int i = 0;i < uint8AnimationMax;i++)
 		{
-			auto* newAnimationClip = new AnimationClip();
-			newAnimationClip->Load(animationData[i].fileName);
-			newAnimationClip->SetLoopFlag(animationData[i].isLoop);
-			m_animetionList[i] = newAnimationClip;
+			m_animationClipListPtr[i].Load(animationData[i].fileName);
+			m_animationClipListPtr[i].SetLoopFlag(animationData[i].isLoop);
 		}
 	}
 
 	inline void InitModelRender(const char* filePath)
 	{
-		m_modelRender.Init(filePath,*m_animetionList.data(),m_animetionList.size());
+		m_modelRender.Init(filePath,m_animationClipListPtr,m_animationMaxNum ,enModelUpAxisZ);
 	}
 public:
 

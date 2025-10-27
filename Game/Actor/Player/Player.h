@@ -5,22 +5,21 @@
 //プレイヤーが操作するキャラクターを継承したクラス
 class Player : public Character
 {
+public:
 	enum PlayerAnimation
 	{
 		en_idle,
+		en_walk,
 		en_run,
-		en_attack1,
-		en_attack2,
 		num
 	};
-
+private:
 	AnimationData animationDataList[PlayerAnimation::num] =
 	{
 		//追加したい場合はここから下に伸ばす
-		AnimationData{"debug_file1",true},
-		AnimationData{"debug_file2",true},
-		AnimationData{"debug_file3",true},
-		AnimationData{"debug_file4",true},
+		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Idle.tka",true},
+		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Walking.tka",true},
+		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Run.tka",true}
 	};
 public:
 	//コンストラクタ

@@ -9,7 +9,7 @@ bool Player::Start()
 
 	InitAnimationClipList(PlayerAnimation::num, animationDataList);
 
-	InitModelRender("");
+	InitModelRender("Assets/modelData/Character/Survivalist/Survivalist.tkm");
 
 	return true;
 }
@@ -19,10 +19,12 @@ void Player::Update()
 {
 	//ステートマシン更新
 	GetPlayerStateMachine()->UpdateStateMachine();
+
+	GetModelRender()->Update();
 }
 
 //描画関数
 void Player::Render(RenderContext& rc)
 {
-
+	GetModelRender()->Draw(rc);
 }

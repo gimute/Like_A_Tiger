@@ -44,3 +44,9 @@ bool PlayerStateMachine::CanChangeAttack()
 
 	return false;
 }
+
+void PlayerStateMachine::PlayerPlayAnimation(int animationNum,float interpolateTime)
+{
+	m_player->GetModelRender()->PlayAnimation(animationNum, interpolateTime);
+}
+

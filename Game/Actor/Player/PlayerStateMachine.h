@@ -64,6 +64,8 @@ public:
 
 	inline bool GetDefenseButtonLTandRT() { return m_defenseButtonLTandRT; }
 
+	void PlayerPlayAnimation(int animationNum, float interpolateTime = 0.0f);
+
 	///s“®‰Â”\‚©‚ğ”»’è‚·‚éŠÖ”
 private:
 	//ˆÚ“®‚·‚é‚±‚Æ‚ª‚Å‚«‚é‚©‚Ç‚¤‚©
