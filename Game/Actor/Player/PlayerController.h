@@ -22,5 +22,6 @@ public:
 private:
 	//左スティックの入力量を取得
 	Vector3 GetStickL() const;
+
 };
 

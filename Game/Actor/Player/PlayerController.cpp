@@ -1,11 +1,10 @@
 #include "stdafx.h"
 #include "PlayerController.h"
 
-#include "Player.h"
+#include "Actor\Player\Player.h"
 #include "PlayerStateMachine.h"
 
-namespace
-{
+namespace{
 	inline bool IsInputStickL()
 	{
 		//左スティックの入力があるかどうかを判定
@@ -16,7 +15,7 @@ namespace
 		}
 		return false;
 	}
-};
+}
 
 bool PlayerController::Start()
 {
@@ -25,7 +24,7 @@ bool PlayerController::Start()
 
 void PlayerController::Update()
 {
-	auto* targetStateMachine = m_controllTarget->GetStateMachine();
+	auto* targetStateMachine = m_controllTarget->GetPlayerStateMachine();
 
 	if (!targetStateMachine)
 	{

@@ -5,7 +5,11 @@
 bool Player::Start()
 {
 
-	m_stateMachine = std::make_unique<PlayerStateMachine>();
+	MakeStateMachineUniquePtr<PlayerStateMachine>(this);
+
+	InitAnimationClipList(PlayerAnimation::num, animationDataList);
+
+	InitModelRender("");
 
 	return true;
 }
@@ -14,7 +18,7 @@ bool Player::Start()
 void Player::Update()
 {
 	//ステートマシン更新
-	m_stateMachine->UpdateStateMachine();
+	GetPlayerStateMachine()->UpdateStateMachine();
 }
 
 //描画関数

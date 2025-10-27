@@ -2,15 +2,7 @@
 #include "PlayerStateMachine.h"
 
 #include "PlayerStates.h"
-
-//コンストラクタ
-PlayerStateMachine::PlayerStateMachine()
-{
-	AddState<PlayerIdleState>(this);
-	AddState<PlayerWalkState>(this);
-
-	ReqestState<PlayerIdleState>();
-}
+#include "Player.h"
 
 IStateBase* PlayerStateMachine::GetNextState()
 {

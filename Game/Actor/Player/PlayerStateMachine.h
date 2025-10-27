@@ -3,11 +3,21 @@
 #include "StateMachineComponents\IState.h"
 #include "Actor\Player\PlayerStates.h"
 
+class Player;
+
 class PlayerStateMachine : public IStateMachine
 {
 public:
 	//コンストラクタ
-	PlayerStateMachine();
+	PlayerStateMachine(Player* playerPtr) : m_player(nullptr)
+	{
+		m_player = playerPtr;
+
+		AddState<PlayerIdleState>(this);
+		AddState<PlayerWalkState>(this);
+
+		ReqestState<PlayerIdleState>();
+	}
 
 	//次のステート値を取得する関数
 	IStateBase* GetNextState() override;
@@ -25,6 +35,8 @@ private:
 	bool m_swayButtonA = false;
 
 	bool m_defenseButtonLTandRT = false;
+
+	Player* m_player = nullptr;
 public:
 	///変数系のゲッター＆セッター
 
