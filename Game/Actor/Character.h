@@ -52,8 +52,7 @@ public:
 		m_stateMachine = std::make_unique<StateMachine>(std::forward<Args>(args)...);
 	}
 	//アニメーションのリストを登録
-	template<size_t N>
-	inline void InitAnimationClipList(int animationMaxNum,const AnimationData (&animationData)[N])
+	inline void InitAnimationClipList(int animationMaxNum,const AnimationData* animationData)
 	{
 		m_animationMaxNum = animationMaxNum;
 
@@ -67,7 +66,7 @@ public:
 			m_animationClipListPtr[i].SetLoopFlag(animationData[i].isLoop);
 		}
 	}
-
+	//モデルレンダーの初期化関数
 	inline void InitModelRender(const char* filePath)
 	{
 		m_modelRender.Init(filePath,m_animationClipListPtr,m_animationMaxNum ,enModelUpAxisZ);
