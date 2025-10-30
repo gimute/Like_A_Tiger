@@ -5,7 +5,7 @@
 //見た目が存在するゲームオブジェクトの規定クラス
 class Actor : public IGameObject
 {
-public:
+protected:
 
 	//参考にしたプログラムではココがまとめられたTransformというクラスになっていた
 	//面白そうなので後で見てみる
@@ -50,5 +50,17 @@ public:
 	{
 		return &m_modelRender;
 	}
+
+	inline void SetPosition(const Vector3& pos) { m_position = pos; }
+
+	inline const Vector3& GetPosition() { return m_position; }
+
+	inline void SetRotation(const Quaternion& rot) { m_rotation = rot; }
+
+	inline const Quaternion& GetRotation() { return m_rotation; }
+
+	inline void SetScale(const Vector3& scale) { m_scale = scale; }
+
+	inline const Vector3& GetScale() { return m_scale; }
 };
 

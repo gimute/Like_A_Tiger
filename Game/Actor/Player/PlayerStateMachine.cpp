@@ -22,7 +22,10 @@ IStateBase* PlayerStateMachine::GetNextState()
 
 bool PlayerStateMachine::CanChangeWalk()
 {
-	if (m_stickAmountL > 0.01f)
+	if (m_stickAmountLX >= 0.001f ||
+		m_stickAmountLY >= 0.001f ||
+		m_stickAmountLX <= -0.001f||
+		m_stickAmountLY <= -0.001f)
 	{
 		return true;
 	}
@@ -45,8 +48,25 @@ bool PlayerStateMachine::CanChangeAttack()
 	return false;
 }
 
+void PlayerStateMachine::SetPlayerPos(const Vector3& pos) { m_player->SetPosition(pos); }
+
+const Vector3& PlayerStateMachine::GetPlayerPos() { return m_player->GetPosition(); }
+
+void PlayerStateMachine::SetPlayerRot(const Quaternion& rot) { m_player->SetRotation(rot); }
+
+const Quaternion& PlayerStateMachine::GetPlayerRot() { return m_player->GetRotation(); }
+
+void PlayerStateMachine::SetPlayerForward(const Vector3& forward) { m_player->SetPlayerForward(forward); }
+
+const Vector3& PlayerStateMachine::GetPlayerForward() { return m_player->GetPlayerForward(); }
+
 void PlayerStateMachine::PlayerPlayAnimation(int animationNum,float interpolateTime)
 {
 	m_player->GetModelRender()->PlayAnimation(animationNum, interpolateTime);
+}
+
+CharacterController* PlayerStateMachine::GetPlayerCharaCon()
+{
+	return m_player->GetCharacterController();
 }
 

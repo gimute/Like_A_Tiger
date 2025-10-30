@@ -23,12 +23,12 @@ public:
 	IStateBase* GetNextState() override;
 
 private:
-	//プレイヤーの現在位置
-	Vector3 m_playerPos = Vector3::Zero;
 	//プレイヤーの移動方向
 	Vector3 m_playerMoveVec = Vector3::Zero;
 	//Lスティックの入力量
-	float m_stickAmountL = 0.0f;
+	float m_stickAmountLX = 0.0f;
+	//Rスティックの入力量
+	float m_stickAmountLY = 0.0f;
 	//RスティックのX値入力量
 	float m_stickAmountRX = 0.0f;
 	//RスティックのY値入力量
@@ -47,18 +47,17 @@ private:
 	Player* m_player = nullptr;
 public:
 	///変数系のゲッター＆セッター
-
-	inline void SetPlayerPos(const Vector3& pos) { m_playerPos = pos; }
-
-	inline const Vector3& GetPlayerPos() { return m_playerPos; }
-
 	inline void SetPlayerMoveVec(const Vector3& vec) { m_playerMoveVec = vec; }
 
 	inline const Vector3& GetPlayerMoveVec() { return m_playerMoveVec; }
 
-	inline void SetStickAmountL(float setAmount) { m_stickAmountL = setAmount; }
+	inline void SetStickAmountLX(float setAmount) { m_stickAmountLX = setAmount; }
 
-	inline float GetStickAmountL() { return m_stickAmountL; }
+	inline float GetStickAmountLX() { return m_stickAmountLX; }
+
+	inline void SetStickAmountLY(float setAmount) { m_stickAmountLY = setAmount; }
+
+	inline float GetStickAmountLY() { return m_stickAmountLY; }
 
 	inline void SetStickAmountRX(float setAmount) { m_stickAmountRX = setAmount; }
 
@@ -88,7 +87,21 @@ public:
 
 	inline bool GetDefenseButtonLTandRT() { return m_defenseButtonLTandRT; }
 
+	void SetPlayerPos(const Vector3& pos);
+
+	const Vector3& GetPlayerPos();
+
+	void SetPlayerRot(const Quaternion& rot);
+
+	const Quaternion& GetPlayerRot();
+
+	void SetPlayerForward(const Vector3& vec);
+
+	const Vector3& GetPlayerForward();
+
 	void PlayerPlayAnimation(int animationNum, float interpolateTime = 0.0f);
+
+	CharacterController* GetPlayerCharaCon();
 
 	///行動可能かを判定する関数
 private:
