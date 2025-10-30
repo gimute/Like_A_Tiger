@@ -226,6 +226,8 @@
     <ClCompile Include="Actor\ActorStatus.cpp" />
     <ClCompile Include="Actor\Actor.cpp" />
     <ClCompile Include="Actor\Character.cpp" />
+    <ClCompile Include="Camera\CameraEntity.cpp" />
+    <ClCompile Include="Camera\CameraManager.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameScene\GameInScene.cpp" />
     <ClCompile Include="GameScene\GameSceneManager.cpp" />
@@ -235,6 +237,7 @@
     <ClCompile Include="Actor\Player\PlayerStateMachine.cpp" />
     <ClCompile Include="Actor\Player\PlayerStates.cpp" />
     <ClCompile Include="Actor\Player\PlayerController.cpp" />
+    <ClCompile Include="Actor\Player\PlayerCameraController.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -246,6 +249,9 @@
     <ClInclude Include="Actor\ActorStatus.h" />
     <ClInclude Include="Actor\Actor.h" />
     <ClInclude Include="Actor\Character.h" />
+    <ClInclude Include="Camera\CameraUpdateData.h" />
+    <ClInclude Include="Camera\CameraEntity.h" />
+    <ClInclude Include="Camera\CameraManager.h" />
     <ClInclude Include="CRC32.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameScene\GameInScene.h" />
@@ -256,6 +262,8 @@
     <ClInclude Include="Actor\Player\PlayerStateMachine.h" />
     <ClInclude Include="Actor\Player\PlayerStates.h" />
     <ClInclude Include="Actor\Player\PlayerController.h" />
+    <ClInclude Include="Camera\ICameraController.h" />
+    <ClInclude Include="Actor\Player\PlayerCameraController.h" />
     <ClInclude Include="StateMachineComponents\IState.h" />
     <ClInclude Include="StateMachineComponents\IStateMachine.h" />
     <ClInclude Include="stdafx.h" />

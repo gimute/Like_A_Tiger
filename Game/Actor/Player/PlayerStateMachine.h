@@ -23,10 +23,18 @@ public:
 	IStateBase* GetNextState() override;
 
 private:
+	//プレイヤーの現在位置
+	Vector3 m_playerPos = Vector3::Zero;
 	//プレイヤーの移動方向
 	Vector3 m_playerMoveVec = Vector3::Zero;
 	//Lスティックの入力量
-	float m_stickAmount = 0.0f;
+	float m_stickAmountL = 0.0f;
+	//RスティックのX値入力量
+	float m_stickAmountRX = 0.0f;
+	//RスティックのY値入力量
+	float m_stickAmountRY = 0.0f;
+	//Rスティックが入力されたか
+	bool m_stickR = false;
 	//Aボタンが押されたか
 	bool m_attackButtonB = false;
 
@@ -40,13 +48,29 @@ private:
 public:
 	///変数系のゲッター＆セッター
 
+	inline void SetPlayerPos(const Vector3& pos) { m_playerPos = pos; }
+
+	inline const Vector3& GetPlayerPos() { return m_playerPos; }
+
 	inline void SetPlayerMoveVec(const Vector3& vec) { m_playerMoveVec = vec; }
 
 	inline const Vector3& GetPlayerMoveVec() { return m_playerMoveVec; }
 
-	inline void SetStickAmount(float setAmount) { m_stickAmount = setAmount; }
+	inline void SetStickAmountL(float setAmount) { m_stickAmountL = setAmount; }
 
-	inline float GetStickAmount() { return m_stickAmount; }
+	inline float GetStickAmountL() { return m_stickAmountL; }
+
+	inline void SetStickAmountRX(float setAmount) { m_stickAmountRX = setAmount; }
+
+	inline float GetStickAmountRX() { return m_stickAmountRX; }
+
+	inline void SetStickAmountRY(float setAmount) { m_stickAmountRY = setAmount; }
+
+	inline float GetStickAmountRY() { return m_stickAmountRY; }
+
+	inline void SetStickR(bool setIs) { m_stickR = setIs; }
+
+	inline bool GetStickR() { return m_stickR; }
 
 	inline void SetAttackButtonB(bool setIs) { m_attackButtonB = setIs; }
 

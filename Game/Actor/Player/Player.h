@@ -38,4 +38,6 @@ public:
 	{
 		return dynamic_cast<PlayerStateMachine*>(GetStateMachine());
 	}
+
+	inline const Vector3& GetPosition() { return GetPlayerStateMachine()->GetPlayerPos(); }
 };

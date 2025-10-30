@@ -3,6 +3,8 @@
 
 #include "Actor\Player\Player.h"
 #include "Actor\Player\PlayerController.h"
+#include "Actor\Player\PlayerCameraController.h"
+#include "Camera\CameraManager.h"
 
 //ステート侵入関数
 void GameInScene::EnterScene()
@@ -12,12 +14,15 @@ void GameInScene::EnterScene()
 	//プレイヤーコントローラー設定
 	m_playerController = NewGO<PlayerController>(0, "playercontroller");
 	m_playerController->TargetSet(m_player);
+	//カメラ生成
+	CameraManager::GetCameraManagerInstance()->CreateCamera<PlayerCameraController>(m_player);
 }
 
 //ステート更新関数
 void GameInScene::UpdateScene()
 {
-
+	//カメラ更新
+	CameraManager::GetCameraManagerInstance()->UpdateCamera();
 }
 
 //ステート退出関数

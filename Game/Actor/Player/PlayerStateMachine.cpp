@@ -22,7 +22,7 @@ IStateBase* PlayerStateMachine::GetNextState()
 
 bool PlayerStateMachine::CanChangeWalk()
 {
-	if (m_stickAmount > 0.01f)
+	if (m_stickAmountL > 0.01f)
 	{
 		return true;
 	}
