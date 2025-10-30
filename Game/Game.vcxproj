@@ -238,6 +238,7 @@
     <ClCompile Include="Actor\Player\PlayerStates.cpp" />
     <ClCompile Include="Actor\Player\PlayerController.cpp" />
     <ClCompile Include="Actor\Player\PlayerCameraController.cpp" />
+    <ClCompile Include="Actor\BackGround\ProtoStage.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -264,6 +265,7 @@
     <ClInclude Include="Actor\Player\PlayerController.h" />
     <ClInclude Include="Camera\ICameraController.h" />
     <ClInclude Include="Actor\Player\PlayerCameraController.h" />
+    <ClInclude Include="Actor\BackGround\ProtoStage.h" />
     <ClInclude Include="StateMachineComponents\IState.h" />
     <ClInclude Include="StateMachineComponents\IStateMachine.h" />
     <ClInclude Include="stdafx.h" />
