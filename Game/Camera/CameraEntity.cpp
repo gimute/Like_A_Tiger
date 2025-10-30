@@ -14,6 +14,7 @@ bool CameraEntity::Start()
 
 	m_springCamera.SetNear(1.0f);
 	m_springCamera.SetFar(30000.0f);
+	m_springCamera.SetDampingRate(0.5f);
 
 	SetCameraUpdateFlag(true);
 

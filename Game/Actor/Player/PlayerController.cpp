@@ -63,7 +63,8 @@ void PlayerController::Update()
 		targetStateMachine->SetPlayerMoveVec(GetStickL());
 	}
 	//Lスティックの入力量を設定
-	targetStateMachine->SetStickAmountL(GetStickL().Length());
+	targetStateMachine->SetStickAmountLX(g_pad[0]->GetLStickXF());
+	targetStateMachine->SetStickAmountLY(g_pad[0]->GetLStickYF());
 
 	targetStateMachine->SetStickR(IsInputStickR());
 

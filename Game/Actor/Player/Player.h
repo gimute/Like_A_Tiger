@@ -21,6 +21,12 @@ private:
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Walking.tka",true},
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Run.tka",true}
 	};
+private:
+	//キャラクターコントローラー
+	CharacterController m_charaCon;
+	//プレイヤーの正面方向
+	Vector3 m_forward = Vector3::AxisZ;
+
 public:
 	//コンストラクタ
 	Player() = default;
@@ -31,6 +37,8 @@ public:
 	bool Start() override;
 	//更新関数
 	void Update() override;
+	//モデル回転
+	void ModelRotation();
 	//描画関数
 	void Render(RenderContext& rc) override;
 
@@ -39,5 +47,9 @@ public:
 		return dynamic_cast<PlayerStateMachine*>(GetStateMachine());
 	}
 
-	inline const Vector3& GetPosition() { return GetPlayerStateMachine()->GetPlayerPos(); }
+	inline void SetPlayerForward(const Vector3& forward) { m_forward = forward; }
+
+	inline const Vector3& GetPlayerForward() { return m_forward; }
+
+	inline CharacterController* GetCharacterController() { return &m_charaCon; }
 };
