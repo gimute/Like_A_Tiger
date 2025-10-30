@@ -5,7 +5,11 @@
 bool Player::Start()
 {
 
-	m_stateMachine = std::make_unique<PlayerStateMachine>();
+	MakeStateMachineUniquePtr<PlayerStateMachine>(this);
+
+	InitAnimationClipList(PlayerAnimation::num, animationDataList);
+
+	InitModelRender("Assets/modelData/Character/Survivalist/Survivalist.tkm");
 
 	return true;
 }
@@ -14,11 +18,13 @@ bool Player::Start()
 void Player::Update()
 {
 	//ステートマシン更新
-	m_stateMachine->UpdateStateMachine();
+	GetPlayerStateMachine()->UpdateStateMachine();
+
+	GetModelRender()->Update();
 }
 
 //描画関数
 void Player::Render(RenderContext& rc)
 {
-
+	GetModelRender()->Draw(rc);
 }

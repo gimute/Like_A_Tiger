@@ -2,15 +2,7 @@
 #include "PlayerStateMachine.h"
 
 #include "PlayerStates.h"
-
-//コンストラクタ
-PlayerStateMachine::PlayerStateMachine()
-{
-	AddState<PlayerIdleState>(this);
-	AddState<PlayerWalkState>(this);
-
-	ReqestState<PlayerIdleState>();
-}
+#include "Player.h"
 
 IStateBase* PlayerStateMachine::GetNextState()
 {
@@ -30,7 +22,7 @@ IStateBase* PlayerStateMachine::GetNextState()
 
 bool PlayerStateMachine::CanChangeWalk()
 {
-	if (m_stickAmount > 0.01f)
+	if (m_stickAmountL > 0.01f)
 	{
 		return true;
 	}
@@ -52,3 +44,9 @@ bool PlayerStateMachine::CanChangeAttack()
 
 	return false;
 }
+
+void PlayerStateMachine::PlayerPlayAnimation(int animationNum,float interpolateTime)
+{
+	m_player->GetModelRender()->PlayAnimation(animationNum, interpolateTime);
+}
+

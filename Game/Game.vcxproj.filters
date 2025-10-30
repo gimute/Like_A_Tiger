@@ -22,6 +22,9 @@
     <ClCompile Include="Actor\Player\PlayerStateMachine.cpp" />
     <ClCompile Include="Actor\Player\PlayerStates.cpp" />
     <ClCompile Include="Actor\Player\PlayerController.cpp" />
+    <ClCompile Include="Camera\CameraManager.cpp" />
+    <ClCompile Include="Camera\CameraEntity.cpp" />
+    <ClCompile Include="Actor\Player\PlayerCameraController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -43,5 +46,10 @@
     <ClInclude Include="Actor\Player\PlayerStateMachine.h" />
     <ClInclude Include="Actor\Player\PlayerStates.h" />
     <ClInclude Include="Actor\Player\PlayerController.h" />
+    <ClInclude Include="Camera\CameraManager.h" />
+    <ClInclude Include="Camera\ICameraController.h" />
+    <ClInclude Include="Camera\CameraEntity.h" />
+    <ClInclude Include="Actor\Player\PlayerCameraController.h" />
+    <ClInclude Include="Camera\CameraUpdateData.h" />
   </ItemGroup>
 </Project>

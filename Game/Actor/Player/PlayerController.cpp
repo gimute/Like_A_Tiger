@@ -1,11 +1,10 @@
 #include "stdafx.h"
 #include "PlayerController.h"
 
-#include "Player.h"
+#include "Actor\Player\Player.h"
 #include "PlayerStateMachine.h"
 
-namespace
-{
+namespace{
 	inline bool IsInputStickL()
 	{
 		//左スティックの入力があるかどうかを判定
@@ -16,7 +15,18 @@ namespace
 		}
 		return false;
 	}
-};
+
+	inline bool IsInputStickR()
+	{
+		//右スティックの入力があるかどうかを判定
+		if ((fabsf(g_pad[0]->GetRStickXF()) >= FLT_EPSILON) ||
+			(fabsf(g_pad[0]->GetRStickYF()) >= FLT_EPSILON))
+		{
+			return true;
+		}
+		return false;
+	}
+}
 
 bool PlayerController::Start()
 {
@@ -25,7 +35,7 @@ bool PlayerController::Start()
 
 void PlayerController::Update()
 {
-	auto* targetStateMachine = m_controllTarget->GetStateMachine();
+	auto* targetStateMachine = m_controllTarget->GetPlayerStateMachine();
 
 	if (!targetStateMachine)
 	{
@@ -53,7 +63,13 @@ void PlayerController::Update()
 		targetStateMachine->SetPlayerMoveVec(GetStickL());
 	}
 	//Lスティックの入力量を設定
-	targetStateMachine->SetStickAmount(GetStickL().Length());
+	targetStateMachine->SetStickAmountL(GetStickL().Length());
+
+	targetStateMachine->SetStickR(IsInputStickR());
+
+	//Rスティックの入力量を設定
+	targetStateMachine->SetStickAmountRX(g_pad[0]->GetRStickXF());
+	targetStateMachine->SetStickAmountRY(g_pad[0]->GetRStickYF());
 }
 
 Vector3 PlayerController::GetStickL() const 
@@ -82,3 +98,12 @@ Vector3 PlayerController::GetStickL() const
 	return direction;
 }
 
+Vector3 PlayerController::GetStickR() const
+{
+	//右スティックの入力量を取得
+	Vector3 stickR;
+	stickR.x = g_pad[0]->GetRStickXF();
+	stickR.y = g_pad[0]->GetRStickYF();
+
+	return stickR;
+}

@@ -5,9 +5,22 @@
 //プレイヤーが操作するキャラクターを継承したクラス
 class Player : public Character
 {
+public:
+	enum PlayerAnimation
+	{
+		en_idle,
+		en_walk,
+		en_run,
+		num
+	};
 private:
-	std::unique_ptr<PlayerStateMachine> m_stateMachine;
-	
+	AnimationData animationDataList[PlayerAnimation::num] =
+	{
+		//追加したい場合はここから下に伸ばす
+		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Idle.tka",true},
+		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Walking.tka",true},
+		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Run.tka",true}
+	};
 public:
 	//コンストラクタ
 	Player() = default;
@@ -21,8 +34,10 @@ public:
 	//描画関数
 	void Render(RenderContext& rc) override;
 
-public:
+	PlayerStateMachine* GetPlayerStateMachine()
+	{
+		return dynamic_cast<PlayerStateMachine*>(GetStateMachine());
+	}
 
-	PlayerStateMachine* GetStateMachine() { return m_stateMachine.get(); }
+	inline const Vector3& GetPosition() { return GetPlayerStateMachine()->GetPlayerPos(); }
 };
-
