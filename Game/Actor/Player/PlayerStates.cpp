@@ -76,3 +76,47 @@ void PlayerWalkState::OnExit()
 {
 
 }
+
+///AttackState
+
+void PlayerAttackState::OnEnter()
+{
+	m_owner->SetIsAttack(true);
+}
+
+void PlayerAttackState::OnUpdate()
+{
+
+	m_owner->SetNextCombo(PlayerFirstAttackComboState::ID());
+
+}
+
+void PlayerAttackState::OnExit()
+{
+
+}
+
+
+///FirstAttackComboState
+
+void PlayerFirstAttackComboState::OnEnter()
+{
+
+}
+
+void PlayerFirstAttackComboState::OnUpdate()
+{
+
+	m_owner->PlayerPlayAnimation(Player::en_punch_cross);
+
+	if (!m_owner->IsPlayerPlayAnimation())
+	{
+		m_owner->SetIsAttack(false);
+	}
+
+}
+
+void PlayerFirstAttackComboState::OnExit()
+{
+
+}

@@ -33,23 +33,32 @@ CameraUpdateData PlayerCameraController::UpdateCamera()
 
 	float y = m_player->GetPlayerStateMachine()->GetStickAmountRY();
 
+	bool cameraUporDawnFlag = false;
+
+	//上下カメラ移動抑制
+	if (y >= 0.6f || y <= -0.6)
+	{
+		cameraUporDawnFlag = true;
+	}
+
 	Quaternion qRot;
 	qRot.SetRotationDeg(Vector3::AxisY, 2.4f * x);
 	qRot.Apply(m_toCameraPos);
 
-	Vector3 axisX;
-	axisX.Cross(Vector3::AxisY, m_toCameraPos);
-	axisX.Normalize();
+	if (cameraUporDawnFlag)
+	{
+		Vector3 axisX;
+		axisX.Cross(Vector3::AxisY, m_toCameraPos);
+		axisX.Normalize();
 
-	//TODOカメラの上下もうちょい早くする
-
-	qRot.SetRotationDeg(axisX, -5.0f * y);
-	qRot.Apply(m_toCameraPos);
+		qRot.SetRotationDeg(axisX, -5.0f * y);
+		qRot.Apply(m_toCameraPos);
+	}
 
 	Vector3 toPosDir = m_toCameraPos;
 	toPosDir.Normalize();
 	if (toPosDir.y < -0.5f || toPosDir.y > 0.6f) {
-		//カメラが上向きすぎ
+		//カメラが上または下に向きすぎ
 		m_toCameraPos = toCameraPosOld;
 	}
 
@@ -57,7 +66,7 @@ CameraUpdateData PlayerCameraController::UpdateCamera()
 	calcVec.Normalize();
 
 	//高さを25.0fに戻す処理
-	if ((m_toCameraPos.y > 25 || m_toCameraPos.y < 25) && 
+	if ((m_toCameraPos.y > 25 || m_toCameraPos.y < 25) &&
 		!m_player->GetPlayerStateMachine()->GetStickR())
 	{
 		//現在のXZ距離を計算(水平面の半径)

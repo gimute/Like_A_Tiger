@@ -6,10 +6,14 @@
 
 IStateBase* PlayerStateMachine::GetNextState()
 {
+	if (CanChangeComboAttack())
+	{
+		return FindClassUINT32TState(m_nextCombo);
+	}
 
 	if (CanChangeAttack())
 	{
-
+		return FindClassNameState<PlayerAttackState>();
 	}
 
 	if (CanChangeWalk())
@@ -35,6 +39,11 @@ bool PlayerStateMachine::CanChangeWalk()
 
 bool PlayerStateMachine::CanChangeAttack()
 {
+	if (m_isAttack)
+	{
+		return true;
+	}
+
 	if (m_attackButtonB)
 	{
 		return true;
@@ -46,6 +55,21 @@ bool PlayerStateMachine::CanChangeAttack()
 	}
 
 	return false;
+}
+
+bool PlayerStateMachine::CanChangeComboAttack()
+{
+	if (m_nextCombo == 0)
+	{
+		return false;
+	}
+
+	if (!m_isAttack)
+	{
+		return false;
+	}
+
+	return true;
 }
 
 void PlayerStateMachine::SetPlayerPos(const Vector3& pos) { m_player->SetPosition(pos); }
@@ -63,6 +87,11 @@ const Vector3& PlayerStateMachine::GetPlayerForward() { return m_player->GetPlay
 void PlayerStateMachine::PlayerPlayAnimation(int animationNum,float interpolateTime)
 {
 	m_player->GetModelRender()->PlayAnimation(animationNum, interpolateTime);
+}
+
+bool PlayerStateMachine::IsPlayerPlayAnimation()
+{
+	return m_player->GetModelRender()->IsPlayingAnimation();
 }
 
 CharacterController* PlayerStateMachine::GetPlayerCharaCon()

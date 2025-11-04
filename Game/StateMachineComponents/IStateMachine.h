@@ -43,7 +43,7 @@ public:
 	inline void ReqestState()
 	{
 		//ステートを探して変更
-		m_currentState = FindState(ClassName::ID());
+		m_currentState = FindClassUINT32TState(ClassName::ID());
 	}
 public:
 	//純粋仮想関数、次のステートを取得する関数
@@ -68,9 +68,9 @@ public:
 			m_currentState->OnUpdate();
 		}
 	}
-private:
-	//ステート探索関数
-	inline IStateBase* FindState(uint32_t stateID)
+protected:
+	//UINT32Tでステート探索
+	inline IStateBase* FindClassUINT32TState(uint32_t stateID)
 	{
 		const auto& it = m_stateMap.find(stateID);
 		if (it == m_stateMap.end())
@@ -80,7 +80,6 @@ private:
 		}
 		return it->second.get();
 	}
-protected:
 	//クラス名でステート探索
 	template<typename ClassName>
 	inline IStateBase* FindClassNameState()

@@ -47,3 +47,41 @@ public:
 	//ステートアウト
 	void OnExit() override;
 };
+
+class PlayerAttackState : public IStateBase
+{
+	appState(PlayerAttackState)
+protected:
+	PlayerStateMachine* m_owner = nullptr;
+public:
+	//コンストラクタ
+	PlayerAttackState(PlayerStateMachine* stateMachine) : m_owner(stateMachine) {}
+	//デストラクタ
+	~PlayerAttackState() = default;
+
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+};
+
+class PlayerFirstAttackComboState : public IStateBase
+{
+	appState(PlayerFirstAttackComboState)
+protected:
+	PlayerStateMachine* m_owner = nullptr;
+public:
+	//コンストラクタ
+	PlayerFirstAttackComboState(PlayerStateMachine* stateMachine) : m_owner(stateMachine) {};
+	//デストラクタ
+	~PlayerFirstAttackComboState() = default;
+
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+};

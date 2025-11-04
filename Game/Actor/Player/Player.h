@@ -11,6 +11,7 @@ public:
 		en_idle,
 		en_walk,
 		en_run,
+		en_punch_cross,
 		num
 	};
 private:
@@ -19,11 +20,10 @@ private:
 		//追加したい場合はここから下に伸ばす
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Idle.tka",true},
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Walking.tka",true},
-		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Run.tka",true}
+		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Run.tka",true},
+		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Cross_Punch_EventTest.tka",false}
 	};
 private:
-	//キャラクターコントローラー
-	CharacterController m_charaCon;
 	//プレイヤーの正面方向
 	Vector3 m_forward = Vector3::AxisZ;
 
@@ -51,5 +51,5 @@ public:
 
 	inline const Vector3& GetPlayerForward() { return m_forward; }
 
-	inline CharacterController* GetCharacterController() { return &m_charaCon; }
+	inline CharacterController* GetCharacterController() { return &m_characterController; }
 };

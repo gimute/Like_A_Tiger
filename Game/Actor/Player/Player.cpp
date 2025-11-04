@@ -11,7 +11,7 @@ bool Player::Start()
 
 	InitModelRender("Assets/modelData/Character/Survivalist/Survivalist.tkm");
 
-	m_charaCon.Init(25.0f, 40.0f, m_position);
+	m_characterController.Init(25.0f, 40.0f, m_position);
 
 	return true;
 }

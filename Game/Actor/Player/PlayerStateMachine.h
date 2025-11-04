@@ -15,6 +15,8 @@ public:
 
 		AddState<PlayerIdleState>(this);
 		AddState<PlayerWalkState>(this);
+		AddState<PlayerAttackState>(this);
+		AddState<PlayerFirstAttackComboState>(this);
 
 		ReqestState<PlayerIdleState>();
 	}
@@ -37,13 +39,17 @@ private:
 	bool m_stickR = false;
 	//Aボタンが押されたか
 	bool m_attackButtonB = false;
-
+	//Yボタンが押されたか
 	bool m_finishBrowButtonY = false;
-
+	//Aボタンが押されたか
 	bool m_swayButtonA = false;
-
+	//RTまたはLTが押されたか
 	bool m_defenseButtonLTandRT = false;
-
+	//攻撃が中か
+	bool m_isAttack = false;
+	//次の攻撃コンボの攻撃
+	uint32_t m_nextCombo = 0;
+	//プレイヤーのポインタ
 	Player* m_player = nullptr;
 public:
 	///変数系のゲッター＆セッター
@@ -87,6 +93,14 @@ public:
 
 	inline bool GetDefenseButtonLTandRT() { return m_defenseButtonLTandRT; }
 
+	inline void SetIsAttack(bool setIs) { m_isAttack = setIs; }
+
+	inline bool GetIsAttack() { return m_isAttack; }
+
+	inline void SetNextCombo(uint32_t nextCombo) { m_nextCombo = nextCombo; }
+
+	inline uint32_t GetNextCombo() { return m_nextCombo; }
+
 	void SetPlayerPos(const Vector3& pos);
 
 	const Vector3& GetPlayerPos();
@@ -103,10 +117,14 @@ public:
 
 	CharacterController* GetPlayerCharaCon();
 
+	bool IsPlayerPlayAnimation();
+
 	///行動可能かを判定する関数
 private:
 	//移動することができるかどうか
 	bool CanChangeWalk();
 	//格闘攻撃を行えるかどうか
 	bool CanChangeAttack();
+	//コンボ攻撃に移行できるかどうか
+	bool CanChangeComboAttack();
 };
