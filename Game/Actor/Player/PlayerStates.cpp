@@ -96,7 +96,6 @@ void PlayerAttackState::OnExit()
 
 }
 
-
 ///FirstAttackComboState
 
 void PlayerFirstAttackComboState::OnEnter()
@@ -109,6 +108,26 @@ void PlayerFirstAttackComboState::OnUpdate()
 
 	m_owner->PlayerPlayAnimation(Player::en_punch_cross);
 
+	if (m_nextComboNum == 0)
+	{
+		if (m_owner->GetAttackButtonB())
+		{
+			m_nextComboNum = PlayerSecondAttackComboState::ID();
+		}
+		else if(m_owner->GetFinishBrowButtonY())
+		{
+
+		}
+	}
+
+	if (m_owner->GetIsComboTransition())
+	{
+		if (m_nextComboNum != 0)
+		{
+			m_owner->SetNextCombo(m_nextComboNum);
+		}
+	}
+
 	if (!m_owner->IsPlayerPlayAnimation())
 	{
 		m_owner->SetIsAttack(false);
@@ -118,5 +137,34 @@ void PlayerFirstAttackComboState::OnUpdate()
 
 void PlayerFirstAttackComboState::OnExit()
 {
+	m_nextComboFlag = false;
+
+	m_nextComboNum = 0;
+
+	m_owner->SetIsComboTransition(false);
+}
+
+///SecondAttackComboState
+
+void PlayerSecondAttackComboState::OnEnter()
+{
 
 }
+
+void PlayerSecondAttackComboState::OnUpdate()
+{
+
+	m_owner->PlayerPlayAnimation(Player::en_kick_1);
+
+	if (!m_owner->IsPlayerPlayAnimation())
+	{
+		m_owner->SetIsAttack(false);
+	}
+}
+
+void PlayerSecondAttackComboState::OnExit()
+{
+
+}
+
+

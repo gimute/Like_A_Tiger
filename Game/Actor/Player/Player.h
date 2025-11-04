@@ -12,6 +12,7 @@ public:
 		en_walk,
 		en_run,
 		en_punch_cross,
+		en_kick_1,
 		num
 	};
 private:
@@ -21,12 +22,20 @@ private:
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Idle.tka",true},
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Walking.tka",true},
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Run.tka",true},
-		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Cross_Punch_EventTest.tka",false}
+		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Cross_Punch_EventTest_2.tka",false},
+		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Kick_1_R.tka",false}
+	};
+	float comboWindowTimeList[PlayerAnimation::num] =
+	{
+		0.0f,
+		0.0f,
+		0.0f,
+		0.5f,
+		0.5f,
 	};
 private:
 	//プレイヤーの正面方向
 	Vector3 m_forward = Vector3::AxisZ;
-
 public:
 	//コンストラクタ
 	Player() = default;

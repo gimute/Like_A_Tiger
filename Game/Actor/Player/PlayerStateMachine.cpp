@@ -94,6 +94,16 @@ bool PlayerStateMachine::IsPlayerPlayAnimation()
 	return m_player->GetModelRender()->IsPlayingAnimation();
 }
 
+void PlayerStateMachine::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName)
+{
+	
+	if (wcscmp(eventName, L"CanTransition") == 0)
+	{
+		m_isComboTransition = true;
+	}
+
+}
+
 CharacterController* PlayerStateMachine::GetPlayerCharaCon()
 {
 	return m_player->GetCharacterController();

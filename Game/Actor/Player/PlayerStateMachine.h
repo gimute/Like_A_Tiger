@@ -17,6 +17,7 @@ public:
 		AddState<PlayerWalkState>(this);
 		AddState<PlayerAttackState>(this);
 		AddState<PlayerFirstAttackComboState>(this);
+		AddState<PlayerSecondAttackComboState>(this);
 
 		ReqestState<PlayerIdleState>();
 	}
@@ -49,6 +50,8 @@ private:
 	bool m_isAttack = false;
 	//次の攻撃コンボの攻撃
 	uint32_t m_nextCombo = 0;
+	//次のコンボに以降可能かどうか
+	bool m_isComboTransition = false;
 	//プレイヤーのポインタ
 	Player* m_player = nullptr;
 public:
@@ -101,6 +104,10 @@ public:
 
 	inline uint32_t GetNextCombo() { return m_nextCombo; }
 
+	inline void SetIsComboTransition(bool setIs) { m_isComboTransition = setIs; }
+
+	inline bool GetIsComboTransition() { return m_isComboTransition; }
+
 	void SetPlayerPos(const Vector3& pos);
 
 	const Vector3& GetPlayerPos();
@@ -115,9 +122,11 @@ public:
 
 	void PlayerPlayAnimation(int animationNum, float interpolateTime = 0.0f);
 
-	CharacterController* GetPlayerCharaCon();
-
 	bool IsPlayerPlayAnimation();
+
+	void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);
+
+	CharacterController* GetPlayerCharaCon();
 
 	///行動可能かを判定する関数
 private:

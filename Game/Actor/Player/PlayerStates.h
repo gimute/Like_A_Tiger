@@ -72,11 +72,36 @@ class PlayerFirstAttackComboState : public IStateBase
 	appState(PlayerFirstAttackComboState)
 protected:
 	PlayerStateMachine* m_owner = nullptr;
+private:
+	bool m_nextComboFlag = false;
+	uint32_t m_nextComboNum = 0;
 public:
 	//コンストラクタ
 	PlayerFirstAttackComboState(PlayerStateMachine* stateMachine) : m_owner(stateMachine) {};
 	//デストラクタ
 	~PlayerFirstAttackComboState() = default;
+
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+};
+
+class PlayerSecondAttackComboState : public IStateBase
+{
+	appState(PlayerSecondAttackComboState)
+protected:
+	PlayerStateMachine* m_owner = nullptr;
+private:
+	bool m_nextComboFlag = false;
+	uint32_t m_nextComboNum = 0;
+public:
+	//コンストラクタ
+	PlayerSecondAttackComboState(PlayerStateMachine* stateMachine) : m_owner(stateMachine) {}
+	//デストラクタ
+	~PlayerSecondAttackComboState() = default;
 
 	//ステートイン
 	void OnEnter() override;
