@@ -244,6 +244,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="system\system.cpp" />
+    <ClCompile Include="UI\UIBase\UIBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorStatus.h" />
@@ -268,6 +269,7 @@
     <ClInclude Include="StateMachineComponents\IStateMachine.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
+    <ClInclude Include="UI\UIBase\UIBase.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
