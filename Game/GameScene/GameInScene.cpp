@@ -13,11 +13,14 @@ void GameInScene::EnterScene()
 {
 	//プレイヤー生成
 	m_player = NewGO<Player>(0, "player");
-	//プレイヤーコントローラー設定
+	//プレイヤーコントローラー生成
 	m_playerController = NewGO<PlayerController>(0, "playercontroller");
-	m_playerController->TargetSet(m_player);
 	//カメラ生成
-	CameraManager::GetCameraManagerInstance()->CreateCamera<PlayerCameraController>(m_player);
+	CameraManager::GetCameraManagerInstance()->CreateCamera<PlayerCameraController>(m_playerController);
+	//プレイヤーコントローラー設定
+	m_playerController->SetPlayer(m_player);
+	m_playerController->SetPlayerCameraController(CameraManager::GetCameraManagerInstance()->GetCameraController<PlayerCameraController>());
+	//カメラ生成
 
 	NewGO<ProtoStage>(0);
 }

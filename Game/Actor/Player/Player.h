@@ -1,6 +1,6 @@
 #pragma once
 #include "Actor\Character.h"
-#include "Actor\Player\PlayerStateMachine.h"
+#include "Actor\YakuzaComponents\YakuzaStateMachine.h"
 
 //プレイヤーが操作するキャラクターを継承したクラス
 class Player : public Character
@@ -33,9 +33,6 @@ private:
 		0.5f,
 		0.5f,
 	};
-private:
-	//プレイヤーの正面方向
-	Vector3 m_forward = Vector3::AxisZ;
 public:
 	//コンストラクタ
 	Player() = default;
@@ -46,19 +43,11 @@ public:
 	bool Start() override;
 	//更新関数
 	void Update() override;
-	//モデル回転
-	void ModelRotation();
 	//描画関数
 	void Render(RenderContext& rc) override;
 
-	PlayerStateMachine* GetPlayerStateMachine()
+	YakuzaStateMachine* GetYakuzaStateMachine()
 	{
-		return dynamic_cast<PlayerStateMachine*>(GetStateMachine());
+		return dynamic_cast<YakuzaStateMachine*>(GetStateMachine());
 	}
-
-	inline void SetPlayerForward(const Vector3& forward) { m_forward = forward; }
-
-	inline const Vector3& GetPlayerForward() { return m_forward; }
-
-	inline CharacterController* GetCharacterController() { return &m_characterController; }
 };

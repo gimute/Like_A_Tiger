@@ -19,13 +19,15 @@
     <ClCompile Include="Actor\Actor.cpp" />
     <ClCompile Include="Actor\ActorStatus.cpp" />
     <ClCompile Include="Actor\Character.cpp" />
-    <ClCompile Include="Actor\Player\PlayerStateMachine.cpp" />
-    <ClCompile Include="Actor\Player\PlayerStates.cpp" />
+    <ClCompile Include="Actor\YakuzaComponents\YakuzaStateMachine.cpp" />
+    <ClCompile Include="Actor\YakuzaComponents\YakuzaStates.cpp" />
     <ClCompile Include="Actor\Player\PlayerController.cpp" />
     <ClCompile Include="Camera\CameraManager.cpp" />
     <ClCompile Include="Camera\CameraEntity.cpp" />
     <ClCompile Include="Actor\Player\PlayerCameraController.cpp" />
     <ClCompile Include="Actor\BackGround\ProtoStage.cpp" />
+    <ClCompile Include="Actor\YakuzaComponents\YakuzaAttackComboStateMachine.cpp" />
+    <ClCompile Include="Actor\Player\PlayerAttackComboState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -44,8 +46,8 @@
     <ClInclude Include="Actor\Character.h" />
     <ClInclude Include="StateMachineComponents\IStateMachine.h" />
     <ClInclude Include="StateMachineComponents\IState.h" />
-    <ClInclude Include="Actor\Player\PlayerStateMachine.h" />
-    <ClInclude Include="Actor\Player\PlayerStates.h" />
+    <ClInclude Include="Actor\YakuzaComponents\YakuzaStateMachine.h" />
+    <ClInclude Include="Actor\YakuzaComponents\YakuzaStates.h" />
     <ClInclude Include="Actor\Player\PlayerController.h" />
     <ClInclude Include="Camera\CameraManager.h" />
     <ClInclude Include="Camera\ICameraController.h" />
@@ -53,5 +55,7 @@
     <ClInclude Include="Actor\Player\PlayerCameraController.h" />
     <ClInclude Include="Camera\CameraUpdateData.h" />
     <ClInclude Include="Actor\BackGround\ProtoStage.h" />
+    <ClInclude Include="Actor\YakuzaComponents\YakuzaAttackComboStateMachine.h" />
+    <ClInclude Include="Actor\Player\PlayerAttackComboState.h" />
   </ItemGroup>
 </Project>

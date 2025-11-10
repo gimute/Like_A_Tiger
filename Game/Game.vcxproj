@@ -234,17 +234,19 @@
     <ClCompile Include="GameScene\GameTitleScene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Actor\Player\Player.cpp" />
-    <ClCompile Include="Actor\Player\PlayerStateMachine.cpp" />
-    <ClCompile Include="Actor\Player\PlayerStates.cpp" />
+    <ClCompile Include="Actor\YakuzaComponents\YakuzaStateMachine.cpp" />
+    <ClCompile Include="Actor\YakuzaComponents\YakuzaStates.cpp" />
     <ClCompile Include="Actor\Player\PlayerController.cpp" />
     <ClCompile Include="Actor\Player\PlayerCameraController.cpp" />
     <ClCompile Include="Actor\BackGround\ProtoStage.cpp" />
+    <ClCompile Include="Actor\Player\PlayerAttackComboState.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="system\system.cpp" />
+    <ClCompile Include="Actor\YakuzaComponents\YakuzaAttackComboStateMachine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorStatus.h" />
@@ -260,16 +262,18 @@
     <ClInclude Include="GameScene\IGameSceneState.h" />
     <ClInclude Include="GameScene\GameTitleScene.h" />
     <ClInclude Include="Actor\Player\Player.h" />
-    <ClInclude Include="Actor\Player\PlayerStateMachine.h" />
-    <ClInclude Include="Actor\Player\PlayerStates.h" />
+    <ClInclude Include="Actor\YakuzaComponents\YakuzaStateMachine.h" />
+    <ClInclude Include="Actor\YakuzaComponents\YakuzaStates.h" />
     <ClInclude Include="Actor\Player\PlayerController.h" />
     <ClInclude Include="Camera\ICameraController.h" />
     <ClInclude Include="Actor\Player\PlayerCameraController.h" />
     <ClInclude Include="Actor\BackGround\ProtoStage.h" />
+    <ClInclude Include="Actor\Player\PlayerAttackComboState.h" />
     <ClInclude Include="StateMachineComponents\IState.h" />
     <ClInclude Include="StateMachineComponents\IStateMachine.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
+    <ClInclude Include="Actor\YakuzaComponents\YakuzaAttackComboStateMachine.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

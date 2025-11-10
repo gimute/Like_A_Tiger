@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "PlayerCameraController.h"
 
-#include "Actor\Player\Player.h"
 #include "Actor\Player\PlayerController.h"
 
 ///カメラ初期化
@@ -23,15 +22,15 @@ CameraUpdateData PlayerCameraController::UpdateCamera()
  	CameraUpdateData cameraUpdateData;
 	
 	///注視点を計算
-	Vector3 target = m_player->GetPosition();
+	Vector3 target = m_targetPos;
 	//注視点を少し上げる
 	target.y += 70.0f;
 
 	Vector3 toCameraPosOld = m_toCameraPos;
 
-	float x = m_player->GetPlayerStateMachine()->GetStickAmountRX();
+	float x = m_cameraMoveAmountXY.x;
 
-	float y = m_player->GetPlayerStateMachine()->GetStickAmountRY();
+	float y = m_cameraMoveAmountXY.y;
 
 	bool cameraUporDawnFlag = false;
 
@@ -67,7 +66,7 @@ CameraUpdateData PlayerCameraController::UpdateCamera()
 
 	//高さを25.0fに戻す処理
 	if ((m_toCameraPos.y > 25 || m_toCameraPos.y < 25) &&
-		!m_player->GetPlayerStateMachine()->GetStickR())
+		!IsInputCameraAmount())
 	{
 		//現在のXZ距離を計算(水平面の半径)
 		float lengthXZ = std::sqrt(m_toCameraPos.x * m_toCameraPos.x + m_toCameraPos.z * m_toCameraPos.z);
