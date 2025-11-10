@@ -15,6 +15,7 @@ public:
 		AddState<YakuzaIdleState>(this);
 		AddState<YakuzaWalkState>(this);
 		AddState<YakuzaAttackState>(this);
+		AddState<YakuzaSwayState>(this);
 
 		InitStateMachineClassName<YakuzaIdleState>();
 	}

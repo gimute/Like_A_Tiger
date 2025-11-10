@@ -11,8 +11,11 @@ void PlayerFirstAttackState::OnEnter()
 
 }
 
+//これを見本に
 void PlayerFirstAttackState::OnUpdate()
 {
+	//コンボ判定処理
+
 	auto* stateMachine = m_owner->GetYakuzaStateMachine();
 
 	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(Player::en_punch_cross);
@@ -43,6 +46,13 @@ void PlayerFirstAttackState::OnUpdate()
 
 		m_owner->SetIsAttackEnds(true);
 	}
+
+	//移動処理、必要あれば
+	//Vector3 moveVec = stateMachine->GetHasCharactarForward() * 40.0f;
+
+	//Vector3 newPos = stateMachine->GetHasCharactarCharaCon()->Execute(moveVec, g_gameTime->GetFrameDeltaTime());
+
+	//stateMachine->SetHasCharactarPosition(newPos);
 
 }
 

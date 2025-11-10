@@ -45,7 +45,7 @@ void YakuzaWalkState::OnUpdate()
 
 	m_owner->GetHasCharactarRot().SetRotationYFromDirectionXZ(m_owner->GetMoveVec());
 
-	m_owner->SetHasCharactarForward(Vector3::Zero);
+	m_owner->SetHasCharactarForward(Vector3::AxisZ);
 	m_owner->GetHasCharactarRot().Apply(m_owner->GetHasCharactarForward());
 
 	m_owner->SetMoveVec(Vector3::Zero);
@@ -103,3 +103,19 @@ void YakuzaAttackState::OnExit()
 
 }
 
+//SwayState
+
+void YakuzaSwayState::OnEnter()
+{
+
+}
+
+void YakuzaSwayState::OnUpdate()
+{
+
+}
+
+void YakuzaSwayState::OnExit()
+{
+
+}
