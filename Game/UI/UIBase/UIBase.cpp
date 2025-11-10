@@ -12,10 +12,7 @@ UICanvas::UICanvas()
 
 UICanvas::~UICanvas()
 {
-	for (auto ui : m_uiList)
-	{
-		delete ui;
-	}
+
 }
 
 

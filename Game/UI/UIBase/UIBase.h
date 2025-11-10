@@ -25,12 +25,14 @@ public:
 /// </summary>
 class UICanvas
 {
+	using RefUIBasePtr = std::shared_ptr<UIBase>;
+
 public:
 	Transform m_transform;
 
 private:
 
-	std::vector<UIBase*> m_uiList;
+	std::vector<RefUIBasePtr> m_uiList;
 
 public:
 	UICanvas();
@@ -56,7 +58,7 @@ public:
 	/// <typeparam name="T"></typeparam>
 	/// <returns></returns>
 	template <typename T>
-	T* CreateUI()
+	std::shared_ptr<T> CreateUI()
 	{
 		//UIBaseを継承しているか確認
 		if constexpr (!(std::is_base_of_v<UIBase, T>))
@@ -65,9 +67,11 @@ public:
 		}
 
 		//UI生成
-		T* ui = new T();
-		//Canvasのtransformと親子付け
+		auto ui = std::make_shared<T>();
+
+		////Canvasのtransformと親子付け
 		ui->m_transform.SetParent(&m_transform);
+
 		m_uiList.push_back(ui);
 
 		ui->Start();
@@ -83,17 +87,15 @@ public:
 /// </summary>
 class UIImage : public UIBase
 {
-	template<typename T>
-	friend T* UICanvas::CreateUI();
 
 protected:
 	SpriteRender m_spriteRender;
 
-protected:
-	UIImage();
-	~UIImage();
+	
 
 public:
+	UIImage();
+	~UIImage();
 
 	virtual void Init(const char* filePath, const float w, const float h, AlphaBlendMode alphaBlendMode = AlphaBlendMode_Trans);
 	virtual bool Start() override;
@@ -109,18 +111,16 @@ public:
 /// </summary>
 class UIGauge : public UIImage
 {
-	template<typename T>
-	friend T* UICanvas::CreateUI();
 
 private:
 	float m_maxValue = 1.0f;
 	float m_Value = 0.0f;
+	
 
-private:
+public:
 	UIGauge();
 	~UIGauge();
 
-public:
 	virtual void Init(const char* filePath, const float w, const float h, AlphaBlendMode alphaBlendMode = AlphaBlendMode_Trans);
 	virtual bool Start() override;
 	virtual void Update() override;
@@ -148,19 +148,16 @@ public:
 /// </summary>
 class UIText : public UIBase
 {
-	template<typename T>
-	friend T* UICanvas::CreateUI();
 
 protected:
 	FontRender m_fontRender;
 
 
-private:
+
+public:
 	UIText() {};
 	~UIText() {};
 
-
-public:
 	virtual bool Start() override;
 	virtual void Update() override;
 	virtual void Render(RenderContext& rc) override;
