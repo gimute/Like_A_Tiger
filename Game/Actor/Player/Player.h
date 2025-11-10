@@ -13,6 +13,7 @@ public:
 		en_run,
 		en_punch_cross,
 		en_kick_1,
+		en_punch_1,
 		num
 	};
 private:
@@ -23,7 +24,8 @@ private:
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Walking.tka",true},
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Run.tka",true},
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Cross_Punch_EventTest_2.tka",false},
-		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Kick_1_R.tka",false}
+		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Kick_1_R.tka",false},
+		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Punch_1_L.tka",false}
 	};
 	float comboWindowTimeList[PlayerAnimation::num] =
 	{

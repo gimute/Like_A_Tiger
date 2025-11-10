@@ -5,30 +5,31 @@
 
 IStateBase* YakuzaAttackComboStateMachine::GetNextState()
 {
-	uint32_t nextCombo = 0;
-
-	if (GetIsUnderFirstAttack())
-	{
-		if (m_hasStateMachine->GetAttackFlag())
-		{
-			nextCombo = GetFirstAttack();
-		}
-		else if (m_hasStateMachine->GetFinishBrowFlag())
-		{
-			nextCombo = GetFirstFinishBrow();
-		}
-	}
-	else
-	{
-		nextCombo = GetNextCombo();
-	}
-
 
 	//次のコンボのハッシュ値を探索
-	return FindClassUINT32TState(nextCombo);
+	return FindClassUINT32TState(GetNextCombo());
 }
+
+void YakuzaAttackComboStateMachine::StartFirstAttack()
+{
+	SetIsAttackEnds(false);
+
+	InitStateMachineUINT32T(m_firstAttack);
+	SetNextCombo(m_firstAttack);
+}
+
+void YakuzaAttackComboStateMachine::StartFirstFinishBrow()
+{
+	SetIsAttackEnds(false);
+
+	InitStateMachineUINT32T(m_firstFinishBrow);
+	SetNextCombo(m_firstFinishBrow);
+}
+
 
 YakuzaStateMachine* YakuzaAttackComboStateMachine::GetYakuzaStateMachine()
 {
 	return m_hasStateMachine;
 }
+
+

@@ -27,14 +27,12 @@ private:
 	//次のコンボを行うかどうか
 	bool m_isNextConbo = false;
 	//攻撃中が終了したかどうか
-	bool m_isAttackEnds = false;
-	//最初の攻撃を行ったかどうか
-	bool m_isUnderFirstAttack = false;
+	bool m_isAttackEnds = true;
 public:
 
 	inline void SetNextCombo(uint32_t setComboID) { m_nextCombo = setComboID; }
 
-	inline uint32_t GetNextCombo() { return m_isNextConbo; }
+	inline uint32_t GetNextCombo() { return m_nextCombo; }
 
 	inline void SetIsNextCombo(bool setIs) { m_isNextConbo = setIs; }
 
@@ -52,11 +50,10 @@ public:
 
 	inline bool GetIsAttackEnds() { return m_isAttackEnds; }
 
-	inline void SetIsUnderFirstAttack(bool SetIs) { m_isUnderFirstAttack = SetIs; }
+	void StartFirstAttack();
 
-	inline bool GetIsUnderFirstAttack() { return m_isUnderFirstAttack; }
+	void StartFirstFinishBrow();
 
 	YakuzaStateMachine* GetYakuzaStateMachine();
-
 };
 

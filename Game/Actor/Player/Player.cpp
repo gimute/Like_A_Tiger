@@ -1,11 +1,18 @@
 #include "stdafx.h"
 #include "Player.h"
+#include "Actor\Player\PlayerAttackComboState.h"
 
 //スタート関数
 bool Player::Start()
 {
 
 	MakeStateMachineUniquePtr<YakuzaStateMachine>(this);
+
+	GetYakuzaStateMachine()->InitAttackStateMachine(PlayerFirstAttackState::ID(), 0);
+
+	GetYakuzaStateMachine()->GetAttackStateMachine()->AddState<PlayerFirstAttackState>(GetYakuzaStateMachine()->GetAttackStateMachine());
+	GetYakuzaStateMachine()->GetAttackStateMachine()->AddState<PlayerSecondAttackState>(GetYakuzaStateMachine()->GetAttackStateMachine());
+	GetYakuzaStateMachine()->GetAttackStateMachine()->AddState<PlayerFirstFinalBlowState>(GetYakuzaStateMachine()->GetAttackStateMachine());
 
 	InitAnimationClipList(PlayerAnimation::num, animationDataList);
 
@@ -30,20 +37,6 @@ void Player::Update()
 	GetModelRender()->SetRotation(m_rotation);
 	GetModelRender()->Update();
 }
-
-//void Player::ModelRotation()
-//{
-//	if (fabsf(GetYakuzaStateMachine()->GetMoveVec().x) >= 0.001f ||
-//		fabsf(GetYakuzaStateMachine()->GetMoveVec().z) >= 0.001f)
-//	{
-//		//キャラクターの方向を変更
-//		m_rotation.SetRotationYFromDirectionXZ(GetYakuzaStateMachine()->GetMoveVec());
-//		m_modelRender.SetRotation(m_rotation);
-//	}
-//
-//	m_forward = Vector3::Zero;
-//	m_rotation.Apply(m_forward);
-//}
 
 //描画関数
 void Player::Render(RenderContext& rc)

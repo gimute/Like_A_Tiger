@@ -6,6 +6,10 @@
 
 IStateBase* YakuzaStateMachine::GetNextState()
 {
+
+
+
+	//攻撃中なら現在更新中のアタックステートを更新する
 	if (CanChangeAttack())
 	{
 		return FindClassNameState<YakuzaAttackState>();

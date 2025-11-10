@@ -67,85 +67,39 @@ void YakuzaAttackState::OnEnter()
 
 void YakuzaAttackState::OnUpdate()
 {
+	//アタックステートマシンを取得
+	auto* attackStateMachine = m_owner->GetAttackStateMachine();
 
-	m_owner->GetAttackStateMachine()->UpdateStateMachine();
+	//最初の攻撃が始まっていない場合最初の攻撃を行うように設定
+	if (attackStateMachine->GetIsAttackEnds())
+	{
+		if (m_owner->GetAttackFlag())
+		{
+			attackStateMachine->StartFirstAttack();
+		}
+		else if (m_owner->GetFinishBrowFlag())
+		{
+			attackStateMachine->StartFirstFinishBrow();
+		}
 
+		return;
+	}
+
+	if (!attackStateMachine->GetIsAttackEnds())
+	{
+		m_owner->GetAttackStateMachine()->UpdateStateMachine();
+
+		if (attackStateMachine->GetIsAttackEnds())
+		{
+			m_owner->SetIsAttack(false);
+		}
+
+		return;
+	}
 }
 
 void YakuzaAttackState::OnExit()
 {
 
 }
-
-///FirstAttackComboState
-//
-//void PlayerFirstAttackComboState::OnEnter()
-//{
-//
-//}
-//
-//void PlayerFirstAttackComboState::OnUpdate()
-//{
-//
-//	m_owner->HasCharactarPlayAnimation(Player::en_punch_cross);
-//
-//	if (m_nextComboNum == 0)
-//	{
-//		if (m_owner->GetAttackFlag())
-//		{
-//			m_nextComboNum = PlayerSecondAttackComboState::ID();
-//		}
-//		else if(m_owner->GetFinishBrowFlag())
-//		{
-//
-//		}
-//	}
-//
-//	if (m_owner->GetIsComboTransition())
-//	{
-//		if (m_nextComboNum != 0)
-//		{
-//			m_owner->SetNextCombo(m_nextComboNum);
-//		}
-//	}
-//
-//	if (!m_owner->IsHasCharactarPlayAnimation())
-//	{
-//		m_owner->SetIsAttackEnds(false);
-//	}
-//
-//}
-//
-//void PlayerFirstAttackComboState::OnExit()
-//{
-//	m_nextComboFlag = false;
-//
-//	m_nextComboNum = 0;
-//
-//	m_owner->SetIsComboTransition(false);
-//}
-//
-/////SecondAttackComboState
-//
-//void PlayerSecondAttackComboState::OnEnter()
-//{
-//
-//}
-//
-//void PlayerSecondAttackComboState::OnUpdate()
-//{
-//
-//	m_owner->HasCharactarPlayAnimation(Player::en_kick_1);
-//
-//	if (!m_owner->IsHasCharactarPlayAnimation())
-//	{
-//		m_owner->SetIsAttackEnds(false);
-//	}
-//}
-//
-//void PlayerSecondAttackComboState::OnExit()
-//{
-//
-//}
-
 

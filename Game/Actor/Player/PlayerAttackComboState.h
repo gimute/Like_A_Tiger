@@ -18,6 +18,44 @@ public:
 
 	~PlayerFirstAttackState() = default;
 
+	uint32_t m_nextComboHash = 0;
+
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+};
+
+class PlayerSecondAttackState : public IStateBase
+{
+	appState(PlayerSecondAttackState)
+protected:
+	YakuzaAttackComboStateMachine* m_owner = nullptr;
+public:
+	PlayerSecondAttackState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
+
+	~PlayerSecondAttackState() = default;
+
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+};
+
+class PlayerFirstFinalBlowState : public IStateBase
+{
+	appState(PlayerFirstFinalBlowState)
+protected:
+	YakuzaAttackComboStateMachine* m_owner = nullptr;
+public:
+	PlayerFirstFinalBlowState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
+
+	~PlayerFirstFinalBlowState() = default;
+
 	//ステートイン
 	void OnEnter() override;
 	//ステートアップデート

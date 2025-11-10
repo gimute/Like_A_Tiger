@@ -16,7 +16,7 @@ public:
 		AddState<YakuzaWalkState>(this);
 		AddState<YakuzaAttackState>(this);
 
-		ReqestState<YakuzaIdleState>();
+		InitStateMachineClassName<YakuzaIdleState>();
 	}
 
 	//次のステート値を取得する関数
