@@ -15,6 +15,7 @@ public:
 		en_swayRight,
 		en_swayLeft,
 		en_swayBack,
+		en_defense,
 		en_punch_cross,
 		en_kick_1,
 		en_punch_1,
@@ -31,6 +32,7 @@ private:
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Dodge_Right.tka",false},
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Dodge_Left.tka",false},
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Dodge_Back.tka",false},
+		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Guard.tka",true},
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Cross_Punch_EventTest_2.tka",false},
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Kick_1_R.tka",false},
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Punch_1_L.tka",false}

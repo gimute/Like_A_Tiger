@@ -13,7 +13,7 @@ void YakuzaIdleState::OnEnter()
 void YakuzaIdleState::OnUpdate()
 {
 
-	m_owner->HasCharactarPlayAnimation(Player::en_idle);
+	m_owner->HasCharactarPlayAnimation(Player::en_idle,0.1f);
 
 }
 
@@ -50,7 +50,7 @@ void YakuzaWalkState::OnUpdate()
 
 	m_owner->SetMoveVec(Vector3::Zero);
 
-	m_owner->HasCharactarPlayAnimation(Player::en_run);
+	m_owner->HasCharactarPlayAnimation(Player::en_run,0.1f);
 }
 
 void YakuzaWalkState::OnExit()
@@ -100,7 +100,8 @@ void YakuzaAttackState::OnUpdate()
 
 void YakuzaAttackState::OnExit()
 {
-
+	m_owner->SetIsAttack(false);
+	m_owner->GetAttackStateMachine()->SetIsAttackEnds(true);
 }
 
 //SwayState
@@ -158,16 +159,16 @@ void YakuzaSwayState::OnUpdate()
 	switch (m_swayDir)
 	{
 	case YakuzaSwayState::en_forwardDir:
-		m_owner->HasCharactarPlayAnimation(Player::en_swayForward,0.0f,3.0f);
+		m_owner->HasCharactarPlayAnimation(Player::en_swayForward,0.1f,3.0f);
 		break;
 	case YakuzaSwayState::en_backwardDir:
-		m_owner->HasCharactarPlayAnimation(Player::en_swayBack, 0.0f, 3.0f);
+		m_owner->HasCharactarPlayAnimation(Player::en_swayBack, 0.1f, 3.0f);
 		break;
 	case YakuzaSwayState::en_rightDir:
-		m_owner->HasCharactarPlayAnimation(Player::en_swayRight, 0.0f, 3.0f);
+		m_owner->HasCharactarPlayAnimation(Player::en_swayRight, 0.1f, 3.0f);
 		break;
 	case YakuzaSwayState::en_leftDir:
-		m_owner->HasCharactarPlayAnimation(Player::en_swayLeft, 0.0f, 3.0f);
+		m_owner->HasCharactarPlayAnimation(Player::en_swayLeft, 0.1f, 3.0f);
 		break;
 	default:
 		break;
@@ -188,4 +189,22 @@ void YakuzaSwayState::OnUpdate()
 void YakuzaSwayState::OnExit()
 {
 	m_swayVec = Vector3::Zero;
+	m_owner->SetIsSway(false);
+}
+
+//DefenseState
+
+void YakuzaDefenseState::OnEnter()
+{
+
+}
+
+void YakuzaDefenseState::OnUpdate()
+{
+	m_owner->HasCharactarPlayAnimation(Player::en_defense,0.1f);
+}
+
+void YakuzaDefenseState::OnExit()
+{
+
 }

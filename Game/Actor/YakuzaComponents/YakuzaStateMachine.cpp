@@ -19,6 +19,11 @@ IStateBase* YakuzaStateMachine::GetNextState()
 		return FindClassNameState<YakuzaSwayState>();
 	}
 
+	if (CanChangeDefense())
+	{
+		return FindClassNameState<YakuzaDefenseState>();
+	}
+
 	if (CanChangeWalk())
 	{
 		return FindClassNameState<YakuzaWalkState>();
@@ -55,6 +60,18 @@ bool YakuzaStateMachine::CanChangeSway()
 {
 	if (GetSwayFlag() ||
 		GetIsSway())
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool YakuzaStateMachine::CanChangeDefense()
+{
+	if (GetDefenseFlag() &&
+		!GetIsSway() &&
+		!GetIsAttack())
 	{
 		return true;
 	}

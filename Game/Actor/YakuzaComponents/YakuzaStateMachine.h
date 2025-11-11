@@ -16,6 +16,7 @@ public:
 		AddState<YakuzaWalkState>(this);
 		AddState<YakuzaAttackState>(this);
 		AddState<YakuzaSwayState>(this);
+		AddState<YakuzaDefenseState>(this);
 
 		InitStateMachineClassName<YakuzaIdleState>();
 	}
@@ -122,4 +123,6 @@ private:
 	bool CanChangeAttack();
 	//回避行動を行えるかどうか
 	bool CanChangeSway();
+	//防御行動を行えるかどうか
+	bool CanChangeDefense();
 };

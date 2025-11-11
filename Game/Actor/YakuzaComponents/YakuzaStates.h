@@ -97,3 +97,23 @@ private:
 	//回避ベクトル
 	Vector3 m_swayVec = Vector3::Zero;
 };
+
+
+class YakuzaDefenseState : public IStateBase
+{
+	appState(YakuzaDefenseState)
+protected:
+	YakuzaStateMachine* m_owner = nullptr;
+public:
+	//コンストラクタ
+	YakuzaDefenseState(YakuzaStateMachine* stateMachine) : m_owner(stateMachine) {}
+	//デストラクタ
+	~YakuzaDefenseState() = default;
+
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+};

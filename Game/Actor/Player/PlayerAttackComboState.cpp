@@ -18,7 +18,7 @@ void PlayerFirstAttackState::OnUpdate()
 
 	auto* stateMachine = m_owner->GetYakuzaStateMachine();
 
-	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(Player::en_punch_cross);
+	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(Player::en_punch_cross,0.1f);
 
 	if (stateMachine->GetAttackFlag() && !m_owner->GetIsNextCombo())
 	{
@@ -72,7 +72,7 @@ void PlayerSecondAttackState::OnUpdate()
 {
 	auto* stateMachine = m_owner->GetYakuzaStateMachine();
 
-	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(Player::en_kick_1);
+	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(Player::en_kick_1,0.1f);
 
 	if (stateMachine->GetIsComboTransition())
 	{
@@ -109,7 +109,7 @@ void PlayerFirstFinalBlowState::OnUpdate()
 {
 	auto* stateMachine = m_owner->GetYakuzaStateMachine();
 
-	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(Player::en_punch_1);
+	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(Player::en_punch_1,0.1f);
 
 	if (stateMachine->GetIsComboTransition())
 	{
