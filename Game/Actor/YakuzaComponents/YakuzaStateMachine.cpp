@@ -7,12 +7,16 @@
 IStateBase* YakuzaStateMachine::GetNextState()
 {
 
-
-
 	//攻撃中なら現在更新中のアタックステートを更新する
 	if (CanChangeAttack())
 	{
 		return FindClassNameState<YakuzaAttackState>();
+	}
+
+	//回避中なら、回避ボタンが押されたら
+	if (CanChangeSway())
+	{
+		return FindClassNameState<YakuzaSwayState>();
 	}
 
 	if (CanChangeWalk())
@@ -36,17 +40,21 @@ bool YakuzaStateMachine::CanChangeWalk()
 
 bool YakuzaStateMachine::CanChangeAttack()
 {
-	if (m_isAttack)
+	if (GetFinishBrowFlag() || 
+		GetAttackFlag() ||
+		GetIsAttack() && 
+		!GetIsSway())
 	{
 		return true;
 	}
 
-	if (m_attackFlag)
-	{
-		return true;
-	}
+	return false;
+}
 
-	if (m_finishBrowFlag)
+bool YakuzaStateMachine::CanChangeSway()
+{
+	if (GetSwayFlag() ||
+		GetIsSway())
 	{
 		return true;
 	}
@@ -74,8 +82,9 @@ void YakuzaStateMachine::SetHasCharactarForward(const Vector3& forward) { m_hasC
 
 Vector3& YakuzaStateMachine::GetHasCharactarForward() { return m_hasCharactar->GetForward(); }
 
-void YakuzaStateMachine::HasCharactarPlayAnimation(int animationNum,float interpolateTime)
+void YakuzaStateMachine::HasCharactarPlayAnimation(int animationNum,float interpolateTime,float animationSpeed)
 {
+	m_hasCharactar->GetModelRender()->SetAnimationSpeed(animationSpeed);
 	m_hasCharactar->GetModelRender()->PlayAnimation(animationNum, interpolateTime);
 }
 

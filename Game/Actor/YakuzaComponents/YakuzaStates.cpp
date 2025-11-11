@@ -107,15 +107,85 @@ void YakuzaAttackState::OnExit()
 
 void YakuzaSwayState::OnEnter()
 {
+	//‰ñ”ð“ü—ÍŽž‚Ì“ü—Í•ûŒü‚ðŽæ“¾
+	m_swayVec = m_owner->GetMoveVec();
+	
+	if (m_swayVec.x == 0.0f &&
+		m_swayVec.z == 0.0f)
+	{
+		m_swayVec = m_owner->GetHasCharactarForward() * -1.0f;
+	}
 
+	//³‹K‰»
+	m_swayVec.Normalize();
+
+	Vector3 modelForward = m_owner->GetHasCharactarForward();
+
+	Vector3 modelRight = Cross(Vector3::Up, modelForward);
+
+	float forwardDot = Dot(modelForward, m_swayVec);
+
+	float rightDot = Dot(modelRight, m_swayVec);
+
+	if (std::fabs(forwardDot) > std::fabs(rightDot))
+	{
+		if (forwardDot >= 0)
+		{
+			m_swayDir = SwayDir::en_forwardDir;
+		}
+		else
+		{
+			m_swayDir = SwayDir::en_backwardDir;
+		}
+	}
+	else
+	{
+		if (rightDot >= 0)
+		{
+			m_swayDir = SwayDir::en_rightDir;
+		}
+		else
+		{
+			m_swayDir = SwayDir::en_leftDir;
+		}
+	}
+
+	m_owner->SetIsSway(true);
 }
 
 void YakuzaSwayState::OnUpdate()
 {
+	switch (m_swayDir)
+	{
+	case YakuzaSwayState::en_forwardDir:
+		m_owner->HasCharactarPlayAnimation(Player::en_swayForward,0.0f,3.0f);
+		break;
+	case YakuzaSwayState::en_backwardDir:
+		m_owner->HasCharactarPlayAnimation(Player::en_swayBack, 0.0f, 3.0f);
+		break;
+	case YakuzaSwayState::en_rightDir:
+		m_owner->HasCharactarPlayAnimation(Player::en_swayRight, 0.0f, 3.0f);
+		break;
+	case YakuzaSwayState::en_leftDir:
+		m_owner->HasCharactarPlayAnimation(Player::en_swayLeft, 0.0f, 3.0f);
+		break;
+	default:
+		break;
+	}
 
+	Vector3 moveVec = m_swayVec * m_owner->GetSwaySpeed();
+
+	Vector3 newPos = m_owner->GetHasCharactarCharaCon()->Execute(moveVec, g_gameTime->GetFrameDeltaTime());
+
+	m_owner->SetHasCharactarPosition(newPos);
+
+	if (!m_owner->IsHasCharactarPlayAnimation())
+	{
+		m_owner->SetIsSway(false);
+	}
 }
 
 void YakuzaSwayState::OnExit()
 {
-
+	m_swayVec = Vector3::Zero;
 }

@@ -28,6 +28,8 @@ private:
 	Vector3 m_moveVec = Vector3::Zero;
 	//移動速度 
 	float m_moveSpeed = 400.0f;
+	//回避速度
+	float m_swaySpeed = 600.0f;
 	//Aボタンが押されたか
 	bool m_attackFlag = false;
 	//Yボタンが押されたか
@@ -38,6 +40,8 @@ private:
 	bool m_defenseFlag = false;
 	//攻撃が中か
 	bool m_isAttack = false;
+	//回避中か
+	bool m_isSway = false;
 	//次のコンボに以降可能かどうか
 	bool m_isComboTransition = false;
 	//このステートを扱うCharacterのポインタ
@@ -53,6 +57,10 @@ public:
 	inline void SetMoveSpeed(float speed) { m_moveSpeed = speed; }
 
 	inline float GetMoveSpeed() { return m_moveSpeed; }
+
+	inline float SetSwaySpeed(float speed) { m_swaySpeed = speed; }
+
+	inline float GetSwaySpeed() { return m_swaySpeed; }
 
 	inline void SetAttackFlag(bool setIs) { m_attackFlag = setIs; }
 
@@ -74,6 +82,10 @@ public:
 
 	inline bool GetIsAttack() { return m_isAttack; }
 
+	inline void SetIsSway(bool setIs) { m_isSway = setIs; }
+
+	inline bool GetIsSway() { return m_isSway; }
+
 	inline void SetIsComboTransition(bool setIs) { m_isComboTransition = setIs; }
 
 	inline bool GetIsComboTransition() { return m_isComboTransition; }
@@ -92,7 +104,7 @@ public:
 
 	Vector3& GetHasCharactarForward();
 
-	void HasCharactarPlayAnimation(int animationNum, float interpolateTime = 0.0f);
+	void HasCharactarPlayAnimation(int animationNum, float interpolateTime = 0.0f,float animationSpeed = 1.0f);
 
 	bool IsHasCharactarPlayAnimation();
 
@@ -108,4 +120,6 @@ private:
 	bool CanChangeWalk();
 	//格闘攻撃を行えるかどうか
 	bool CanChangeAttack();
+	//回避行動を行えるかどうか
+	bool CanChangeSway();
 };

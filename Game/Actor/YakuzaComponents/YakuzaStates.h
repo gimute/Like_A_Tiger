@@ -84,5 +84,16 @@ public:
 	void OnUpdate() override;
 	//ステートアウト
 	void OnExit() override;
-
+private:
+	enum SwayDir
+	{
+		en_forwardDir,
+		en_backwardDir,
+		en_rightDir,
+		en_leftDir
+	};
+	//回避方向
+	SwayDir m_swayDir = SwayDir::en_forwardDir;
+	//回避ベクトル
+	Vector3 m_swayVec = Vector3::Zero;
 };
