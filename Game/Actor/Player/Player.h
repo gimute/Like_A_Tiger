@@ -1,6 +1,7 @@
 #pragma once
 #include "Actor\Character.h"
 #include "Actor\YakuzaComponents\YakuzaStateMachine.h"
+#include "Actor\YakuzaComponents\YakuzaAnimationState.h"
 
 //プレイヤーが操作するキャラクターを継承したクラス
 class Player : public Character
@@ -8,15 +9,7 @@ class Player : public Character
 public:
 	enum PlayerAnimation
 	{
-		en_idle,
-		en_walk,
-		en_run,
-		en_swayForward,
-		en_swayRight,
-		en_swayLeft,
-		en_swayBack,
-		en_defense,
-		en_punch_cross,
+		en_punch_cross = YakuzaAnimation::en_num,
 		en_kick_1,
 		en_punch_1,
 		num
@@ -37,17 +30,9 @@ private:
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Kick_1_R.tka",false},
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Punch_1_L.tka",false}
 	};
-	float comboWindowTimeList[PlayerAnimation::num] =
-	{
-		0.0f,
-		0.0f,
-		0.0f,
-		0.5f,
-		0.5f,
-	};
 public:
 	//コンストラクタ
-	Player() = default;
+	Player();
 	//デストラクタ
 	~Player() = default;
 

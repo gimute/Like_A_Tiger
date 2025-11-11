@@ -2,12 +2,15 @@
 #include "Player.h"
 #include "Actor\Player\PlayerAttackComboState.h"
 
+//コンストラクタ
+Player::Player()
+{
+	MakeStateMachineUniquePtr<YakuzaStateMachine>(this);
+}
+
 //スタート関数
 bool Player::Start()
 {
-
-	MakeStateMachineUniquePtr<YakuzaStateMachine>(this);
-
 	GetYakuzaStateMachine()->InitAttackStateMachine(PlayerFirstAttackState::ID(), 0);
 
 	GetYakuzaStateMachine()->GetAttackStateMachine()->AddState<PlayerFirstAttackState>(GetYakuzaStateMachine()->GetAttackStateMachine());

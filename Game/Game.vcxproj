@@ -274,6 +274,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Actor\YakuzaComponents\YakuzaAttackComboStateMachine.h" />
+    <ClInclude Include="Actor\YakuzaComponents\YakuzaAnimationState.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -57,5 +57,6 @@
     <ClInclude Include="Actor\BackGround\ProtoStage.h" />
     <ClInclude Include="Actor\YakuzaComponents\YakuzaAttackComboStateMachine.h" />
     <ClInclude Include="Actor\Player\PlayerAttackComboState.h" />
+    <ClInclude Include="Actor\YakuzaComponents\YakuzaAnimationState.h" />
   </ItemGroup>
 </Project>
