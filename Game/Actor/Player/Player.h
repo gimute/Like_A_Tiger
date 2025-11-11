@@ -1,6 +1,7 @@
 #pragma once
 #include "Actor\Character.h"
-#include "Actor\Player\PlayerStateMachine.h"
+#include "Actor\YakuzaComponents\YakuzaStateMachine.h"
+#include "Actor\YakuzaComponents\YakuzaAnimationState.h"
 
 //プレイヤーが操作するキャラクターを継承したクラス
 class Player : public Character
@@ -8,9 +9,9 @@ class Player : public Character
 public:
 	enum PlayerAnimation
 	{
-		en_idle,
-		en_walk,
-		en_run,
+		en_punch_cross = YakuzaAnimation::en_num,
+		en_kick_1,
+		en_punch_1,
 		num
 	};
 private:
@@ -19,17 +20,19 @@ private:
 		//追加したい場合はここから下に伸ばす
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Idle.tka",true},
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Walking.tka",true},
-		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Run.tka",true}
+		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Run.tka",true},
+		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Dodge_Forward.tka",false},
+		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Dodge_Right.tka",false},
+		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Dodge_Left.tka",false},
+		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Dodge_Back.tka",false},
+		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Guard.tka",true},
+		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Cross_Punch_EventTest_2.tka",false},
+		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Kick_1_R.tka",false},
+		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Punch_1_L.tka",false}
 	};
-private:
-	//キャラクターコントローラー
-	CharacterController m_charaCon;
-	//プレイヤーの正面方向
-	Vector3 m_forward = Vector3::AxisZ;
-
 public:
 	//コンストラクタ
-	Player() = default;
+	Player();
 	//デストラクタ
 	~Player() = default;
 
@@ -37,19 +40,11 @@ public:
 	bool Start() override;
 	//更新関数
 	void Update() override;
-	//モデル回転
-	void ModelRotation();
 	//描画関数
 	void Render(RenderContext& rc) override;
 
-	PlayerStateMachine* GetPlayerStateMachine()
+	YakuzaStateMachine* GetYakuzaStateMachine()
 	{
-		return dynamic_cast<PlayerStateMachine*>(GetStateMachine());
+		return dynamic_cast<YakuzaStateMachine*>(GetStateMachine());
 	}
-
-	inline void SetPlayerForward(const Vector3& forward) { m_forward = forward; }
-
-	inline const Vector3& GetPlayerForward() { return m_forward; }
-
-	inline CharacterController* GetCharacterController() { return &m_charaCon; }
 };
