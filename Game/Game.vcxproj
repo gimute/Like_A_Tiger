@@ -247,6 +247,7 @@
     </ClCompile>
     <ClCompile Include="system\system.cpp" />
     <ClCompile Include="Actor\YakuzaComponents\YakuzaAttackComboStateMachine.cpp" />
+    <ClCompile Include="UI\UIBase\UIBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorStatus.h" />
@@ -275,6 +276,7 @@
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Actor\YakuzaComponents\YakuzaAttackComboStateMachine.h" />
     <ClInclude Include="Actor\YakuzaComponents\YakuzaAnimationState.h" />
+    <ClInclude Include="UI\UIBase\UIBase.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
