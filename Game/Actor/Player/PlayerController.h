@@ -1,27 +1,33 @@
 #pragma once
+#include "Actor\Player\PlayerCameraController.h"
 
 class Player;
+class ICameraController;
 
 class PlayerController : public IGameObject
 {
 public:
+	//コンストラクタ
+	PlayerController() = default;
 
-	PlayerController() {}
-
-	~PlayerController() {}
+	~PlayerController() = default;
 
 	//スタート関数
 	bool Start() override;
 	//アップデート関数
 	void Update() override;
 
-	//ターゲット変数
-	Player* m_controllTarget = nullptr;
-	//ターゲット決定関数
-	void TargetSet(Player* target) { m_controllTarget = target; }
+	//プレイヤーのポインタ
+	Player* m_player = nullptr;
+	//プレイヤーカメラのポインタ
+	PlayerCameraController* m_cameraController = nullptr;
+	//プレイヤー設定
+	void SetPlayer(Player* player) { m_player = player; }
+	//カメラ設定
+	void SetPlayerCameraController(ICameraController* controller) { m_cameraController = dynamic_cast<PlayerCameraController*>(controller); }
 private:
-	//左スティックの入力量を取得
-	Vector3 GetStickL() const;
+	//カメラを考慮した移動量計算
+	Vector3 CameraControllCalc();
 	//右スティックの入力量を取得
 	Vector3 GetStickR() const;
 

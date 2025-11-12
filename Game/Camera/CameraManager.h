@@ -56,6 +56,19 @@ public:
 			std::make_unique<ControllClass>(std::forward<Args>(args)...)
 		);
 	}
+	///カメラ取得
+	template<typename ControllClass>
+	inline ICameraController* GetCameraController()
+	{
+		uint32_t id = ControllClass::ID();
+		const auto& it = m_cameraControllerList.find(id);
+		if (it == m_cameraControllerList.end())
+		{
+			//念のため
+			return nullptr;
+		}
+		return it->second.get();
+	}
 	///切り替え先カメラコントローラー設定
 	template<typename ControllClass>
 	inline void SetNextCameraController()

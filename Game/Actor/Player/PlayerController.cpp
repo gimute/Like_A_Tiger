@@ -2,7 +2,9 @@
 #include "PlayerController.h"
 
 #include "Actor\Player\Player.h"
-#include "PlayerStateMachine.h"
+#include "Camera\ICameraController.h"
+#include "Actor\Player\PlayerCameraController.h"
+#include "Actor\YakuzaComponents\YakuzaStates.h"
 
 namespace{
 	inline bool IsInputStickL()
@@ -35,24 +37,28 @@ bool PlayerController::Start()
 
 void PlayerController::Update()
 {
-	auto* targetStateMachine = m_controllTarget->GetPlayerStateMachine();
+	auto* playerStateMachine = m_player->GetYakuzaStateMachine();
 
-	if (!targetStateMachine)
+	auto* cameraController = m_cameraController;
+
+	if (!playerStateMachine || !cameraController)
 	{
 		return;
 	}
 
+	cameraController->SetTargetPosition(playerStateMachine->GetHasCharactarPos());
+
 	//フィニッシュブロウの条件文を付けるならここ
-	targetStateMachine->SetFinishBrowButtonY(g_pad[0]->IsTrigger(enButtonY));
+	playerStateMachine->SetFinishBrowFlag(g_pad[0]->IsTrigger(enButtonY));
 	
 	//通常攻撃の条件文を付けるならここ
-	targetStateMachine->SetAttackButtonB(g_pad[0]->IsTrigger(enButtonB));
+	playerStateMachine->SetAttackFlag(g_pad[0]->IsTrigger(enButtonB));
 
 	//スウェイの条件文付けるならここ
-	targetStateMachine->SetSwayMoveButtonA(g_pad[0]->IsTrigger(enButtonA));
+	playerStateMachine->SetSwayFlag(g_pad[0]->IsTrigger(enButtonA));
 
 	//ガードの条件文付けるならここ
-	targetStateMachine->SetDefenseButtonLTandRT(
+	playerStateMachine->SetDefenseFlag(
 		g_pad[0]->IsPress(enButtonLB1) ||
 		g_pad[0]->IsPress(enButtonRB1)
 	);
@@ -60,43 +66,42 @@ void PlayerController::Update()
 	//Lスティックの入力があれば
 	if (IsInputStickL())
 	{
-		targetStateMachine->SetPlayerMoveVec(GetStickL());
+		playerStateMachine->SetMoveVec(CameraControllCalc());
 	}
-	//Lスティックの入力量を設定
-	targetStateMachine->SetStickAmountLX(g_pad[0]->GetLStickXF());
-	targetStateMachine->SetStickAmountLY(g_pad[0]->GetLStickYF());
-
-	targetStateMachine->SetStickR(IsInputStickR());
 
 	//Rスティックの入力量を設定
-	targetStateMachine->SetStickAmountRX(g_pad[0]->GetRStickXF());
-	targetStateMachine->SetStickAmountRY(g_pad[0]->GetRStickYF());
+	cameraController->SetCameraMoveAmountXY(
+		g_pad[0]->GetRStickXF(), 
+		g_pad[0]->GetRStickYF()
+	);
 }
 
-Vector3 PlayerController::GetStickL() const 
+Vector3 PlayerController::CameraControllCalc()
 {
 	//左スティックの入力量を取得
 	Vector3 stickL;
 	stickL.x = g_pad[0]->GetLStickXF();
 	stickL.y = g_pad[0]->GetLStickYF();
 
-	//カメラの前方向と右方向のベクトルを取得
+	//カメラの前方向と右方向ベクトルを取得
 	Vector3 forward = g_camera3D->GetForward();
 	Vector3 right = g_camera3D->GetRight();
 
-	//y方向に移動しない
+	//y方向には移動しない
 	forward.y = 0.0f;
 	right.y = 0.0f;
 
-	//左スティックの入力量を加算
+	forward.Normalize();
+	right.Normalize();
+
 	right *= stickL.x;
 	forward *= stickL.y;
 
-	Vector3 direction = right + forward;
-	//正規化
-	direction.Normalize();
+	//移動速度にスティックの入力量を加算
+	Vector3 newMoveVec = right + forward;
 
-	return direction;
+	//移動速度にスティックの入力量を加算
+	return newMoveVec;
 }
 
 Vector3 PlayerController::GetStickR() const
@@ -108,3 +113,4 @@ Vector3 PlayerController::GetStickR() const
 
 	return stickR;
 }
+

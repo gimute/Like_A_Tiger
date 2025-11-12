@@ -198,7 +198,7 @@ namespace nsK2EngineLow {
 	//		{
 	//			m_pointLight->UnUse();
 	//			m_pointLight->SetColor(0.0f, 0.0f, 0.0f);
-	//			m_pointLight->SetPosition(0.0f, 0.0f, 0.0f);
+	//			m_pointLight->SetHasCharactarPosition(0.0f, 0.0f, 0.0f);
 	//			m_pointLight->SetRange(0.0f);
 	//			m_pointLight->SetAffectPowParam(1.0f);
 	//		}

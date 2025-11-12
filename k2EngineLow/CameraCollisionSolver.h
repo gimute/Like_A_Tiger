@@ -32,7 +32,7 @@ namespace nsK2EngineLow {
 	///			cameraPosition,			//第二引数は衝突解決前の視点の座標。
 	///			cameraTarget,			//第三引数は注視点の座標。
 	///			//衝突解決した座標をカメラの座標として設定する。
-	///			g_camera3D->SetPosition(newCameraPosition);
+	///			g_camera3D->SetHasCharactarPosition(newCameraPosition);
 	///		}
 	///
 	///		return 0;

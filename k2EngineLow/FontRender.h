@@ -23,12 +23,12 @@ namespace nsK2EngineLow
 			return m_text;
 		}
 
-		//座標設定、ｚ値は0.0fで
+		//座標設定、ｚ値は0.0fにしてください
 		void SetPosition(float x, float y, float z)
 		{
 			SetPosition({ x,y,z });
 		}
-		//座標設定。ｚ値は0.0f
+		//座標設定。ｚ値は0.0fにしてください
 		void SetPosition(const Vector3& position)
 		{
 			m_position = position;

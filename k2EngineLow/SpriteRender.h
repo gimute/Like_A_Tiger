@@ -92,6 +92,17 @@ namespace nsK2EngineLow
 			return m_sprite.GetMulColor();
 		}
 
+		/// <summary>
+		/// Transformクラスで座標・拡大・回転を設定
+		/// </summary>
+		/// <param name="transform"></param>
+		void SetTransform(const Transform& transform)
+		{
+			SetPosition(transform.m_position);
+			SetRotation(transform.m_rotation);
+			SetScale(transform.m_scale);
+		}
+
 		//追加
 		//void SetTexture(const std::string& filePath);
 

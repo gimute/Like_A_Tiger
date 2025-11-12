@@ -22,6 +22,11 @@ protected:
 	/// 拡大率
 	/// </summary>
 	Vector3 m_scale = Vector3::One;
+	/// <summary>
+	/// 正面ベクトル
+	/// </summary>
+	Vector3 m_forward = Vector3::AxisZ;
+
 
 protected:
 	//モデル描画機能
@@ -57,10 +62,14 @@ public:
 
 	inline void SetRotation(const Quaternion& rot) { m_rotation = rot; }
 
-	inline const Quaternion& GetRotation() { return m_rotation; }
+	inline  Quaternion& GetRotation() { return m_rotation; }
 
 	inline void SetScale(const Vector3& scale) { m_scale = scale; }
 
 	inline const Vector3& GetScale() { return m_scale; }
+
+	inline void SetForward(const Vector3& forward) { m_forward = forward; }
+
+	inline Vector3& GetForward() { return m_forward; }
 };
 

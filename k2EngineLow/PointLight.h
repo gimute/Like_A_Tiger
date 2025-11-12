@@ -8,13 +8,13 @@ namespace nsK2EngineLow {
 		~PointLight();
 
 		////À•W‚ğİ’è
-		//void SetPosition(const Vector3& position)
+		//void SetHasCharactarPosition(const Vector3& position)
 		//{                                                                                           
-		//m_pointLight->SetPosition(position);
+		//m_pointLight->SetHasCharactarPosition(position);
 		//}
-		//void SetPosition(float x, float y, float z)
+		//void SetHasCharactarPosition(float x, float y, float z)
 		//{
-		//	m_pointLight->SetPosition(x, y, z);
+		//	m_pointLight->SetHasCharactarPosition(x, y, z);
 		//}
 
 		////ƒJƒ‰[‚ğİ’è
