@@ -73,6 +73,15 @@ void UIImage::Update()
 	m_spriteRender.Update();
 }
 
+void UIImage::SetPivot(float x, float y)
+{
+	m_spriteRender.SetPivot(x, y);
+}
+
+void UIImage::SetPivot(const Vector2& pivot)
+{
+	m_spriteRender.SetPivot(pivot);
+}
 
 void UIImage::Render(RenderContext& rc)
 {
@@ -104,6 +113,25 @@ bool UIGauge::Start()
 	return true;
 }
 
+void UIGauge::SetPivot(float x, float y)
+{
+	m_spriteRender.SetPivot(x, y);
+}
+
+void UIGauge::SetPivot(const Vector2& pivot)
+{
+	m_spriteRender.SetPivot(pivot);
+}
+
+const float UIGauge::GetMaxValue() const
+{
+	return m_maxValue;
+}
+
+const float UIGauge::GetValue() const
+{
+	return m_Value;
+}
 
 void UIGauge::Update()
 {

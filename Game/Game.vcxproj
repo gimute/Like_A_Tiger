@@ -232,6 +232,7 @@
     <ClCompile Include="GameScene\GameInScene.cpp" />
     <ClCompile Include="GameScene\GameSceneManager.cpp" />
     <ClCompile Include="GameScene\GameTitleScene.cpp" />
+    <ClCompile Include="UI\HPGauge.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Actor\Player\Player.cpp" />
     <ClCompile Include="Actor\Player\PlayerStateMachine.cpp" />
@@ -265,6 +266,7 @@
     <ClInclude Include="Actor\Player\PlayerController.h" />
     <ClInclude Include="Camera\ICameraController.h" />
     <ClInclude Include="Actor\Player\PlayerCameraController.h" />
+    <ClInclude Include="UI\HPGauge.h" />
     <ClInclude Include="StateMachineComponents\IState.h" />
     <ClInclude Include="StateMachineComponents\IStateMachine.h" />
     <ClInclude Include="stdafx.h" />

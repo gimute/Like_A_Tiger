@@ -3,6 +3,7 @@
 
 class Player;
 class PlayerController;
+class HPGauge;
 
 class GameInScene :
     public IGameSceneState
@@ -40,6 +41,8 @@ private:
     Player* m_player = nullptr;
     ///プレイヤーコントローラーのポインタ
     PlayerController* m_playerController = nullptr;
-    
+    //HPゲージテスト
+    HPGauge* m_HPGauge;
+    float m_nowHP = 1.0f;
 };
 

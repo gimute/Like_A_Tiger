@@ -26,6 +26,7 @@
     <ClCompile Include="Camera\CameraEntity.cpp" />
     <ClCompile Include="Actor\Player\PlayerCameraController.cpp" />
     <ClCompile Include="UI\UIBase\UIBase.cpp" />
+    <ClCompile Include="UI\HPGauge.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -53,5 +54,6 @@
     <ClInclude Include="Actor\Player\PlayerCameraController.h" />
     <ClInclude Include="Camera\CameraUpdateData.h" />
     <ClInclude Include="UI\UIBase\UIBase.h" />
+    <ClInclude Include="UI\HPGauge.h" />
   </ItemGroup>
 </Project>

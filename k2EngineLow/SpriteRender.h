@@ -75,6 +75,11 @@ namespace nsK2EngineLow
 		{
 			m_pivot = pivot;
 		}
+		void SetPivot(const float x, const float y)
+		{
+			m_pivot = Vector2(x, y);
+		}
+
 		//ピボットを取得
 		const Vector2& GetPivot()const
 		{
