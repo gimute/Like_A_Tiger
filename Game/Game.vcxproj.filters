@@ -29,6 +29,10 @@
     <ClCompile Include="Actor\YakuzaComponents\YakuzaAttackComboStateMachine.cpp" />
     <ClCompile Include="Actor\Player\PlayerAttackComboState.cpp" />
     <ClCompile Include="UI\UIBase\UIBase.cpp" />
+    <ClCompile Include="Actor\Enemy\Enemy.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyFactory.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyTypeSet\NormalYakuzaActionSet.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyTypeSet\EnemyTypeSetFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -60,5 +64,11 @@
     <ClInclude Include="Actor\Player\PlayerAttackComboState.h" />
     <ClInclude Include="Actor\YakuzaComponents\YakuzaAnimationState.h" />
     <ClInclude Include="UI\UIBase\UIBase.h" />
+    <ClInclude Include="Actor\Enemy\Enemy.h" />
+    <ClInclude Include="Actor\Enemy\EnemyFactory.h" />
+    <ClInclude Include="Actor\Enemy\EnemyTypeSet\IEnemyTypeSet.h" />
+    <ClInclude Include="Actor\Enemy\EnemyTypeSet\NormalYakuzaActionSet.h" />
+    <ClInclude Include="Actor\Enemy\EnemyTypeSet\EnemyTypeSetFactory.h" />
+    <ClInclude Include="Actor\Enemy\EnemyType.h" />
   </ItemGroup>
 </Project>
