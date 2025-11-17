@@ -29,14 +29,16 @@ struct NormalYakuzaTypeSet : public IEnemyTypeSet
 {
 	appState(NormalYakuzaTypeSet)
 public:
-	std::vector<std::unique_ptr<IStateBase>> CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) const override
+	std::unordered_map<uint32_t, std::unique_ptr<IStateBase>> CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) const override
 	{
-		std::vector<std::unique_ptr<IStateBase>> actions;
+		std::unordered_map<uint32_t,std::unique_ptr<IStateBase>> actions;
 
-		actions.push_back(std::make_unique<NormalYakuzaFirstAttackState>(useAttackStateMachine));
+		actions.emplace(NormalYakuzaFirstAttackState::ID(), std::make_unique<NormalYakuzaFirstAttackState>(useAttackStateMachine));
 
 		return actions;
 	}
 private:
 	static TypeSetAutoRegister<NormalYakuzaTypeSet> typeSet;
+
+	
 };

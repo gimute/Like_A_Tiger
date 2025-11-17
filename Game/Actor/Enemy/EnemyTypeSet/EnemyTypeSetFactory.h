@@ -19,14 +19,14 @@ public:
 		return inst;
 	}
 	//“o˜^
-	void Register(uint32_t hash, CreateFunc func)
+	void Register(EnemyType type, CreateFunc func)
 	{
-		m_registry[hash] = func;
+		m_registry[type] = func;
 	}
 	//ì¬
-	std::unique_ptr<IEnemyTypeSet> Create(uint32_t hash, CreateFunc func)
+	std::unique_ptr<IEnemyTypeSet> Create(EnemyType type)
 	{
-		auto it = m_registry.find(hash);
+		auto it = m_registry.find(type);
 		if (it != m_registry.end())
 		{
 			return it->second();
@@ -35,6 +35,6 @@ public:
 	}
 private:
 	//“o˜^‚³‚ê‚½Set‚ÌƒŠƒXƒg
-	std::unordered_map<uint32_t, CreateFunc> m_registry;
+	std::unordered_map<EnemyType, CreateFunc> m_registry;
 };
 

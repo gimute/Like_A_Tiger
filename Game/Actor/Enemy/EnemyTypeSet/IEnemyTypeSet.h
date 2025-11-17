@@ -5,15 +5,17 @@
 #include "Actor\YakuzaComponents\YakuzaAttackComboStateMachine.h"
 #include "Actor\Enemy\EnemyTypeSet\EnemyTypeSetFactory.h"
 
+#include "Actor\Enemy\EnemyType.h"
+
 class EnemyTypeSetFactory;
 
 template<class ClassType>
 class TypeSetAutoRegister
 {
 public:
-	TypeSetAutoRegister(uint32_t hash)
+	TypeSetAutoRegister(EnemyType type)
 	{
-		EnemyTypeSetFactory::GetInstance().Register(hash, []()
+		EnemyTypeSetFactory::GetInstance().Register(type, []()
 		{
 			return std::make_unique<ClassType>();
 		});
@@ -26,6 +28,6 @@ public:
 	//デストラクタ
 	virtual ~IEnemyTypeSet() = default;
 	//ステート生成
-	virtual std::vector<std::unique_ptr<IStateBase>> CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) const = 0;
+	virtual std::unordered_map<uint32_t, std::unique_ptr<IStateBase>> CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) const = 0;
 };
 

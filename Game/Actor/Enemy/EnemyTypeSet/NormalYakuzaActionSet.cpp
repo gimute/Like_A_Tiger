@@ -2,7 +2,7 @@
 #include "NormalYakuzaActionSet.h"
 #include "Actor\Enemy\EnemyTypeSet\IEnemyTypeSet.h"
 
-TypeSetAutoRegister<NormalYakuzaTypeSet> NormalYakuzaTypeSet::typeSet{ NormalYakuzaTypeSet::ID() };
+TypeSetAutoRegister<NormalYakuzaTypeSet> NormalYakuzaTypeSet::typeSet{ EnemyType::en_normalYakuza };
 
 //FirstAttackState
 
