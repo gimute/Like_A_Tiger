@@ -29,6 +29,7 @@
     <ClCompile Include="Actor\YakuzaComponents\YakuzaAttackComboStateMachine.cpp" />
     <ClCompile Include="Actor\Player\PlayerAttackComboState.cpp" />
     <ClCompile Include="UI\UIBase\UIBase.cpp" />
+    <ClCompile Include="UI\HPGauge.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -60,5 +61,6 @@
     <ClInclude Include="Actor\Player\PlayerAttackComboState.h" />
     <ClInclude Include="Actor\YakuzaComponents\YakuzaAnimationState.h" />
     <ClInclude Include="UI\UIBase\UIBase.h" />
+    <ClInclude Include="UI\HPGauge.h" />
   </ItemGroup>
 </Project>

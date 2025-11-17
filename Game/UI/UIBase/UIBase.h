@@ -101,6 +101,8 @@ public:
 	virtual bool Start() override;
 	virtual void Update() override;
 	virtual void Render(RenderContext& rc) override;
+	virtual void SetPivot(float x, float y);
+	virtual void SetPivot(const Vector2& pivot);
 };
 
 
@@ -114,17 +116,22 @@ class UIGauge : public UIImage
 
 private:
 	float m_maxValue = 1.0f;
-	float m_Value = 0.0f;
+	float m_Value = 1.0f;
 	
 
 public:
 	UIGauge();
 	~UIGauge();
 
-	virtual void Init(const char* filePath, const float w, const float h, AlphaBlendMode alphaBlendMode = AlphaBlendMode_Trans);
-	virtual bool Start() override;
-	virtual void Update() override;
-	virtual void Render(RenderContext& rc) override;
+	void Init(const char* filePath, const float w, const float h, AlphaBlendMode alphaBlendMode = AlphaBlendMode_Trans);
+	bool Start() override;
+	void Update() override;
+	void Render(RenderContext& rc) override;
+	void SetPivot(float x, float y) override;
+	void SetPivot(const Vector2& pivot) override;
+
+	const float GetMaxValue() const;
+	const float GetValue() const;
 
 	void SetMaxValue(float max)
 	{
