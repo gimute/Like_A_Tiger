@@ -6,6 +6,9 @@
 class HPGauge : public IGameObject
 {
 public:
+	//HPUIに設定する画像のデータ
+	//バーは実際に伸び縮みする部分、フレームはバーの周りの枠部分
+	//バーとフレームの位置関係は、フレームの中央部分にバーが来るように計算して配置する
 	struct HPGaugeUIInitData
 	{
 		const char* frameFilePath;			//フレーム画像のファイルパス
@@ -21,6 +24,7 @@ public:
 
 	//定数
 private:
+	//仮のHPバー用のデータ
 	const HPGaugeUIInitData defaultHPGauge =
 	{
 		"Assets/spriteData/HPGauge/Test/HPGauge_Frame.DDS",
