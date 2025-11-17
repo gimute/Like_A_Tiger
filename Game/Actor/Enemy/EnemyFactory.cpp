@@ -4,13 +4,15 @@
 
 #include "Actor\Enemy\Enemy.h"
 
-Character* EnemyFactory::CreateEnemy(EnemyType type)
+Enemy* EnemyFactory::CreateEnemy(EnemyType type)
 {
-
 	Enemy* newEnemy = NewGO<Enemy>(0,"enemy");
-
+	//基本ステートマシン作成
+	newEnemy->MakeStateMachineUniquePtr<YakuzaStateMachine>(newEnemy);
 	//TypeSet取得
 	auto typeSet = EnemyTypeSetFactory::GetInstance().Create(type);
+	//アタックステートマシン初期化
+	newEnemy->GetYakuzaStateMachine()->InitAttackStateMachine(typeSet.get()->GetFirstAttackID(),typeSet.get()->GetFirstFinishBrowID());
 	//TypeSet攻撃ステートリスト作成
 	auto typeSetAttackList = typeSet.get()->CreateActions(newEnemy->GetYakuzaStateMachine()->GetAttackStateMachine());
 	//攻撃ステート登録
@@ -22,9 +24,10 @@ Character* EnemyFactory::CreateEnemy(EnemyType type)
 			id,
 			std::move(it->second.get())
 		);
+
+		it++;
 	}
 
-
-	return nullptr;
+	return newEnemy;
 }
 

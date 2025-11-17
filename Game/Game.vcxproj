@@ -226,11 +226,14 @@
     <ClCompile Include="Actor\ActorStatus.cpp" />
     <ClCompile Include="Actor\Actor.cpp" />
     <ClCompile Include="Actor\Character.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyAI\IEnemyAi.cpp" />
     <ClCompile Include="Camera\CameraEntity.cpp" />
     <ClCompile Include="Camera\CameraManager.cpp" />
     <ClCompile Include="Actor\Enemy\Enemy.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyFactory.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyTypeSet\EnemyTypeSetFactory.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyManager.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAiFactory.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameScene\GameInScene.cpp" />
     <ClCompile Include="GameScene\GameSceneManager.cpp" />
@@ -244,6 +247,7 @@
     <ClCompile Include="Actor\BackGround\ProtoStage.cpp" />
     <ClCompile Include="Actor\Player\PlayerAttackComboState.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyTypeSet\NormalYakuzaActionSet.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyAI\NormalYakuzaAi\NormalYakuzaAi.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -265,6 +269,8 @@
     <ClInclude Include="Actor\Enemy\EnemyFactory.h" />
     <ClInclude Include="Actor\Enemy\EnemyTypeSet\EnemyTypeSetFactory.h" />
     <ClInclude Include="Actor\Enemy\EnemyType.h" />
+    <ClInclude Include="Actor\Enemy\EnemyManager.h" />
+    <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAiFactory.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameScene\GameInScene.h" />
     <ClInclude Include="GameScene\GameSceneManager.h" />
@@ -280,6 +286,8 @@
     <ClInclude Include="Actor\Player\PlayerAttackComboState.h" />
     <ClInclude Include="Actor\Enemy\EnemyTypeSet\IEnemyTypeSet.h" />
     <ClInclude Include="Actor\Enemy\EnemyTypeSet\NormalYakuzaActionSet.h" />
+    <ClInclude Include="Actor\Enemy\EnemyAI\IEnemyAi.h" />
+    <ClInclude Include="Actor\Enemy\EnemyAI\NormalYakuzaAi\NormalYakuzaAi.h" />
     <ClInclude Include="StateMachineComponents\IState.h" />
     <ClInclude Include="StateMachineComponents\IStateMachine.h" />
     <ClInclude Include="stdafx.h" />

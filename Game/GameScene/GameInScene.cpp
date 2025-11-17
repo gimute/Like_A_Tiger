@@ -6,6 +6,8 @@
 #include "Actor\Player\PlayerCameraController.h"
 #include "Camera\CameraManager.h"
 
+#include "Actor\Enemy\EnemyManager.h"
+
 #include "Actor\BackGround\ProtoStage.h"
 
 //ステート侵入関数
@@ -21,6 +23,9 @@ void GameInScene::EnterScene()
 	m_playerController->SetPlayer(m_player);
 	m_playerController->SetPlayerCameraController(CameraManager::GetCameraManagerInstance()->GetCameraController<PlayerCameraController>());
 	//カメラ生成
+
+	//敵生成テスト
+	EnemyManager::GetInstance()->RequestSpawnEnemy(EnemyType::en_normalYakuza,Vector3::Zero);
 
 	NewGO<ProtoStage>(0);
 }

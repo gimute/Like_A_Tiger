@@ -29,6 +29,12 @@ struct NormalYakuzaTypeSet : public IEnemyTypeSet
 {
 	appState(NormalYakuzaTypeSet)
 public:
+
+	NormalYakuzaTypeSet()
+	{
+		SetFirstAttackID(NormalYakuzaFirstAttackState::ID());
+	}
+
 	std::unordered_map<uint32_t, std::unique_ptr<IStateBase>> CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) const override
 	{
 		std::unordered_map<uint32_t,std::unique_ptr<IStateBase>> actions;

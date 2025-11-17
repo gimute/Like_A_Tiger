@@ -29,5 +29,26 @@ public:
 	virtual ~IEnemyTypeSet() = default;
 	//ステート生成
 	virtual std::unordered_map<uint32_t, std::unique_ptr<IStateBase>> CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) const = 0;
+
+	uint32_t m_firstAttackID = 0;
+
+	uint32_t m_firstFinishBrowID = 0;
+
+	void SetFirstAttackID(uint32_t setId)
+	{
+		m_firstAttackID = setId;
+	}
+
+	uint32_t GetFirstAttackID()
+	{
+		return m_firstAttackID;
+	}
+
+
+	uint32_t GetFirstFinishBrowID()
+	{
+		return m_firstFinishBrowID;
+	}
+
 };
 

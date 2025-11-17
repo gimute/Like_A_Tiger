@@ -1,7 +1,8 @@
 #pragma once
 #include "Actor\Character.h"
-
 #include "Actor\Enemy\EnemyType.h"
+
+class Enemy;
 
 class EnemyFactory
 {
@@ -13,6 +14,6 @@ public:
 	~EnemyFactory() = default;
 
 	//エネミー制作
-	Character* CreateEnemy(EnemyType type);
+	Enemy* CreateEnemy(EnemyType type);
 };
 
