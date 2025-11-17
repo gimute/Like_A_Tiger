@@ -18,6 +18,8 @@ private:
 	StateMap m_stateMap;
 	//現在のステート
 	IStateBase* m_currentState = nullptr;
+	//初期化するステートID
+	uint32_t m_initStateHash = 0;
 public:
 	//コンストラクタ
 	IStateMachine() : m_currentState(nullptr)
@@ -40,10 +42,15 @@ public:
 	}
 	//外部からステートを探して変更する関数
 	template<typename ClassName>
-	inline void ReqestState()
+	inline void InitStateMachineClassName()
 	{
 		//ステートを探して変更
-		m_currentState = FindState(ClassName::ID());
+		m_initStateHash = ClassName::ID();
+	}
+	inline void InitStateMachineUINT32T(uint32_t stateID)
+	{
+		//ステートを探して変更
+		m_initStateHash = stateID;
 	}
 public:
 	//純粋仮想関数、次のステートを取得する関数
@@ -51,26 +58,36 @@ public:
 	//ステートマシンの更新関数
 	inline void UpdateStateMachine()
 	{
+		IStateBase* nextState = nullptr;
+
+		//ステートをハッシュ値で取得
 		if (m_currentState)
 		{
-			//ステートをハッシュ値で取得
-			IStateBase* nextState = GetNextState();
-			if (m_currentState != nextState)
-			{
-				//ステートアウト
-				m_currentState->OnExit();
-				//ステートアップデート
-				m_currentState = nextState;
-				//ステートイン
-				m_currentState->OnEnter();
-			}
-			//ステート更新
-			m_currentState->OnUpdate();
+			nextState = GetNextState();
 		}
+		else
+		{
+			nextState = FindClassUINT32TState(m_initStateHash);
+		}
+
+		if (m_currentState != nextState)
+		{
+			//ステートアウト
+			if (m_currentState)
+			{
+				m_currentState->OnExit();
+			}
+			//ステートアップデート
+			m_currentState = nextState;
+			//ステートイン
+			m_currentState->OnEnter();
+		}
+		//ステート更新
+		m_currentState->OnUpdate();
 	}
-private:
-	//ステート探索関数
-	inline IStateBase* FindState(uint32_t stateID)
+protected:
+	//UINT32Tでステート探索
+	inline IStateBase* FindClassUINT32TState(uint32_t stateID)
 	{
 		const auto& it = m_stateMap.find(stateID);
 		if (it == m_stateMap.end())
@@ -80,7 +97,6 @@ private:
 		}
 		return it->second.get();
 	}
-protected:
 	//クラス名でステート探索
 	template<typename ClassName>
 	inline IStateBase* FindClassNameState()
