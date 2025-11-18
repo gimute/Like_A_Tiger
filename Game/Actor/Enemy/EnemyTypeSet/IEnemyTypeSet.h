@@ -6,6 +6,9 @@
 #include "Actor\Enemy\EnemyTypeSet\EnemyTypeSetFactory.h"
 
 #include "Actor\Enemy\EnemyType.h"
+#include "Actor\YakuzaComponents\YakuzaAnimationState.h"
+
+#include "Actor\Character.h"
 
 class EnemyTypeSetFactory;
 
@@ -30,25 +33,23 @@ public:
 	//ステート生成
 	virtual std::unordered_map<uint32_t, std::unique_ptr<IStateBase>> CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) const = 0;
 
+protected:
+
 	uint32_t m_firstAttackID = 0;
 
 	uint32_t m_firstFinishBrowID = 0;
 
-	void SetFirstAttackID(uint32_t setId)
-	{
-		m_firstAttackID = setId;
-	}
+	const char* m_modelFilePath = nullptr;
 
-	uint32_t GetFirstAttackID()
-	{
-		return m_firstAttackID;
-	}
+	std::vector<Character::AnimationData> m_animationDataList;
 
+public:
+	inline uint32_t GetFirstAttackID() { return m_firstAttackID; }
 
-	uint32_t GetFirstFinishBrowID()
-	{
-		return m_firstFinishBrowID;
-	}
+	inline uint32_t GetFirstFinishBrowID() { return m_firstFinishBrowID; }
 
+	inline const char* GetModelFilePath() { return m_modelFilePath; }
+
+	inline std::vector<Character::AnimationData>& GetAnimationDataList() { return m_animationDataList; }
 };
 

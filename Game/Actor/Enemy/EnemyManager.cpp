@@ -10,7 +10,9 @@ void EnemyManager::RequestSpawnEnemy(EnemyType type, const Vector3& spawnPoint)
 {	
 	auto newEnemy = m_enemyFactory.CreateEnemy(type);
 
-	auto newAi = m_enemyAiFactory.Create(type, newEnemy->GetYakuzaStateMachine());
+	auto newAi = m_enemyAiFactory.GetInstance().Create(type, newEnemy->GetYakuzaStateMachine());
+
+	newEnemy->SetAi(newAi.get());
 
 	newEnemy->SetPosition(spawnPoint);
 

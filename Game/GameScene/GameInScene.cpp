@@ -13,10 +13,10 @@
 //ステート侵入関数
 void GameInScene::EnterScene()
 {
-	//プレイヤー生成
-	m_player = NewGO<Player>(0, "player");
 	//プレイヤーコントローラー生成
 	m_playerController = NewGO<PlayerController>(0, "playercontroller");
+	//プレイヤー生成
+	m_player = NewGO<Player>(0, "player");
 	//カメラ生成
 	CameraManager::GetCameraManagerInstance()->CreateCamera<PlayerCameraController>(m_playerController);
 	//プレイヤーコントローラー設定

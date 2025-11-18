@@ -30,9 +30,26 @@ struct NormalYakuzaTypeSet : public IEnemyTypeSet
 	appState(NormalYakuzaTypeSet)
 public:
 
+	enum NormalYakuzaAnimation
+	{
+		en_punch = YakuzaAnimation::en_num
+	};
+
 	NormalYakuzaTypeSet()
 	{
-		SetFirstAttackID(NormalYakuzaFirstAttackState::ID());
+		m_firstAttackID = NormalYakuzaFirstAttackState::ID();
+
+		m_modelFilePath = "Assets/modelData/Character/Joe/Joe.tkm";
+
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Idle.tka",true });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Walking.tka",true });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Running.tka",true });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Dodge_Right.tka",false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Dodge_Right.tka",false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Dodge_Left.tka",false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Dodge_Left.tka",false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Guard.tka",true });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Punching.tka",true });
 	}
 
 	std::unordered_map<uint32_t, std::unique_ptr<IStateBase>> CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) const override

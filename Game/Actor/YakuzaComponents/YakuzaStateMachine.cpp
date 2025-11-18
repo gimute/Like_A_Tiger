@@ -35,7 +35,7 @@ IStateBase* YakuzaStateMachine::GetNextState()
 bool YakuzaStateMachine::CanChangeWalk()
 {
 	if (fabsf(m_moveVec.x) >= FLT_EPSILON ||
-		fabsf(m_moveVec.y) >= FLT_EPSILON)
+		fabsf(m_moveVec.z) >= FLT_EPSILON)
 	{
 		return true;
 	}
