@@ -19,11 +19,3 @@ void EnemyManager::RequestSpawnEnemy(EnemyType type, const Vector3& spawnPoint)
 	m_aiList.push_back(std::move(newAi));
 	m_enemyList.push_back(newEnemy);
 }
-
-void EnemyManager::AllAiUpdate()
-{
-	for (auto it = m_aiList.begin();it != m_aiList.end();it++)
-	{
-		it->get()->UpdateStateMachine();
-	}
-}

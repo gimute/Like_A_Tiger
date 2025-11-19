@@ -234,6 +234,7 @@
     <ClCompile Include="Actor\Enemy\EnemyTypeSet\EnemyTypeSetFactory.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAiFactory.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemySystem.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameScene\GameInScene.cpp" />
     <ClCompile Include="GameScene\GameSceneManager.cpp" />
@@ -271,6 +272,7 @@
     <ClInclude Include="Actor\Enemy\EnemyType.h" />
     <ClInclude Include="Actor\Enemy\EnemyManager.h" />
     <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAiFactory.h" />
+    <ClInclude Include="Actor\Enemy\EnemySystem.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameScene\GameInScene.h" />
     <ClInclude Include="GameScene\GameSceneManager.h" />
@@ -295,6 +297,7 @@
     <ClInclude Include="Actor\YakuzaComponents\YakuzaAttackComboStateMachine.h" />
     <ClInclude Include="Actor\YakuzaComponents\YakuzaAnimationState.h" />
     <ClInclude Include="UI\UIBase\UIBase.h" />
+    <ClInclude Include="GameScene\UpdateOrder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

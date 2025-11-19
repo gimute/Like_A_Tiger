@@ -19,8 +19,6 @@ bool Enemy::Start()
 
 void Enemy::Update()
 {
-	m_hasAi->UpdateStateMachine();
-
 	GetYakuzaStateMachine()->UpdateStateMachine();
 
 	m_characterController.SetPosition(m_position);;

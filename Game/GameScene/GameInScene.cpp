@@ -7,16 +7,19 @@
 #include "Camera\CameraManager.h"
 
 #include "Actor\Enemy\EnemyManager.h"
+#include "Actor\Enemy\EnemySystem.h"
 
 #include "Actor\BackGround\ProtoStage.h"
+
+#include "GameScene\UpdateOrder.h"
 
 //ステート侵入関数
 void GameInScene::EnterScene()
 {
 	//プレイヤーコントローラー生成
-	m_playerController = NewGO<PlayerController>(0, "playercontroller");
+	m_playerController = NewGO<PlayerController>(UpdateOrder::Input, "playercontroller");
 	//プレイヤー生成
-	m_player = NewGO<Player>(0, "player");
+	m_player = NewGO<Player>(UpdateOrder::Charactar, "player");
 	//カメラ生成
 	CameraManager::GetCameraManagerInstance()->CreateCamera<PlayerCameraController>(m_playerController);
 	//プレイヤーコントローラー設定
@@ -24,10 +27,13 @@ void GameInScene::EnterScene()
 	m_playerController->SetPlayerCameraController(CameraManager::GetCameraManagerInstance()->GetCameraController<PlayerCameraController>());
 	//カメラ生成
 
+	//敵AI生成
+	NewGO<EnemySystem>(UpdateOrder::AI, "enemy");
+
 	//敵生成テスト
 	EnemyManager::GetInstance()->RequestSpawnEnemy(EnemyType::en_normalYakuza,Vector3::Zero);
 
-	NewGO<ProtoStage>(0);
+	NewGO<ProtoStage>(UpdateOrder::Actor);
 }
 
 //ステート更新関数

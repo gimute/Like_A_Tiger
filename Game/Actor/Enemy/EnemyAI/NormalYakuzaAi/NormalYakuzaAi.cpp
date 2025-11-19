@@ -11,7 +11,7 @@ void NormalYakuzaIdleState::OnEnter()
 void NormalYakuzaIdleState::OnUpdate()
 {
 
-	m_owner->SetMoveVec(Vector3::Zero);
+	m_owner->SetMoveVec(Vector3::AxisZ);
 
 }
 

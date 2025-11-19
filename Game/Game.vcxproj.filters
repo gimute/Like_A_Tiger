@@ -37,6 +37,7 @@
     <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAiFactory.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\IEnemyAi.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\NormalYakuzaAi\NormalYakuzaAi.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemySystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -78,5 +79,7 @@
     <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAiFactory.h" />
     <ClInclude Include="Actor\Enemy\EnemyAI\IEnemyAi.h" />
     <ClInclude Include="Actor\Enemy\EnemyAI\NormalYakuzaAi\NormalYakuzaAi.h" />
+    <ClInclude Include="GameScene\UpdateOrder.h" />
+    <ClInclude Include="Actor\Enemy\EnemySystem.h" />
   </ItemGroup>
 </Project>

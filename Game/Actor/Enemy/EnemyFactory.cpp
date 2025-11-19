@@ -4,9 +4,11 @@
 
 #include "Actor\Enemy\Enemy.h"
 
+#include "GameScene\UpdateOrder.h"
+
 Enemy* EnemyFactory::CreateEnemy(EnemyType type)
 {
-	Enemy* newEnemy = NewGO<Enemy>(0,"enemy");
+	Enemy* newEnemy = NewGO<Enemy>(UpdateOrder::Charactar,"enemy");
 	//基本ステートマシン作成
 	newEnemy->MakeStateMachineUniquePtr<YakuzaStateMachine>(newEnemy);
 	//TypeSet取得

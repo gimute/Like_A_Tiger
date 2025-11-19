@@ -34,8 +34,6 @@ public:
 	}
 	//スポーン依頼
 	void RequestSpawnEnemy(EnemyType type,const Vector3& spawnPoint);
-	//全体のAIを更新する関数
-	void AllAiUpdate();
 private:
 	//エネミーのファクトリー
 	EnemyFactory m_enemyFactory;
@@ -45,6 +43,11 @@ private:
 	std::vector<Enemy*> m_enemyList;
 	//AIのリスト
 	std::vector<std::unique_ptr<IEnemyAi>> m_aiList;
-
+public:
+	//aiのリストを取得
+	std::vector<std::unique_ptr<IEnemyAi>>& GetAiList()
+	{
+		return m_aiList;
+	}
 };
 
