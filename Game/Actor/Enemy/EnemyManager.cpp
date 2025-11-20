@@ -19,3 +19,22 @@ void EnemyManager::RequestSpawnEnemy(EnemyType type, const Vector3& spawnPoint)
 	m_aiList.push_back(std::move(newAi));
 	m_enemyList.push_back(newEnemy);
 }
+
+void EnemyManager::Update()
+{
+	UpdateTargetView();
+}
+
+void EnemyManager::UpdateTargetView()
+{
+	m_targetView.m_targetPosition = m_targetCharacter->GetPosition();
+
+	m_targetView.m_targetForward = m_targetCharacter->GetForward();
+
+	for (auto it = m_aiList.begin();it != m_aiList.end();)
+	{
+		it->get()->UpdateTargetView(m_targetView);
+
+		it++;
+	}
+}

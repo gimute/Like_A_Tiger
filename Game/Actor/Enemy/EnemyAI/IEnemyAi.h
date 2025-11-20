@@ -4,6 +4,9 @@
 #include "Actor\Enemy\EnemyAI\EnemyAiFactory.h"
 
 #include "Actor\Enemy\EnemyType.h"
+#include "Actor\Enemy\EnemyAI\EnemyAiBlackboard .h"
+
+#include "IEnemyAiState.h"
 
 class EnemyAiFactory;
 
@@ -26,10 +29,16 @@ public:
 
 	IEnemyAi(YakuzaStateMachine* hasStateMachine) : m_hasStateMachine(hasStateMachine) {}
 
+	inline void UpdateTargetView(TargetCharacterView view) { m_targetView = view; }
+
+	inline TargetCharacterView GetTargetView() { return m_targetView; }
+
 protected:
 	//次のステートを取得
 	virtual IStateBase* GetNextState() override;
 	//このAIが操作するStateMachine
 	YakuzaStateMachine* m_hasStateMachine = nullptr;
+	//ターゲットビュー
+	TargetCharacterView m_targetView;
 };
 

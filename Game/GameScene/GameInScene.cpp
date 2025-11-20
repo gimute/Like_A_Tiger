@@ -31,7 +31,9 @@ void GameInScene::EnterScene()
 	NewGO<EnemySystem>(UpdateOrder::AI, "enemy");
 
 	//敵生成テスト
-	EnemyManager::GetInstance()->RequestSpawnEnemy(EnemyType::en_normalYakuza,Vector3::Zero);
+	EnemyManager::GetInstance()->RequestSpawnEnemy(EnemyType::en_normalYakuza,Vector3{1000.0,0.0,0.0});
+
+	EnemyManager::GetInstance()->SetEnemyTargetCharacter(m_player);
 
 	NewGO<ProtoStage>(UpdateOrder::Actor);
 }
@@ -41,6 +43,9 @@ void GameInScene::UpdateScene()
 {
 	//カメラ更新
 	CameraManager::GetCameraManagerInstance()->UpdateCamera();
+
+	//EnemyManager更新
+	EnemyManager::GetInstance()->Update();
 }
 
 //ステート退出関数

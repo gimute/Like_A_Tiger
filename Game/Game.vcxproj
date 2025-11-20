@@ -235,10 +235,13 @@
     <ClCompile Include="Actor\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAiFactory.cpp" />
     <ClCompile Include="Actor\Enemy\EnemySystem.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiIdleState.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiTrackingState.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameScene\GameInScene.cpp" />
     <ClCompile Include="GameScene\GameSceneManager.cpp" />
     <ClCompile Include="GameScene\GameTitleScene.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyAI\IEnemyAiState.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Actor\Player\Player.cpp" />
     <ClCompile Include="Actor\YakuzaComponents\YakuzaStateMachine.cpp" />
@@ -273,6 +276,8 @@
     <ClInclude Include="Actor\Enemy\EnemyManager.h" />
     <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAiFactory.h" />
     <ClInclude Include="Actor\Enemy\EnemySystem.h" />
+    <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiIdleState.h" />
+    <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiTrackingState.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameScene\GameInScene.h" />
     <ClInclude Include="GameScene\GameSceneManager.h" />
@@ -290,12 +295,14 @@
     <ClInclude Include="Actor\Enemy\EnemyTypeSet\NormalYakuzaActionSet.h" />
     <ClInclude Include="Actor\Enemy\EnemyAI\IEnemyAi.h" />
     <ClInclude Include="Actor\Enemy\EnemyAI\NormalYakuzaAi\NormalYakuzaAi.h" />
+    <ClInclude Include="Actor\Enemy\EnemyAI\IEnemyAiState.h" />
     <ClInclude Include="StateMachineComponents\IState.h" />
     <ClInclude Include="StateMachineComponents\IStateMachine.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Actor\YakuzaComponents\YakuzaAttackComboStateMachine.h" />
     <ClInclude Include="Actor\YakuzaComponents\YakuzaAnimationState.h" />
+    <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAiBlackboard .h" />
     <ClInclude Include="UI\UIBase\UIBase.h" />
     <ClInclude Include="GameScene\UpdateOrder.h" />
   </ItemGroup>

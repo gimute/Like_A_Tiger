@@ -1,51 +1,43 @@
 #include "stdafx.h"
 #include "NormalYakuzaAi.h"
 
-//IdleState
+#include "Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiIdleState.h"
+#include "Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiTrackingState.h"
 
-void NormalYakuzaIdleState::OnEnter()
+//’è”“™
+namespace NormalYakuzaAiConstant
 {
-
-}
-
-void NormalYakuzaIdleState::OnUpdate()
-{
-
-	m_owner->SetMoveVec(Vector3::AxisZ);
-
-}
-
-void NormalYakuzaIdleState::OnExit()
-{
-
-}
-
-//TrackingState
-
-void NormalYakuzaTrackingState::OnEnter()
-{
-
-}
-
-void NormalYakuzaTrackingState::OnUpdate()
-{
-
-}
-
-void NormalYakuzaTrackingState::OnExit()
-{
-
+	const float  TRACKING_RADIUS = 400.0f;
 }
 
 AiAutoRegister<NormalYakuzaAi> NormalYakuzaAi::aiSet{ EnemyType::en_normalYakuza };
 
 IStateBase* NormalYakuzaAi::GetNextState()
 {
-	if (true)
+	if (CanChangeTraking())
 	{
-		return FindClassNameState<NormalYakuzaTrackingState>();
+		return FindClassNameState<EnemyAiTrackingState>();
 	}
 
-	return FindClassNameState<NormalYakuzaIdleState>();
+	return FindClassNameState<EnemyAiIdleState>();
+}
+
+bool NormalYakuzaAi::CanChangeTraking()
+{
+	Vector3 targetPos = m_targetView.m_targetPosition;
+
+	Vector3 iPos = m_hasStateMachine->GetHasCharactarPos();
+
+	Vector3 targetToIVec = targetPos - iPos;
+
+	float radius = NormalYakuzaAiConstant::TRACKING_RADIUS;
+
+	float radiusSq = radius * radius;
+
+	if (targetToIVec.LengthSq() <= radiusSq)
+	{
+		return true;
+	}
+	return false;
 }
 
