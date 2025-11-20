@@ -1,8 +1,35 @@
 #pragma once
 #include "Actor\Enemy\EnemyAI\IEnemyAi.h"
 
+#include "CRC32.h"
+
+#define appState(name)	\
+public:\
+	static constexpr uint32_t ID() { return Hash32(#name); }
+
 class EnemyAiIdleState;
 class EnemyAiTrackingState;
+
+class NormalYakuzaAiWaitingAttackState : public IEnemyAiState
+{
+	appState(NormalYakuzaAiWaitingAttackState)
+public:
+	//コンストラクタ
+	NormalYakuzaAiWaitingAttackState(YakuzaStateMachine* stateMachine, IEnemyAi* hasEnemyAi)
+		: IEnemyAiState(stateMachine, hasEnemyAi)
+	{}
+	//デストラクタ
+	~NormalYakuzaAiWaitingAttackState() = default;
+
+	float m_random;
+
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+};
 
 class NormalYakuzaAi : public IEnemyAi
 {
@@ -11,6 +38,7 @@ public:
 	{
 		AddState<EnemyAiIdleState>(controllStateMachine,this);
 		AddState<EnemyAiTrackingState>(controllStateMachine,this);
+		AddState<NormalYakuzaAiWaitingAttackState>(controllStateMachine, this);
 
 		InitStateMachineClassName<EnemyAiIdleState>();
 	}
@@ -18,6 +46,8 @@ public:
 	IStateBase* GetNextState() override;
 	//追跡状態に移行できるかどうか
 	bool CanChangeTraking();
+	//攻撃待機状態に移行できるかどうか
+	bool CanChangeWaitingAttack();
 private:
 	static AiAutoRegister<NormalYakuzaAi> aiSet;
 };
