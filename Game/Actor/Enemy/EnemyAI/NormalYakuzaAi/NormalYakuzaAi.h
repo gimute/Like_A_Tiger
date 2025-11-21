@@ -21,7 +21,21 @@ public:
 	//デストラクタ
 	~NormalYakuzaAiWaitingAttackState() = default;
 
-	float m_random;
+	float m_randomTimer = 0.0f;
+
+	bool m_isMoveLR = false;
+
+	enum WaitingMove
+	{
+		en_wait,
+		en_fowardMove,
+		en_backMove,
+		en_leftMove,
+		en_rightMove,
+		num
+	};
+
+	int m_waitingMove = WaitingMove::en_wait;
 
 	//ステートイン
 	void OnEnter() override;

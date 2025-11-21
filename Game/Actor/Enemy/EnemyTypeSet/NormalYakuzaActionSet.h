@@ -44,6 +44,10 @@ public:
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Idle.tka",true });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Walking.tka",true });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Running.tka",true });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/ForwardStep.tka",true });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/BackStep.tka",true });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/SideStep_Right.tka",true });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/SideStep_Left.tka",true });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Dodge_Right.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Dodge_Right.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Dodge_Left.tka",false });
