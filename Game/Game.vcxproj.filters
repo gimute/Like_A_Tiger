@@ -41,6 +41,7 @@
     <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiIdleState.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiTrackingState.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\IEnemyAiState.cpp" />
+    <ClCompile Include="Random.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -88,5 +89,6 @@
     <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAiBlackboard .h" />
     <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiTrackingState.h" />
     <ClInclude Include="Actor\Enemy\EnemyAI\IEnemyAiState.h" />
+    <ClInclude Include="Random.h" />
   </ItemGroup>
 </Project>

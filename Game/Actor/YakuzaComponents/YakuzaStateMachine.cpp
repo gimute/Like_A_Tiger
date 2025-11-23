@@ -24,16 +24,14 @@ IStateBase* YakuzaStateMachine::GetNextState()
 		return FindClassNameState<YakuzaDefenseState>();
 	}
 
+	if (GetIsAimMove())
+	{
+		return FindClassNameState<YakuzaAimMoveState>();
+	}
+
 	if (CanChangeWalk())
 	{
-		if (GetIsAimMove())
-		{
-			return FindClassNameState<YakuzaAimMoveState>();
-		}
-		else
-		{
-			return FindClassNameState<YakuzaWalkState>();
-		}
+		return FindClassNameState<YakuzaWalkState>();
 	}
 
 	return FindClassNameState<YakuzaIdleState>();

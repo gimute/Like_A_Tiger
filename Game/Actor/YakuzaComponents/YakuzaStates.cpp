@@ -69,6 +69,12 @@ void YakuzaAimMoveState::OnUpdate()
 {
 	Vector3 moveVec = m_owner->GetMoveVec();
 
+	//if (moveVec.z == 0.0f &&
+	//	moveVec.x == 0.0f)
+	//{
+	//	moveVec.x = 0.0f;
+	//}
+
 	Vector3 newMoveVec = moveVec * m_owner->GetMoveSpeed();
 
 	//À•W‚ðˆÚ“®
@@ -110,7 +116,7 @@ void YakuzaAimMoveState::OnUpdate()
 			m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_aimWalkingBack);
 		}
 	}
-	else
+	else if (std::fabs(forwardDot) < std::fabs(rightDot))
 	{
 		if (rightDot >= 0)
 		{
@@ -120,6 +126,10 @@ void YakuzaAimMoveState::OnUpdate()
 		{
 			m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_aimWalkingRigft);
 		}
+	}
+	else
+	{
+		m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_fightingIdle);
 	}
 }
 

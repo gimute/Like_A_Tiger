@@ -252,6 +252,7 @@
     <ClCompile Include="Actor\Player\PlayerAttackComboState.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyTypeSet\NormalYakuzaActionSet.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\NormalYakuzaAi\NormalYakuzaAi.cpp" />
+    <ClCompile Include="Random.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -296,6 +297,7 @@
     <ClInclude Include="Actor\Enemy\EnemyAI\IEnemyAi.h" />
     <ClInclude Include="Actor\Enemy\EnemyAI\NormalYakuzaAi\NormalYakuzaAi.h" />
     <ClInclude Include="Actor\Enemy\EnemyAI\IEnemyAiState.h" />
+    <ClInclude Include="Random.h" />
     <ClInclude Include="StateMachineComponents\IState.h" />
     <ClInclude Include="StateMachineComponents\IStateMachine.h" />
     <ClInclude Include="stdafx.h" />

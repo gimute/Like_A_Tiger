@@ -22,8 +22,12 @@ public:
 	~NormalYakuzaAiWaitingAttackState() = default;
 
 	float m_randomTimer = 0.0f;
-
-	bool m_isMoveLR = false;
+	//範囲外から出たか
+	bool m_isLimitOut = false;
+	//範囲外に出た際に前に進むか後ろに進むか
+	bool m_LimitOutFB = true;
+	//範囲外に出た際にどこまでのラインまで移動するか
+	float m_limitOutMoveLine = 0.0f;
 
 	enum WaitingMove
 	{
@@ -34,7 +38,7 @@ public:
 		en_rightMove,
 		num
 	};
-
+	
 	int m_waitingMove = WaitingMove::en_wait;
 
 	//ステートイン

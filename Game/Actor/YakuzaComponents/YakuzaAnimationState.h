@@ -5,6 +5,7 @@ enum YakuzaAnimation
 	en_idle,
 	en_walk,
 	en_run,
+	en_fightingIdle,
 	en_aimWalkingFoward,
 	en_aimWalkingBack,
 	en_aimWalkingRigft,

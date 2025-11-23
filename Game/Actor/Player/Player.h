@@ -21,6 +21,7 @@ private:
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Idle.tka",true},
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Walking.tka",true},
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Run.tka",true},
+		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Run.tka",true},//Fighting_Idleê›íËó\íË
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Run.tka",true},//AimWalkó\íË
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Run.tka",true},//AimWalkó\íË
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Run.tka",true},//AimWalkó\íË
