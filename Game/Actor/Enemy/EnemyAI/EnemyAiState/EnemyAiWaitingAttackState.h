@@ -26,17 +26,18 @@ public:
 	bool m_LimitOutFB = true;
 	//範囲外に出た際にどこまでのラインまで移動するか
 	float m_limitOutMoveLine = 0.0f;
-
+	//近づきすぎた時に下がるまでの時間
+	float m_backTime = 0.0f;
 	enum WaitingMove
 	{
-		en_wait,
+		en_wait = 5,
 		en_fowardMove,
 		en_backMove,
 		en_leftMove,
 		en_rightMove,
 		num
 	};
-
+	//どの方向に動くか
 	int m_waitingMove = WaitingMove::en_wait;
 
 	//ステートイン

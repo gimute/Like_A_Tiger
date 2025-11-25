@@ -109,27 +109,27 @@ void YakuzaAimMoveState::OnUpdate()
 	{
 		if (forwardDot >= 0)
 		{
-			m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_aimWalkingFoward);
+			m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_aimWalkingFoward,0.1f);
 		}
 		else
 		{
-			m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_aimWalkingBack);
+			m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_aimWalkingBack,0.1f);
 		}
 	}
 	else if (std::fabs(forwardDot) < std::fabs(rightDot))
 	{
 		if (rightDot >= 0)
 		{
-			m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_aimWalkingLeft);
+			m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_aimWalkingLeft,0.1f);
 		}
 		else
 		{
-			m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_aimWalkingRigft);
+			m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_aimWalkingRigft,0.1f);
 		}
 	}
 	else
 	{
-		m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_fightingIdle);
+		m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_fightingIdle,0.1f);
 	}
 }
 

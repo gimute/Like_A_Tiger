@@ -15,6 +15,8 @@ namespace WaitingAttackStateConstant
 	const float FORWARD_WEIGHT = 0.6;
 	const float BACKWARD_WEIGHT = 0.8;
 
+	const float BACK_TIME = 1.5;
+
 	const float RANDOM_TIME_MAX = 1.5f;
 	const float RANDOM_TIME_MIN = 0.5f;
 }
@@ -73,6 +75,8 @@ void EnemyAiWaitingAttackState::OnUpdate()
 			//一定範囲まで外側に来るように移動
 			m_limitOutMoveLine = limitMin + 100.0f;
 
+			//タイマー設定
+			m_backTime = WaitingAttackStateConstant::BACK_TIME;
 			//後ろに動くように
 			m_LimitOutFB = false;
 			m_isLimitOut = true;
@@ -84,7 +88,14 @@ void EnemyAiWaitingAttackState::OnUpdate()
 		}
 		else
 		{
-			limitOutMoveVec -= forward * WaitingAttackStateConstant::FORWARD_WEIGHT;
+			if (m_backTime <= 0.0f)
+			{
+				limitOutMoveVec -= forward * WaitingAttackStateConstant::FORWARD_WEIGHT;
+			}
+			else
+			{
+				m_backTime -= g_gameTime->GetFrameDeltaTime();
+			}
 		}
 
 		if (m_LimitOutFB &&
@@ -94,6 +105,7 @@ void EnemyAiWaitingAttackState::OnUpdate()
 		{
 			m_isLimitOut = false;
 			m_limitOutMoveLine = 0.0f;
+			m_backTime = 0.0f;
 		}
 
 		m_hasStateMachine->SetMoveVec(limitOutMoveVec);
@@ -116,7 +128,7 @@ void EnemyAiWaitingAttackState::OnUpdate()
 		);
 
 		int moveDirMax = WaitingMove::en_rightMove;
-		int moveDirMin = WaitingMove::en_wait;
+		int moveDirMin = 0;
 
 		m_waitingMove = Random::Range(
 			moveDirMin,
@@ -126,8 +138,6 @@ void EnemyAiWaitingAttackState::OnUpdate()
 
 	switch (m_waitingMove)
 	{
-	case EnemyAiWaitingAttackState::en_wait:
-		moveVec = Vector3::Zero;
 		break;
 	case EnemyAiWaitingAttackState::en_fowardMove:
 		moveVec += forward * WaitingAttackStateConstant::FORWARD_WEIGHT;
@@ -142,6 +152,7 @@ void EnemyAiWaitingAttackState::OnUpdate()
 		moveVec += right;
 		break;
 	default:
+		moveVec = Vector3::Zero;
 		break;
 	}
 
