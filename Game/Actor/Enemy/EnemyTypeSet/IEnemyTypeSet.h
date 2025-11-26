@@ -31,7 +31,7 @@ public:
 	//デストラクタ
 	virtual ~IEnemyTypeSet() = default;
 	//ステート生成
-	virtual std::unordered_map<uint32_t, std::unique_ptr<IStateBase>> CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) const = 0;
+	virtual void CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) = 0;
 
 protected:
 
@@ -41,7 +41,25 @@ protected:
 
 	const char* m_modelFilePath = nullptr;
 
+	int m_maxAttackNum = 0; 
+	int m_maxFinishBrowNum = 0;
+
 	std::vector<Character::AnimationData> m_animationDataList;
+
+	//攻撃ステートを追加＋通常攻撃かフィニッシュブロウかを選択しカウント、trueが通常攻撃、falseがフィニッシュブロウ
+	template<typename ClassName>
+	inline void AddAttackState(YakuzaAttackComboStateMachine* useAttackStateMachine,bool isAttackOrFinish)
+	{
+		useAttackStateMachine->AddState<ClassName>(useAttackStateMachine);
+		if (isAttackOrFinish)
+		{
+			m_maxAttackNum++;
+		}
+		else
+		{
+			m_maxFinishBrowNum++;
+		}
+	}
 
 public:
 	inline uint32_t GetFirstAttackID() { return m_firstAttackID; }

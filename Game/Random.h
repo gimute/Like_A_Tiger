@@ -22,5 +22,12 @@ public:
 		std::uniform_real_distribution<float> dist(min, max);
 		return dist(Get());
 	}
+	//ƒ‰ƒ“ƒ_ƒ€Àsbool
+	static bool Range(float probability)
+	{
+		std::bernoulli_distribution dist(0.3);
+		bool flag = dist(Get());
+		return flag;
+	}
 };
 

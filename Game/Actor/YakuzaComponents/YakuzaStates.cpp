@@ -142,7 +142,11 @@ void YakuzaAimMoveState::OnExit()
 
 void YakuzaAttackState::OnEnter()
 {
+	auto* attackStateMachine = m_owner->GetAttackStateMachine();
+
 	m_owner->SetIsAttack(true);
+
+	attackStateMachine->SetIsLastCombo(false);
 }
 
 void YakuzaAttackState::OnUpdate()
@@ -161,7 +165,6 @@ void YakuzaAttackState::OnUpdate()
 		{
 			attackStateMachine->StartFirstFinishBrow();
 		}
-
 		return;
 	}
 
@@ -176,6 +179,7 @@ void YakuzaAttackState::OnUpdate()
 
 		return;
 	}
+
 }
 
 void YakuzaAttackState::OnExit()

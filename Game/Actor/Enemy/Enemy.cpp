@@ -14,6 +14,8 @@ bool Enemy::Start()
 
 	m_characterController.Init(10.0f, 20.0f, m_position);
 
+	m_modelRender.AddAnimationEvent([&](const wchar_t* clipName, const wchar_t* eventName) { GetYakuzaStateMachine()->OnAnimationEvent(clipName, eventName); });
+
 	return true;
 }
 

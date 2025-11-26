@@ -17,6 +17,28 @@ public:
 
 	~NormalYakuzaFirstAttackState() = default;
 
+	uint32_t m_nextComboHash = 0;
+
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+};
+
+class NormalYakuzaSecondAttackState : public IStateBase
+{
+	appState(NormalYakuzaSecondAttackState)
+protected:
+	YakuzaAttackComboStateMachine* m_owner = nullptr;
+public:
+	NormalYakuzaSecondAttackState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
+
+	~NormalYakuzaSecondAttackState() = default;
+
+	uint32_t m_nextComboHash = 0;
+
 	//ステートイン
 	void OnEnter() override;
 	//ステートアップデート
@@ -32,7 +54,10 @@ public:
 
 	enum NormalYakuzaAnimation
 	{
-		en_punch = YakuzaAnimation::en_num
+		en_crossPunch_1_R = YakuzaAnimation::en_num,
+		en_punching_1_L,
+		en_punching_2_R,
+		en_punching_3_L
 	};
 
 	NormalYakuzaTypeSet()
@@ -54,19 +79,17 @@ public:
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Dodge_Left.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Dodge_Left.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Guard.tka",true });
-		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Punching.tka",true });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/CrossPunch_R_Ev.tka",false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Punching_1_L_Ev.tka",false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Punching_2_R_Ev.tka",false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Punching_3_L_Ev.tka",false });
 	}
 
-	std::unordered_map<uint32_t, std::unique_ptr<IStateBase>> CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) const override
+	void CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) override
 	{
-		std::unordered_map<uint32_t,std::unique_ptr<IStateBase>> actions;
-
-		actions.emplace(NormalYakuzaFirstAttackState::ID(), std::make_unique<NormalYakuzaFirstAttackState>(useAttackStateMachine));
-
-		return actions;
+		AddAttackState<NormalYakuzaFirstAttackState>(useAttackStateMachine,true);
+		AddAttackState<NormalYakuzaSecondAttackState>(useAttackStateMachine,true);
 	}
 private:
 	static TypeSetAutoRegister<NormalYakuzaTypeSet> typeSet;
-
-	
 };

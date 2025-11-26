@@ -5,7 +5,6 @@
 
 IStateBase* YakuzaAttackComboStateMachine::GetNextState()
 {
-
 	//次のコンボのハッシュ値を探索
 	return FindClassUINT32TState(GetNextCombo());
 }

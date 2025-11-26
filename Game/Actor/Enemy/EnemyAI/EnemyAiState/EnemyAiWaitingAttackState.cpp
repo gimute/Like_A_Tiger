@@ -5,7 +5,7 @@
 #include "Random.h"
 
 //定数等
-namespace WaitingAttackStateConstant
+namespace NormalYakuzaAiConstant
 {
 	const float MOVE_LIMIT_MAX = 450.0f;
 	const float MOVE_LIMIT_MIN = 250.0f;
@@ -46,9 +46,9 @@ void EnemyAiWaitingAttackState::OnUpdate()
 	Vector3 forward = toTarget;
 	forward.Normalize();
 	//範囲定数
-	const float buffer = WaitingAttackStateConstant::BUFFER;
-	const float limitMax = WaitingAttackStateConstant::MOVE_LIMIT_MAX;
-	const float limitMin = WaitingAttackStateConstant::MOVE_LIMIT_MIN;
+	const float buffer = NormalYakuzaAiConstant::BUFFER;
+	const float limitMax = NormalYakuzaAiConstant::MOVE_LIMIT_MAX;
+	const float limitMin = NormalYakuzaAiConstant::MOVE_LIMIT_MIN;
 
 	//範囲外に出ているかどうかの判定
 	if (dist > limitMax + buffer ||
@@ -76,7 +76,7 @@ void EnemyAiWaitingAttackState::OnUpdate()
 			m_limitOutMoveLine = limitMin + 100.0f;
 
 			//タイマー設定
-			m_backTime = WaitingAttackStateConstant::BACK_TIME;
+			m_backTime = NormalYakuzaAiConstant::BACK_TIME;
 			//後ろに動くように
 			m_LimitOutFB = false;
 			m_isLimitOut = true;
@@ -84,13 +84,13 @@ void EnemyAiWaitingAttackState::OnUpdate()
 
 		if (m_LimitOutFB)
 		{
-			limitOutMoveVec += forward * WaitingAttackStateConstant::FORWARD_WEIGHT;
+			limitOutMoveVec += forward * NormalYakuzaAiConstant::FORWARD_WEIGHT;
 		}
 		else
 		{
 			if (m_backTime <= 0.0f)
 			{
-				limitOutMoveVec -= forward * WaitingAttackStateConstant::FORWARD_WEIGHT;
+				limitOutMoveVec -= forward * NormalYakuzaAiConstant::FORWARD_WEIGHT;
 			}
 			else
 			{
@@ -123,8 +123,8 @@ void EnemyAiWaitingAttackState::OnUpdate()
 	if (m_randomTimer <= 0.0f)
 	{
 		m_randomTimer = Random::Range(
-			WaitingAttackStateConstant::RANDOM_TIME_MIN,
-			WaitingAttackStateConstant::RANDOM_TIME_MAX
+			NormalYakuzaAiConstant::RANDOM_TIME_MIN,
+			NormalYakuzaAiConstant::RANDOM_TIME_MAX
 		);
 
 		int moveDirMax = WaitingMove::en_rightMove;
@@ -140,10 +140,10 @@ void EnemyAiWaitingAttackState::OnUpdate()
 	{
 		break;
 	case EnemyAiWaitingAttackState::en_fowardMove:
-		moveVec += forward * WaitingAttackStateConstant::FORWARD_WEIGHT;
+		moveVec += forward * NormalYakuzaAiConstant::FORWARD_WEIGHT;
 		break;
 	case EnemyAiWaitingAttackState::en_backMove:
-		moveVec -= forward * WaitingAttackStateConstant::BACKWARD_WEIGHT;
+		moveVec -= forward * NormalYakuzaAiConstant::BACKWARD_WEIGHT;
 		break;
 	case EnemyAiWaitingAttackState::en_leftMove:
 		moveVec += left;

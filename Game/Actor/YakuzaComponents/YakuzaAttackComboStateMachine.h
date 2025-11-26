@@ -26,6 +26,8 @@ private:
 	uint32_t m_firstFinishBrow = 0;
 	//次のコンボを行うかどうか
 	bool m_isNextConbo = false;
+	//最後のコンボが実行されたかどうか
+	bool m_isLastCombo = false;
 	//攻撃中が終了したかどうか
 	bool m_isAttackEnds = true;
 public:
@@ -46,6 +48,10 @@ public:
 
 	inline uint32_t GetFirstFinishBrow() { return m_firstFinishBrow; }
 	
+	inline void SetIsLastCombo(bool setIs) { m_isLastCombo = setIs; }
+
+	inline bool GetIsLastCombo() { return m_isLastCombo; }
+ 
 	inline void SetIsAttackEnds(bool setIs) { m_isAttackEnds = setIs; }
 
 	inline bool GetIsAttackEnds() { return m_isAttackEnds; }

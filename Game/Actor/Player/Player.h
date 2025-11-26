@@ -9,9 +9,11 @@ class Player : public Character
 public:
 	enum PlayerAnimation
 	{
-		en_punch_cross = YakuzaAnimation::en_num,
+		en_punchCross_1_R = YakuzaAnimation::en_num,
+		en_punching_1_R,
+		en_punching_2_R,
+		en_punching_3_L,
 		en_kick_1,
-		en_punch_1,
 		num
 	};
 private:
@@ -31,9 +33,11 @@ private:
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Dodge_Left.tka",false},
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Dodge_Back.tka",false},
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Guard.tka",true},
-		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Cross_Punch_EventTest_2.tka",false},
+		AnimationData{"Assets/modelData/Character/Survivalist/Animation/CrossPunch_R_Ev.tka",false},
+		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Punching_1_R_Ev.tka",false},
+		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Punching_2_R_Ev.tka",false},
+		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Punching_3_L_Ev.tka",false},
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Kick_1_R.tka",false},
-		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Punch_1_L.tka",false}
 	};
 public:
 	//コンストラクタ

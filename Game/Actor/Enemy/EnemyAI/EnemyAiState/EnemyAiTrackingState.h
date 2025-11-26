@@ -10,10 +10,13 @@ public:\
 class EnemyAiTrackingState : public IEnemyAiState
 {
 	appState(EnemyAiTrackingState)
+protected:
+	IEnemyAi* m_owner = nullptr;
 public:
 	//コンストラクタ
 	EnemyAiTrackingState(YakuzaStateMachine* stateMachine, IEnemyAi* hasEnemyAi)
-		: IEnemyAiState(stateMachine, hasEnemyAi)
+		: IEnemyAiState(stateMachine)
+		, m_owner(hasEnemyAi)
 	{}
 
 	//デストラクタ
