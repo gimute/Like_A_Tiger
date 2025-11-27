@@ -38,6 +38,28 @@ public:
 
 	~PlayerSecondAttackState() = default;
 
+	uint32_t m_nextComboHash = 0;
+
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+};
+
+class PlayerThirdAttackState : public IStateBase
+{
+	appState(PlayerThirdAttackState)
+protected:
+	YakuzaAttackComboStateMachine* m_owner = nullptr;
+public:
+	PlayerThirdAttackState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
+
+	~PlayerThirdAttackState() = default;
+
+	uint32_t m_nextComboHash = 0;
+
 	//ステートイン
 	void OnEnter() override;
 	//ステートアップデート

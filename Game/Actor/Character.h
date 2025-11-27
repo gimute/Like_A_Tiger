@@ -19,14 +19,6 @@ private:
 
 protected:
 
-	//アニメーション配列類
-	struct AnimationData
-	{
-		//ファイルパス
-		const char* fileName = nullptr;
-		//ループするかしないか
-		bool isLoop = false;
-	};
 	//キャラクターコントローラー
 	CharacterController m_characterController;
 
@@ -38,6 +30,15 @@ public:
 	{
 		delete[] m_animationClipListPtr;
 	}
+
+	//アニメーション配列類
+	struct AnimationData
+	{
+		//ファイルパス
+		const char* fileName = nullptr;
+		//ループするかしないか
+		bool isLoop = false;
+	};
 
 	//スタート関数
 	virtual bool Start() override;

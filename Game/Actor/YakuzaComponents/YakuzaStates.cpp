@@ -26,7 +26,7 @@ void YakuzaIdleState::OnExit()
 
 void YakuzaWalkState::OnEnter()
 {
-
+	m_owner->SetMoveSpeed(400.0f);
 }
 
 void YakuzaWalkState::OnUpdate()
@@ -58,11 +58,95 @@ void YakuzaWalkState::OnExit()
 
 }
 
+///AimMoveState
+
+void YakuzaAimMoveState::OnEnter()
+{
+	m_owner->SetMoveSpeed(50.0f);
+}
+
+void YakuzaAimMoveState::OnUpdate()
+{
+	Vector3 moveVec = m_owner->GetMoveVec();
+
+	//if (moveVec.z == 0.0f &&
+	//	moveVec.x == 0.0f)
+	//{
+	//	moveVec.x = 0.0f;
+	//}
+
+	Vector3 newMoveVec = moveVec * m_owner->GetMoveSpeed();
+
+	//座標を移動
+	Vector3 newPos = m_owner->GetHasCharactarCharaCon()->Execute(newMoveVec, g_gameTime->GetFrameDeltaTime());
+
+	//壁に突っ込んだ時に浮かび上がる現象が発生することがあるので、y座標を0にする
+	newPos.y = 0.0f;
+
+	//座標を設定
+	m_owner->SetHasCharactarPosition(newPos);
+
+	Vector3 toTarget = m_owner->GetAimMoveTargetPos() - m_owner->GetHasCharactarPos();
+
+	toTarget.Normalize();
+
+	m_owner->GetHasCharactarRot().SetRotationYFromDirectionXZ(toTarget);
+
+	m_owner->SetHasCharactarForward(Vector3::AxisZ);
+	m_owner->GetHasCharactarRot().Apply(m_owner->GetHasCharactarForward());
+
+	Vector3 modelForward = m_owner->GetHasCharactarForward();
+
+	Vector3 modelRight = Cross(Vector3::Up, modelForward);
+
+	float forwardDot = Dot(modelForward, moveVec);
+
+	float rightDot = Dot(modelRight, moveVec);
+
+	AnimationDirection animDir = AnimationDirection::en_forwardDir;;
+
+	if (std::fabs(forwardDot) > std::fabs(rightDot))
+	{
+		if (forwardDot >= 0)
+		{
+			m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_aimWalkingFoward,0.1f);
+		}
+		else
+		{
+			m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_aimWalkingBack,0.1f);
+		}
+	}
+	else if (std::fabs(forwardDot) < std::fabs(rightDot))
+	{
+		if (rightDot >= 0)
+		{
+			m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_aimWalkingLeft,0.1f);
+		}
+		else
+		{
+			m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_aimWalkingRigft,0.1f);
+		}
+	}
+	else
+	{
+		m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_fightingIdle,0.1f);
+	}
+}
+
+void YakuzaAimMoveState::OnExit()
+{
+	m_owner->SetIsAimMove(false);
+}
+
 ///AttackState
 
 void YakuzaAttackState::OnEnter()
 {
+	auto* attackStateMachine = m_owner->GetAttackStateMachine();
+
 	m_owner->SetIsAttack(true);
+
+	attackStateMachine->SetIsLastCombo(false);
 }
 
 void YakuzaAttackState::OnUpdate()
@@ -81,7 +165,6 @@ void YakuzaAttackState::OnUpdate()
 		{
 			attackStateMachine->StartFirstFinishBrow();
 		}
-
 		return;
 	}
 
@@ -96,6 +179,7 @@ void YakuzaAttackState::OnUpdate()
 
 		return;
 	}
+
 }
 
 void YakuzaAttackState::OnExit()

@@ -14,6 +14,7 @@ public:
 	{
 		AddState<YakuzaIdleState>(this);
 		AddState<YakuzaWalkState>(this);
+		AddState<YakuzaAimMoveState>(this);
 		AddState<YakuzaAttackState>(this);
 		AddState<YakuzaSwayState>(this);
 		AddState<YakuzaDefenseState>(this);
@@ -45,6 +46,10 @@ private:
 	bool m_isSway = false;
 	//次のコンボに以降可能かどうか
 	bool m_isComboTransition = false;
+	//移動方式、狙い移動
+	bool m_isAimMove = false;
+	//狙い移動のキャラクターの位置
+	Vector3 m_aimMoveTargetPos = Vector3::Zero;
 	//このステートを扱うCharacterのポインタ
 	Character* m_hasCharactar = nullptr;
 	//攻撃専用ステートマシン
@@ -90,6 +95,14 @@ public:
 	inline void SetIsComboTransition(bool setIs) { m_isComboTransition = setIs; }
 
 	inline bool GetIsComboTransition() { return m_isComboTransition; }
+
+	inline void SetIsAimMove(bool setIs) { m_isAimMove = setIs; }
+
+	inline bool GetIsAimMove() { return m_isAimMove; }
+
+	inline void SetAimMoveTargetPos(const Vector3& setPos) { m_aimMoveTargetPos = setPos; }
+
+	inline const Vector3& GetAimMoveTargetPos() { return m_aimMoveTargetPos; }
 
 	void InitAttackStateMachine(uint32_t firstAttackStateHash,uint32_t firstFinishBrowStateHash);
 

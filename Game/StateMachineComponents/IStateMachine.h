@@ -40,6 +40,14 @@ public:
 				std::make_unique<ClassName>(std::forward<Args>(args)...)
 		);
 	}
+	//“o˜^ŠÖ”(ŒÂ•Ê“o˜^)
+	inline void AddState(uint32_t Id, IStateBase* statePtr)
+	{
+		m_stateMap.emplace(
+			Id,
+			statePtr
+		);
+	}
 	//ŠO•”‚©‚çƒXƒe[ƒg‚ğ’T‚µ‚Ä•ÏX‚·‚éŠÖ”
 	template<typename ClassName>
 	inline void InitStateMachineClassName()
