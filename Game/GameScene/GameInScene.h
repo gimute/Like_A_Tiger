@@ -40,6 +40,5 @@ private:
     Player* m_player = nullptr;
     ///プレイヤーコントローラーのポインタ
     PlayerController* m_playerController = nullptr;
-    
 };
 
