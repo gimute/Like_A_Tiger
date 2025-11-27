@@ -10,7 +10,7 @@
 //定数等
 namespace NormalYakuzaAiConstant
 {
-	const float TRACKING_START_RADIUS = 600.0f;
+	const float TRACKING_START_RADIUS = 700.0f;
 
 	const float WAITING_ATTACK_RADIUS = 400.0f;
 
@@ -33,7 +33,9 @@ void NormalYakuzaAiAttackState::OnEnter()
 
 void NormalYakuzaAiAttackState::OnUpdate()
 {
+	//フラグ初期化
 	m_hasStateMachine->SetAttackFlag(false);
+	m_hasStateMachine->SetFinishBrowFlag(false);
 	//計算のための値
 	//攻撃用のステートマシン
 	auto attackState = m_hasStateMachine->GetAttackStateMachine();
@@ -97,7 +99,14 @@ void NormalYakuzaAiAttackState::OnUpdate()
 	if (!attackState->GetIsNextCombo() &&
 		!m_attackEndFlag)
 	{
-		m_hasStateMachine->SetAttackFlag(true);
+		if (Random::Range(0.5f))
+		{
+			m_hasStateMachine->SetAttackFlag(true);
+		}
+		else
+		{
+			m_hasStateMachine->SetFinishBrowFlag(true);
+		}
 	}
 }
 
@@ -108,16 +117,34 @@ bool NormalYakuzaAiAttackState::ShouldPerformChaseAttack()
 
 void NormalYakuzaAiAttackState::OnExit()
 {
-	
+	//アタックステート内で攻撃終了を伝える
+	m_attackEndFlag = true;
+	//狙い移動を停止
+	m_hasStateMachine->SetIsAimMove(false);
+	//タイマー初期化
+    m_owner->SetAttackTimer(NormalYakuzaAiConstant::ATTACK_TIME);
+	//ステート側に攻撃終了を伝える
+	m_owner->SetAttackFlag(false);
 }
+
 //StateMachine
 
 AiAutoRegister<NormalYakuzaAi> NormalYakuzaAi::aiSet{ EnemyType::en_normalYakuza };
 
 IStateBase* NormalYakuzaAi::GetNextState()
 {
+	//個々の処理微妙なので修正予定
+	if (!m_attackFlag)
+	{
+		//追跡判定のバグ修正
+		m_attackFlag = AttackTimer();
+	}
+	else
+	{
+		m_attackTestTime = NormalYakuzaAiConstant::ATTACK_TIME;
 
-	m_attackFlag = AttackTimer();
+		m_attackFlag = true;
+	}
 
 	if (CanChangeAttack())
 	{
@@ -149,7 +176,9 @@ bool NormalYakuzaAi::CanChangeTraking()
 
 	float radiusSq = radius * radius;
 
-	if (targetToIVec.LengthSq() <= radiusSq)
+	float targetToVecLenSq = targetToIVec.LengthSq();
+
+	if (targetToVecLenSq <= radiusSq)
 	{
 		return true;
 	}
@@ -188,6 +217,23 @@ bool NormalYakuzaAi::CanChangeWaitingAttack()
 
 bool NormalYakuzaAi::CanChangeAttack()
 {
+	Vector3 targetPos = m_targetView.m_targetPosition;
+
+	Vector3 iPos = m_hasStateMachine->GetHasCharactarPos();
+
+	Vector3 targetToIVec = targetPos - iPos;
+
+	float radius = 600.0f;
+
+	float radiusSq = radius * radius;
+
+	float targetToVecLenSq = targetToIVec.LengthSq();
+
+	if (targetToVecLenSq >= radiusSq)
+	{
+		return false;
+	}
+
 	if (!m_attackFlag)
 	{
 		return false;
@@ -197,12 +243,6 @@ bool NormalYakuzaAi::CanChangeAttack()
 
 bool NormalYakuzaAi::AttackTimer()
 {
-
-	if (m_attackFlag)
-	{
-		return true;
-	}
-
 	if (!IsNowStateClassName<EnemyAiWaitingAttackState>())
 	{
 		return false;

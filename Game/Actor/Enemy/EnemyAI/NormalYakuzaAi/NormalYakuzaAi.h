@@ -71,15 +71,19 @@ private:
 	bool CanChangeTraking();
 	//攻撃待機状態に移行できるかどうか
 	bool CanChangeWaitingAttack();
-
-	bool CanChangeAttack();
 	//攻撃に移行できるかどうか
+	bool CanChangeAttack();
+	//攻撃タイマー
 	bool AttackTimer();
 public:
 
 	inline void SetAttackFlag(bool setIs) { m_attackFlag = setIs; }
 
 	inline bool GetAttackFlag() { return m_attackFlag; }
+
+	inline void SetAttackTimer(float setTime) { m_attackTestTime = setTime; }
+
+	inline float GetAttackTimer() { return m_attackTestTime; }
 
 private:
 	static AiAutoRegister<NormalYakuzaAi> aiSet;

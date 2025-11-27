@@ -3,12 +3,36 @@
 #include "StateMachineComponents\IState.h"
 
 class YakuzaStateMachine;
+class YakuzaAttackComboStateMachine;
+
+class EnemyAiAttackEndState : public IStateBase
+{
+	appState(EnemyAiAttackEndState)
+protected:
+	YakuzaAttackComboStateMachine* m_owner = nullptr;
+public:
+	EnemyAiAttackEndState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
+
+	~EnemyAiAttackEndState() = default;
+
+	uint32_t m_nextComboHash = 0;
+
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+};
 
 class YakuzaAttackComboStateMachine : public IStateMachine
 {
 public:
 	//コンストラクタ
-	YakuzaAttackComboStateMachine(YakuzaStateMachine* hasStateMachine) : m_hasStateMachine(hasStateMachine) {}
+	YakuzaAttackComboStateMachine(YakuzaStateMachine* hasStateMachine) : m_hasStateMachine(hasStateMachine)
+	{
+		AddState<EnemyAiAttackEndState>(this);
+	}
 	//デストラクタ
 	~YakuzaAttackComboStateMachine() = default;
 

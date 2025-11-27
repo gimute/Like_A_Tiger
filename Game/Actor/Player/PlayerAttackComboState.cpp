@@ -84,6 +84,7 @@ void PlayerSecondAttackState::OnUpdate()
 	}
 	else if (stateMachine->GetFinishBrowFlag() && !m_owner->GetIsNextCombo())
 	{
+		m_nextComboHash = 0;
 
 		m_owner->SetIsNextCombo(true);
 	}

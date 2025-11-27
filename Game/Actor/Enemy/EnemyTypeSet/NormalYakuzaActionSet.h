@@ -47,6 +47,46 @@ public:
 	void OnExit() override;
 };
 
+class NormalYakuzaThirdAttackState : public IStateBase
+{
+	appState(NormalYakuzaThirdAttackState)
+protected:
+	YakuzaAttackComboStateMachine* m_owner = nullptr;
+public:
+	NormalYakuzaThirdAttackState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
+
+	~NormalYakuzaThirdAttackState() = default;
+
+	uint32_t m_nextComboHash = 0;
+	
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+};
+
+class NormalYakuzaFirstFinalBlowState : public IStateBase
+{
+	appState(NormalYakuzaFirstFinalBlowState)
+protected:
+	YakuzaAttackComboStateMachine* m_owner = nullptr;
+public:
+	NormalYakuzaFirstFinalBlowState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
+
+	~NormalYakuzaFirstFinalBlowState() = default;
+
+	uint32_t m_nextComboHash = 0;
+
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+};
+
 struct NormalYakuzaTypeSet : public IEnemyTypeSet
 {
 	appState(NormalYakuzaTypeSet)
@@ -89,6 +129,7 @@ public:
 	{
 		AddAttackState<NormalYakuzaFirstAttackState>(useAttackStateMachine,true);
 		AddAttackState<NormalYakuzaSecondAttackState>(useAttackStateMachine,true);
+		AddAttackState<NormalYakuzaThirdAttackState>(useAttackStateMachine, true);
 	}
 private:
 	static TypeSetAutoRegister<NormalYakuzaTypeSet> typeSet;

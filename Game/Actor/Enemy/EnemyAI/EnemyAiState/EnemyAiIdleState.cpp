@@ -10,6 +10,8 @@ void EnemyAiIdleState::OnEnter()
 
 void EnemyAiIdleState::OnUpdate()
 {
+	m_hasStateMachine->SetIsAimMove(false);
+
 	m_hasStateMachine->SetMoveVec(Vector3::Zero);
 }
 
