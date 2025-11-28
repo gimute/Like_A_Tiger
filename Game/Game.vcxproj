@@ -238,6 +238,7 @@
     <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiIdleState.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiTrackingState.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiWaitingAttackState.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyMetaAi\EnemyMetaAi.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameScene\GameInScene.cpp" />
     <ClCompile Include="GameScene\GameSceneManager.cpp" />
@@ -282,6 +283,7 @@
     <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiIdleState.h" />
     <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiTrackingState.h" />
     <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiWaitingAttackState.h" />
+    <ClInclude Include="Actor\Enemy\EnemyMetaAi\EnemyMetaAi.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameScene\GameInScene.h" />
     <ClInclude Include="GameScene\GameSceneManager.h" />
