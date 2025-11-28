@@ -4,9 +4,19 @@
 #include "Actor\Enemy\EnemyAI\EnemyAiFactory.h"
 #include "Actor\Character.h"
 
+#include "GameScene\UpdateOrder.h"
+
 //シングルトンパターン
 
 class Enemy;
+class EnemyMetaAi;
+
+struct EnemyPair
+{
+	Enemy* m_enemy = nullptr;
+	IEnemyAi* m_enemyAi = nullptr;
+	EnemyType m_type = EnemyType::en_normalYakuza;
+};
 
 class EnemyManager
 {
@@ -15,7 +25,7 @@ private:
 	//インスタンス
 	static EnemyManager* m_instance;
 	//コンストラクタ
-	EnemyManager() = default;
+	EnemyManager();
 	//コピー禁止
 	EnemyManager(const EnemyManager&) = delete;
 	//代入禁止にする
@@ -42,22 +52,22 @@ private:
 	EnemyFactory m_enemyFactory;
 	//AIのファクトリー
 	EnemyAiFactory m_enemyAiFactory;
-	//エネミーのリスト
-	std::vector<Enemy*> m_enemyList;
-	//AIのリスト
-	std::vector<std::unique_ptr<IEnemyAi>> m_aiList;
+	//エネミーのペアリスト
+	std::vector<EnemyPair> m_enemyPairList;
 	//敵のターゲットのCharactar
 	Character* m_targetCharacter = nullptr;
 
 	TargetCharacterView m_targetView;
 
+	EnemyMetaAi* m_enemyMetaAi = nullptr;
+
 	//TargetView更新
 	void UpdateTargetView();
 public:
 	//aiのリストを取得
-	inline std::vector<std::unique_ptr<IEnemyAi>>& GetAiList()
+	inline std::vector<EnemyPair>& GetAiList()
 	{
-		return m_aiList;
+		return m_enemyPairList;
 	}
 	//敵のターゲットを設定
 	inline void SetEnemyTargetCharacter(Character* target)

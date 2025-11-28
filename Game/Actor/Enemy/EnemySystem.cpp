@@ -20,6 +20,6 @@ void EnemySystem::AllAiUpdate()
 
 	for (auto it = allEnemyAi.begin();it != allEnemyAi.end();it++)
 	{
-		it->get()->UpdateStateMachine();
+		it->m_enemyAi->UpdateStateMachine();
 	}
 }

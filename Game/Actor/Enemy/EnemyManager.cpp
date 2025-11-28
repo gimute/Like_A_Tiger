@@ -2,9 +2,15 @@
 #include "EnemyManager.h"
 
 #include "Actor\Enemy\Enemy.h"
+#include "Actor\Enemy\EnemyMetaAi\EnemyMetaAi.h"
 
 //インスタンス初期化
 EnemyManager* EnemyManager::m_instance = nullptr;
+
+EnemyManager::EnemyManager()
+{
+	m_enemyMetaAi = NewGO<EnemyMetaAi>(UpdateOrder::AI, "enemymetaai");
+}
 
 void EnemyManager::RequestSpawnEnemy(EnemyType type, const Vector3& spawnPoint)
 {	
@@ -16,8 +22,13 @@ void EnemyManager::RequestSpawnEnemy(EnemyType type, const Vector3& spawnPoint)
 
 	newEnemy->SetPosition(spawnPoint);
 
-	m_aiList.push_back(std::move(newAi));
-	m_enemyList.push_back(newEnemy);
+	EnemyPair newPair;
+
+	newPair.m_enemy = newEnemy;
+	newPair.m_enemyAi = newAi.get();
+	newPair.m_type = type;
+
+	m_enemyPairList.push_back(newPair);
 }
 
 void EnemyManager::Update()
@@ -31,9 +42,9 @@ void EnemyManager::UpdateTargetView()
 
 	m_targetView.m_targetForward = m_targetCharacter->GetForward();
 
-	for (auto it = m_aiList.begin();it != m_aiList.end();)
+	for (auto it = m_enemyPairList.begin();it != m_enemyPairList.end();)
 	{
-		it->get()->UpdateTargetView(m_targetView);
+		it->m_enemyAi->UpdateTargetView(m_targetView);
 
 		it++;
 	}
