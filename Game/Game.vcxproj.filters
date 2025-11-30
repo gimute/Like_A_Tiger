@@ -45,6 +45,7 @@
     <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiWaitingAttackState.cpp" />
     <ClCompile Include="UI\HPGauge.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyMetaAi\EnemyMetaAi.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAiState\IEnemyAttackAiState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -96,5 +97,6 @@
     <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiWaitingAttackState.h" />
     <ClInclude Include="UI\HPGauge.h" />
     <ClInclude Include="Actor\Enemy\EnemyMetaAi\EnemyMetaAi.h" />
+    <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAiState\IEnemyAttackAiState.h" />
   </ItemGroup>
 </Project>

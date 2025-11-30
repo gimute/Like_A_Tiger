@@ -33,6 +33,12 @@ public:
 
 	inline TargetCharacterView GetTargetView() { return m_targetView; }
 
+	template<typename ClassName>
+	inline bool IsAiNowStateClassName()
+	{
+		return IsNowStateClassName<ClassName>();
+	}
+
 protected:
 	//次のステートを取得
 	virtual IStateBase* GetNextState() override;

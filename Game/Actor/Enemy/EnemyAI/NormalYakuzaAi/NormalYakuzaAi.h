@@ -1,23 +1,17 @@
 #pragma once
 #include "Actor\Enemy\EnemyAI\IEnemyAi.h"
-
-#include "CRC32.h"
-
-#define appState(name)	\
-public:\
-	static constexpr uint32_t ID() { return Hash32(#name); }
+#include "Actor\Enemy\EnemyAI\EnemyAiState\IEnemyAttackAiState.h"
 
 class NormalYakuzaAi;
 
-class NormalYakuzaAiAttackState : public IEnemyAiState
+class NormalYakuzaAiAttackState : public IEnemyAttackAiState
 {
-	appState(NormalYakuzaAiAttackState)
 protected:
 	NormalYakuzaAi* m_owner = nullptr;
 public:
 	//コンストラクタ
 	NormalYakuzaAiAttackState(YakuzaStateMachine* stateMachine, NormalYakuzaAi* hasAi)
-		: IEnemyAiState(stateMachine)
+		: IEnemyAttackAiState(stateMachine)
 		, m_owner(hasAi)
 	{}
 

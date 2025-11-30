@@ -14,8 +14,15 @@ class EnemyMetaAi;
 struct EnemyPair
 {
 	Enemy* m_enemy = nullptr;
-	IEnemyAi* m_enemyAi = nullptr;
+	std::unique_ptr<IEnemyAi> m_enemyAi = nullptr;
 	EnemyType m_type = EnemyType::en_normalYakuza;
+
+	EnemyPair(Enemy* enemy,IEnemyAi* enemyAi,EnemyType type)
+		:m_enemy(enemy)
+		,m_enemyAi(enemyAi)
+		,m_type(type)
+	{}
+	EnemyPair() = default;
 };
 
 class EnemyManager
@@ -52,7 +59,11 @@ private:
 	EnemyFactory m_enemyFactory;
 	//AIのファクトリー
 	EnemyAiFactory m_enemyAiFactory;
-	//エネミーのペアリスト
+	////エネミーのリスト
+	//std::vector<Enemy*> m_enemyList;
+	////エネミーのAiのリスト
+	//std::vector<std::unique_ptr<IEnemyAi>> m_enemyAiList;
+	//エネミーとAiのペアリスト
 	std::vector<EnemyPair> m_enemyPairList;
 	//敵のターゲットのCharactar
 	Character* m_targetCharacter = nullptr;
@@ -65,7 +76,11 @@ private:
 	void UpdateTargetView();
 public:
 	//aiのリストを取得
-	inline std::vector<EnemyPair>& GetAiList()
+	//inline std::vector<std::unique_ptr<IEnemyAi>>& GetEnemyPairList()
+	//{
+	//	return m_enemyAiList;
+	//}
+	inline std::vector<EnemyPair>& GetEnemyPairList()
 	{
 		return m_enemyPairList;
 	}
