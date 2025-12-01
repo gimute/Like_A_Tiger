@@ -92,6 +92,11 @@ void HPGauge::SetPosition(Vector3 pos)
 	m_canvas.m_transform.m_localPosition = pos;
 }
 
+void HPGauge::SetVisible(bool visible)
+{
+	m_canvas.SetVisible(visible);
+}
+
 void HPGauge::InitializeDelaydHPBar()
 {
 	//ディレイHPバーのラープをリセット
