@@ -16,6 +16,7 @@ struct EnemyPair
 	Enemy* m_enemy = nullptr;
 	std::unique_ptr<IEnemyAi> m_enemyAi = nullptr;
 	EnemyType m_type = EnemyType::en_normalYakuza;
+	int m_enemyID = -1;
 
 	EnemyPair(Enemy* enemy,IEnemyAi* enemyAi,EnemyType type)
 		:m_enemy(enemy)
@@ -23,6 +24,14 @@ struct EnemyPair
 		,m_type(type)
 	{}
 	EnemyPair() = default;
+};
+
+struct EnemyGroup
+{
+	//エネミーの１グループ
+	std::vector<int> m_enemyID;
+	//このグループが戦闘中か
+	bool isInBattle = false;
 };
 
 class EnemyManager
@@ -52,6 +61,8 @@ public:
 	}
 	//スポーン依頼
 	void RequestSpawnEnemy(EnemyType type,const Vector3& spawnPoint);
+	//グループスポーン依頼
+	void RequestSpawnEnemyGroup(int spawnNum,const Vector3& spawnPoint);
 	//更新
 	void Update();
 private:
@@ -59,30 +70,30 @@ private:
 	EnemyFactory m_enemyFactory;
 	//AIのファクトリー
 	EnemyAiFactory m_enemyAiFactory;
-	////エネミーのリスト
-	//std::vector<Enemy*> m_enemyList;
-	////エネミーのAiのリスト
-	//std::vector<std::unique_ptr<IEnemyAi>> m_enemyAiList;
 	//エネミーとAiのペアリスト
 	std::vector<EnemyPair> m_enemyPairList;
+	//エネミーのグループリスト
+	std::vector<EnemyGroup> m_enemyGroupList;
 	//敵のターゲットのCharactar
 	Character* m_targetCharacter = nullptr;
-
+	//ターゲットのビュー情報
 	TargetCharacterView m_targetView;
-
+	//メタAI
 	EnemyMetaAi* m_enemyMetaAi = nullptr;
-
+	//敵のIDカウンター
+	int m_enemyIDCounter = 0;
 	//TargetView更新
 	void UpdateTargetView();
+	//半径ランダム座標選定
+	Vector3 GetRandomPointInRadius(const Vector3& point, float radius);
 public:
-	//aiのリストを取得
-	//inline std::vector<std::unique_ptr<IEnemyAi>>& GetEnemyPairList()
-	//{
-	//	return m_enemyAiList;
-	//}
 	inline std::vector<EnemyPair>& GetEnemyPairList()
 	{
 		return m_enemyPairList;
+	}
+	inline std::vector<EnemyGroup>& GetEnemyGroupList()
+	{
+		return m_enemyGroupList;
 	}
 	//敵のターゲットを設定
 	inline void SetEnemyTargetCharacter(Character* target)

@@ -1,36 +1,18 @@
 #pragma once
 #include "Actor\Enemy\EnemyType.h"
+#include "Actor\Enemy\EnemyMetaAi\EnemyMetaAiStruct.h"
 
 class IEnemyAi;
-
-struct EnemyAiInfo
-{
-	IEnemyAi* m_enemyAi = nullptr;
-	EnemyType m_enemyType = EnemyType::en_normalYakuza;
-	Vector3 m_enemyPosition = Vector3::Zero;
-	bool m_isActive = false;
-
-	//攻撃役決定スコア
-	float m_attackRoleScore = 0.0f;
-
-	EnemyAiInfo(
-		IEnemyAi* enemyAi,
-		EnemyType enemyType,
-		const Vector3& enemyPos,
-		bool isActive
-	) 		
-		: m_enemyAi(enemyAi)
-		, m_enemyType(enemyType)
-		, m_enemyPosition(enemyPos)
-		, m_isActive(isActive)
-	{}
-};
 
 class EnemyMetaAi : public IGameObject
 {
 public:
 	//コンストラクタ
-	EnemyMetaAi() = default;
+	EnemyMetaAi()
+	{
+		//処理設定
+
+	}
 	//デストラクタ
 	~EnemyMetaAi() = default;
 
@@ -41,14 +23,29 @@ public:
 private:
 	//情報収集
 	void EnemyAiDataCollect();
-	//状況評か
+	//状況評価
 	void EnemyAiSituationEvaluation();
+	//処理決定
+	void ProcessingDecision();
+	//役割の仮決定
+	void EnemyAiRoleTentativedecision();
+private:
+	template<typename ClassName,typename... Args>
+	void AddProcess(Args&&... args)
+	{
+		m_processList.emplace(
+			ClassName::ID(),
+			std::make_unique<ClassName>(std::forward<Args>(args)...)
+		);
+	}
 private:
 	//ターゲット位置
 	Vector3 m_targetPosition = Vector3::Zero;
 	//ターゲット正面ベクトル
 	Vector3 m_cameraFoward = Vector3::Zero;
 	//情報格納リスト
-	std::vector<EnemyAiInfo> m_enemyAiInfoList;
+	std::vector<EnemyAiInfoGroupe> m_enemyAiInfoGroupeList;
+	//処理格納リスト
+	std::unordered_map<uint32_t, std::unique_ptr<IMetaAiProcess>> m_processList;
 };
 

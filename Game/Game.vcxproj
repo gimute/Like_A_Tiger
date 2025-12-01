@@ -227,6 +227,7 @@
     <ClCompile Include="Actor\Actor.cpp" />
     <ClCompile Include="Actor\Character.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\IEnemyAi.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyMetaAi\Process\AttackRoleProcess.cpp" />
     <ClCompile Include="Camera\CameraEntity.cpp" />
     <ClCompile Include="Camera\CameraManager.cpp" />
     <ClCompile Include="Actor\Enemy\Enemy.cpp" />
@@ -270,6 +271,7 @@
     <ClInclude Include="Actor\ActorStatus.h" />
     <ClInclude Include="Actor\Actor.h" />
     <ClInclude Include="Actor\Character.h" />
+    <ClInclude Include="Actor\Enemy\EnemyMetaAi\Process\AttackRoleProcess.h" />
     <ClInclude Include="Camera\CameraUpdateData.h" />
     <ClInclude Include="Camera\CameraEntity.h" />
     <ClInclude Include="Camera\CameraManager.h" />
@@ -285,6 +287,7 @@
     <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiTrackingState.h" />
     <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiWaitingAttackState.h" />
     <ClInclude Include="Actor\Enemy\EnemyMetaAi\EnemyMetaAi.h" />
+    <ClInclude Include="Actor\Enemy\EnemyMetaAi\EnemyMetaAiStruct.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameScene\GameInScene.h" />
     <ClInclude Include="GameScene\GameSceneManager.h" />
@@ -297,6 +300,7 @@
     <ClInclude Include="Camera\ICameraController.h" />
     <ClInclude Include="Actor\Player\PlayerCameraController.h" />
     <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAiState\IEnemyAttackAiState.h" />
+    <ClInclude Include="Actor\Enemy\EnemyMetaAi\IMetaAiProcess.h" />
     <ClInclude Include="UI\HPGauge.h" />
     <ClInclude Include="Actor\BackGround\ProtoStage.h" />
     <ClInclude Include="Actor\Player\PlayerAttackComboState.h" />
@@ -315,6 +319,7 @@
     <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAiBlackboard .h" />
     <ClInclude Include="UI\UIBase\UIBase.h" />
     <ClInclude Include="GameScene\UpdateOrder.h" />
+    <ClInclude Include="Actor\Enemy\EnemyMetaAi\YakuzaRole.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

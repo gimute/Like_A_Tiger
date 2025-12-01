@@ -7,6 +7,7 @@
 #include "Actor\Enemy\EnemyAI\EnemyAiBlackboard .h"
 
 #include "IEnemyAiState.h"
+#include "Actor\Enemy\EnemyMetaAi\YakuzaRole.h"
 
 class EnemyAiFactory;
 
@@ -33,6 +34,14 @@ public:
 
 	inline TargetCharacterView GetTargetView() { return m_targetView; }
 
+	inline void SetYakuzaRole(YakuzaRole role) { m_yakuzaRole = role; }
+
+	inline YakuzaRole GetYakuzaRole() { return m_yakuzaRole; }
+
+	inline void SetIsInBattle(bool isInBattle) { m_isInBattle = isInBattle; }
+
+	inline bool GetIsInBattle() { return m_isInBattle; }
+
 	template<typename ClassName>
 	inline bool IsAiNowStateClassName()
 	{
@@ -40,11 +49,15 @@ public:
 	}
 
 protected:
+	//戦闘中か?
+	bool m_isInBattle = false;
 	//次のステートを取得
 	virtual IStateBase* GetNextState() override;
 	//このAIが操作するStateMachine
 	YakuzaStateMachine* m_hasStateMachine = nullptr;
 	//ターゲットビュー
 	TargetCharacterView m_targetView;
+	//役割
+	YakuzaRole m_yakuzaRole = en_YakuzaRole_None;
 };
 
