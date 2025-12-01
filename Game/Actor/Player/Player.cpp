@@ -15,6 +15,7 @@ bool Player::Start()
 
 	GetYakuzaStateMachine()->GetAttackStateMachine()->AddState<PlayerFirstAttackState>(GetYakuzaStateMachine()->GetAttackStateMachine());
 	GetYakuzaStateMachine()->GetAttackStateMachine()->AddState<PlayerSecondAttackState>(GetYakuzaStateMachine()->GetAttackStateMachine());
+	GetYakuzaStateMachine()->GetAttackStateMachine()->AddState<PlayerThirdAttackState>(GetYakuzaStateMachine()->GetAttackStateMachine());
 	GetYakuzaStateMachine()->GetAttackStateMachine()->AddState<PlayerFirstFinalBlowState>(GetYakuzaStateMachine()->GetAttackStateMachine());
 
 	InitAnimationClipList(PlayerAnimation::num, animationDataList);

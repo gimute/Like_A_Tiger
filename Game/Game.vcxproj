@@ -226,14 +226,25 @@
     <ClCompile Include="Actor\ActorStatus.cpp" />
     <ClCompile Include="Actor\Actor.cpp" />
     <ClCompile Include="Actor\Character.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyAI\IEnemyAi.cpp" />
     <ClCompile Include="Camera\CameraEntity.cpp" />
     <ClCompile Include="Camera\CameraManager.cpp" />
+    <ClCompile Include="Actor\Enemy\Enemy.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyFactory.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyTypeSet\EnemyTypeSetFactory.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyManager.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAiFactory.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemySystem.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiIdleState.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiTrackingState.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiWaitingAttackState.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameScene\GameInScene.cpp" />
     <ClCompile Include="GameScene\GameSceneManager.cpp" />
     <ClCompile Include="GameScene\GameTitleScene.cpp" />
     <ClCompile Include="PoseMenu.cpp" />
     <ClCompile Include="Title.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyAI\IEnemyAiState.cpp" />
     <ClCompile Include="UI\HPGauge.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Actor\Player\Player.cpp" />
@@ -243,6 +254,9 @@
     <ClCompile Include="Actor\Player\PlayerCameraController.cpp" />
     <ClCompile Include="Actor\BackGround\ProtoStage.cpp" />
     <ClCompile Include="Actor\Player\PlayerAttackComboState.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyTypeSet\NormalYakuzaActionSet.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyAI\NormalYakuzaAi\NormalYakuzaAi.cpp" />
+    <ClCompile Include="Random.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -260,6 +274,16 @@
     <ClInclude Include="Camera\CameraEntity.h" />
     <ClInclude Include="Camera\CameraManager.h" />
     <ClInclude Include="CRC32.h" />
+    <ClInclude Include="Actor\Enemy\Enemy.h" />
+    <ClInclude Include="Actor\Enemy\EnemyFactory.h" />
+    <ClInclude Include="Actor\Enemy\EnemyTypeSet\EnemyTypeSetFactory.h" />
+    <ClInclude Include="Actor\Enemy\EnemyType.h" />
+    <ClInclude Include="Actor\Enemy\EnemyManager.h" />
+    <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAiFactory.h" />
+    <ClInclude Include="Actor\Enemy\EnemySystem.h" />
+    <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiIdleState.h" />
+    <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiTrackingState.h" />
+    <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiWaitingAttackState.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameScene\GameInScene.h" />
     <ClInclude Include="GameScene\GameSceneManager.h" />
@@ -276,13 +300,21 @@
     <ClInclude Include="UI\HPGauge.h" />
     <ClInclude Include="Actor\BackGround\ProtoStage.h" />
     <ClInclude Include="Actor\Player\PlayerAttackComboState.h" />
+    <ClInclude Include="Actor\Enemy\EnemyTypeSet\IEnemyTypeSet.h" />
+    <ClInclude Include="Actor\Enemy\EnemyTypeSet\NormalYakuzaActionSet.h" />
+    <ClInclude Include="Actor\Enemy\EnemyAI\IEnemyAi.h" />
+    <ClInclude Include="Actor\Enemy\EnemyAI\NormalYakuzaAi\NormalYakuzaAi.h" />
+    <ClInclude Include="Actor\Enemy\EnemyAI\IEnemyAiState.h" />
+    <ClInclude Include="Random.h" />
     <ClInclude Include="StateMachineComponents\IState.h" />
     <ClInclude Include="StateMachineComponents\IStateMachine.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Actor\YakuzaComponents\YakuzaAttackComboStateMachine.h" />
     <ClInclude Include="Actor\YakuzaComponents\YakuzaAnimationState.h" />
+    <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAiBlackboard .h" />
     <ClInclude Include="UI\UIBase\UIBase.h" />
+    <ClInclude Include="GameScene\UpdateOrder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -14,5 +14,7 @@ public:
 	virtual void OnUpdate() = 0;
 	//純粋仮想関数、ステートアウト
 	virtual void OnExit() = 0;
+
+	
 };
 

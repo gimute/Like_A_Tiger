@@ -48,6 +48,33 @@ public:
 	void OnExit() override;
 };
 
+class YakuzaAimMoveState : public IStateBase
+{
+	appState(YakuzaAimMoveState)
+protected:
+	YakuzaStateMachine* m_owner = nullptr;
+public:
+	//コンストラクタ
+	YakuzaAimMoveState(YakuzaStateMachine* stateMachine) : m_owner(stateMachine) {}
+	//デストラクタ
+	~YakuzaAimMoveState() = default;
+
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+private:
+	enum AnimationDirection
+	{
+		en_forwardDir,
+		en_backwardDir,
+		en_rightDir,
+		en_leftDir
+	};
+};
+
 class YakuzaAttackState : public IStateBase
 {
 	appState(YakuzaAttackState)

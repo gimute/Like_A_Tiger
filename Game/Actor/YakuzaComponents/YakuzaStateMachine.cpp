@@ -6,7 +6,6 @@
 
 IStateBase* YakuzaStateMachine::GetNextState()
 {
-
 	//攻撃中なら現在更新中のアタックステートを更新する
 	if (CanChangeAttack())
 	{
@@ -24,6 +23,11 @@ IStateBase* YakuzaStateMachine::GetNextState()
 		return FindClassNameState<YakuzaDefenseState>();
 	}
 
+	if (GetIsAimMove())
+	{
+		return FindClassNameState<YakuzaAimMoveState>();
+	}
+
 	if (CanChangeWalk())
 	{
 		return FindClassNameState<YakuzaWalkState>();
@@ -35,7 +39,7 @@ IStateBase* YakuzaStateMachine::GetNextState()
 bool YakuzaStateMachine::CanChangeWalk()
 {
 	if (fabsf(m_moveVec.x) >= FLT_EPSILON ||
-		fabsf(m_moveVec.y) >= FLT_EPSILON)
+		fabsf(m_moveVec.z) >= FLT_EPSILON)
 	{
 		return true;
 	}

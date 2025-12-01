@@ -7,9 +7,9 @@ public:
 	Transform m_transform;
 
 protected:
-	bool isStart = false;
-	bool isUpdate = true;
-	bool isDraw = false;
+	bool m_isStart = false;
+	bool m_isUpdate = true;
+	bool m_isDraw = false;
 
 public:
 	UIBase() {}
@@ -18,6 +18,25 @@ public:
 	virtual bool Start() = 0;
 	virtual void Update() = 0;
 	virtual void Render(RenderContext& rc) = 0;
+
+
+	/// <summary>
+	/// 描画の制御
+	/// </summary>
+	/// <param name="flag"></param>
+	void SetDrawFlag(bool flag)
+	{
+		m_isDraw = flag;
+	}
+
+	/// <summary>
+	/// 更新処理の制御
+	/// </summary>
+	/// <param name="flag"></param>
+	void SetUpdateFlag(bool flag)
+	{
+		m_isUpdate = flag;
+	}
 };
 
 /// <summary>
@@ -34,8 +53,9 @@ public:
 	Transform m_transform;
 
 private:
-
 	std::vector<RefUIBasePtr> m_uiList;
+	bool m_isVisible = true;	//UIの表示、非表示
+	bool m_isUpdate = true;		//UIの更新処理の有効無効
 
 public:
 	UICanvas();
@@ -53,8 +73,6 @@ public:
 	/// <param name="rc"></param>
 	void Render(RenderContext& rc);
 
-
-public:
 	/// <summary>
 	/// この関数で生成したUIはデストラクタでdeleteするのでほっといても大丈夫なはず
 	/// </summary>
@@ -81,6 +99,13 @@ public:
 
 		return ui;
 	}
+
+	/// <summary>
+	/// UIの表示、非表示
+	/// </summary>
+	void SetVisible(bool visible);
+
+	void SetUpdateEnabled(bool enable);
 };
 
 
@@ -92,8 +117,8 @@ class UIImage : public UIBase
 {
 
 protected:
-	SpriteRender m_spriteRender;
-
+	SpriteRender m_spriteRender;	//表示する画像
+	Vector4 m_mulColor = Vector4(1.0f, 1.0f, 1.0f, 1.0f);	//乗算カラー
 	
 
 public:
@@ -106,6 +131,12 @@ public:
 	virtual void Render(RenderContext& rc) override;
 	virtual void SetPivot(float x, float y);
 	virtual void SetPivot(const Vector2& pivot);
+	/// <summary>
+	/// 乗算カラーを設定
+	/// </summary>
+	/// <param name="mulColor"></param>
+	virtual void SetColor(Vector4 mulColor);
+	virtual void SetColor(float r, float g, float b, float a);
 };
 
 
@@ -160,9 +191,9 @@ class UIText : public UIBase
 {
 
 protected:
-	FontRender m_fontRender;
+	FontRender m_fontRender;	//表示する文字
 
-
+	Vector4 m_color;	//文字の色
 
 public:
 	UIText() {};
@@ -172,8 +203,8 @@ public:
 	virtual void Update() override;
 	virtual void Render(RenderContext& rc) override;
 	virtual void SetText(const wchar_t* text);
-	virtual void SetColor(float r, float g, float b, float a);
 	virtual void SetColor(const Vector4& color);
+	virtual void SetColor(float r, float g, float b, float a);
 	virtual void SetPivot(float x, float y);
 	virtual void SetPivot(const Vector2& pivot);
 };

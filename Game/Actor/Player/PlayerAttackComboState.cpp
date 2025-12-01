@@ -18,7 +18,7 @@ void PlayerFirstAttackState::OnUpdate()
 
 	auto* stateMachine = m_owner->GetYakuzaStateMachine();
 
-	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(Player::en_punch_cross,0.1f);
+	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(Player::en_punchCross_1_R,0.1f);
 
 	if (stateMachine->GetAttackFlag() && !m_owner->GetIsNextCombo())
 	{
@@ -70,32 +70,72 @@ void PlayerSecondAttackState::OnEnter()
 
 void PlayerSecondAttackState::OnUpdate()
 {
+	//コンボ判定処理
+
 	auto* stateMachine = m_owner->GetYakuzaStateMachine();
 
-	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(Player::en_kick_1,0.1f);
+	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(Player::en_punching_3_L, 0.1f);
 
-	if (stateMachine->GetIsComboTransition())
+	if (stateMachine->GetAttackFlag() && !m_owner->GetIsNextCombo())
 	{
-		if (stateMachine->GetAttackFlag())
-		{
+		m_nextComboHash = PlayerThirdAttackState::ID();
 
-		}
-		else if (stateMachine->GetFinishBrowFlag())
-		{
+		m_owner->SetIsNextCombo(true);
+	}
+	else if (stateMachine->GetFinishBrowFlag() && !m_owner->GetIsNextCombo())
+	{
+		m_nextComboHash = 0;
 
-		}
+		m_owner->SetIsNextCombo(true);
+	}
+
+	if (stateMachine->GetIsComboTransition() && m_owner->GetIsNextCombo())
+	{
+		m_owner->SetNextCombo(m_nextComboHash);
+
+		stateMachine->SetIsComboTransition(false);
 	}
 
 	if (!m_owner->GetYakuzaStateMachine()->IsHasCharactarPlayAnimation())
 	{
+		stateMachine->SetIsComboTransition(false);
+
 		m_owner->SetIsAttackEnds(true);
 	}
-
 }
 
 void PlayerSecondAttackState::OnExit()
 {
+	m_owner->SetIsNextCombo(false);
+}
 
+//PlayerThirdAttackState
+
+
+void PlayerThirdAttackState::OnEnter()
+{
+
+}
+
+void PlayerThirdAttackState::OnUpdate()
+{
+	//コンボ判定処理
+
+	auto* stateMachine = m_owner->GetYakuzaStateMachine();
+
+	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(Player::en_punching_2_R, 0.1f);
+
+	if (!m_owner->GetYakuzaStateMachine()->IsHasCharactarPlayAnimation())
+	{
+		stateMachine->SetIsComboTransition(false);
+
+		m_owner->SetIsAttackEnds(true);
+	}
+}
+
+void PlayerThirdAttackState::OnExit()
+{
+	m_owner->SetIsNextCombo(false);
 }
 
 //PlayerFirstFinalBrowState
@@ -109,7 +149,7 @@ void PlayerFirstFinalBlowState::OnUpdate()
 {
 	auto* stateMachine = m_owner->GetYakuzaStateMachine();
 
-	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(Player::en_punch_1,0.1f);
+	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(Player::en_kick_1,0.1f);
 
 	if (stateMachine->GetIsComboTransition())
 	{

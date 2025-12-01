@@ -19,9 +19,10 @@ namespace nsK2EngineLow {
 	/// <param name="pos">座標。</param>
 	/// <param name="rot">回転。</param>
 	/// <param name="size">サイズ。</param>
-		void CreateBox(Vector3 pos, Quaternion rot, Vector3 size)
+		void CreateBox(Vector3 pos, Quaternion rot, Vector3 size, IGameObject* owner)
 		{
 			m_physicsGhostObject.CreateBox(pos, rot, size);
+			SetOwner(owner);
 		}
 		/// <summary>
 		/// カプセル形状のゴーストオブジェクトを作成。
@@ -30,9 +31,10 @@ namespace nsK2EngineLow {
 		/// <param name="rot">回転。</param>
 		/// <param name="radius">カプセルの半径。</param>
 		/// <param name="height">カプセルの高さ。</param>
-		void CreateCapsule(Vector3 pos, Quaternion rot, float radius, float height)
+		void CreateCapsule(Vector3 pos, Quaternion rot, float radius, float height, IGameObject* owner)
 		{
 			m_physicsGhostObject.CreateCapsule(pos, rot, radius, height);
+			SetOwner(owner);
 		}
 		/// <summary>
 		/// 球形状のゴーストオブジェクトを作成。
@@ -40,9 +42,10 @@ namespace nsK2EngineLow {
 		/// <param name="pos">座標。</param>
 		/// <param name="rot">回転。</param>
 		/// <param name="radius">球形の半径。</param>
-		void CreateSphere(Vector3 pos, Quaternion rot, float radius)
+		void CreateSphere(Vector3 pos, Quaternion rot, float radius, IGameObject* owner)
 		{
 			m_physicsGhostObject.CreateSphere(pos, rot, radius);
+			SetOwner(owner);
 		}
 		/// <summary>
 		/// メッシュ形状のゴーストオブジェクトを作成。
@@ -51,10 +54,29 @@ namespace nsK2EngineLow {
 		/// <param name="rot">回転。</param>
 		/// <param name="model">モデル。</param>
 		/// <param name="worldMatrix">ワールド行列。</param>
-		void CreateMesh(Vector3 pos, Quaternion rot, const Model& model, const Matrix& worldMatrix)
+		void CreateMesh(Vector3 pos, Quaternion rot, const Model& model, const Matrix& worldMatrix, IGameObject* owner)
 		{
 			m_physicsGhostObject.CreateMesh(pos, rot, model, worldMatrix);
+			SetOwner(owner);
 		}
+
+		/// <summary>
+		/// 所有者の設定
+		/// </summary>
+		/// <param name="owner"></param>
+		void SetOwner(IGameObject* owner)
+		{
+			m_owner = owner;
+		}
+		/// <summary>
+		/// 所有者の取得
+		/// </summary>
+		/// <returns></returns>
+		IGameObject* GetOwner()
+		{
+			return m_owner;
+		}
+
 		/// <summary>
 		/// 設定した時間(秒)が経過すると自動で削除されます。0.0fを設定したら1フレーム経過で削除されます。
 		/// </summary>
@@ -203,6 +225,13 @@ namespace nsK2EngineLow {
 		float						m_timeLimit = 0.0f;					//削除されるまでの時間。
 		bool						m_isEnableAutoDelete = true;		//自動で削除されるならtrue。
 		bool						m_isEnable = true;					//trueなら当たり判定有効。
+		IGameObject*				m_owner = nullptr;					//このコリジョンを所持しているゲームオブジェクト
+	};
+
+	struct CollisionPair
+	{
+		CollisionObject* m_collisionA = nullptr;
+		CollisionObject* m_collisionB = nullptr;
 	};
 
 	class CollisionObjectManager
@@ -210,6 +239,10 @@ namespace nsK2EngineLow {
 	public:
 		CollisionObjectManager();
 		~CollisionObjectManager();
+
+		void Update();
+		
+
 		void AddCollisionObject(CollisionObject* collisionObject)
 		{
 			m_collisionObjectVector.push_back(collisionObject);
@@ -332,6 +365,9 @@ namespace nsK2EngineLow {
 		std::vector<CollisionObject*>		m_collisionObjectVector;
 		std::vector<CollisionObject*>		m_findsCollisionObjectVector;
 		std::vector<CollisionObject*>		m_findMatchForwardNameCollisionObjectVector;
+
+		std::vector<CollisionPair> m_overlapCollisionPair;	//重なっているコリジョンのペア
 	};
 
+	
 }
