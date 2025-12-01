@@ -13,6 +13,8 @@
 
 #include "GameScene\UpdateOrder.h"
 
+#include "PoseMenu.h"
+
 //ステート侵入関数
 void GameInScene::EnterScene()
 {
@@ -36,6 +38,9 @@ void GameInScene::EnterScene()
 	EnemyManager::GetInstance()->SetEnemyTargetCharacter(m_player);
 
 	NewGO<ProtoStage>(UpdateOrder::Actor);
+
+	m_poseMenu = NewGO<PoseMenu>(0, "posemenu");
+	m_poseMenu->Init();
 }
 
 //ステート更新関数

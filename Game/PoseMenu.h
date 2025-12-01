@@ -17,8 +17,8 @@ public:
 private:
 	const PoseMenuInitData defaultPoseMenu = {
 		"Assets/spriteData/PoseMenu/test.DDS",
-		1920,
-		1080,
+		1280,
+		720,
 	};
 
 public:
@@ -35,5 +35,7 @@ private:
 	
 
 	UICanvas m_canvas;
+
+	std::shared_ptr<UIImage> m_image = nullptr;
 };
 

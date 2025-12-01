@@ -3,6 +3,7 @@
 
 PoseMenu::PoseMenu()
 {
+	m_image = m_canvas.CreateUI<UIImage>();
 }
 
 
@@ -18,11 +19,16 @@ bool PoseMenu::Start() {
 
 void PoseMenu::Update() {
 	m_canvas.Update();
+
 }
 
 
 void PoseMenu::Render(RenderContext& rc) {
-	m_canvas.Render(rc);
+	/**
+	 * ポーズ画面、画面上に出てるので
+	 * 非表示にしています。
+	 */
+	// m_canvas.Render(rc);
 }
 
 void PoseMenu::Init(const PoseMenuInitData* initData)
@@ -32,4 +38,6 @@ void PoseMenu::Init(const PoseMenuInitData* initData)
 		Init(&defaultPoseMenu);
 		return;
 	}
+
+	m_image->Init(initData->frameFilePath, initData->frameSize_x, initData->frameSize_y);
 }

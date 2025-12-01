@@ -3,6 +3,7 @@
 
 class Player;
 class PlayerController;
+class PoseMenu;
 
 class GameInScene :
     public IGameSceneState
@@ -40,5 +41,7 @@ private:
     Player* m_player = nullptr;
     ///プレイヤーコントローラーのポインタ
     PlayerController* m_playerController = nullptr;
+
+    PoseMenu* m_poseMenu = nullptr;
 };
 
