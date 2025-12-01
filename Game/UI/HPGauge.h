@@ -60,6 +60,12 @@ public:
 
 	void SetPosition(Vector3 pos);
 
+	/// <summary>
+	/// 表示非表示
+	/// </summary>
+	/// <param name="visible"></param>
+	void SetVisible(bool visible);
+
 private:
 	/// <summary>
 	/// ディレイHPバーの準備
