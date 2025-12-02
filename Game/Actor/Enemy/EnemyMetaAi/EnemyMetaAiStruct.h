@@ -16,8 +16,8 @@ struct EnemyMemberInfo
 	bool m_isInBattle = false;
 	bool m_isActive = false;
 
-	//攻撃役決定スコア
-	float m_attackRoleScore = 0.0f;
+	//役割決定用スコア
+	float m_roleScore = 0.0f;
 
 	EnemyMemberInfo(
 		IEnemyAi* enemyAi,
@@ -35,10 +35,18 @@ struct EnemyMemberInfo
 	}
 };
 
+class IMetaAiProcess;
+
 struct EnemyAiInfoGroupe
 {
+	//グループID
+	int m_groupId = -1;
 	std::vector<EnemyMemberInfo> m_enemyAiInfoList;
 	//このグループに適用するMetaAI
-	IMetaAiProcess* m_useMetaAI;
+	IMetaAiProcess* m_useMetaAI = nullptr;
+	//ターゲットの座標
+	Vector3 m_groupeTargetPosition = Vector3::Zero;
+	//カメラの正面方向
+	Vector3 m_camFoward = Vector3::Zero;
 };
 

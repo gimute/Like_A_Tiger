@@ -243,24 +243,8 @@ bool NormalYakuzaAi::CanChangeAttack()
 
 bool NormalYakuzaAi::AttackTimer()
 {
-	if (!IsNowStateClassName<EnemyAiWaitingAttackState>())
+	if (m_yakuzaRole == YakuzaRole::en_YakuzaRole_Attack)
 	{
-		return false;
-	}
-
-	// タイマーが未セットなら初期化
-	if (m_attackTestTime <= 0.0f)
-	{
-		m_attackTestTime = NormalYakuzaAiConstant::ATTACK_TIME;
-	}
-
-	// タイマー更新
-	m_attackTestTime -= g_gameTime->GetFrameDeltaTime();
-
-	// 0以下なら攻撃トリガー
-	if (m_attackTestTime <= 0.0f)
-	{
-		m_attackTestTime = NormalYakuzaAiConstant::ATTACK_TIME;
 		return true;
 	}
 

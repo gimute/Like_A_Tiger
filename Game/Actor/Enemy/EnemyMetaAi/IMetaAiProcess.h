@@ -11,8 +11,10 @@ public:
 	~IMetaAiProcess() = default;
 
 	//役割の決定
-	virtual void RoleDetermination(EnemyAiInfoGroupe* groupePtr) = 0;
-	//この処理が実行できるかどうか
-	virtual bool IsMetaAiProces(EnemyAiInfoGroupe* groupePtr) = 0;
+	virtual void AssignRoles(EnemyAiInfoGroupe* groupePtr) = 0;
+	//この処理を適用できる条件を満たしているか実行できるかどうか
+	virtual bool IsApplicable(EnemyAiInfoGroupe* groupePtr) = 0;
+	//この処理を続けて使えるかどうか
+	virtual bool IsReady(EnemyAiInfoGroupe* groupePtr) = 0;
 };
 

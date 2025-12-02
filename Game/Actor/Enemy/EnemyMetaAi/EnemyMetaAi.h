@@ -2,6 +2,8 @@
 #include "Actor\Enemy\EnemyType.h"
 #include "Actor\Enemy\EnemyMetaAi\EnemyMetaAiStruct.h"
 
+#include "Actor\Enemy\EnemyMetaAi\Process\AttackRoleProcess.h"
+
 class IEnemyAi;
 
 class EnemyMetaAi : public IGameObject
@@ -11,7 +13,7 @@ public:
 	EnemyMetaAi()
 	{
 		//処理設定
-
+		AddProcess<AttackRoleProcess>();
 	}
 	//デストラクタ
 	~EnemyMetaAi() = default;

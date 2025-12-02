@@ -15,8 +15,17 @@ public:
 	~AttackRoleProcess() = default;
 
 	//–ğŠ„‚ÌŒˆ’è
-	void RoleDetermination(EnemyAiInfoGroupe* groupePtr) override;
+	void AssignRoles(EnemyAiInfoGroupe* groupePtr) override;
 	//Às‚Å‚«‚é‚©‚Ç‚¤‚©
-	bool IsMetaAiProces(EnemyAiInfoGroupe* groupePtr) override;
+	bool IsApplicable(EnemyAiInfoGroupe* groupePtr) override;
+	//ˆ—‚ğ‘±‚¯‚é‚©‚Ç‚¤‚©
+	bool IsReady(EnemyAiInfoGroupe* groupePtr) override;
+private:
+
+	float m_attackTimer = 15.0f;
+
+	bool m_isAttackTargetSelected = false;
+
+	IEnemyAi* m_nowAttackAi = nullptr;
 };
 

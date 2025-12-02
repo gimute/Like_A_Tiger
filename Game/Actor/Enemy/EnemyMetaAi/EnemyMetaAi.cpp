@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "EnemyMetaAi.h"
 
+#include <unordered_set>
+
 #include "Actor\Character.h"
 #include "Actor\Enemy\EnemyAI\EnemyAiBlackboard .h"
 
@@ -51,20 +53,49 @@ void EnemyMetaAi::EnemyAiDataCollect()
 
 	if (enemyGroupList.empty())
 	{
+		m_enemyAiInfoGroupeList.clear();
 		return;
 	}
 
 	auto targetView = EnemyManager::GetInstance()->GetTargetView();
 	m_targetPosition = targetView.m_targetPosition;
-	m_cameraFoward = targetView.m_targetForward;
+	m_cameraFoward = g_camera3D->GetForward();
 
-	//まずはリストをクリア
-	m_enemyAiInfoGroupeList.clear();
+	std::unordered_set<int> currentGroupIds;
 
-	for (auto& group : enemyGroupList)
+	for (int groupId = 0;groupId < enemyGroupList.size(); ++groupId)
 	{
-		EnemyAiInfoGroupe infoGroup;
+		auto& group = enemyGroupList[groupId];
+		currentGroupIds.insert(groupId);
 
+		//グループがすでにあるかを探索
+		EnemyAiInfoGroupe* existGroup = nullptr;
+
+		for (auto& g : m_enemyAiInfoGroupeList)
+		{
+			if (g.m_groupId == groupId)
+			{
+				existGroup = &g;
+
+				break;
+			}
+		}
+		
+		//無いなら新規追加
+		if (!existGroup)
+		{
+			EnemyAiInfoGroupe newGroup;
+			newGroup.m_groupId = groupId;
+			m_enemyAiInfoGroupeList.push_back(newGroup);
+			existGroup = &m_enemyAiInfoGroupeList.back();
+ 		}
+
+		//グループ内部の更新
+		existGroup->m_enemyAiInfoList.clear();
+		existGroup->m_groupeTargetPosition = m_targetPosition;
+		existGroup->m_camFoward = m_cameraFoward;
+
+		//EnemyIdごとにEnemyMemberInfowo作成
 		for (auto& id : group.m_enemyID)
 		{
 			EnemyPair* pair = nullptr;
@@ -79,7 +110,7 @@ void EnemyMetaAi::EnemyAiDataCollect()
 				}
 			}
 
-			if (pair)
+			if (!pair)
 			{
 				continue;
 			}
@@ -98,64 +129,36 @@ void EnemyMetaAi::EnemyAiDataCollect()
 				isActive
 			);
 
-			infoGroup.m_enemyAiInfoList.push_back(info);
+			existGroup->m_enemyAiInfoList.emplace_back(info);
 		}
-
-		//グループを追加
-		m_enemyAiInfoGroupeList.push_back(infoGroup);
 	}
+
+	//今フレームに無いGroupIdは削除
+	m_enemyAiInfoGroupeList.erase(
+		std::remove_if(
+			m_enemyAiInfoGroupeList.begin(),
+			m_enemyAiInfoGroupeList.end(),
+			[&](const EnemyAiInfoGroupe& g)
+			{
+				return currentGroupIds.count(g.m_groupId) == 0;
+			}
+		),
+		m_enemyAiInfoGroupeList.end()
+	);
 }
 
 //状況評価
 void EnemyMetaAi::EnemyAiSituationEvaluation()
 {
-	
 	for (auto & group : m_enemyAiInfoGroupeList)
 	{
-		//group.m_useMetaAI->RoleDetermination(group);
-	}
-
-	//リストから情報を取り出して評価を行う
-	for (auto & group : m_enemyAiInfoGroupeList)
-	{
-
-		for (auto & enemyPtr : group.m_enemyAiInfoList)
+		if(!group.m_useMetaAI ||
+			!group.m_useMetaAI->IsReady(&group))
 		{
-			//まずは距離計算等
-			//距離ベクトル
-			Vector3 distanceVec = m_targetPosition - enemyPtr.m_enemyPosition;
-			//正規化距離ベクトル
-			Vector3 normalizeDistanceVec = distanceVec;
-			normalizeDistanceVec.Normalize();
-			//カメラの正面にいる敵には高スコア
-			float dot = Dot(m_cameraFoward, normalizeDistanceVec);
-			btClamp(dot, -1.0f, 1.0f);
-			//スコア加算
-			enemyPtr.m_attackRoleScore += dot;
-
-			//敵の現在の行動によってスコアを変動させる
-			//攻撃待機中ならスコアアップ
-			if (enemyPtr.m_enemyAi->IsAiNowStateClassName<EnemyAiWaitingAttackState>())
-			{
-				enemyPtr.m_attackRoleScore += 1.0f;
-			}
-			//待機中なら変動なし
-			//攻撃中ならスコアダウン
-			if (enemyPtr.m_enemyAi->IsAiNowStateClassName<IEnemyAttackAiState>())
-			{
-				enemyPtr.m_attackRoleScore -= 1.0f;
-			}
+			continue;
 		}
 
-		//点数準に並び替える
-		std::sort(
-			group.m_enemyAiInfoList.begin(),
-			group.m_enemyAiInfoList.begin(),
-			[](const EnemyMemberInfo& a, const EnemyMemberInfo& b)
-			{
-				return a.m_attackRoleScore > b.m_attackRoleScore;
-			}
-		);
+		group.m_useMetaAI->AssignRoles(&group);
 	}
 }
 
@@ -165,11 +168,12 @@ void EnemyMetaAi::ProcessingDecision()
 	//グループのリスト数繰り返す
 	for (auto & group : m_enemyAiInfoGroupeList)
 	{
-		//処理数繰り返して条件に合致する処理を代入する
+		//処理数繰り返して条件に合致する処理を適用する
 		for (auto& map : m_processList)
 		{
-			if (map.second.get()->IsMetaAiProces(&group))
+			if (map.second.get()->IsApplicable(&group))
 			{
+				//適用処理を決定
 				group.m_useMetaAI = map.second.get();
 			}
 		}

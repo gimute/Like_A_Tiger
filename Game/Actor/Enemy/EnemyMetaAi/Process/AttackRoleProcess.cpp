@@ -2,10 +2,34 @@
 #include "AttackRoleProcess.h"
 
 #include "Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiWaitingAttackState.h"
+#include "Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiTrackingState.h"
 #include "Actor\Enemy\EnemyAI\EnemyAiState\IEnemyAttackAiState.h"
 
-void AttackRoleProcess::RoleDetermination(EnemyAiInfoGroupe* groupePtr)
+void AttackRoleProcess::AssignRoles(EnemyAiInfoGroupe* groupePtr)
 {
+	// タイマーが未セットなら初期化
+	if (m_attackTimer <= 0.0f)
+	{
+		m_attackTimer = 3;
+	}
+
+	// タイマー更新
+	m_attackTimer -= g_gameTime->GetFrameDeltaTime();
+
+	// 0以上なら処理しない
+	if (m_attackTimer >= 0.0f)
+	{
+		for (auto& ptr : groupePtr->m_enemyAiInfoList)
+		{
+			ptr.m_enemyAi->SetYakuzaRole(YakuzaRole::en_YakuzaRole_Wait);
+		}
+
+		return;
+	}
+
+	Vector3 targetPos = groupePtr->m_groupeTargetPosition;
+	Vector3 camFoward = groupePtr->m_camFoward;
+
 	//リストから情報を取り出して評価を行う
 	for (auto it = groupePtr->m_enemyAiInfoList.begin();
 		it != groupePtr->m_enemyAiInfoList.end();
@@ -13,48 +37,83 @@ void AttackRoleProcess::RoleDetermination(EnemyAiInfoGroupe* groupePtr)
 	{
 		//まずは距離計算等
 		//距離ベクトル
-		Vector3 distanceVec = m_targetPosition - it->m_enemyPosition;
+		Vector3 distanceVec = it->m_enemyPosition - targetPos;
 		//正規化距離ベクトル
 		Vector3 normalizeDistanceVec = distanceVec;
 		normalizeDistanceVec.Normalize();
+		normalizeDistanceVec;
 		//カメラの正面にいる敵には高スコア
-		float dot = Dot(m_cameraFoward, normalizeDistanceVec);
-		btClamp(dot, -1.0f, 1.0f);
+		float dot = Dot(camFoward, normalizeDistanceVec);
 		//スコア加算
-		it->m_attackRoleScore += dot;
-
-		//敵の現在の行動によってスコアを変動させる
-		//攻撃待機中ならスコアアップ
-		if (it->m_enemyAi->IsAiNowStateClassName<EnemyAiWaitingAttackState>())
-		{
-			it->m_attackRoleScore += 1.0f;
-		}
-		//待機中なら変動なし
-		//攻撃中ならスコアダウン
-		if (it->m_enemyAi->IsAiNowStateClassName<IEnemyAttackAiState>())
-		{
-			it->m_attackRoleScore -= 1.0f;
-		}
+		it->m_roleScore += dot;
 
 		it++;
 	}
+
+	//点数準に並び替える
+	std::sort(
+		groupePtr->m_enemyAiInfoList.begin(),
+		groupePtr->m_enemyAiInfoList.end(),
+		[](const EnemyMemberInfo& a, const EnemyMemberInfo& b)
+		{
+			return a.m_roleScore > b.m_roleScore;
+		}
+	);
+
+	//一番上のヤツを攻撃役に
+	auto it = groupePtr->m_enemyAiInfoList.begin();
+	it->m_enemyAi->SetYakuzaRole(YakuzaRole::en_YakuzaRole_Attack);
+	//今攻撃をしているAIを保持
+	m_nowAttackAi = it->m_enemyAi;
+	//フラグをオンに
+	m_isAttackTargetSelected = true;
+	//一つ進めて
+	it++;
+	//他のヤツを待機に
+	for (auto itfor = it;itfor != groupePtr->m_enemyAiInfoList.end();)
+	{
+		itfor->m_enemyAi->SetYakuzaRole(YakuzaRole::en_YakuzaRole_Wait);
+
+		itfor++;
+	}
+
+	//スコアリセット
+	for (auto & ptr : groupePtr->m_enemyAiInfoList)
+	{
+		ptr.m_roleScore = 0.0f;
+	}
 }
 
-bool AttackRoleProcess::IsMetaAiProces(EnemyAiInfoGroupe* groupePtr)
+bool AttackRoleProcess::IsApplicable(EnemyAiInfoGroupe* groupePtr)
 {
 	auto enemyInfoList = groupePtr->m_enemyAiInfoList;
 
-	bool isInBattle;
-
 	for (auto & ptr : enemyInfoList)
 	{
-		if (ptr.m_isInBattle)
+		if (ptr.m_enemyAi->IsAiNowStateClassName<EnemyAiWaitingAttackState>())
 		{
-			isInBattle = true;
-
-			break;
+			return true;
 		}
 	}
 
-	return isInBattle;
+	return false;
+}
+
+bool AttackRoleProcess::IsReady(EnemyAiInfoGroupe* groupePtr)
+{
+	auto enemyInfoList = groupePtr->m_enemyAiInfoList;
+
+	//このままじゃ永遠に追ってくるのでタイマー付ける
+
+	if (m_nowAttackAi &&
+		!m_nowAttackAi->IsAiNowStateClassName<IEnemyAttackAiState>())
+	{
+		m_attackTimer = 3.0f;
+
+		m_nowAttackAi = nullptr;
+
+		return false;
+	}
+
+	return true;
 }
