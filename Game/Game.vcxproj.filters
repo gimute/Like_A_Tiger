@@ -45,6 +45,8 @@
     <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiWaitingAttackState.cpp" />
     <ClCompile Include="UI\HPGauge.cpp" />
     <ClCompile Include="UI\UIAnimation\UIAnimation.cpp" />
+    <ClCompile Include="Title.cpp" />
+    <ClCompile Include="PoseMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -96,5 +98,7 @@
     <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiWaitingAttackState.h" />
     <ClInclude Include="UI\HPGauge.h" />
     <ClInclude Include="UI\UIAnimation\UIAnimation.h" />
+    <ClInclude Include="Title.h" />
+    <ClInclude Include="PoseMenu.h" />
   </ItemGroup>
 </Project>

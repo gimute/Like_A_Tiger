@@ -47,6 +47,9 @@ public:
 /// </summary>
 class UICanvas : public UIBase
 {
+	/**
+	* ’·‚¢Œ^–¼‚ÉA’Z‚­‚Ä•ª‚©‚è‚â‚·‚¢‚ ‚¾–¼‚ğ•t‚¯‚½
+	*/
 	using RefUIBasePtr = std::shared_ptr<UIBase>;
 
 public:
