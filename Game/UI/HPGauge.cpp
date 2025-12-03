@@ -1,11 +1,15 @@
 #include "stdafx.h"
+#include "UI\UIAnimation\UIAnimation.h"
+
 #include "HPGauge.h"
 
 HPGauge::HPGauge()
 {
-	m_frame = m_canvas.CreateUI<UIImage>();
-	m_delayedHPBar = m_canvas.CreateUI<UIGauge>();
-	m_HPBar = m_canvas.CreateUI<UIGauge>();
+	m_canvas = std::make_shared<UICanvas>();
+
+	m_frame = m_canvas->CreateUI<UIImage>();
+	m_delayedHPBar = m_canvas->CreateUI<UIGauge>();
+	m_HPBar = m_canvas->CreateUI<UIGauge>();
 }
 
 HPGauge::~HPGauge()
@@ -14,6 +18,7 @@ HPGauge::~HPGauge()
 
 bool HPGauge::Start()
 {
+
 	return true;
 }
 
@@ -21,12 +26,12 @@ void HPGauge::Update()
 {
 	DelaydHPBarUpdate();
 
-	m_canvas.Update();
+	m_canvas->Update();
 }
 
 void HPGauge::Render(RenderContext& rc)
 {
-	m_canvas.Render(rc);
+	m_canvas->Render(rc);
 }
 
 void HPGauge::Init(const HPGaugeUIInitData* initData)
@@ -89,7 +94,12 @@ void HPGauge::IncreaseHP(float val)
 
 void HPGauge::SetPosition(Vector3 pos)
 {
-	m_canvas.m_transform.m_localPosition = pos;
+	m_canvas->m_transform.m_localPosition = pos;
+}
+
+void HPGauge::SetVisible(bool visible)
+{
+	m_canvas->SetDrawFlag(visible);
 }
 
 void HPGauge::InitializeDelaydHPBar()

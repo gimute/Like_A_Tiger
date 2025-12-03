@@ -37,7 +37,7 @@ private:
 	};
 
 private:
-	UICanvas m_canvas;
+	std::shared_ptr<UICanvas> m_canvas;
 	std::shared_ptr<UIImage> m_frame;	//フレーム
 	std::shared_ptr<UIGauge> m_HPBar;	//HPバー
 	std::shared_ptr<UIGauge> m_delayedHPBar;	//HP減少時にHPバーに遅れて追従するHPバー、ディレイHPバーと呼ぶことにする
@@ -59,6 +59,12 @@ public:
 	void IncreaseHP(float val);
 
 	void SetPosition(Vector3 pos);
+
+	/// <summary>
+	/// 表示非表示
+	/// </summary>
+	/// <param name="visible"></param>
+	void SetVisible(bool visible);
 
 private:
 	/// <summary>

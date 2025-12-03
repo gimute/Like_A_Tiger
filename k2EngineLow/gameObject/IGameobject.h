@@ -9,6 +9,8 @@
 namespace nsK2EngineLow {
 	class RenderContext;
 
+	class CollisionObject;
+
 	/*!
 		*@brief	ゲームオブジェクト。
 		*/
@@ -43,6 +45,16 @@ namespace nsK2EngineLow {
 		virtual void Render(RenderContext& renderContext)
 		{
 			(void)renderContext;
+		}
+
+		/// <summary>
+		/// 所有しているコリジョンが重なった時の処理
+		/// </summary>
+		/// <param name="hitCollision">重なったコリジョンの名前</param>
+		/// <param name="pairCollision">所有しているどのコリジョンに重なったか</param>
+		virtual void OnHit(const char* hitCollisionName, CollisionObject* pairCollision)
+		{
+
 		}
 
 	public:
