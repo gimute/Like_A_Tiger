@@ -64,6 +64,8 @@ struct EnemyAiInfoGroupe
 	std::vector<EnemyMemberInfo> m_enemyAiInfoList;
 	//このグループに適用するMetaAI
 	IMetaAiProcess* m_useMetaAI = nullptr;
+	//前回仕様していた処理
+	IMetaAiProcess* m_prevMetaAI = nullptr;
 	//処理に必要な構造体
 	MetaAiGroupState m_grouoeState;
 	//ターゲットの座標

@@ -147,19 +147,25 @@ void EnemyMetaAi::EnemyAiSituationEvaluation()
 //処理決定
 void EnemyMetaAi::ProcessingDecision()
 {
-	//処理にちょっと不安アリ、一つの処理から抜けた際に初期化かなんかしたい。
-	//ステートマシンがいいヒントになるかも
-
 	//グループのリスト数繰り返す
 	for (auto & group : m_enemyAiInfoGroupeList)
 	{
+		group.m_prevMetaAI = group.m_useMetaAI;
+
 		//処理数繰り返して条件に合致する処理を適用する
 		for (auto& map : m_processList)
 		{
 			if (map.second.get()->IsApplicable(&group))
 			{
-				//適用処理を決定
-				group.m_useMetaAI = map.second.get();
+				IMetaAiProcess* nextProcess = map.second.get();
+				
+				//処理が変わったときだけReset
+				if (group.m_useMetaAI != nextProcess)
+				{
+					//適用処理を決定
+					group.m_grouoeState.ResetStateForProcess();
+					group.m_useMetaAI = nextProcess;
+				}
 			}
 		}
 	}

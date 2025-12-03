@@ -16,5 +16,6 @@ public:
 	virtual bool IsApplicable(EnemyAiInfoGroupe* groupePtr) = 0;
 	//‚±‚Ìˆ—‚ğ‘±‚¯‚Äg‚¦‚é‚©‚Ç‚¤‚©
 	virtual bool IsReady(EnemyAiInfoGroupe* groupePtr) = 0;
+	
 };
 
