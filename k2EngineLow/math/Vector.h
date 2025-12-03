@@ -510,6 +510,23 @@ namespace nsK2EngineLow {
 			this->w = _w;
 		}
 		/// <summary>
+		/// 線形補完
+		/// </summary>
+		/// <remarks>
+		/// this = v0 + (v1-v0) * t;
+		/// </remarks>
+		/// <param name="t">補完率。</param>
+		/// <param name="v0">補完開始のベクトル。</param>
+		/// <param name="v1">補完終了のベクトル。</param>
+		void Lerp(float t, const Vector4& v0, const Vector4& v1)
+		{
+			DirectX::XMVECTOR _v = DirectX::XMVectorLerp(
+				DirectX::XMLoadFloat4(&v0.vec),
+				DirectX::XMLoadFloat4(&v1.vec),
+				t);
+			DirectX::XMStoreFloat4(&vec, _v);
+		}
+		/// <summary>
 		/// ベクトルを正規化。
 		/// </summary>
 		void Normalize()

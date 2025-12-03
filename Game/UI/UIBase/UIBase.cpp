@@ -7,6 +7,7 @@
 
 UICanvas::UICanvas()
 {
+	m_isDraw = true;
 }
 
 
@@ -39,7 +40,7 @@ void UICanvas::Update()
 
 void UICanvas::Render(RenderContext& rc)
 {
-	if (!m_isVisible)
+	if (!m_isDraw)
 	{
 		return;
 	}
@@ -49,12 +50,34 @@ void UICanvas::Render(RenderContext& rc)
 	}
 }
 
-void UICanvas::SetVisible(bool visible)
+void UICanvas::SetColor(Vector4 mulColor)
 {
-	m_isVisible = visible;
+	for (auto ui : m_uiList)
+	{
+		ui->SetColor(mulColor);
+	}
 }
 
-void UICanvas::SetUpdateEnabled(bool enable)
+void UICanvas::SetColor(float r, float g, float b, float a)
+{
+	for (auto ui : m_uiList)
+	{
+		ui->SetColor(Vector4(r, g, b, a));
+	}
+}
+
+Vector4 UICanvas::GetColor()
+{
+	//一旦白を返すようにしておく
+	return Vector4(1.0f,1.0f,1.0f,1.0f);
+}
+
+void UICanvas::SetDrawFlag(bool visible)
+{
+	m_isDraw = visible;
+}
+
+void UICanvas::SetUpdateFlag(bool enable)
 {
 	m_isUpdate = enable;
 }
@@ -122,6 +145,11 @@ void UIImage::SetColor(float r, float g, float b, float a)
 	m_mulColor = Vector4(r, g, b, a);
 }
 
+Vector4 UIImage::GetColor()
+{
+	return m_mulColor;
+}
+
 void UIImage::Render(RenderContext& rc)
 {
 	if (m_isDraw)
@@ -163,6 +191,21 @@ void UIGauge::SetPivot(const Vector2& pivot)
 	m_spriteRender.SetPivot(pivot);
 }
 
+void UIGauge::SetColor(Vector4 mulColor)
+{
+	m_mulColor = mulColor;
+}
+
+void UIGauge::SetColor(float r, float g, float b, float a)
+{
+	m_mulColor = Vector4(r, g, b, a);
+}
+
+Vector4 UIGauge::GetColor()
+{
+	return m_mulColor;
+}
+
 const float UIGauge::GetMaxValue() const
 {
 	return m_maxValue;
@@ -183,9 +226,13 @@ void UIGauge::Update()
 	m_transform.UpdateTransform();
 	m_spriteRender.SetPosition(m_transform.m_position);
 	m_spriteRender.SetRotation(m_transform.m_rotation);
+	m_spriteRender.SetMulColor(m_mulColor);
+
+	//ゲージの伸び縮み用スケール計算
 	float scaleX;
 	scaleX = m_Value / m_maxValue;
-	m_spriteRender.SetScale(Vector3(scaleX, m_transform.m_scale.y, m_transform.m_scale.z));
+
+	m_spriteRender.SetScale(Vector3(m_transform.m_scale.x * scaleX, m_transform.m_scale.y, m_transform.m_scale.z));
 	m_spriteRender.Update();
 }
 
@@ -224,7 +271,7 @@ void UIText::SetText(const wchar_t* text)
 	m_fontRender.SetText(text);
 }
 
-void UIText::SetColor(const Vector4& color)
+void UIText::SetColor(Vector4 color)
 {
 	m_color = color;
 }
@@ -232,6 +279,11 @@ void UIText::SetColor(const Vector4& color)
 void UIText::SetColor(float r, float g, float b, float a)
 {
 	m_color = Vector4(r, g, b, a);
+}
+
+Vector4 UIText::GetColor()
+{
+	return m_color;
 }
 
 void UIText::SetPivot(float x, float y)
