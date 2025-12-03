@@ -33,6 +33,7 @@ void GameInScene::EnterScene()
 	//“G¶¬ƒeƒXƒg
 	//EnemyManager::GetInstance()->RequestSpawnEnemy(EnemyType::en_normalYakuza,Vector3{1000.0,0.0,0.0});
 	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ 1000.0f,0.0f,0.0f });
+	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ -1000.0f,0.0f,0.0f });
 
 	EnemyManager::GetInstance()->SetEnemyTargetCharacter(m_player);
 

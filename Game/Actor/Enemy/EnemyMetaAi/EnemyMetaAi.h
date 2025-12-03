@@ -3,6 +3,7 @@
 #include "Actor\Enemy\EnemyMetaAi\EnemyMetaAiStruct.h"
 
 #include "Actor\Enemy\EnemyMetaAi\Process\AttackRoleProcess.h"
+#include "Actor\Enemy\EnemyMetaAi\Process\TrakingRoleProcess.h"
 
 class IEnemyAi;
 
@@ -14,6 +15,8 @@ public:
 	{
 		//処理設定
 		AddProcess<AttackRoleProcess>();
+		//処理設定
+		AddProcess<TrakingRoleProcess>();
 	}
 	//デストラクタ
 	~EnemyMetaAi() = default;
@@ -29,8 +32,6 @@ private:
 	void EnemyAiSituationEvaluation();
 	//処理決定
 	void ProcessingDecision();
-	//役割の仮決定
-	void EnemyAiRoleTentativedecision();
 private:
 	template<typename ClassName,typename... Args>
 	void AddProcess(Args&&... args)

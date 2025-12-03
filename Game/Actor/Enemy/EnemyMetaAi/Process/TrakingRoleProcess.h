@@ -7,12 +7,13 @@
 public:\
 	static constexpr uint32_t ID() { return Hash32(#name); }
 
-class AttackRoleProcess : public IMetaAiProcess
+class TrakingRoleProcess : public IMetaAiProcess
 {
-	appState(AttackRoleProcess)
+	appState(TrakingRoleProcess)
 public:
-	AttackRoleProcess() = default;
-	~AttackRoleProcess() = default;
+	TrakingRoleProcess() = default;
+	~TrakingRoleProcess() = default;
+
 
 	//–ðŠ„‚ÌŒˆ’è
 	void AssignRoles(EnemyAiInfoGroupe* groupePtr) override;

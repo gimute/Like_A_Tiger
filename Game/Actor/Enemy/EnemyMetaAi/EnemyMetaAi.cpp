@@ -10,22 +10,6 @@
 #include "Actor\Enemy\Enemy.h"
 
 #include "Actor\Enemy\EnemyAI\IEnemyAi.h"
-//フロー(上から下へ)
-//データ収集（敵の状態 / 距離）
-//
-//状況評価（誰が攻撃に向いているかスコア化）
-//
-//ロール仮決定
-//
-//ロールの競合調整
-//
-//クールダウン・ローテーション反映
-//
-//フォーメーション調整
-//
-//最終ロール決定
-//
-//敵AIへ命令を送る
 
 //スタート関数
 bool EnemyMetaAi::Start()
@@ -41,8 +25,6 @@ void EnemyMetaAi::Update()
 	EnemyAiSituationEvaluation();
 	//3.実行処理決定
 	ProcessingDecision();
-	//4.役割の仮決定
-	EnemyAiRoleTentativedecision();
 }
 
 //情報収集
@@ -165,6 +147,9 @@ void EnemyMetaAi::EnemyAiSituationEvaluation()
 //処理決定
 void EnemyMetaAi::ProcessingDecision()
 {
+	//処理にちょっと不安アリ、一つの処理から抜けた際に初期化かなんかしたい。
+	//ステートマシンがいいヒントになるかも
+
 	//グループのリスト数繰り返す
 	for (auto & group : m_enemyAiInfoGroupeList)
 	{
@@ -178,12 +163,4 @@ void EnemyMetaAi::ProcessingDecision()
 			}
 		}
 	}
-}
-
-//役割の仮決定
-void EnemyMetaAi::EnemyAiRoleTentativedecision()
-{
-
-	
-
 }

@@ -4,7 +4,8 @@
 
 enum YakuzaRole
 {
-	en_YakuzaRole_None = 0,
-	en_YakuzaRole_Wait = 1,
-	en_YakuzaRole_Attack = 3
+	en_YakuzaRole_None,
+	en_YakuzaRole_Traking,
+	en_YakuzaRole_Wait,
+	en_YakuzaRole_Attack,
 };

@@ -37,13 +37,35 @@ struct EnemyMemberInfo
 
 class IMetaAiProcess;
 
+struct MetaAiGroupState
+{
+	//AttackRoleProcess
+	float m_attackStartTime = 0.0f;
+	IEnemyAi* m_nowAttackAi = nullptr;
+
+	//TrakingRoleProcess
+	bool m_isProcessEnd = false;
+
+	// 処理変更時に呼ばれる初期化
+	void ResetStateForProcess()
+	{
+		m_attackStartTime = 0.0f;
+		m_nowAttackAi = nullptr;
+
+		m_isProcessEnd = false;
+	}
+};
+
 struct EnemyAiInfoGroupe
 {
 	//グループID
 	int m_groupId = -1;
+	//所属している敵のリスト
 	std::vector<EnemyMemberInfo> m_enemyAiInfoList;
 	//このグループに適用するMetaAI
 	IMetaAiProcess* m_useMetaAI = nullptr;
+	//処理に必要な構造体
+	MetaAiGroupState m_grouoeState;
 	//ターゲットの座標
 	Vector3 m_groupeTargetPosition = Vector3::Zero;
 	//カメラの正面方向

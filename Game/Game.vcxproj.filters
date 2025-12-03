@@ -47,6 +47,7 @@
     <ClCompile Include="Actor\Enemy\EnemyMetaAi\EnemyMetaAi.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAiState\IEnemyAttackAiState.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyMetaAi\Process\AttackRoleProcess.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyMetaAi\Process\TrakingRoleProcess.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -103,5 +104,6 @@
     <ClInclude Include="Actor\Enemy\EnemyMetaAi\IMetaAiProcess.h" />
     <ClInclude Include="Actor\Enemy\EnemyMetaAi\EnemyMetaAiStruct.h" />
     <ClInclude Include="Actor\Enemy\EnemyMetaAi\Process\AttackRoleProcess.h" />
+    <ClInclude Include="Actor\Enemy\EnemyMetaAi\Process\TrakingRoleProcess.h" />
   </ItemGroup>
 </Project>

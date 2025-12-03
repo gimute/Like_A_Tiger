@@ -5,19 +5,27 @@
 #include "Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiTrackingState.h"
 #include "Actor\Enemy\EnemyAI\EnemyAiState\IEnemyAttackAiState.h"
 
+namespace AttackRoleProcessConstant
+{
+	//攻撃開始までの時間
+	const float ATTACK_START_TIME = 5.0f;
+	//攻撃終了までの時間
+	const float ATTACK_END_TIME = 15.0f;
+}
+
 void AttackRoleProcess::AssignRoles(EnemyAiInfoGroupe* groupePtr)
 {
 	// タイマーが未セットなら初期化
-	if (m_attackTimer <= 0.0f)
+	if (groupePtr->m_grouoeState.m_attackStartTime <= 0.0f)
 	{
-		m_attackTimer = 3;
+		groupePtr->m_grouoeState.m_attackStartTime = AttackRoleProcessConstant::ATTACK_START_TIME;
 	}
 
 	// タイマー更新
-	m_attackTimer -= g_gameTime->GetFrameDeltaTime();
+	groupePtr->m_grouoeState.m_attackStartTime -= g_gameTime->GetFrameDeltaTime();
 
 	// 0以上なら処理しない
-	if (m_attackTimer >= 0.0f)
+	if (groupePtr->m_grouoeState.m_attackStartTime >= 0.0f)
 	{
 		for (auto& ptr : groupePtr->m_enemyAiInfoList)
 		{
@@ -64,9 +72,7 @@ void AttackRoleProcess::AssignRoles(EnemyAiInfoGroupe* groupePtr)
 	auto it = groupePtr->m_enemyAiInfoList.begin();
 	it->m_enemyAi->SetYakuzaRole(YakuzaRole::en_YakuzaRole_Attack);
 	//今攻撃をしているAIを保持
-	m_nowAttackAi = it->m_enemyAi;
-	//フラグをオンに
-	m_isAttackTargetSelected = true;
+	groupePtr->m_grouoeState.m_nowAttackAi = it->m_enemyAi;
 	//一つ進めて
 	it++;
 	//他のヤツを待機に
@@ -103,14 +109,39 @@ bool AttackRoleProcess::IsReady(EnemyAiInfoGroupe* groupePtr)
 {
 	auto enemyInfoList = groupePtr->m_enemyAiInfoList;
 
-	//このままじゃ永遠に追ってくるのでタイマー付ける
+	////このままじゃ永遠に追ってくるのでタイマー付ける
+	// ちょっと難しいので検討
+	//途中抜けした際にタイマーがリセットされないのに対策必要かも
+	//if (m_nowAttackAi &&
+	//	m_nowAttackAi->IsAiNowStateClassName<IEnemyAttackAiState>())
+	//{
+	//	// タイマーが未セットなら初期化
+	//	if (m_attackStartTimer <= 0.0f)
+	//	{
+	//		m_attackStartTimer = AttackRoleProcessConstant::ATTACK_END_TIME;
+	//	}
 
-	if (m_nowAttackAi &&
-		!m_nowAttackAi->IsAiNowStateClassName<IEnemyAttackAiState>())
+	//	// タイマー更新
+	//	m_attackEndTimer -= g_gameTime->GetFrameDeltaTime();
+
+	//	if (m_attackEndTimer <= 0.0f)
+	//	{
+	//		m_nowAttackAi->SetYakuzaRole(YakuzaRole::en_YakuzaRole_Wait);
+
+	//		m_attackEndTimer = AttackRoleProcessConstant::ATTACK_END_TIME;
+
+	//		m_nowAttackAi = nullptr;
+
+	//		return false;
+	//	}
+	//}
+
+	if (groupePtr->m_grouoeState.m_nowAttackAi &&
+		!groupePtr->m_grouoeState.m_nowAttackAi->IsAiNowStateClassName<IEnemyAttackAiState>())
 	{
-		m_attackTimer = 3.0f;
+		groupePtr->m_grouoeState.m_attackStartTime = AttackRoleProcessConstant::ATTACK_START_TIME;
 
-		m_nowAttackAi = nullptr;
+		groupePtr->m_grouoeState.m_nowAttackAi = nullptr;
 
 		return false;
 	}
