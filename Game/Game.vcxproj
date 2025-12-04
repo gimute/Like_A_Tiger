@@ -242,7 +242,7 @@
     <ClCompile Include="GameScene\GameInScene.cpp" />
     <ClCompile Include="GameScene\GameSceneManager.cpp" />
     <ClCompile Include="GameScene\GameTitleScene.cpp" />
-    <ClCompile Include="PoseMenu.cpp" />
+    <ClCompile Include="UI\PoseMenu.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\IEnemyAiState.cpp" />
     <ClCompile Include="UI\HPGauge.cpp" />
@@ -295,7 +295,7 @@
     <ClInclude Include="Actor\Player\PlayerController.h" />
     <ClInclude Include="Camera\ICameraController.h" />
     <ClInclude Include="Actor\Player\PlayerCameraController.h" />
-    <ClInclude Include="PoseMenu.h" />
+    <ClInclude Include="UI\PoseMenu.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="UI\HPGauge.h" />
     <ClInclude Include="Actor\BackGround\ProtoStage.h" />

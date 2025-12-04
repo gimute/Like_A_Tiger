@@ -13,7 +13,7 @@
 
 #include "GameScene\UpdateOrder.h"
 
-#include "PoseMenu.h"
+#include "UI\PoseMenu.h"
 
 //ステート侵入関数
 void GameInScene::EnterScene()
