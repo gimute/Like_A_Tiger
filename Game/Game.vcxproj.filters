@@ -47,6 +47,7 @@
     <ClCompile Include="UI\UIAnimation\UIAnimation.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="PoseMenu.cpp" />
+    <ClCompile Include="UI\UILayout.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -100,5 +101,6 @@
     <ClInclude Include="UI\UIAnimation\UIAnimation.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="PoseMenu.h" />
+    <ClInclude Include="UI\UILayout.h" />
   </ItemGroup>
 </Project>
