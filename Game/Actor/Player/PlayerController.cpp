@@ -37,7 +37,7 @@ bool PlayerController::Start()
 
 void PlayerController::Update()
 {
-	auto* playerStateMachine = m_player->GetYakuzaStateMachine();
+	auto* playerStateMachine = &m_player->GetYakuzaStateMachine();
 
 	auto* cameraController = m_cameraController;
 

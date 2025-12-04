@@ -22,7 +22,7 @@ void EnemyManager::RequestSpawnEnemy(EnemyType type, const Vector3& spawnPoint)
 
 	pair.m_enemy = newEnemy;
 
-	pair.m_enemyAi = m_enemyAiFactory.GetInstance().Create(type, newEnemy->GetYakuzaStateMachine());
+	pair.m_enemyAi = m_enemyAiFactory.GetInstance().Create(type, &newEnemy->GetYakuzaStateMachine());
 
 	newEnemy->SetAi(pair.m_enemyAi.get());
 
@@ -48,7 +48,7 @@ void EnemyManager::RequestSpawnEnemyGroup(int spawnNum, const Vector3& spawnPoin
 
 		pair.m_enemy = newEnemy;
 
-		pair.m_enemyAi = m_enemyAiFactory.GetInstance().Create(type, newEnemy->GetYakuzaStateMachine());
+		pair.m_enemyAi = m_enemyAiFactory.GetInstance().Create(type, &newEnemy->GetYakuzaStateMachine());
 
 		pair.m_enemyID = m_enemyIDCounter;
 

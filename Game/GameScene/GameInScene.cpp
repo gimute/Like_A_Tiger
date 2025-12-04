@@ -37,7 +37,10 @@ void GameInScene::EnterScene()
 
 	EnemyManager::GetInstance()->SetEnemyTargetCharacter(m_player);
 
-	NewGO<ProtoStage>(UpdateOrder::Actor);
+	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+
+
+	//NewGO<ProtoStage>(UpdateOrder::Actor);
 }
 
 //ステート更新関数

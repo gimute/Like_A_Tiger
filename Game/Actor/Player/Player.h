@@ -4,7 +4,7 @@
 #include "Actor\YakuzaComponents\YakuzaAnimationState.h"
 
 //プレイヤーが操作するキャラクターを継承したクラス
-class Player : public Character
+class Player : public YakuzaCharacter
 {
 public:
 	enum PlayerAnimation
@@ -33,6 +33,7 @@ private:
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Dodge_Left.tka",false},
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Dodge_Back.tka",false},
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Guard.tka",true},
+		AnimationData{"Assets/modelData/Character/Survivalist/Animation/BodyHit.tka",false},
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/CrossPunch_R_Ev.tka",false},
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Punching_1_R_Ev.tka",false},
 		AnimationData{"Assets/modelData/Character/Survivalist/Animation/Punching_2_R_Ev.tka",false},
@@ -41,7 +42,7 @@ private:
 	};
 public:
 	//コンストラクタ
-	Player();
+	Player() : YakuzaCharacter(this) {}
 	//デストラクタ
 	~Player() = default;
 
@@ -52,8 +53,5 @@ public:
 	//描画関数
 	void Render(RenderContext& rc) override;
 
-	YakuzaStateMachine* GetYakuzaStateMachine()
-	{
-		return dynamic_cast<YakuzaStateMachine*>(GetStateMachine());
-	}
+	void OnHit(const char* hitCollisionName, CollisionObject* pairCollision) override;
 };

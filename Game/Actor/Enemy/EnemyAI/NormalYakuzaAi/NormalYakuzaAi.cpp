@@ -10,7 +10,7 @@
 //定数等
 namespace NormalYakuzaAiConstant
 {
-	const float TRACKING_START_RADIUS = 700.0f;
+	const float START_TRACKING_RADIUS = 700.0f;
 
 	const float WAITING_ATTACK_RADIUS = 400.0f;
 
@@ -135,6 +135,13 @@ AiAutoRegister<NormalYakuzaAi> NormalYakuzaAi::aiSet{ EnemyType::en_normalYakuza
 
 IStateBase* NormalYakuzaAi::GetNextState()
 {
+	//ダメージを受けている最中は操作不可
+	if (m_hasStateMachine->GetIsDamage())
+	{
+		//とりあえずダメージ終了まで待機
+		return FindClassNameState<EnemyAiIdleState>();
+	}
+
 	//個々の処理微妙なので修正予定
 	if (!m_attackFlag)
 	{
@@ -174,7 +181,7 @@ bool NormalYakuzaAi::CanChangeTraking()
 
 	Vector3 targetToIVec = targetPos - iPos;
 		
-	float radius = NormalYakuzaAiConstant::TRACKING_START_RADIUS;
+	float radius = NormalYakuzaAiConstant::START_TRACKING_RADIUS;
 
 	float radiusSq = radius * radius;
 
@@ -189,6 +196,7 @@ bool NormalYakuzaAi::CanChangeTraking()
 	{
 		return true;
 	}
+
 	return false;
 }
 
@@ -213,7 +221,6 @@ bool NormalYakuzaAi::CanChangeWaitingAttack()
 	}
 
 	float radiusSq = radius * radius;
-
 
 	if (targetToIVec.LengthSq() <= radiusSq)
 	{
