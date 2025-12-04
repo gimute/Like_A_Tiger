@@ -44,6 +44,10 @@
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiWaitingAttackState.cpp" />
     <ClCompile Include="UI\HPGauge.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyMetaAi\EnemyMetaAi.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAiState\IEnemyAttackAiState.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyMetaAi\Process\AttackRoleProcess.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyMetaAi\Process\TrakingRoleProcess.cpp" />
     <ClCompile Include="UI\UIAnimation\UIAnimation.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="PoseMenu.cpp" />
@@ -97,6 +101,13 @@
     <ClInclude Include="Random.h" />
     <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiWaitingAttackState.h" />
     <ClInclude Include="UI\HPGauge.h" />
+    <ClInclude Include="Actor\Enemy\EnemyMetaAi\EnemyMetaAi.h" />
+    <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAiState\IEnemyAttackAiState.h" />
+    <ClInclude Include="Actor\Enemy\EnemyMetaAi\YakuzaRole.h" />
+    <ClInclude Include="Actor\Enemy\EnemyMetaAi\IMetaAiProcess.h" />
+    <ClInclude Include="Actor\Enemy\EnemyMetaAi\EnemyMetaAiStruct.h" />
+    <ClInclude Include="Actor\Enemy\EnemyMetaAi\Process\AttackRoleProcess.h" />
+    <ClInclude Include="Actor\Enemy\EnemyMetaAi\Process\TrakingRoleProcess.h" />
     <ClInclude Include="UI\UIAnimation\UIAnimation.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="PoseMenu.h" />

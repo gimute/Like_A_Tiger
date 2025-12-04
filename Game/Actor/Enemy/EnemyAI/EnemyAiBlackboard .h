@@ -17,4 +17,6 @@ public:
 	Vector3 m_targetPosition = Vector3::Zero;
 	//対象正面ベクトル
 	Vector3 m_targetForward = Vector3::Zero;
+	//自身の座標
+	Vector3 m_selfPosition = Vector3::Zero;
 };
