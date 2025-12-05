@@ -48,6 +48,7 @@
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="PoseMenu.cpp" />
     <ClCompile Include="UI\UILayout.cpp" />
+    <ClCompile Include="Core\ParameterManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -102,5 +103,7 @@
     <ClInclude Include="Title.h" />
     <ClInclude Include="PoseMenu.h" />
     <ClInclude Include="UI\UILayout.h" />
+    <ClInclude Include="json\json.hpp" />
+    <ClInclude Include="Core\ParameterManager.h" />
   </ItemGroup>
 </Project>
