@@ -17,6 +17,8 @@ namespace NormalYakuzaAiConstant
 	const float EXIT_WAITING_ATTACK_RADIUS = 500.0f;
 
 	const float ATTACK_TIME = 5.0f;
+
+	
 }
 
 namespace NormalYakuzaAiAttackConstant
@@ -178,6 +180,11 @@ bool NormalYakuzaAi::CanChangeTraking()
 
 	float targetToVecLenSq = targetToIVec.LengthSq();
 
+	if (m_yakuzaRole == YakuzaRole::en_YakuzaRole_Traking)
+	{
+		return true;
+	}
+
 	if (targetToVecLenSq <= radiusSq)
 	{
 		return true;
@@ -218,49 +225,33 @@ bool NormalYakuzaAi::CanChangeWaitingAttack()
 bool NormalYakuzaAi::CanChangeAttack()
 {
 	Vector3 targetPos = m_targetView.m_targetPosition;
+	Vector3 iPos = m_hasStateMachine->GetHasCharactarPos(); 
+	Vector3 targetToIVec = targetPos - iPos; float radius = 600.0f;
+	float radiusSq = radius * radius; float targetToVecLenSq = targetToIVec.LengthSq();
 
-	Vector3 iPos = m_hasStateMachine->GetHasCharactarPos();
+	bool inRange = (targetToVecLenSq >= radiusSq);
 
-	Vector3 targetToIVec = targetPos - iPos;
-
-	float radius = 600.0f;
-
-	float radiusSq = radius * radius;
-
-	float targetToVecLenSq = targetToIVec.LengthSq();
-
-	if (targetToVecLenSq >= radiusSq)
-	{
+	if (inRange)
+	{ 
 		return false;
-	}
+	} 
+	
+	if (!m_attackFlag) 
+	{ 
+		//ここに攻撃終了タイマーを付けるのがいいかも
+		//攻撃終了判断を全体管理AIに任せるか個別の敵に任せるか決める。
 
-	if (!m_attackFlag)
-	{
+
 		return false;
-	}
+	} 
+
 	return true;
 }
 
 bool NormalYakuzaAi::AttackTimer()
 {
-	if (!IsNowStateClassName<EnemyAiWaitingAttackState>())
+	if (m_yakuzaRole == YakuzaRole::en_YakuzaRole_Attack)
 	{
-		return false;
-	}
-
-	// タイマーが未セットなら初期化
-	if (m_attackTestTime <= 0.0f)
-	{
-		m_attackTestTime = NormalYakuzaAiConstant::ATTACK_TIME;
-	}
-
-	// タイマー更新
-	m_attackTestTime -= g_gameTime->GetFrameDeltaTime();
-
-	// 0以下なら攻撃トリガー
-	if (m_attackTestTime <= 0.0f)
-	{
-		m_attackTestTime = NormalYakuzaAiConstant::ATTACK_TIME;
 		return true;
 	}
 

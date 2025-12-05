@@ -62,7 +62,7 @@ void YakuzaWalkState::OnExit()
 
 void YakuzaAimMoveState::OnEnter()
 {
-	m_owner->SetMoveSpeed(50.0f);
+	m_owner->SetMoveSpeed(100.0f);
 }
 
 void YakuzaAimMoveState::OnUpdate()
