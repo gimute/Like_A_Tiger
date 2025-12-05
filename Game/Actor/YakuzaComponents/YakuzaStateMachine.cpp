@@ -159,8 +159,3 @@ YakuzaAttackComboStateMachine* YakuzaStateMachine::GetAttackStateMachine()
 	return m_attackStateMachine.get();
 }
 
-void YakuzaStateMachine::InitGetAttackPowerFunc(std::function<float(YakuzaAttackComboStateMachine*)> func)
-{
-	m_getAttackPowerFunc = func;
-}
-

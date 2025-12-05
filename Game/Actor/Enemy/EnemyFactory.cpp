@@ -18,7 +18,7 @@ Enemy* EnemyFactory::CreateEnemy(EnemyType type)
 	//ƒ‚ƒfƒ‹ƒtƒ@ƒCƒ‹ƒpƒX“o˜^
 	newEnemy->InitEnemyModel(typeSet.get()->GetModelFilePath(), typeSet.get()->GetAnimationDataList());
 	//UŒ‚—ÍŽæ“¾ŠÖ”“o˜^
-	newEnemy->GetYakuzaStateMachine().InitGetAttackPowerFunc([&](YakuzaAttackComboStateMachine* obj) { return typeSet.get()->GetAttackPower(obj); });
+	newEnemy->GetYakuzaStateMachine().SetTypeSet(std::move(typeSet));
 
 	return newEnemy;
 }

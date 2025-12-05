@@ -42,9 +42,11 @@ void Enemy::Render(RenderContext& rc)
 
 void Enemy::OnHit(const char* hitCollisionName, CollisionObject* pairCollision)
 {
+	float test = 0;
+
 	if (hitCollisionName == "playerBodyCollision" &&
 		pairCollision == m_attackCollision)
 	{
-		GetYakuzaStateMachine().GetAttackPowerFunc();
+		test = GetYakuzaStateMachine().GetTypeSetAttackPower();
 	}
 }
