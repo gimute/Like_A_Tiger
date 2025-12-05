@@ -62,6 +62,8 @@ private:
 	YakuzaCharacter* m_hasCharactar = nullptr;
 	//攻撃専用ステートマシン
 	std::unique_ptr<YakuzaAttackComboStateMachine> m_attackStateMachine = nullptr;
+	//攻撃力取得関数
+	std::function<float(YakuzaAttackComboStateMachine*)> m_getAttackPowerFunc;
 public:
 	///変数系のゲッター＆セッター
 	inline void SetMoveVec(const Vector3& vec) { m_moveVec = vec; }
@@ -140,7 +142,10 @@ public:
 
 	YakuzaAttackComboStateMachine* GetAttackStateMachine();
 
-	///行動可能かを判定する関数
+	//攻撃力取得関数初期化
+	void InitGetAttackPowerFunc(std::function<float(YakuzaAttackComboStateMachine*)> func);
+	//攻撃力取得関数使用
+	inline float GetAttackPowerFunc() { return m_getAttackPowerFunc(m_attackStateMachine.get()); }
 private:
 	//移動することができるかどうか
 	bool CanChangeWalk();

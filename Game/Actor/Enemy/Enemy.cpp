@@ -13,6 +13,8 @@ bool Enemy::Start()
 
 	InitBodyCollision(this, "testEnemy");
 
+	SetAttackCollisionName("EnemyAttack");
+
 	return true;
 }
 
@@ -36,4 +38,13 @@ void Enemy::Update()
 void Enemy::Render(RenderContext& rc)
 {
 	GetModelRender()->Draw(rc);
+}
+
+void Enemy::OnHit(const char* hitCollisionName, CollisionObject* pairCollision)
+{
+	if (hitCollisionName == "playerBodyCollision" &&
+		pairCollision == m_attackCollision)
+	{
+		GetYakuzaStateMachine().GetAttackPowerFunc();
+	}
 }

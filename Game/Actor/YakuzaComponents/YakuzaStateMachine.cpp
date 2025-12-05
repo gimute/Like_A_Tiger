@@ -138,11 +138,14 @@ void YakuzaStateMachine::OnAnimationEvent(const wchar_t* clipName, const wchar_t
 	}
 	if (wcscmp(eventName, L"HitBoxOn") == 0)
 	{
-
+		m_hasCharactar->SpwanAttackCollision(
+			m_hasCharactar,
+			20.0f
+		);
 	}
 	if (wcscmp(eventName, L"HitBoxOff") == 0)
 	{
-
+		m_hasCharactar->DeleteAttackCollision();
 	}
 }
 
@@ -154,5 +157,10 @@ CharacterController* YakuzaStateMachine::GetHasCharactarCharaCon()
 YakuzaAttackComboStateMachine* YakuzaStateMachine::GetAttackStateMachine()
 {
 	return m_attackStateMachine.get();
+}
+
+void YakuzaStateMachine::InitGetAttackPowerFunc(std::function<float(YakuzaAttackComboStateMachine*)> func)
+{
+	m_getAttackPowerFunc = func;
 }
 

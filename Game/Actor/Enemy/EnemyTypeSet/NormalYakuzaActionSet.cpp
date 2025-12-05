@@ -5,6 +5,32 @@
 
 TypeSetAutoRegister<NormalYakuzaTypeSet> NormalYakuzaTypeSet::typeSet{ EnemyType::en_normalYakuza };
 
+float NormalYakuzaTypeSet::GetAttackPower(YakuzaAttackComboStateMachine* useAttackStateMachine)
+{
+	uint32_t nowStateId = useAttackStateMachine->GetNowCombo();
+
+	if (nowStateId == NormalYakuzaFirstAttackState::ID())
+	{
+
+	}
+	else if (nowStateId == NormalYakuzaSecondAttackState::ID())
+	{
+
+	}
+	else if (nowStateId == NormalYakuzaThirdAttackState::ID())
+	{
+
+	}
+	else if (nowStateId == NormalYakuzaFirstFinalBlowState::ID())
+	{
+
+	}
+
+	float attackPower = 0;
+
+	return attackPower;
+}
+
 //FirstAttackState
 
 void NormalYakuzaFirstAttackState::OnEnter()
@@ -16,7 +42,7 @@ void NormalYakuzaFirstAttackState::OnUpdate()
 {
 	auto* stateMachine = m_owner->GetYakuzaStateMachine();
 
-	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(NormalYakuzaTypeSet::en_crossPunch_1_R,0.1f);
+	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(NormalYakuzaTypeSet::en_punching_1_L,0.1f);
 
 	if (stateMachine->GetAttackFlag() && !m_owner->GetIsNextCombo())
 	{

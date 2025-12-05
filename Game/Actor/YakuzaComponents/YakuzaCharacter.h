@@ -38,36 +38,54 @@ public:
 		m_bodyCollision->SetIsEnableAutoDelete(false);
 	}
 
+	inline void SetAttackCollisionName(const char* name)
+	{
+		m_attackCollisionName = name;
+	}
+
 	inline void SpwanAttackCollision(
 		YakuzaCharacter* useCharacter,
-		const Vector3& position,
-		const Quaternion rotation,
-		float size,
-		const char* name)
+		float size
+	)
 	{
+		if (m_attackCollision)
+		{
+			return;
+		}
+
 		m_attackCollision = NewGO<CollisionObject>(0, "collision");
 
-		m_bodyCollision->CreateSphere(
-			position,
-			rotation,
+		Vector3 iPos = GetPosition();
+		Vector3 collisionPos = iPos + GetForward() * 20.0f;
+		collisionPos.y = 60.0f;
+
+		m_attackCollision->CreateSphere(
+			collisionPos,
+			GetRotation(),
 			size,
 			useCharacter
 		);
 
-		m_bodyCollision->SetName(name);
+		m_attackCollision->SetName(m_attackCollisionName);
 
-		m_bodyCollision->SetIsEnableAutoDelete(false);
+		m_attackCollision->SetIsEnableAutoDelete(false);
 	}
 
 	inline void DeleteAttackCollision()
 	{
-		m_bodyCollision->Dead();
+		if (!m_attackCollision)
+		{
+			return;
+		}
+		DeleteGO(m_attackCollision);
 	}
 
 	//本体の当たり判定
 	CollisionObject* m_bodyCollision = nullptr;
 	//攻撃の当たり判定
 	CollisionObject* m_attackCollision = nullptr;
+	//攻撃のコリジョンネーム
+	const char* m_attackCollisionName = "";
 public:
 	inline YakuzaStateMachine& GetYakuzaStateMachine() 
 	{

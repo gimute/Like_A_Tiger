@@ -32,6 +32,7 @@ public:
 	//AIİ’è
 	void SetAi(IEnemyAi* setAi) { m_hasAi = setAi; }
 
+	void OnHit(const char* hitCollisionName, CollisionObject* pairCollision) override;
 
 	//ƒ‚ƒfƒ‹‰Šúİ’è
 	void InitEnemyModel(const char* filePath, std::vector<Character::AnimationData>& ptr)

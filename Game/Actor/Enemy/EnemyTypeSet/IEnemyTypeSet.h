@@ -60,6 +60,7 @@ protected:
 			m_maxFinishBrowNum++;
 		}
 	}
+	//UŒ‚—Íæ“¾ŠÖ”
 
 public:
 	inline uint32_t GetFirstAttackID() { return m_firstAttackID; }
@@ -69,5 +70,7 @@ public:
 	inline const char* GetModelFilePath() { return m_modelFilePath; }
 
 	inline std::vector<Character::AnimationData>& GetAnimationDataList() { return m_animationDataList; }
+
+	virtual float GetAttackPower(YakuzaAttackComboStateMachine* useAttackStateMachine) = 0;
 };
 

@@ -271,6 +271,7 @@
     <ClCompile Include="Actor\YakuzaComponents\YakuzaAttackComboStateMachine.cpp" />
     <ClCompile Include="UI\UIBase\UIBase.cpp" />
     <ClCompile Include="Actor\YakuzaComponents\YakuzaCharacter.cpp" />
+    <ClCompile Include="Actor\YakuzaComponents\YakuzaCharacterDamageManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorStatus.h" />
@@ -330,6 +331,7 @@
     <ClInclude Include="GameScene\UpdateOrder.h" />
     <ClInclude Include="Actor\Enemy\EnemyMetaAi\YakuzaRole.h" />
     <ClInclude Include="Actor\YakuzaComponents\YakuzaCharacter.h" />
+    <ClInclude Include="Actor\YakuzaComponents\YakuzaCharacterDamageManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
