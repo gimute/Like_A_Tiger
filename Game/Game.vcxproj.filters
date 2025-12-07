@@ -32,7 +32,7 @@
     <ClCompile Include="Actor\Enemy\Enemy.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyFactory.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyTypeSet\NormalYakuzaActionSet.cpp" />
-    <ClCompile Include="Actor\Enemy\EnemyTypeSet\EnemyTypeSetFactory.cpp" />
+    <ClCompile Include="Actor\YakuzaComponents\YakuzaTypeSetFactory.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAiFactory.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\IEnemyAi.cpp" />
@@ -86,10 +86,10 @@
     <ClInclude Include="UI\UIBase\UIBase.h" />
     <ClInclude Include="Actor\Enemy\Enemy.h" />
     <ClInclude Include="Actor\Enemy\EnemyFactory.h" />
-    <ClInclude Include="Actor\Enemy\EnemyTypeSet\IEnemyTypeSet.h" />
+    <ClInclude Include="Actor\YakuzaComponents\IYakuzaTypeSet.h" />
     <ClInclude Include="Actor\Enemy\EnemyTypeSet\NormalYakuzaActionSet.h" />
-    <ClInclude Include="Actor\Enemy\EnemyTypeSet\EnemyTypeSetFactory.h" />
-    <ClInclude Include="Actor\Enemy\EnemyType.h" />
+    <ClInclude Include="Actor\YakuzaComponents\YakuzaTypeSetFactory.h" />
+    <ClInclude Include="Actor\YakuzaComponents\YakuzaType.h" />
     <ClInclude Include="Actor\Enemy\EnemyManager.h" />
     <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAiFactory.h" />
     <ClInclude Include="Actor\Enemy\EnemyAI\IEnemyAi.h" />

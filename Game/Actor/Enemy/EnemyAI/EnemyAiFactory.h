@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Actor\Enemy\EnemyType.h"
+#include "Actor\YakuzaComponents\YakuzaType.h"
 #include "Actor\Enemy\EnemyAI\IEnemyAi.h"
 
 class IEnemyAi;
@@ -17,12 +17,12 @@ public:
 		return inst;
 	}
 	//“o˜^
-	void Register(EnemyType type, CreateFunc func)
+	void Register(EnemyYakuzaType type, CreateFunc func)
 	{
 		m_registry[type] = func;
 	}
 	//ì¬
-	std::unique_ptr<IEnemyAi> Create(EnemyType type,YakuzaStateMachine* hasStateMachine)
+	std::unique_ptr<IEnemyAi> Create(EnemyYakuzaType type,YakuzaStateMachine* hasStateMachine)
 	{
 		auto it = m_registry.find(type);
 		if (it != m_registry.end())
@@ -33,6 +33,6 @@ public:
 	}
 private:
 	//“o˜^‚³‚ê‚½Ai‚ÌƒŠƒXƒg
-	std::unordered_map<EnemyType, CreateFunc> m_registry;
+	std::unordered_map<EnemyYakuzaType, CreateFunc> m_registry;
 };
 

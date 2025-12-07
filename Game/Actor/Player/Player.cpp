@@ -1,20 +1,38 @@
 #include "stdafx.h"
 #include "Player.h"
 #include "Actor\Player\PlayerAttackComboState.h"
+#include "Actor\YakuzaComponents\YakuzaType.h"
+#include "Actor\YakuzaComponents\YakuzaTypeSetFactory.h"
 
 //スタート関数
 bool Player::Start()
 {
-	GetYakuzaStateMachine().InitAttackStateMachine(PlayerFirstAttackState::ID(), 0);
 
-	GetYakuzaStateMachine().GetAttackStateMachine()->AddState<PlayerFirstAttackState>(GetYakuzaStateMachine().GetAttackStateMachine());
-	GetYakuzaStateMachine().GetAttackStateMachine()->AddState<PlayerSecondAttackState>(GetYakuzaStateMachine().GetAttackStateMachine());
-	GetYakuzaStateMachine().GetAttackStateMachine()->AddState<PlayerThirdAttackState>(GetYakuzaStateMachine().GetAttackStateMachine());
-	GetYakuzaStateMachine().GetAttackStateMachine()->AddState<PlayerFirstFinalBlowState>(GetYakuzaStateMachine().GetAttackStateMachine());
+	//タイプセットからプレイヤーの物を取得
+	auto typeSet = YakuzaTypeSetFactory::GetInstance().Create(OthersYakuzaType::en_playerYakuza);
+	//タイプセットを使用してプレイヤーの攻撃ステートマシンを初期化
+	GetYakuzaStateMachine().InitAttackStateMachine(typeSet.get()->GetFirstAttackID(), typeSet.get()->GetFirstFinishBrowID());
+	//タイプセットを利用して初期化
+	InitYakuzaModel(typeSet.get()->GetModelFilePath(), typeSet.get()->GetAnimationDataList());
+	//初期化した内容でモデルを初期化
+	InitAnimationClipList(m_maxAnimationNum, m_animationData.data());
+	//TypeSet攻撃ステートリスト作成
+	typeSet.get()->CreateActions(GetYakuzaStateMachine().GetAttackStateMachine());
+	//タイプセットをステートマシンに登録
+	GetYakuzaStateMachine().SetTypeSet(std::move(typeSet));
 
-	InitAnimationClipList(PlayerAnimation::num, animationDataList);
+	//モデルレンダー初期化
+	InitModelRender(m_modelFilePath);
 
-	InitModelRender("Assets/modelData/Character/Survivalist/Survivalist.tkm");
+
+	//GetYakuzaStateMachine().GetAttackStateMachine()->AddState<PlayerFirstAttackState>(GetYakuzaStateMachine().GetAttackStateMachine());
+	//GetYakuzaStateMachine().GetAttackStateMachine()->AddState<PlayerSecondAttackState>(GetYakuzaStateMachine().GetAttackStateMachine());
+	//GetYakuzaStateMachine().GetAttackStateMachine()->AddState<PlayerThirdAttackState>(GetYakuzaStateMachine().GetAttackStateMachine());
+	//GetYakuzaStateMachine().GetAttackStateMachine()->AddState<PlayerFirstFinalBlowState>(GetYakuzaStateMachine().GetAttackStateMachine());
+
+	//InitAnimationClipList(PlayerAnimation::num, animationDataList);
+
+	//InitModelRender("Assets/modelData/Character/Survivalist/Survivalist.tkm");
 
 	m_modelRender.AddAnimationEvent([&](const wchar_t* clipName, const wchar_t* eventName) { GetYakuzaStateMachine().OnAnimationEvent(clipName, eventName); });
 

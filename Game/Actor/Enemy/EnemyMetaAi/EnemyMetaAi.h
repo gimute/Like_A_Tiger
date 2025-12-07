@@ -1,5 +1,5 @@
 #pragma once
-#include "Actor\Enemy\EnemyType.h"
+#include "Actor\YakuzaComponents\YakuzaType.h"
 #include "Actor\Enemy\EnemyMetaAi\EnemyMetaAiStruct.h"
 
 #include "Actor\Enemy\EnemyMetaAi\Process\AttackRoleProcess.h"

@@ -14,7 +14,7 @@ EnemyManager::EnemyManager()
 	m_enemyMetaAi = NewGO<EnemyMetaAi>(UpdateOrder::AI, "enemymetaai");
 }
 
-void EnemyManager::RequestSpawnEnemy(EnemyType type, const Vector3& spawnPoint)
+void EnemyManager::RequestSpawnEnemy(EnemyYakuzaType type, const Vector3& spawnPoint)
 {	
 	EnemyPair pair;
 
@@ -41,8 +41,8 @@ void EnemyManager::RequestSpawnEnemyGroup(int spawnNum, const Vector3& spawnPoin
 
 		//タイプをランダム選定
 		int randomType = 0;
-		//Random::Range(EnemyType::en_normalYakuza)
-		EnemyType type = static_cast<EnemyType>(randomType);
+		//Random::Range(EnemyYakuzaType::en_normalYakuza)
+		EnemyYakuzaType type = static_cast<EnemyYakuzaType>(randomType);
 
 		auto newEnemy = m_enemyFactory.CreateEnemy(type);
 

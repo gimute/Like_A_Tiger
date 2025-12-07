@@ -3,33 +3,40 @@
 
 #include "StateMachineComponents\IState.h"
 #include "Actor\YakuzaComponents\YakuzaAttackComboStateMachine.h"
-#include "Actor\Enemy\EnemyTypeSet\EnemyTypeSetFactory.h"
+#include "Actor\YakuzaComponents\YakuzaTypeSetFactory.h"
 
-#include "Actor\Enemy\EnemyType.h"
+#include "Actor\YakuzaComponents\YakuzaType.h"
 #include "Actor\YakuzaComponents\YakuzaAnimationState.h"
 
 #include "Actor\Character.h"
 
-class EnemyTypeSetFactory;
+class YakuzaTypeSetFactory;
 
 template<class ClassType>
 class TypeSetAutoRegister
 {
 public:
-	TypeSetAutoRegister(EnemyType type)
+	TypeSetAutoRegister(OthersYakuzaType type)
 	{
-		EnemyTypeSetFactory::GetInstance().Register(type, []()
+		YakuzaTypeSetFactory::GetInstance().Register(type, []()
+			{
+				return std::make_unique<ClassType>();
+			});
+	}
+	TypeSetAutoRegister(EnemyYakuzaType type)
+	{
+		YakuzaTypeSetFactory::GetInstance().Register(type, []()
 		{
 			return std::make_unique<ClassType>();
 		});
 	}
 };
 
-class IEnemyTypeSet
+class IYakuzaTypeSet
 {
 public:
 	//デストラクタ
-	virtual ~IEnemyTypeSet() = default;
+	virtual ~IYakuzaTypeSet() = default;
 	//ステート生成
 	virtual void CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) = 0;
 
@@ -49,7 +56,6 @@ protected:
 	{
 		useAttackStateMachine->AddState<ClassName>(useAttackStateMachine);
 	}
-	//攻撃力取得関数
 
 public:
 	inline uint32_t GetFirstAttackID() { return m_firstAttackID; }
@@ -60,6 +66,7 @@ public:
 
 	inline std::vector<Character::AnimationData>& GetAnimationDataList() { return m_animationDataList; }
 
+	//攻撃力取得関数
 	virtual float GetAttackPower(YakuzaAttackComboStateMachine* useAttackStateMachine) = 0;
 };
 

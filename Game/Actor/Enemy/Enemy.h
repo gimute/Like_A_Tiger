@@ -9,12 +9,6 @@ class Enemy : public YakuzaCharacter
 public:
 	//エネミーのアニメーションは外部から変更できるようにしたいためここをいじる
 private:
-	const char* m_modelFilePath = nullptr;
-
-	int m_maxAnimationNum = 0;
-
-	std::vector<Character::AnimationData> m_animationData;
-
 	IEnemyAi* m_hasAi;
 public:
 	//コンストラクタ
@@ -33,15 +27,5 @@ public:
 	void SetAi(IEnemyAi* setAi) { m_hasAi = setAi; }
 
 	void OnHit(const char* hitCollisionName, CollisionObject* pairCollision) override;
-
-	//モデル初期設定
-	void InitEnemyModel(const char* filePath, std::vector<Character::AnimationData>& ptr)
-	{
-		m_modelFilePath = filePath;
-
-		m_maxAnimationNum = ptr.size();
-
-		m_animationData = ptr;
-	}
 };
 

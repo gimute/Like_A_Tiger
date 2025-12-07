@@ -4,6 +4,13 @@
 #include "Actor\YakuzaComponents\YakuzaStateMachine.h"
 #include "Actor\Player\Player.h"
 
+TypeSetAutoRegister<PlayerYakuzaTypeSet> PlayerYakuzaTypeSet::typeSet{ OthersYakuzaType::en_playerYakuza };
+
+float PlayerYakuzaTypeSet::GetAttackPower(YakuzaAttackComboStateMachine* useAttackStateMachine)
+{
+	return 0.0f;
+}
+
 //PlayerFirstAttackState
 
 void PlayerFirstAttackState::OnEnter()

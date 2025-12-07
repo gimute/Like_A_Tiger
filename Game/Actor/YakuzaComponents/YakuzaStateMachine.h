@@ -3,7 +3,7 @@
 #include "StateMachineComponents\IState.h"
 #include "Actor\YakuzaComponents\YakuzaStates.h"
 #include "Actor\YakuzaComponents\YakuzaAttackComboStateMachine.h"
-#include "Actor\Enemy\EnemyTypeSet\IEnemyTypeSet.h"
+#include "Actor\YakuzaComponents\IYakuzaTypeSet.h"
 
 #include "YakuzaCharacter.h"
 
@@ -64,7 +64,7 @@ private:
 	//攻撃専用ステートマシン
 	std::unique_ptr<YakuzaAttackComboStateMachine> m_attackStateMachine = nullptr;
 	//敵種セット
-	std::unique_ptr<IEnemyTypeSet> m_typeSet;
+	std::unique_ptr<IYakuzaTypeSet> m_typeSet;
 public:
 	///変数系のゲッター＆セッター
 	inline void SetMoveVec(const Vector3& vec) { m_moveVec = vec; }
@@ -119,9 +119,9 @@ public:
 
 	inline const Vector3& GetAimMoveTargetPos() { return m_aimMoveTargetPos; }
 	
-	inline void SetTypeSet(std::unique_ptr<IEnemyTypeSet> setType) { m_typeSet = std::move(setType); }
+	inline void SetTypeSet(std::unique_ptr<IYakuzaTypeSet> setType) { m_typeSet = std::move(setType); }
 
-	inline IEnemyTypeSet& GetTypeSet() { return *m_typeSet.get(); }
+	inline IYakuzaTypeSet& GetTypeSet() { return *m_typeSet.get(); }
 
 	inline float GetTypeSetAttackPower() { return m_typeSet.get()->GetAttackPower(m_attackStateMachine.get()); }
 

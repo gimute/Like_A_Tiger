@@ -131,7 +131,7 @@ void NormalYakuzaAiAttackState::OnExit()
 
 //StateMachine
 
-AiAutoRegister<NormalYakuzaAi> NormalYakuzaAi::aiSet{ EnemyType::en_normalYakuza };
+AiAutoRegister<NormalYakuzaAi> NormalYakuzaAi::aiSet{ EnemyYakuzaType::en_normalYakuza };
 
 IStateBase* NormalYakuzaAi::GetNextState()
 {

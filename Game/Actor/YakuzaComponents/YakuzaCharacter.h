@@ -91,6 +91,12 @@ public:
 	CollisionObject* m_attackCollision = nullptr;
 	//攻撃のコリジョンネーム
 	const char* m_attackCollisionName = "";
+protected:
+	const char* m_modelFilePath = nullptr;
+
+	int m_maxAnimationNum = 0;
+
+	std::vector<Character::AnimationData> m_animationData;
 public:
 	inline YakuzaStateMachine& GetYakuzaStateMachine() 
 	{
@@ -99,6 +105,15 @@ public:
 	inline void SetBodyCollision()
 	{
 		m_bodyCollision->SetIsEnable(false);
+	}
+	//モデル初期設定
+	inline void InitYakuzaModel(const char* filePath, std::vector<Character::AnimationData>& ptr)
+	{
+		m_modelFilePath = filePath;
+
+		m_maxAnimationNum = ptr.size();
+
+		m_animationData = ptr;
 	}
 };
 

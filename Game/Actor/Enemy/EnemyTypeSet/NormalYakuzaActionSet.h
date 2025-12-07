@@ -1,6 +1,6 @@
 #pragma once
 #include "StateMachineComponents\IState.h"
-#include "Actor\Enemy\EnemyTypeSet\IEnemyTypeSet.h"
+#include "Actor\YakuzaComponents\IYakuzaTypeSet.h"
 #include "CRC32.h"
 
 #define appState(name)	\
@@ -87,7 +87,7 @@ public:
 	void OnExit() override;
 };
 
-struct NormalYakuzaTypeSet : public IEnemyTypeSet
+struct NormalYakuzaTypeSet : public IYakuzaTypeSet
 {
 	appState(NormalYakuzaTypeSet)
 public:

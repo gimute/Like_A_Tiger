@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "NormalYakuzaActionSet.h"
-#include "Actor\Enemy\EnemyTypeSet\IEnemyTypeSet.h"
+#include "Actor\YakuzaComponents\IYakuzaTypeSet.h"
 #include "Actor\YakuzaComponents\YakuzaStateMachine.h"
 
-TypeSetAutoRegister<NormalYakuzaTypeSet> NormalYakuzaTypeSet::typeSet{ EnemyType::en_normalYakuza };
+TypeSetAutoRegister<NormalYakuzaTypeSet> NormalYakuzaTypeSet::typeSet{ EnemyYakuzaType::en_normalYakuza };
 
 float NormalYakuzaTypeSet::GetAttackPower(YakuzaAttackComboStateMachine* useAttackStateMachine)
 {
