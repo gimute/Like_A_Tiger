@@ -128,9 +128,9 @@ public:
 
 	void CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) override
 	{
-		AddAttackState<NormalYakuzaFirstAttackState>(useAttackStateMachine,true);
-		AddAttackState<NormalYakuzaSecondAttackState>(useAttackStateMachine,true);
-		AddAttackState<NormalYakuzaThirdAttackState>(useAttackStateMachine, true);
+		AddAttackState<NormalYakuzaFirstAttackState>(useAttackStateMachine);
+		AddAttackState<NormalYakuzaSecondAttackState>(useAttackStateMachine);
+		AddAttackState<NormalYakuzaThirdAttackState>(useAttackStateMachine);
 	}
 
 	float GetAttackPower(YakuzaAttackComboStateMachine* useAttackStateMachine) override;

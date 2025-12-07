@@ -47,6 +47,6 @@ void Enemy::OnHit(const char* hitCollisionName, CollisionObject* pairCollision)
 	if (hitCollisionName == "playerBodyCollision" &&
 		pairCollision == m_attackCollision)
 	{
-		test = GetYakuzaStateMachine().GetTypeSetAttackPower();
+		float damage = GetYakuzaStateMachine().GetTypeSetAttackPower();
 	}
 }

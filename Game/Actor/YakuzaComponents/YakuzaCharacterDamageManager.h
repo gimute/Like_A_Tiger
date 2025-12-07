@@ -15,5 +15,18 @@ private:
 public:
 	//デストラクタ
 	~YakuzaCharacterDamageManager() = default;
+	//インスタンス取得
+	static YakuzaCharacterDamageManager* GetInstance()
+	{
+		if (m_instance == nullptr)
+		{
+			m_instance = new YakuzaCharacterDamageManager();
+		}
+
+		return m_instance;
+	}
+	
+	//引数のコリジョンを持っている敵を検索して引数分のダメージを与える
+	void SendEnemyDamage(CollisionObject* collision, float sendDamage);
 };
 

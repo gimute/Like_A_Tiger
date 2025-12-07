@@ -38,6 +38,11 @@ public:
 		m_bodyCollision->SetIsEnableAutoDelete(false);
 	}
 
+	inline CollisionObject& GetBodyCollision()
+	{
+		return *m_bodyCollision;
+	}
+
 	inline void SetAttackCollisionName(const char* name)
 	{
 		m_attackCollisionName = name;

@@ -41,24 +41,13 @@ protected:
 
 	const char* m_modelFilePath = nullptr;
 
-	int m_maxAttackNum = 0; 
-	int m_maxFinishBrowNum = 0;
-
 	std::vector<Character::AnimationData> m_animationDataList;
 
 	//攻撃ステートを追加＋通常攻撃かフィニッシュブロウかを選択しカウント、trueが通常攻撃、falseがフィニッシュブロウ
 	template<typename ClassName>
-	inline void AddAttackState(YakuzaAttackComboStateMachine* useAttackStateMachine,bool isAttackOrFinish)
+	inline void AddAttackState(YakuzaAttackComboStateMachine* useAttackStateMachine)
 	{
 		useAttackStateMachine->AddState<ClassName>(useAttackStateMachine);
-		if (isAttackOrFinish)
-		{
-			m_maxAttackNum++;
-		}
-		else
-		{
-			m_maxFinishBrowNum++;
-		}
 	}
 	//攻撃力取得関数
 
