@@ -2,13 +2,33 @@
 #include "PlayerAttackComboState.h"
 
 #include "Actor\YakuzaComponents\YakuzaStateMachine.h"
-#include "Actor\Player\Player.h"
 
 TypeSetAutoRegister<PlayerYakuzaTypeSet> PlayerYakuzaTypeSet::typeSet{ OthersYakuzaType::en_playerYakuza };
 
 float PlayerYakuzaTypeSet::GetAttackPower(YakuzaAttackComboStateMachine* useAttackStateMachine)
 {
-	return 0.0f;
+	uint32_t nowStateId = useAttackStateMachine->GetNowCombo();
+
+	float attackPower;
+
+	if (nowStateId == PlayerFirstAttackState::ID())
+	{
+		attackPower = 10.0f;
+	}
+	else if (nowStateId == PlayerSecondAttackState::ID())
+	{
+		attackPower = 20.0f;
+	}
+	else if (nowStateId == PlayerThirdAttackState::ID())
+	{
+		attackPower = 30.0f;
+	}
+	else if (nowStateId == PlayerFirstFinalBlowState::ID())
+	{
+		attackPower = 50.0f;
+	}
+
+	return attackPower;
 }
 
 //PlayerFirstAttackState
@@ -25,7 +45,7 @@ void PlayerFirstAttackState::OnUpdate()
 
 	auto* stateMachine = m_owner->GetYakuzaStateMachine();
 
-	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(Player::en_punchCross_1_R,0.1f);
+	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(PlayerYakuzaTypeSet::en_punching_1_L,0.1f);
 
 	if (stateMachine->GetAttackFlag() && !m_owner->GetIsNextCombo())
 	{
@@ -81,7 +101,7 @@ void PlayerSecondAttackState::OnUpdate()
 
 	auto* stateMachine = m_owner->GetYakuzaStateMachine();
 
-	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(Player::en_punching_3_L, 0.1f);
+	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(PlayerYakuzaTypeSet::en_punching_3_L, 0.1f);
 
 	if (stateMachine->GetAttackFlag() && !m_owner->GetIsNextCombo())
 	{
@@ -130,7 +150,7 @@ void PlayerThirdAttackState::OnUpdate()
 
 	auto* stateMachine = m_owner->GetYakuzaStateMachine();
 
-	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(Player::en_punching_2_R, 0.1f);
+	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(PlayerYakuzaTypeSet::en_punching_2_R, 0.1f);
 
 	if (!m_owner->GetYakuzaStateMachine()->IsHasCharactarPlayAnimation())
 	{
@@ -156,7 +176,7 @@ void PlayerFirstFinalBlowState::OnUpdate()
 {
 	auto* stateMachine = m_owner->GetYakuzaStateMachine();
 
-	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(Player::en_kick_1,0.1f);
+	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(PlayerYakuzaTypeSet::en_kick_1,0.1f);
 
 	if (stateMachine->GetIsComboTransition())
 	{

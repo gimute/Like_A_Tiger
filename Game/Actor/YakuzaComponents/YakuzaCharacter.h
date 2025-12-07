@@ -83,6 +83,7 @@ public:
 			return;
 		}
 		DeleteGO(m_attackCollision);
+		m_attackCollision = nullptr;
 	}
 
 	//本体の当たり判定
@@ -91,6 +92,8 @@ public:
 	CollisionObject* m_attackCollision = nullptr;
 	//攻撃のコリジョンネーム
 	const char* m_attackCollisionName = "";
+	//攻撃が当たったかどうか
+	bool m_isAttackCollisionHit = false;
 protected:
 	const char* m_modelFilePath = nullptr;
 
@@ -98,14 +101,14 @@ protected:
 
 	std::vector<Character::AnimationData> m_animationData;
 public:
-	inline YakuzaStateMachine& GetYakuzaStateMachine() 
-	{
-		return *m_yakuzaStateMachine; 
-	}
-	inline void SetBodyCollision()
-	{
-		m_bodyCollision->SetIsEnable(false);
-	}
+	inline YakuzaStateMachine& GetYakuzaStateMachine() { return *m_yakuzaStateMachine; }
+
+	inline void SetBodyCollision() { m_bodyCollision->SetIsEnable(false); }
+
+	inline void SetIsAttackCollisionHit(bool isHit) { m_isAttackCollisionHit = isHit; }
+
+	inline bool GetIsAttackCollisionHit() { return m_isAttackCollisionHit; }
+
 	//モデル初期設定
 	inline void InitYakuzaModel(const char* filePath, std::vector<Character::AnimationData>& ptr)
 	{

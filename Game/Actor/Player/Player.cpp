@@ -3,6 +3,8 @@
 #include "Actor\Player\PlayerAttackComboState.h"
 #include "Actor\YakuzaComponents\YakuzaType.h"
 #include "Actor\YakuzaComponents\YakuzaTypeSetFactory.h"
+#include "Actor\YakuzaComponents\YakuzaCharacterDamageManager.h"
+
 
 //スタート関数
 bool Player::Start()
@@ -24,21 +26,16 @@ bool Player::Start()
 	//モデルレンダー初期化
 	InitModelRender(m_modelFilePath);
 
-
-	//GetYakuzaStateMachine().GetAttackStateMachine()->AddState<PlayerFirstAttackState>(GetYakuzaStateMachine().GetAttackStateMachine());
-	//GetYakuzaStateMachine().GetAttackStateMachine()->AddState<PlayerSecondAttackState>(GetYakuzaStateMachine().GetAttackStateMachine());
-	//GetYakuzaStateMachine().GetAttackStateMachine()->AddState<PlayerThirdAttackState>(GetYakuzaStateMachine().GetAttackStateMachine());
-	//GetYakuzaStateMachine().GetAttackStateMachine()->AddState<PlayerFirstFinalBlowState>(GetYakuzaStateMachine().GetAttackStateMachine());
-
-	//InitAnimationClipList(PlayerAnimation::num, animationDataList);
-
-	//InitModelRender("Assets/modelData/Character/Survivalist/Survivalist.tkm");
+	//ダメージ判定登録
+	YakuzaCharacterDamageManager::GetInstance()->SetDamageList(this);
 
 	m_modelRender.AddAnimationEvent([&](const wchar_t* clipName, const wchar_t* eventName) { GetYakuzaStateMachine().OnAnimationEvent(clipName, eventName); });
 
 	m_characterController.Init(10.0f, 40.0f, m_position);
 
 	InitBodyCollision(this, "playerBodyCollision");
+
+	SetAttackCollisionName("PlayerAttack");
 
 	return true;
 }
@@ -70,9 +67,21 @@ void Player::Render(RenderContext& rc)
 
 void Player::OnHit(const char* hitCollisionName, CollisionObject* pairCollision)
 {
-	if (hitCollisionName == "" &&
-		pairCollision == m_bodyCollision)
+	if (!m_attackCollision)
 	{
-		GetYakuzaStateMachine().SetIsDamage(true);
+		SetIsAttackCollisionHit(false);
+	}
+
+	if (hitCollisionName == "enemyBodyCollision" &&
+		pairCollision == m_attackCollision)
+	{
+		if (GetIsAttackCollisionHit())
+		{
+			return;
+		}
+
+		float damage = GetYakuzaStateMachine().GetTypeSetAttackPower();
+
+		SetIsAttackCollisionHit(true);
 	}
 }

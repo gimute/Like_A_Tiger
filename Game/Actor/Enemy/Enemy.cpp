@@ -11,7 +11,7 @@ bool Enemy::Start()
 
 	m_modelRender.AddAnimationEvent([&](const wchar_t* clipName, const wchar_t* eventName) { GetYakuzaStateMachine().OnAnimationEvent(clipName, eventName); });
 
-	InitBodyCollision(this, "testEnemy");
+	InitBodyCollision(this, "enemyBodyCollision");
 
 	SetAttackCollisionName("EnemyAttack");
 

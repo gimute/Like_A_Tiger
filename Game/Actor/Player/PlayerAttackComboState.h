@@ -95,6 +95,7 @@ public:
 	{
 		en_punchCross_1_R = YakuzaAnimation::en_num,
 		en_punching_1_R,
+		en_punching_1_L,
 		en_punching_2_R,
 		en_punching_3_L,
 		en_kick_1,
@@ -123,6 +124,7 @@ public:
 		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/BodyHit.tka", false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/CrossPunch_R_Ev.tka", false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Punching_1_R_Ev.tka", false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Punching_1_L_Ev.tka", false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Punching_2_R_Ev.tka", false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Punching_3_L_Ev.tka", false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Kick_1_R.tka", false });

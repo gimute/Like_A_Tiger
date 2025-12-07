@@ -1,4 +1,5 @@
 #pragma once
+#include "Actor\YakuzaComponents\YakuzaCharacter.h"
 
 class YakuzaCharacterDamageManager
 {
@@ -7,7 +8,7 @@ private:
 	//インスタンス
 	static YakuzaCharacterDamageManager* m_instance;
 	//コンストラクタ
-	YakuzaCharacterDamageManager();
+	YakuzaCharacterDamageManager() = default;
 	//コピー禁止
 	YakuzaCharacterDamageManager(const YakuzaCharacterDamageManager&) = delete;
 	//代入禁止にする
@@ -28,5 +29,15 @@ public:
 	
 	//引数のコリジョンを持っている敵を検索して引数分のダメージを与える
 	void SendEnemyDamage(CollisionObject* collision, float sendDamage);
+	//引数のコリジョンを持っているその他のYakuzaを検索して引数分のダメージを与える
+	void SendOtherYakuzaDamage(CollisionObject* collision, float sendDamage);
+
+	void SetDamageList(YakuzaCharacter* setYakuza)
+	{
+		m_sendDamageOtherYakuzaList.push_back(setYakuza);
+	}
+
+	//ダメージを与えるその他のYakuzaのリスト
+	std::vector<YakuzaCharacter*> m_sendDamageOtherYakuzaList;
 };
 

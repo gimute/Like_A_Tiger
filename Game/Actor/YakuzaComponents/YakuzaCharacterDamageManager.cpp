@@ -18,6 +18,20 @@ void YakuzaCharacterDamageManager::SendEnemyDamage(CollisionObject* collision, f
 		if (collision == &bodyCollision)
 		{
 			//‚±‚±‚ÉHPˆ—‚ð“ü‚ê‚é
+			int b = 0;
+		}
+	}
+}
+
+void YakuzaCharacterDamageManager::SendOtherYakuzaDamage(CollisionObject* collision, float sendDamage)
+{
+	for (auto & otherPtr : m_sendDamageOtherYakuzaList)
+	{
+		auto& bodyCollision = otherPtr->GetBodyCollision();
+
+		if (collision == &bodyCollision)
+		{
+			int b = 0;
 		}
 	}
 }
