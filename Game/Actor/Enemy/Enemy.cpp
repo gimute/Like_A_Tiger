@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Enemy.h"
+#include "Actor\YakuzaComponents\YakuzaCharacterDamageManager.h"
 
 bool Enemy::Start()
 {
@@ -33,6 +34,9 @@ void Enemy::Update()
 	positionCorrection.y += 60.0f;
 
 	m_bodyCollision->SetPosition(positionCorrection);
+
+	//無敵時間のタイマー
+	UpdateInvincibleTime();
 }
 
 void Enemy::Render(RenderContext& rc)
@@ -42,11 +46,27 @@ void Enemy::Render(RenderContext& rc)
 
 void Enemy::OnHit(const char* hitCollisionName, CollisionObject* pairCollision)
 {
-	float test = 0;
+	if (hitCollisionName == "PlayerAttack" &&
+		pairCollision == m_bodyCollision)
+	{
+		//無敵じゃなかったら
+		if (!GetIsInvicible())
+		{
+			//無敵時間を開始する
+			StartInvincible(3.0f);
+
+			//ダメージ処理
+			float myDamage = YakuzaCharacterDamageManager::GetInstance()->GetPlayerYakuzaDamage();
+
+			GetYakuzaStateMachine().SetIsDamage(true);
+		}
+	}
 
 	if (hitCollisionName == "playerBodyCollision" &&
 		pairCollision == m_attackCollision)
 	{
-		float damage = GetYakuzaStateMachine().GetTypeSetAttackPower();
+		float toPlayerDamage = GetYakuzaStateMachine().GetTypeSetAttackPower();
+
+		YakuzaCharacterDamageManager::GetInstance()->SendPlayerYakuzaDamage(toPlayerDamage);
 	}
 }

@@ -303,13 +303,11 @@ void YakuzaDamageState::OnUpdate()
 {	
 	//ダメージで中断される行動をリセット
 	//攻撃類
-	m_owner->SetAttackFlag(false);
-	m_owner->SetFinishBrowFlag(false);
 	m_owner->SetIsAttack(false);
 
 	m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_hitBody, 0.1f);
 
-	if (m_owner->IsHasCharactarPlayAnimation())
+	if (!m_owner->IsHasCharactarPlayAnimation())
 	{
 		m_owner->SetIsDamage(false);
 	}

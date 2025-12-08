@@ -64,6 +64,12 @@ void NormalYakuzaAiAttackState::OnUpdate()
 	{
 		moveVec = toTargetDire;
 
+		////近づいている最中にダメージを食らったら
+		//if (m_hasStateMachine->GetIsDamage())
+		//{
+		//	m_owner->SetAttackFlag(false);
+		//}
+
 		//攻撃可能範囲に入ったら
 		if (toTargetDist < NormalYakuzaAiAttackConstant::ATTACK_START_RADIUS)
 		{
@@ -138,6 +144,8 @@ IStateBase* NormalYakuzaAi::GetNextState()
 	//ダメージを受けている最中は操作不可
 	if (m_hasStateMachine->GetIsDamage())
 	{
+		//ダメージ
+		m_yakuzaRole = YakuzaRole::en_YakuzaRole_HitDamage;
 		//とりあえずダメージ終了まで待機
 		return FindClassNameState<EnemyAiIdleState>();
 	}
@@ -162,6 +170,8 @@ IStateBase* NormalYakuzaAi::GetNextState()
 
 	if (CanChangeWaitingAttack())
 	{
+		m_yakuzaRole = m_yakuzaRole = YakuzaRole::en_YakuzaRole_Wait;
+
 		return FindClassNameState<EnemyAiWaitingAttackState>();
 	}
 

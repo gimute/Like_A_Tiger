@@ -27,7 +27,7 @@ bool Player::Start()
 	InitModelRender(m_modelFilePath);
 
 	//ƒ_ƒ[ƒW”»’è“o˜^
-	YakuzaCharacterDamageManager::GetInstance()->SetDamageList(this);
+	YakuzaCharacterDamageManager::GetInstance()->SetSendDamagePlayer(this);
 
 	m_modelRender.AddAnimationEvent([&](const wchar_t* clipName, const wchar_t* eventName) { GetYakuzaStateMachine().OnAnimationEvent(clipName, eventName); });
 
@@ -57,6 +57,9 @@ void Player::Update()
 	positionCorrection.y += 60.0f;
 
 	m_bodyCollision->SetPosition(positionCorrection);
+
+	//–³“GŽžŠÔ‚Ìƒ^ƒCƒ}[
+	UpdateInvincibleTime();
 }
 
 //•`‰æŠÖ”
@@ -67,21 +70,23 @@ void Player::Render(RenderContext& rc)
 
 void Player::OnHit(const char* hitCollisionName, CollisionObject* pairCollision)
 {
-	if (!m_attackCollision)
-	{
-		SetIsAttackCollisionHit(false);
-	}
+	//if (!m_attackCollision)
+	//{
+	//	SetIsAttackCollisionHit(false);
+	//}
 
-	if (hitCollisionName == "enemyBodyCollision" &&
-		pairCollision == m_attackCollision)
-	{
-		if (GetIsAttackCollisionHit())
-		{
-			return;
-		}
+	//if (hitCollisionName == "enemyBodyCollision" &&
+	//	pairCollision == m_attackCollision)
+	//{
+	//	if (GetIsAttackCollisionHit())
+	//	{
+	//		return;
+	//	}
 
-		float damage = GetYakuzaStateMachine().GetTypeSetAttackPower();
+	//	float damage = GetYakuzaStateMachine().GetTypeSetAttackPower();
 
-		SetIsAttackCollisionHit(true);
-	}
+	//	//YakuzaCharacterDamageManager().GetInstance()->SendEnemyDamage()
+
+	//	SetIsAttackCollisionHit(true);
+	//}
 }

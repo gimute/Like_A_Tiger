@@ -27,17 +27,32 @@ public:
 		return m_instance;
 	}
 	
-	//引数のコリジョンを持っている敵を検索して引数分のダメージを与える
-	void SendEnemyDamage(CollisionObject* collision, float sendDamage);
-	//引数のコリジョンを持っているその他のYakuzaを検索して引数分のダメージを与える
-	void SendOtherYakuzaDamage(CollisionObject* collision, float sendDamage);
+	
+	////引数のコリジョンを持っている敵を検索して引数分のダメージを与える
+	//void SendEnemyDamage(const char* name, float sendDamage);
+	////引数のコリジョンを持っているその他のYakuzaを検索して引数分のダメージを与える
+	//void SendOtherYakuzaDamage(const char* name, float sendDamage);
+	//プレイヤーにダメージを送る
+	void SendPlayerYakuzaDamage(float sendDamage);
+	//プレイヤーからダメージを受け取る
+	float GetPlayerYakuzaDamage();
 
-	void SetDamageList(YakuzaCharacter* setYakuza)
+	
+
+	//void SetDamageList(YakuzaCharacter* setYakuza)
+	//{
+	//	m_sendDamageOtherYakuzaList.push_back(setYakuza);
+	//}
+
+	void SetSendDamagePlayer(YakuzaCharacter* setPlayer)
 	{
-		m_sendDamageOtherYakuzaList.push_back(setYakuza);
+		m_playerPtr = setPlayer;
 	}
 
-	//ダメージを与えるその他のYakuzaのリスト
-	std::vector<YakuzaCharacter*> m_sendDamageOtherYakuzaList;
+	////ダメージを与えるその他のYakuzaのリスト
+	//std::vector<YakuzaCharacter*> m_sendDamageOtherYakuzaList;
+	//プレイヤーのポインタ
+	YakuzaCharacter* m_playerPtr = nullptr;
+
 };
 

@@ -7,31 +7,55 @@
 //インスタンス初期化
 YakuzaCharacterDamageManager* YakuzaCharacterDamageManager::m_instance = nullptr;
 
-void YakuzaCharacterDamageManager::SendEnemyDamage(CollisionObject* collision, float sendDamage)
-{
-	auto & enemyList = EnemyManager::GetInstance()->GetEnemyPairList();
+//void YakuzaCharacterDamageManager::SendEnemyDamage(const char* name, float sendDamage)
+//{
+//	auto & enemyList = EnemyManager::GetInstance()->GetEnemyPairList();
+//
+//	for (auto & enemyPtr : enemyList)
+//	{
+//		auto & bodyCollision = enemyPtr.m_enemy->GetBodyCollision();
+//		
+//		if (name == bodyCollision.GetName())
+//		{
+//			//ここにHP処理を入れる
+//			int b = 0;
+//		}
+//	}
+//}
+//
+//void YakuzaCharacterDamageManager::SendOtherYakuzaDamage(const char* name, float sendDamage)
+//{
+//	for (auto & otherPtr : m_sendDamageOtherYakuzaList)
+//	{
+//		auto& bodyCollision = otherPtr->GetBodyCollision();
+//
+//		if (name == bodyCollision.GetName())
+//		{
+//			int b = 0;
+//		}
+//	}
+//}
 
-	for (auto & enemyPtr : enemyList)
+void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(float sendDamage)
+{
+	if (!m_playerPtr || 
+		m_playerPtr->GetIsInvicible())
 	{
-		auto & bodyCollision = enemyPtr.m_enemy->GetBodyCollision();
-		
-		if (collision == &bodyCollision)
-		{
-			//ここにHP処理を入れる
-			int b = 0;
-		}
+		return;
 	}
+	//無敵時間開始
+	m_playerPtr->StartInvincible(3.0f);
+
+	//ここにダメージ処理
+	m_playerPtr->GetYakuzaStateMachine().SetIsDamage(true);
 }
 
-void YakuzaCharacterDamageManager::SendOtherYakuzaDamage(CollisionObject* collision, float sendDamage)
+float YakuzaCharacterDamageManager::GetPlayerYakuzaDamage()
 {
-	for (auto & otherPtr : m_sendDamageOtherYakuzaList)
+	if (!m_playerPtr)
 	{
-		auto& bodyCollision = otherPtr->GetBodyCollision();
-
-		if (collision == &bodyCollision)
-		{
-			int b = 0;
-		}
+		return 0.0f;
 	}
+
+	return m_playerPtr->GetYakuzaStateMachine().GetTypeSetAttackPower();
 }
