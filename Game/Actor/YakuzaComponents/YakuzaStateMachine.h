@@ -3,14 +3,21 @@
 #include "StateMachineComponents\IState.h"
 #include "Actor\YakuzaComponents\YakuzaStates.h"
 #include "Actor\YakuzaComponents\YakuzaAttackComboStateMachine.h"
+#include "Actor\YakuzaComponents\IYakuzaTypeSet.h"
+
+#include "YakuzaCharacter.h"
+
+#include "gameObject\IGameobject.h"
 
 class Character;
+
+class YakuzaCharacter;
 
 class YakuzaStateMachine : public IStateMachine
 {
 public:
 	//コンストラクタ
-	YakuzaStateMachine(Character* charactarPtr) : m_hasCharactar(charactarPtr)
+	YakuzaStateMachine(YakuzaCharacter* charactarPtr) : m_hasCharactar(charactarPtr)
 	{
 		AddState<YakuzaIdleState>(this);
 		AddState<YakuzaWalkState>(this);
@@ -18,6 +25,7 @@ public:
 		AddState<YakuzaAttackState>(this);
 		AddState<YakuzaSwayState>(this);
 		AddState<YakuzaDefenseState>(this);
+		AddState<YakuzaDamageState>(this);
 
 		InitStateMachineClassName<YakuzaIdleState>();
 	}
@@ -48,12 +56,16 @@ private:
 	bool m_isComboTransition = false;
 	//移動方式、狙い移動
 	bool m_isAimMove = false;
+	//ダメージを受けたかどうか
+	bool m_isDamage = false;
 	//狙い移動のキャラクターの位置
 	Vector3 m_aimMoveTargetPos = Vector3::Zero;
 	//このステートを扱うCharacterのポインタ
-	Character* m_hasCharactar = nullptr;
+	YakuzaCharacter* m_hasCharactar = nullptr;
 	//攻撃専用ステートマシン
 	std::unique_ptr<YakuzaAttackComboStateMachine> m_attackStateMachine = nullptr;
+	//敵種セット
+	std::unique_ptr<IYakuzaTypeSet> m_typeSet;
 public:
 	///変数系のゲッター＆セッター
 	inline void SetMoveVec(const Vector3& vec) { m_moveVec = vec; }
@@ -100,9 +112,19 @@ public:
 
 	inline bool GetIsAimMove() { return m_isAimMove; }
 
+	inline void SetIsDamage(bool setIs) { m_isDamage = setIs; }
+
+	inline bool GetIsDamage() { return m_isDamage; }
+
 	inline void SetAimMoveTargetPos(const Vector3& setPos) { m_aimMoveTargetPos = setPos; }
 
 	inline const Vector3& GetAimMoveTargetPos() { return m_aimMoveTargetPos; }
+	
+	inline void SetTypeSet(std::unique_ptr<IYakuzaTypeSet> setType) { m_typeSet = std::move(setType); }
+
+	inline IYakuzaTypeSet& GetTypeSet() { return *m_typeSet.get(); }
+
+	inline float GetTypeSetAttackPower() { return m_typeSet.get()->GetAttackPower(m_attackStateMachine.get()); }
 
 	void InitAttackStateMachine(uint32_t firstAttackStateHash,uint32_t firstFinishBrowStateHash);
 
@@ -127,8 +149,6 @@ public:
 	CharacterController* GetHasCharactarCharaCon();
 
 	YakuzaAttackComboStateMachine* GetAttackStateMachine();
-
-	///行動可能かを判定する関数
 private:
 	//移動することができるかどうか
 	bool CanChangeWalk();
@@ -138,4 +158,6 @@ private:
 	bool CanChangeSway();
 	//防御行動を行えるかどうか
 	bool CanChangeDefense();
+	//ダメージを受けたかどうか
+	bool CanChangeDamage();
 };

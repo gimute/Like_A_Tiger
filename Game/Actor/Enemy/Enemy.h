@@ -4,21 +4,15 @@
 #include "Actor\YakuzaComponents\YakuzaAnimationState.h"
 #include "Actor\Enemy\EnemyAI\IEnemyAi.h"
 
-class Enemy : public Character
+class Enemy : public YakuzaCharacter
 {
 public:
 	//エネミーのアニメーションは外部から変更できるようにしたいためここをいじる
 private:
-	const char* m_modelFilePath = nullptr;
-
-	int m_maxAnimationNum = 0;
-
-	std::vector<Character::AnimationData> m_animationData;
-
 	IEnemyAi* m_hasAi;
 public:
 	//コンストラクタ
-	Enemy();
+	Enemy() : YakuzaCharacter(this) {}
 	//デストラクタ
 	~Enemy() = default;
 
@@ -32,19 +26,6 @@ public:
 	//AI設定
 	void SetAi(IEnemyAi* setAi) { m_hasAi = setAi; }
 
-	//モデル初期設定
-	void InitEnemyModel(const char* filePath, std::vector<Character::AnimationData>& ptr)
-	{
-		m_modelFilePath = filePath;
-
-		m_maxAnimationNum = ptr.size();
-
-		m_animationData = ptr;
-	}
-
-	YakuzaStateMachine* GetYakuzaStateMachine()
-	{
-		return dynamic_cast<YakuzaStateMachine*>(GetStateMachine());
-	}
+	void OnHit(const char* hitCollisionName, CollisionObject* pairCollision) override;
 };
 

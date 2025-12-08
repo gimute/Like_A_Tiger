@@ -98,7 +98,7 @@ void EnemyMetaAi::EnemyAiDataCollect()
 			}
 
 			IEnemyAi* inst = pair->m_enemyAi.get();
-			EnemyType type = pair->m_type;
+			EnemyYakuzaType type = pair->m_type;
 			Vector3 enemyPos = pair->m_enemy->GetPosition();
 			bool isInBattle = pair->m_enemyAi.get()->GetIsInBattle();
 			bool isActive = true;
