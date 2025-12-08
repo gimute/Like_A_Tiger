@@ -5,6 +5,8 @@ class Player;
 class PlayerController;
 class PoseMenu;
 
+class Inventory;
+
 class GameInScene :
     public IGameSceneState
 {
@@ -43,5 +45,7 @@ private:
     PlayerController* m_playerController = nullptr;
 
     PoseMenu* m_poseMenu = nullptr;
+
+    Inventory* m_inventory = nullptr;
 };
 

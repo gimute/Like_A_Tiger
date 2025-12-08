@@ -15,6 +15,9 @@
 
 #include "UI\PoseMenu.h"
 
+#include "Inventory/Inventory.h"
+
+
 //ステート侵入関数
 void GameInScene::EnterScene()
 {
@@ -39,8 +42,22 @@ void GameInScene::EnterScene()
 
 	NewGO<ProtoStage>(UpdateOrder::Actor);
 
+	m_inventory = Inventory::Create();
+
 	m_poseMenu = NewGO<PoseMenu>(0, "posemenu");
-	m_poseMenu->Init();
+
+
+   // UIへ情報を渡す
+   {
+   	m_inventory->ForEach([&](const ItemInfo* itemInfo)
+   		{
+   			ItemIconInformation* info = new ItemIconInformation();
+   			info->m_num = itemInfo->m_num;
+   			info->m_type = itemInfo->m_type;
+   			m_poseMenu->AddItemInfo(info);
+   		});
+   }
+	//m_poseMenu->Init();
 }
 
 //ステート更新関数
@@ -51,12 +68,24 @@ void GameInScene::UpdateScene()
 
 	//EnemyManager更新
 	EnemyManager::GetInstance()->Update();
+
+	///   // UIへ情報を渡す
+	///   {
+	///   	m_inventory->ForEach([&](const ItemInfo* itemInfo)
+	///   		{
+	///   			ItemIconInformation* info = new ItemIconInformation();
+	///   			info->m_num = itemInfo->m_num;
+	///   			info->m_type = itemInfo->m_type;
+	///   			m_poseMenu->AddItemInfo(info);
+	///   		});
+	///   }
+
 }
 
 //ステート退出関数
 void GameInScene::ExitScene()
 {
-
+	Inventory::Delete();
 }
 
 //ステート変更要求関数

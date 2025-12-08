@@ -46,6 +46,8 @@
     <ClCompile Include="UI\HPGauge.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="UI\PoseMenu.cpp" />
+    <ClCompile Include="Inventory\Types.cpp" />
+    <ClCompile Include="Inventory\Inventory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -98,5 +100,7 @@
     <ClInclude Include="UI\HPGauge.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="UI\PoseMenu.h" />
+    <ClInclude Include="Inventory\Types.h" />
+    <ClInclude Include="Inventory\Inventory.h" />
   </ItemGroup>
 </Project>
