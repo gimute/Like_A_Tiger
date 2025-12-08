@@ -30,13 +30,18 @@ void EnemyAiAttackEndState::OnExit()
 
 IStateBase* YakuzaAttackComboStateMachine::GetNextState()
 {
-	IStateBase* nextState = FindClassUINT32TState(GetNextCombo());
+	uint32_t nextStateHush = GetNextCombo();
+	IStateBase* nextState = FindClassUINT32TState(nextStateHush);
 
 	//次のコンボが設定されていなかったら攻撃終了ステートへ
 	if (!nextState)
 	{
+		SetNowCombo(EnemyAiAttackEndState::ID());
+
 		return FindClassUINT32TState(EnemyAiAttackEndState::ID());
 	}
+
+	SetNowCombo(nextStateHush);
 
 	//次のコンボのハッシュ値を探索
 	return nextState;

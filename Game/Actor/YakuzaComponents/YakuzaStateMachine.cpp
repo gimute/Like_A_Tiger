@@ -6,6 +6,12 @@
 
 IStateBase* YakuzaStateMachine::GetNextState()
 {
+	//ダメージを受けたならダメージステートを更新する
+	if (CanChangeDamage())
+	{
+		return FindClassNameState<YakuzaDamageState>();
+	}
+
 	//攻撃中なら現在更新中のアタックステートを更新する
 	if (CanChangeAttack())
 	{
@@ -83,6 +89,16 @@ bool YakuzaStateMachine::CanChangeDefense()
 	return false;
 }
 
+bool YakuzaStateMachine::CanChangeDamage()
+{
+	if (m_isDamage)
+	{
+		return true;
+	}
+
+	return false;
+}
+
 void YakuzaStateMachine::InitAttackStateMachine(uint32_t firstAttackStateHash, uint32_t firstFinishBrowStateHash)
 {
 	m_attackStateMachine = std::make_unique<YakuzaAttackComboStateMachine>(this);
@@ -116,12 +132,21 @@ bool YakuzaStateMachine::IsHasCharactarPlayAnimation()
 
 void YakuzaStateMachine::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName)
 {
-	
 	if (wcscmp(eventName, L"CanTransition") == 0)
 	{
 		m_isComboTransition = true;
 	}
-
+	if (wcscmp(eventName, L"HitBoxOn") == 0)
+	{
+		m_hasCharactar->SpwanAttackCollision(
+			m_hasCharactar,
+			20.0f
+		);
+	}
+	if (wcscmp(eventName, L"HitBoxOff") == 0)
+	{
+		m_hasCharactar->DeleteAttackCollision();
+	}
 }
 
 CharacterController* YakuzaStateMachine::GetHasCharactarCharaCon()

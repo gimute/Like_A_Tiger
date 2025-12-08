@@ -62,7 +62,7 @@ void YakuzaWalkState::OnExit()
 
 void YakuzaAimMoveState::OnEnter()
 {
-	m_owner->SetMoveSpeed(50.0f);
+	m_owner->SetMoveSpeed(100.0f);
 }
 
 void YakuzaAimMoveState::OnUpdate()
@@ -289,6 +289,31 @@ void YakuzaDefenseState::OnUpdate()
 }
 
 void YakuzaDefenseState::OnExit()
+{
+
+}
+
+//DamageState
+
+void YakuzaDamageState::OnEnter()
+{
+}
+
+void YakuzaDamageState::OnUpdate()
+{	
+	//ダメージで中断される行動をリセット
+	//攻撃類
+	m_owner->SetIsAttack(false);
+
+	m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_hitBody, 0.1f);
+
+	if (!m_owner->IsHasCharactarPlayAnimation())
+	{
+		m_owner->SetIsDamage(false);
+	}
+}
+
+void YakuzaDamageState::OnExit()
 {
 
 }

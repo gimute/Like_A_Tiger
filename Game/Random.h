@@ -22,6 +22,15 @@ public:
 		std::uniform_real_distribution<float> dist(min, max);
 		return dist(Get());
 	}
+	//ランダム実行Vector3
+	static Vector3 Range(const Vector3& min, const Vector3& max)
+	{
+		Vector3 result;
+		result.x = Range(min.x, max.x);
+		result.y = Range(min.y, max.y);
+		result.z = Range(min.z, max.z);
+		return result;
+	}
 	//ランダム実行bool
 	static bool Range(float probability)
 	{

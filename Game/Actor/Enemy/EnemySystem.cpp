@@ -16,10 +16,10 @@ void EnemySystem::Update()
 
 void EnemySystem::AllAiUpdate()
 {
-	auto& allEnemyAi = EnemyManager::GetInstance()->GetAiList();
+	auto& allEnemyAi = EnemyManager::GetInstance()->GetEnemyPairList();
 
 	for (auto it = allEnemyAi.begin();it != allEnemyAi.end();it++)
 	{
-		it->get()->UpdateStateMachine();
+		it->m_enemyAi->UpdateStateMachine();
 	}
 }

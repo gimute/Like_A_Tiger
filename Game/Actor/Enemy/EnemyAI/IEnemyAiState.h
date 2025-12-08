@@ -9,7 +9,6 @@ class IEnemyAiState : public IStateBase
 {
 protected:
 	YakuzaStateMachine* m_hasStateMachine = nullptr;
-	//このステートを持っているステートマシン
 public:
 	//コンストラクタ
 	IEnemyAiState(YakuzaStateMachine* stateMachine) :

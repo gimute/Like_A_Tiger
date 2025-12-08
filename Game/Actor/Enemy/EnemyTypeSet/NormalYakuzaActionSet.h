@@ -1,6 +1,6 @@
 #pragma once
 #include "StateMachineComponents\IState.h"
-#include "Actor\Enemy\EnemyTypeSet\IEnemyTypeSet.h"
+#include "Actor\YakuzaComponents\IYakuzaTypeSet.h"
 #include "CRC32.h"
 
 #define appState(name)	\
@@ -87,7 +87,7 @@ public:
 	void OnExit() override;
 };
 
-struct NormalYakuzaTypeSet : public IEnemyTypeSet
+struct NormalYakuzaTypeSet : public IYakuzaTypeSet
 {
 	appState(NormalYakuzaTypeSet)
 public:
@@ -119,18 +119,21 @@ public:
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Dodge_Left.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Dodge_Left.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Guard.tka",true });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/BodyHit.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/CrossPunch_R_Ev.tka",false });
-		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Punching_1_L_Ev.tka",false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Punching_1_L_Ev_test.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Punching_2_R_Ev.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Punching_3_L_Ev.tka",false });
 	}
 
 	void CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) override
 	{
-		AddAttackState<NormalYakuzaFirstAttackState>(useAttackStateMachine,true);
-		AddAttackState<NormalYakuzaSecondAttackState>(useAttackStateMachine,true);
-		AddAttackState<NormalYakuzaThirdAttackState>(useAttackStateMachine, true);
+		AddAttackState<NormalYakuzaFirstAttackState>(useAttackStateMachine);
+		AddAttackState<NormalYakuzaSecondAttackState>(useAttackStateMachine);
+		AddAttackState<NormalYakuzaThirdAttackState>(useAttackStateMachine);
 	}
+
+	float GetAttackPower(YakuzaAttackComboStateMachine* useAttackStateMachine) override;
 private:
 	static TypeSetAutoRegister<NormalYakuzaTypeSet> typeSet;
 };
