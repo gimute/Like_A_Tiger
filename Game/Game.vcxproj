@@ -244,6 +244,7 @@
     <ClCompile Include="GameScene\GameInScene.cpp" />
     <ClCompile Include="GameScene\GameSceneManager.cpp" />
     <ClCompile Include="GameScene\GameTitleScene.cpp" />
+    <ClCompile Include="Core\ParameterManager.cpp" />
     <ClCompile Include="PoseMenu.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\IEnemyAiState.cpp" />
@@ -306,6 +307,8 @@
     <ClInclude Include="Actor\Player\PlayerController.h" />
     <ClInclude Include="Camera\ICameraController.h" />
     <ClInclude Include="Actor\Player\PlayerCameraController.h" />
+    <ClInclude Include="json\json.hpp" />
+    <ClInclude Include="Core\ParameterManager.h" />
     <ClInclude Include="UI\UILayout.h" />
     <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAiState\IEnemyAttackAiState.h" />
     <ClInclude Include="Actor\Enemy\EnemyMetaAi\IMetaAiProcess.h" />

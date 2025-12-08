@@ -6,10 +6,10 @@ void UILayout::Update()
 {
 	int offsetCount = 0;
 
-	//‰üsğŒ‚ª0ˆÈ‰º‚È‚ç
+	//æ”¹è¡Œæ¡ä»¶ãŒ0ä»¥ä¸‹ãªã‚‰
 	if (m_newLineNum <= 0)
 	{
-		//‰üs‹@”\‚È‚µ‚Ì”z’uˆ—
+		//æ”¹è¡Œæ©Ÿèƒ½ãªã—ã®é…ç½®å‡¦ç†
 		for (auto ui : m_uiList)
 		{
 			ui->m_transform.m_localPosition = m_offsetPosition * offsetCount;
@@ -19,17 +19,17 @@ void UILayout::Update()
 	}
 	else
 	{
-		//‰üs‹@”\•t‚«‚Ì”z’uˆ—
+		//æ”¹è¡Œæ©Ÿèƒ½ä»˜ãã®é…ç½®å‡¦ç†
 		int newLineCount = 0;
 
 		for (auto ui : m_uiList)
 		{
-			//ƒIƒtƒZƒbƒgƒJƒEƒ“ƒg‚ª‰üs‚·‚é”‚Ü‚Åi‚ñ‚¾‚ç
+			//ã‚ªãƒ•ã‚»ãƒƒãƒˆã‚«ã‚¦ãƒ³ãƒˆãŒæ”¹è¡Œã™ã‚‹æ•°ã¾ã§é€²ã‚“ã ã‚‰
 			if (offsetCount% m_newLineNum == 0)
 			{
-				//ƒIƒtƒZƒbƒgƒJƒEƒ“ƒgƒŠƒZƒbƒg
+				//ã‚ªãƒ•ã‚»ãƒƒãƒˆã‚«ã‚¦ãƒ³ãƒˆãƒªã‚»ãƒƒãƒˆ
 				offsetCount = 0;
-				//‰üsƒJƒEƒ“ƒg
+				//æ”¹è¡Œã‚«ã‚¦ãƒ³ãƒˆ
 				newLineCount++;
 			}
 

@@ -1,54 +1,54 @@
 #pragma once
 
 /// <summary>
-/// UI‚ğˆê’è‚ÌŠÔŠu‚Å•À‚×‚éƒNƒ‰ƒX
+/// UIã‚’ä¸€å®šã®é–“éš”ã§ä¸¦ã¹ã‚‹ã‚¯ãƒ©ã‚¹
 /// </summary>
 class UILayout
 {
 private:
-	//•À‚×‚éUI
+	//ä¸¦ã¹ã‚‹UI
 	std::vector<UICanvas::RefUIBasePtr> m_uiList;
-	//‚¸‚ç‚·—ÊƒxƒNƒgƒ‹
+	//ãšã‚‰ã™é‡ãƒ™ã‚¯ãƒˆãƒ«
 	Vector3 m_offsetPosition;
-	//Å‰‚ÌUI‚ÌÀ•W
+	//æœ€åˆã®UIã®åº§æ¨™
 	Vector3 m_position;
 
 
-	//‚¢‚­‚ÂUI‚ª“o˜^‚³‚ê‚é‚²‚Æ‚É‰üs‚·‚é‚©A0‚È‚ç‰üs‚µ‚È‚¢
+	//ã„ãã¤UIãŒç™»éŒ²ã•ã‚Œã‚‹ã”ã¨ã«æ”¹è¡Œã™ã‚‹ã‹ã€0ãªã‚‰æ”¹è¡Œã—ãªã„
 	int m_newLineNum = 0;
-	//‰üs‚Å‚¸‚ç‚·—ÊƒxƒNƒgƒ‹
+	//æ”¹è¡Œã§ãšã‚‰ã™é‡ãƒ™ã‚¯ãƒˆãƒ«
 	Vector3 m_newLineOffsetPos;
 
 public:
-	//À•W‚ÌXV
+	//åº§æ¨™ã®æ›´æ–°
 	void Update();
 
-	//UI’Ç‰Á
+	//UIè¿½åŠ 
 	void AddUI(UICanvas::RefUIBasePtr ui)
 	{
 		m_uiList.push_back(ui);
 	}
 
-	//UI‚ğæ‚èœ‚­
+	//UIã‚’å–ã‚Šé™¤ã
 	void RemoveUI(UICanvas::RefUIBasePtr ui)
 	{
 		auto newEnd = std::remove(m_uiList.begin(), m_uiList.end(), ui);
 		m_uiList.erase(newEnd, m_uiList.end());
 	}
 
-	//‚¸‚ç‚·ƒxƒNƒgƒ‹‚ğİ’è
+	//ãšã‚‰ã™ãƒ™ã‚¯ãƒˆãƒ«ã‚’è¨­å®š
 	void SetOffset(Vector3 offset)
 	{
 		m_offsetPosition = offset;
 	}
 
-	//‰üs‚·‚éÛ‚É‚¸‚ç‚·ƒxƒNƒgƒ‹
+	//æ”¹è¡Œã™ã‚‹éš›ã«ãšã‚‰ã™ãƒ™ã‚¯ãƒˆãƒ«
 	void SetNewLineOffset(Vector3 offset)
 	{
 		m_newLineOffsetPos = offset;
 	}
 
-	//UI‚¢‚­‚Â‚²‚Æ‚É‰üs‚·‚é‚©İ’èA0‚Éİ’è‚·‚é‚Æ‰üs‚µ‚È‚¢
+	//UIã„ãã¤ã”ã¨ã«æ”¹è¡Œã™ã‚‹ã‹è¨­å®šã€0ã«è¨­å®šã™ã‚‹ã¨æ”¹è¡Œã—ãªã„
 	void SetNewLineNum(int newLineNum)
 	{
 		m_newLineNum = newLineNum;

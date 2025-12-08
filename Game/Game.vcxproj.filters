@@ -52,6 +52,7 @@
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="PoseMenu.cpp" />
     <ClCompile Include="UI\UILayout.cpp" />
+    <ClCompile Include="Core\ParameterManager.cpp" />
     <ClCompile Include="Actor\YakuzaComponents\YakuzaCharacter.cpp" />
     <ClCompile Include="Actor\YakuzaComponents\YakuzaCharacterDamageManager.cpp" />
   </ItemGroup>
@@ -115,6 +116,8 @@
     <ClInclude Include="Title.h" />
     <ClInclude Include="PoseMenu.h" />
     <ClInclude Include="UI\UILayout.h" />
+    <ClInclude Include="json\json.hpp" />
+    <ClInclude Include="Core\ParameterManager.h" />
     <ClInclude Include="Actor\YakuzaComponents\YakuzaCharacter.h" />
     <ClInclude Include="Actor\YakuzaComponents\YakuzaCharacterDamageManager.h" />
   </ItemGroup>
