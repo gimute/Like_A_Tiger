@@ -48,6 +48,8 @@ private:
 	uint32_t m_firstAttack = 0;
 	//最初に行うフィニッシュブロウのステートのハッシュ値
 	uint32_t m_firstFinishBrow = 0;
+	//現在のコンボのクラスハッシュ値
+	uint32_t m_nowCombo = 0;
 	//次のコンボを行うかどうか
 	bool m_isNextConbo = false;
 	//最後のコンボが実行されたかどうか
@@ -71,6 +73,10 @@ public:
 	inline void SetFirstFinishBrow(uint32_t hush) { m_firstFinishBrow = hush; }
 
 	inline uint32_t GetFirstFinishBrow() { return m_firstFinishBrow; }
+
+	inline void SetNowCombo(uint32_t hush) { m_nowCombo = hush; }
+
+	inline uint32_t GetNowCombo() { return m_nowCombo; }
 	
 	inline void SetIsLastCombo(bool setIs) { m_isLastCombo = setIs; }
 

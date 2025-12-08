@@ -1,9 +1,35 @@
 #include "stdafx.h"
 #include "NormalYakuzaActionSet.h"
-#include "Actor\Enemy\EnemyTypeSet\IEnemyTypeSet.h"
+#include "Actor\YakuzaComponents\IYakuzaTypeSet.h"
 #include "Actor\YakuzaComponents\YakuzaStateMachine.h"
 
-TypeSetAutoRegister<NormalYakuzaTypeSet> NormalYakuzaTypeSet::typeSet{ EnemyType::en_normalYakuza };
+TypeSetAutoRegister<NormalYakuzaTypeSet> NormalYakuzaTypeSet::typeSet{ EnemyYakuzaType::en_normalYakuza };
+
+float NormalYakuzaTypeSet::GetAttackPower(YakuzaAttackComboStateMachine* useAttackStateMachine)
+{
+	uint32_t nowStateId = useAttackStateMachine->GetNowCombo();
+
+	float attackPower;
+
+	if (nowStateId == NormalYakuzaFirstAttackState::ID())
+	{
+		attackPower = 10.0f;
+	}
+	else if (nowStateId == NormalYakuzaSecondAttackState::ID())
+	{
+		attackPower = 20.0f;
+	}
+	else if (nowStateId == NormalYakuzaThirdAttackState::ID())
+	{
+		attackPower = 30.0f;
+	}
+	else if (nowStateId == NormalYakuzaFirstFinalBlowState::ID())
+	{
+		attackPower = 50.0f;
+	}
+
+	return attackPower;
+}
 
 //FirstAttackState
 
@@ -16,7 +42,7 @@ void NormalYakuzaFirstAttackState::OnUpdate()
 {
 	auto* stateMachine = m_owner->GetYakuzaStateMachine();
 
-	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(NormalYakuzaTypeSet::en_crossPunch_1_R,0.1f);
+	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(NormalYakuzaTypeSet::en_punching_1_L,0.1f);
 
 	if (stateMachine->GetAttackFlag() && !m_owner->GetIsNextCombo())
 	{

@@ -8,8 +8,8 @@ public:
 
 protected:
 	bool m_isStart = false;
-	bool m_isUpdate = true;
-	bool m_isDraw = false;
+	bool m_isUpdate = true;	//更新するか
+	bool m_isDraw = false;	//表示非表示
 
 public:
 	UIBase() {}
@@ -19,12 +19,15 @@ public:
 	virtual void Update() = 0;
 	virtual void Render(RenderContext& rc) = 0;
 
+	virtual void SetColor(Vector4 mulColor) {};
+	virtual void SetColor(float r, float g, float b, float a) {};
+	virtual Vector4 GetColor() = 0;
 
 	/// <summary>
 	/// 描画の制御
 	/// </summary>
 	/// <param name="flag"></param>
-	void SetDrawFlag(bool flag)
+	virtual void SetDrawFlag(bool flag)
 	{
 		m_isDraw = flag;
 	}
@@ -33,7 +36,7 @@ public:
 	/// 更新処理の制御
 	/// </summary>
 	/// <param name="flag"></param>
-	void SetUpdateFlag(bool flag)
+	virtual void SetUpdateFlag(bool flag)
 	{
 		m_isUpdate = flag;
 	}
@@ -42,36 +45,39 @@ public:
 /// <summary>
 /// UIの生成、管理、親子付けをするためのクラス
 /// </summary>
-class UICanvas
+class UICanvas : public UIBase
 {
+public:
 	/**
 	* 長い型名に、短くて分かりやすいあだ名を付けた
 	*/
 	using RefUIBasePtr = std::shared_ptr<UIBase>;
 
 public:
-	Transform m_transform;
+	//Transform m_transform;
 
 private:
 	std::vector<RefUIBasePtr> m_uiList;
-	bool m_isVisible = true;	//UIの表示、非表示
-	bool m_isUpdate = true;		//UIの更新処理の有効無効
 
 public:
 	UICanvas();
 	~UICanvas();
 
 
-	bool Start();
+	bool Start() override;
 	/// <summary>
 	/// 登録されているUIの更新処理を呼び出す
 	/// </summary>
-	void Update();
+	void Update() override;
 	/// <summary>
 	/// 登録されているUIの描画処理を呼び出す
 	/// </summary>
 	/// <param name="rc"></param>
-	void Render(RenderContext& rc);
+	void Render(RenderContext& rc) override;
+
+	void SetColor(Vector4 mulColor) override;
+	void SetColor(float r, float g, float b, float a)override;
+	Vector4 GetColor()override;
 
 	/// <summary>
 	/// この関数で生成したUIはデストラクタでdeleteするのでほっといても大丈夫なはず
@@ -103,9 +109,9 @@ public:
 	/// <summary>
 	/// UIの表示、非表示
 	/// </summary>
-	void SetVisible(bool visible);
+	void SetDrawFlag(bool visible);
 
-	void SetUpdateEnabled(bool enable);
+	void SetUpdateFlag(bool enable);
 };
 
 
@@ -135,15 +141,20 @@ public:
 	/// 乗算カラーを設定
 	/// </summary>
 	/// <param name="mulColor"></param>
-	virtual void SetColor(Vector4 mulColor);
-	virtual void SetColor(float r, float g, float b, float a);
+	virtual void SetColor(Vector4 mulColor) override;
+	virtual void SetColor(float r, float g, float b, float a) override;
+	/// <summary>
+	/// 乗算カラー取得
+	/// </summary>
+	/// <returns></returns>
+	virtual Vector4 GetColor()override;
 };
 
 
 /// <summary>
 /// 伸び縮みするUI(例：HPバー)
 /// 何らかの値と連動させて使う、
-/// 最大値と現在値をもとに割合を計算して画像を伸び縮みさせる
+/// 最大値と現在値をもとに割合を計算して画像のxスケールを調整する
 /// </summary>
 class UIGauge : public UIImage
 {
@@ -151,7 +162,7 @@ class UIGauge : public UIImage
 private:
 	float m_maxValue = 1.0f;
 	float m_Value = 1.0f;
-	
+	Vector4 m_mulColor = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 
 public:
 	UIGauge();
@@ -163,6 +174,13 @@ public:
 	void Render(RenderContext& rc) override;
 	void SetPivot(float x, float y) override;
 	void SetPivot(const Vector2& pivot) override;
+	/// <summary>
+	/// 乗算カラーを設定
+	/// </summary>
+	/// <param name="mulColor"></param>
+	virtual void SetColor(Vector4 mulColor) override;
+	virtual void SetColor(float r, float g, float b, float a) override;
+	virtual Vector4 GetColor()override;
 
 	const float GetMaxValue() const;
 	const float GetValue() const;
@@ -193,7 +211,7 @@ class UIText : public UIBase
 protected:
 	FontRender m_fontRender;	//表示する文字
 
-	Vector4 m_color;	//文字の色
+	Vector4 m_color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);	//文字の色
 
 public:
 	UIText() {};
@@ -203,8 +221,9 @@ public:
 	virtual void Update() override;
 	virtual void Render(RenderContext& rc) override;
 	virtual void SetText(const wchar_t* text);
-	virtual void SetColor(const Vector4& color);
-	virtual void SetColor(float r, float g, float b, float a);
+	virtual void SetColor(Vector4 color) override;
+	virtual void SetColor(float r, float g, float b, float a) override;
+	virtual Vector4 GetColor()override;
 	virtual void SetPivot(float x, float y);
 	virtual void SetPivot(const Vector2& pivot);
 };

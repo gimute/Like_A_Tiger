@@ -1,25 +1,24 @@
 #include "stdafx.h"
 #include "EnemyFactory.h"
-#include "EnemyTypeSet\EnemyTypeSetFactory.h"
+#include "Actor\YakuzaComponents\YakuzaTypeSetFactory.h"
 
 #include "Actor\Enemy\Enemy.h"
 
 #include "GameScene\UpdateOrder.h"
 
-Enemy* EnemyFactory::CreateEnemy(EnemyType type)
+Enemy* EnemyFactory::CreateEnemy(EnemyYakuzaType type)
 {
 	Enemy* newEnemy = NewGO<Enemy>(UpdateOrder::Charactar,"enemy");
-	//基本ステートマシン作成
-	newEnemy->MakeStateMachineUniquePtr<YakuzaStateMachine>(newEnemy);
 	//TypeSet取得
-	auto typeSet = EnemyTypeSetFactory::GetInstance().Create(type);
+	auto typeSet = YakuzaTypeSetFactory::GetInstance().Create(type);
 	//アタックステートマシン初期化
-	newEnemy->GetYakuzaStateMachine()->InitAttackStateMachine(typeSet.get()->GetFirstAttackID(),typeSet.get()->GetFirstFinishBrowID());
+	newEnemy->GetYakuzaStateMachine().InitAttackStateMachine(typeSet.get()->GetFirstAttackID(), typeSet.get()->GetFirstFinishBrowID());
 	//TypeSet攻撃ステートリスト作成
-	typeSet.get()->CreateActions(newEnemy->GetYakuzaStateMachine()->GetAttackStateMachine());
+	typeSet.get()->CreateActions(newEnemy->GetYakuzaStateMachine().GetAttackStateMachine());
 	//モデルファイルパス登録
-	newEnemy->InitEnemyModel(typeSet.get()->GetModelFilePath(), typeSet.get()->GetAnimationDataList());
-	//攻撃ステート登録
+	newEnemy->InitYakuzaModel(typeSet.get()->GetModelFilePath(), typeSet.get()->GetAnimationDataList());
+	//攻撃力取得関数登録
+	newEnemy->GetYakuzaStateMachine().SetTypeSet(std::move(typeSet));
 
 	return newEnemy;
 }

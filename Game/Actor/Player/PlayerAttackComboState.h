@@ -1,5 +1,6 @@
 #pragma once
 #include "StateMachineComponents\IState.h"
+#include "Actor\YakuzaComponents\IYakuzaTypeSet.h"
 #include "Actor\YakuzaComponents\YakuzaAttackComboStateMachine.h"
 
 #include "CRC32.h"
@@ -84,5 +85,61 @@ public:
 	void OnUpdate() override;
 	//ÉXÉeÅ[ÉgÉAÉEÉg
 	void OnExit() override;
+};
+
+class PlayerYakuzaTypeSet : public IYakuzaTypeSet
+{
+	appState(PlayerYakuzaTypeSet)
+public:
+	enum PlayerAnimation
+	{
+		en_punchCross_1_R = YakuzaAnimation::en_num,
+		en_punching_1_R,
+		en_punching_1_L,
+		en_punching_2_R,
+		en_punching_3_L,
+		en_kick_1,
+		num
+	};
+
+	PlayerYakuzaTypeSet()
+	{
+		m_firstAttackID = PlayerFirstAttackState::ID();
+
+		m_modelFilePath = "Assets/modelData/Character/Survivalist/Survivalist.tkm";
+
+		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Idle.tka", true });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Walking.tka", true });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Run.tka", true });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Run.tka", true }); // Fighting_Idle ê›íËó\íË
+		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Run.tka", true }); // AimWalkó\íË
+		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Run.tka", true }); // AimWalkó\íË
+		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Run.tka", true }); // AimWalkó\íË
+		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Run.tka", true }); // AimWalkó\íË
+		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Dodge_Forward.tka", false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Dodge_Right.tka", false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Dodge_Left.tka", false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Dodge_Back.tka", false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Guard.tka", true });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/BodyHit.tka", false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/CrossPunch_R_Ev.tka", false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Punching_1_R_Ev.tka", false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Punching_1_L_Ev.tka", false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Punching_2_R_Ev.tka", false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Punching_3_L_Ev.tka", false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Kick_1_R.tka", false });
+	}
+
+	void CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) override
+	{
+		AddAttackState<PlayerFirstAttackState>(useAttackStateMachine);
+		AddAttackState<PlayerSecondAttackState>(useAttackStateMachine);
+		AddAttackState<PlayerThirdAttackState>(useAttackStateMachine);
+		AddAttackState<PlayerFirstFinalBlowState>(useAttackStateMachine);
+	}
+
+	float GetAttackPower(YakuzaAttackComboStateMachine* useAttackStateMachine) override;
+private:
+	static TypeSetAutoRegister<PlayerYakuzaTypeSet> typeSet;
 };
 

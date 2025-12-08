@@ -6,4 +6,10 @@ using namespace nsK2EngineLow;
 // K2EngineLowのグローバルアクセスポイント
 extern K2EngineLow* g_k2EngineLow;
 
+#include "json/json.hpp"
+
+#include "Core\ParameterManager.h"
+
 #include "UI\UIBase\UIBase.h"
+#include "UI\UIAnimation\UIAnimation.h"
+#include "UI\UILayout.h"
