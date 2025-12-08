@@ -50,6 +50,9 @@
     <ClCompile Include="Actor\Enemy\EnemyMetaAi\Process\TrakingRoleProcess.cpp" />
     <ClCompile Include="UI\UIAnimation\UIAnimation.cpp" />
     <ClCompile Include="Title.cpp" />
+    <ClCompile Include="UI\PoseMenu.cpp" />
+    <ClCompile Include="Inventory\Types.cpp" />
+    <ClCompile Include="Inventory\Inventory.cpp" />
     <ClCompile Include="PoseMenu.cpp" />
     <ClCompile Include="UI\UILayout.cpp" />
     <ClCompile Include="Core\ParameterManager.cpp" />
@@ -114,6 +117,9 @@
     <ClInclude Include="Actor\Enemy\EnemyMetaAi\Process\TrakingRoleProcess.h" />
     <ClInclude Include="UI\UIAnimation\UIAnimation.h" />
     <ClInclude Include="Title.h" />
+    <ClInclude Include="UI\PoseMenu.h" />
+    <ClInclude Include="Inventory\Types.h" />
+    <ClInclude Include="Inventory\Inventory.h" />
     <ClInclude Include="PoseMenu.h" />
     <ClInclude Include="UI\UILayout.h" />
     <ClInclude Include="json\json.hpp" />

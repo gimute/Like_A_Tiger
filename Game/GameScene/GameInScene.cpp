@@ -13,53 +13,90 @@
 
 #include "GameScene\UpdateOrder.h"
 
-//ƒXƒe[ƒgN“üŠÖ”
+#include "UI\PoseMenu.h"
+
+#include "Inventory/Inventory.h"
+
+
+//ã‚¹ãƒ†ãƒ¼ãƒˆä¾µå…¥é–¢æ•°
 void GameInScene::EnterScene()
 {
-	//ƒvƒŒƒCƒ„[ƒRƒ“ƒgƒ[ƒ‰[¶¬
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ç”Ÿæˆ
 	m_playerController = NewGO<PlayerController>(UpdateOrder::Input, "playercontroller");
-	//ƒvƒŒƒCƒ„[¶¬
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ç”Ÿæˆ
 	m_player = NewGO<Player>(UpdateOrder::Charactar, "player");
-	//ƒJƒƒ‰¶¬
+	//ã‚«ãƒ¡ãƒ©ç”Ÿæˆ
 	CameraManager::GetCameraManagerInstance()->CreateCamera<PlayerCameraController>(m_playerController);
-	//ƒvƒŒƒCƒ„[ƒRƒ“ƒgƒ[ƒ‰[İ’è
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼è¨­å®š
 	m_playerController->SetPlayer(m_player);
 	m_playerController->SetPlayerCameraController(CameraManager::GetCameraManagerInstance()->GetCameraController<PlayerCameraController>());
-	//ƒJƒƒ‰¶¬
+	//ã‚«ãƒ¡ãƒ©ç”Ÿæˆ
 
-	//“GAI¶¬
+	//æ•µAIç”Ÿæˆ
 	NewGO<EnemySystem>(UpdateOrder::AI, "enemy");
 
-	//“G¶¬ƒeƒXƒg
+	//æ•µç”Ÿæˆãƒ†ã‚¹ãƒˆ
 	//EnemyManager::GetInstance()->RequestSpawnEnemy(EnemyYakuzaType::en_normalYakuza,Vector3{1000.0,0.0,0.0});
 	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ 1000.0f,0.0f,0.0f });
 	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ -1000.0f,0.0f,0.0f });
 
 	EnemyManager::GetInstance()->SetEnemyTargetCharacter(m_player);
 
+	NewGO<ProtoStage>(UpdateOrder::Actor);
+
+	m_inventory = Inventory::Create();
+
+	m_poseMenu = NewGO<PoseMenu>(0, "posemenu");
+
+
+   // UIã¸æƒ…å ±ã‚’æ¸¡ã™
+   {
+   	m_inventory->ForEach([&](const ItemInfo* itemInfo)
+   		{
+   			ItemIconInformation* info = new ItemIconInformation();
+   			info->m_num = itemInfo->m_num;
+   			info->m_type = itemInfo->m_type;
+   			m_poseMenu->AddItemInfo(info);
+   		});
+   }
+	//m_poseMenu->Init();
+
 	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 
 
 	//NewGO<ProtoStage>(UpdateOrder::Actor);
+
 }
 
-//ƒXƒe[ƒgXVŠÖ”
+//ã‚¹ãƒ†ãƒ¼ãƒˆæ›´æ–°é–¢æ•°
 void GameInScene::UpdateScene()
 {
-	//ƒJƒƒ‰XV
+	//ã‚«ãƒ¡ãƒ©æ›´æ–°
 	CameraManager::GetCameraManagerInstance()->UpdateCamera();
 
-	//EnemyManagerXV
+	//EnemyManageræ›´æ–°
 	EnemyManager::GetInstance()->Update();
+
+	///   // UIã¸æƒ…å ±ã‚’æ¸¡ã™
+	///   {
+	///   	m_inventory->ForEach([&](const ItemInfo* itemInfo)
+	///   		{
+	///   			ItemIconInformation* info = new ItemIconInformation();
+	///   			info->m_num = itemInfo->m_num;
+	///   			info->m_type = itemInfo->m_type;
+	///   			m_poseMenu->AddItemInfo(info);
+	///   		});
+	///   }
+
 }
 
-//ƒXƒe[ƒg‘ŞoŠÖ”
+//ã‚¹ãƒ†ãƒ¼ãƒˆé€€å‡ºé–¢æ•°
 void GameInScene::ExitScene()
 {
-
+	Inventory::Delete();
 }
 
-//ƒXƒe[ƒg•ÏX—v‹ŠÖ”
+//ã‚¹ãƒ†ãƒ¼ãƒˆå¤‰æ›´è¦æ±‚é–¢æ•°
 bool GameInScene::ReqestSceneState(uint32_t& nextState)
 {
 	return false;
