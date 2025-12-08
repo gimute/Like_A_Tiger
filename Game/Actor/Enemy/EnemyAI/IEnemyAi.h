@@ -3,7 +3,7 @@
 #include "Actor\YakuzaComponents\YakuzaStateMachine.h"
 #include "Actor\Enemy\EnemyAI\EnemyAiFactory.h"
 
-#include "Actor\Enemy\EnemyType.h"
+#include "Actor\YakuzaComponents\YakuzaType.h"
 #include "Actor\Enemy\EnemyAI\EnemyAiBlackboard .h"
 
 #include "IEnemyAiState.h"
@@ -15,7 +15,7 @@ template<class ClassType>
 class AiAutoRegister
 {
 public:
-	AiAutoRegister(EnemyType type)
+	AiAutoRegister(EnemyYakuzaType type)
 	{
 		EnemyAiFactory::GetInstance().Register(type, [](YakuzaStateMachine* hasStateMachine)
 		{

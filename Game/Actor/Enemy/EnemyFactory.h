@@ -1,6 +1,6 @@
 #pragma once
 #include "Actor\Character.h"
-#include "Actor\Enemy\EnemyType.h"
+#include "Actor\YakuzaComponents\YakuzaType.h"
 
 class Enemy;
 
@@ -14,6 +14,6 @@ public:
 	~EnemyFactory() = default;
 
 	//エネミー制作
-	Enemy* CreateEnemy(EnemyType type);
+	Enemy* CreateEnemy(EnemyYakuzaType type);
 };
 

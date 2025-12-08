@@ -12,3 +12,4 @@ extern K2EngineLow* g_k2EngineLow;
 
 #include "UI\UIBase\UIBase.h"
 #include "UI\UIAnimation\UIAnimation.h"
+#include "UI\UILayout.h"

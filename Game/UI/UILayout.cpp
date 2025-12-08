@@ -4,12 +4,38 @@
 
 void UILayout::Update()
 {
-	int num = 0;
+	int offsetCount = 0;
 
-	for (auto ui : m_uiList)
+	//改行条件が0以下なら
+	if (m_newLineNum <= 0)
 	{
-		ui->m_transform.m_localPosition = m_offsetPosition * num;
+		//改行機能なしの配置処理
+		for (auto ui : m_uiList)
+		{
+			ui->m_transform.m_localPosition = m_offsetPosition * offsetCount;
 
-		num++;
+			offsetCount++;
+		}
+	}
+	else
+	{
+		//改行機能付きの配置処理
+		int newLineCount = 0;
+
+		for (auto ui : m_uiList)
+		{
+			//オフセットカウントが改行する数まで進んだら
+			if (offsetCount% m_newLineNum == 0)
+			{
+				//オフセットカウントリセット
+				offsetCount = 0;
+				//改行カウント
+				newLineCount++;
+			}
+
+			ui->m_transform.m_localPosition = m_offsetPosition * offsetCount + m_newLineOffsetPos * newLineCount;
+
+			offsetCount++;
+		}
 	}
 }

@@ -9,7 +9,7 @@ struct EnemyMemberInfo
 	//エネミーのAI
 	IEnemyAi* m_enemyAi = nullptr;
 	//エネミーの種類
-	EnemyType m_enemyType = EnemyType::en_normalYakuza;
+	EnemyYakuzaType m_enemyType = EnemyYakuzaType::en_normalYakuza;
 	//座標
 	Vector3 m_enemyPosition = Vector3::Zero;
 	//
@@ -21,7 +21,7 @@ struct EnemyMemberInfo
 
 	EnemyMemberInfo(
 		IEnemyAi* enemyAi,
-		EnemyType enemyType,
+		EnemyYakuzaType enemyType,
 		const Vector3& enemyPos,
 		bool isInBattle,
 		bool isActive

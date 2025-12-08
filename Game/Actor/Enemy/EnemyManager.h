@@ -1,5 +1,5 @@
 #pragma once
-#include "Actor\Enemy\EnemyType.h"
+#include "Actor\YakuzaComponents\YakuzaType.h"
 #include "Actor\Enemy\EnemyFactory.h"
 #include "Actor\Enemy\EnemyAI\EnemyAiFactory.h"
 #include "Actor\Character.h"
@@ -15,10 +15,10 @@ struct EnemyPair
 {
 	Enemy* m_enemy = nullptr;
 	std::unique_ptr<IEnemyAi> m_enemyAi = nullptr;
-	EnemyType m_type = EnemyType::en_normalYakuza;
+	EnemyYakuzaType m_type = EnemyYakuzaType::en_normalYakuza;
 	int m_enemyID = -1;
 
-	EnemyPair(Enemy* enemy,IEnemyAi* enemyAi,EnemyType type)
+	EnemyPair(Enemy* enemy,IEnemyAi* enemyAi,EnemyYakuzaType type)
 		:m_enemy(enemy)
 		,m_enemyAi(enemyAi)
 		,m_type(type)
@@ -60,7 +60,7 @@ public:
 		return m_instance;
 	}
 	//スポーン依頼
-	void RequestSpawnEnemy(EnemyType type,const Vector3& spawnPoint);
+	void RequestSpawnEnemy(EnemyYakuzaType type,const Vector3& spawnPoint);
 	//グループスポーン依頼
 	void RequestSpawnEnemyGroup(int spawnNum,const Vector3& spawnPoint);
 	//更新
