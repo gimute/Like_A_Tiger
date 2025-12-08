@@ -247,6 +247,7 @@
     <ClCompile Include="PoseMenu.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\IEnemyAiState.cpp" />
+    <ClCompile Include="UI\UILayout.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAiState\IEnemyAttackAiState.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyMetaAi\Process\TrakingRoleProcess.cpp" />
     <ClCompile Include="UI\UIAnimation\UIAnimation.cpp" />
@@ -305,6 +306,7 @@
     <ClInclude Include="Actor\Player\PlayerController.h" />
     <ClInclude Include="Camera\ICameraController.h" />
     <ClInclude Include="Actor\Player\PlayerCameraController.h" />
+    <ClInclude Include="UI\UILayout.h" />
     <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAiState\IEnemyAttackAiState.h" />
     <ClInclude Include="Actor\Enemy\EnemyMetaAi\IMetaAiProcess.h" />
     <ClInclude Include="Actor\Enemy\EnemyMetaAi\Process\TrakingRoleProcess.h" />

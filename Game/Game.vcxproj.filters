@@ -51,6 +51,7 @@
     <ClCompile Include="UI\UIAnimation\UIAnimation.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="PoseMenu.cpp" />
+    <ClCompile Include="UI\UILayout.cpp" />
     <ClCompile Include="Actor\YakuzaComponents\YakuzaCharacter.cpp" />
     <ClCompile Include="Actor\YakuzaComponents\YakuzaCharacterDamageManager.cpp" />
   </ItemGroup>
@@ -113,6 +114,7 @@
     <ClInclude Include="UI\UIAnimation\UIAnimation.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="PoseMenu.h" />
+    <ClInclude Include="UI\UILayout.h" />
     <ClInclude Include="Actor\YakuzaComponents\YakuzaCharacter.h" />
     <ClInclude Include="Actor\YakuzaComponents\YakuzaCharacterDamageManager.h" />
   </ItemGroup>
