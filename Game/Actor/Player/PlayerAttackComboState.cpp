@@ -193,7 +193,7 @@ void PlayerFourthAttackState::OnUpdate()
 {
 	auto* stateMachine = m_owner->GetYakuzaStateMachine();
 
-	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(PlayerYakuzaTypeSet::en_punching_1_R, 0.1f);
+	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(PlayerYakuzaTypeSet::en_punching_2_R, 0.1f);
 
 	if (stateMachine->GetFinishBrowFlag() && !m_owner->GetIsNextCombo())
 	{

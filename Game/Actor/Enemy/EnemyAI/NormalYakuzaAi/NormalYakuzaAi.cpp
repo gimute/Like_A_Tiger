@@ -101,7 +101,7 @@ void NormalYakuzaAiAttackState::OnUpdate()
 	if (!attackState->GetIsNextCombo() &&
 		!m_attackEndFlag)
 	{
-		if (Random::Range(0.5f))
+		if (Random::Range(0.9))
 		{
 			m_hasStateMachine->SetAttackFlag(true);
 		}

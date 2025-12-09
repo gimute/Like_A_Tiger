@@ -67,6 +67,26 @@ public:
 	void OnExit() override;
 };
 
+class NormalYakuzaFourthAttackState : public IStateBase
+{
+	appState(NormalYakuzaFourthAttackState)
+protected:
+	YakuzaAttackComboStateMachine* m_owner = nullptr;
+public:
+	NormalYakuzaFourthAttackState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
+
+	~NormalYakuzaFourthAttackState() = default;
+
+	uint32_t m_nextComboHash = 0;
+
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+};
+
 class NormalYakuzaFirstFinalBlowState : public IStateBase
 {
 	appState(NormalYakuzaFirstFinalBlowState)
@@ -76,6 +96,66 @@ public:
 	NormalYakuzaFirstFinalBlowState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
 
 	~NormalYakuzaFirstFinalBlowState() = default;
+
+	uint32_t m_nextComboHash = 0;
+
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+};
+
+class NormalYakuzaSecondFinalBlowState : public IStateBase
+{
+	appState(NormalYakuzaSecondFinalBlowState)
+protected:
+	YakuzaAttackComboStateMachine* m_owner = nullptr;
+public:
+	NormalYakuzaSecondFinalBlowState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
+
+	~NormalYakuzaSecondFinalBlowState() = default;
+
+	uint32_t m_nextComboHash = 0;
+
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+};
+
+class NormalYakuzaThirdFinalBlowState : public IStateBase
+{
+	appState(NormalYakuzaThirdFinalBlowState)
+protected:
+	YakuzaAttackComboStateMachine* m_owner = nullptr;
+public:
+	NormalYakuzaThirdFinalBlowState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
+
+	~NormalYakuzaThirdFinalBlowState() = default;
+
+	uint32_t m_nextComboHash = 0;
+
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+};
+
+class NormalYakuzaFourthFinalBlowState : public IStateBase
+{
+	appState(NormalYakuzaFourthFinalBlowState)
+protected:
+	YakuzaAttackComboStateMachine* m_owner = nullptr;
+public:
+	NormalYakuzaFourthFinalBlowState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
+
+	~NormalYakuzaFourthFinalBlowState() = default;
 
 	uint32_t m_nextComboHash = 0;
 
@@ -131,7 +211,11 @@ public:
 		AddAttackState<NormalYakuzaFirstAttackState>(useAttackStateMachine);
 		AddAttackState<NormalYakuzaSecondAttackState>(useAttackStateMachine);
 		AddAttackState<NormalYakuzaThirdAttackState>(useAttackStateMachine);
+		AddAttackState<NormalYakuzaFourthAttackState>(useAttackStateMachine);
 		AddAttackState<NormalYakuzaFirstFinalBlowState>(useAttackStateMachine);
+		AddAttackState<NormalYakuzaSecondFinalBlowState>(useAttackStateMachine);
+		AddAttackState<NormalYakuzaThirdFinalBlowState>(useAttackStateMachine);
+		AddAttackState<NormalYakuzaFourthFinalBlowState>(useAttackStateMachine);
 	}
 
 	float GetAttackPower(YakuzaAttackComboStateMachine* useAttackStateMachine) override;
