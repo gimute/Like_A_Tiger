@@ -86,6 +86,7 @@ public:
 		m_attackCollision = nullptr;
 	}
 
+protected:
 	//–{‘Ì‚Ì“–‚½‚è”»’è
 	CollisionObject* m_bodyCollision = nullptr;
 	//UŒ‚‚Ì“–‚½‚è”»’è
@@ -98,18 +99,37 @@ public:
 	float m_invincibleDuration = 0.0f;
 	//–³“Gƒtƒ‰ƒO
 	bool m_isInvincible = 0.0f;
-protected:
+
 	const char* m_modelFilePath = nullptr;
 
 	int m_maxAnimationNum = 0;
 
 	std::vector<Character::AnimationData> m_animationData;
+	//‚±‚ÌYakuza‚ÌMAXHp
+	float m_yakuzaMaxHp = 150.0f;
+	//‚±‚ÌYakuza‚ÌHp
+	float m_yakuzaCurrentHp = m_yakuzaMaxHp;
 public:
 	inline YakuzaStateMachine& GetYakuzaStateMachine() { return *m_yakuzaStateMachine; }
 
 	inline void SetBodyCollision() { m_bodyCollision->SetIsEnable(false); }
 
 	inline bool GetIsInvicible() { return m_isInvincible; }
+
+	inline void SetHP(float max)
+	{
+		m_yakuzaMaxHp = max;
+		m_yakuzaCurrentHp;
+	}
+
+	inline void TakeDamage(float amount)
+	{
+		m_yakuzaCurrentHp -= amount;
+	}
+
+	inline float GetYakuzaCurrentHp() { return m_yakuzaCurrentHp; }
+
+	inline float GetYakuzaMaxHp() { return m_yakuzaMaxHp; }
 
 	inline void StartInvincible(float sec) 
 	{

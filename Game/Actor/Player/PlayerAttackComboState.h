@@ -69,6 +69,26 @@ public:
 	void OnExit() override;
 };
 
+class PlayerFourthAttackState : public IStateBase
+{
+	appState(PlayerFourthAttackState)
+protected:
+	YakuzaAttackComboStateMachine* m_owner = nullptr;
+public:
+	PlayerFourthAttackState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
+
+	~PlayerFourthAttackState() = default;
+
+	uint32_t m_nextComboHash = 0;
+
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+};
+
 class PlayerFirstFinalBlowState : public IStateBase
 {
 	appState(PlayerFirstFinalBlowState)
@@ -78,6 +98,60 @@ public:
 	PlayerFirstFinalBlowState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
 
 	~PlayerFirstFinalBlowState() = default;
+
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+};
+
+class PlayerSecondFinalBlowState : public IStateBase
+{
+	appState(PlayerSecondFinalBlowState)
+protected:
+	YakuzaAttackComboStateMachine* m_owner = nullptr;
+public:
+	PlayerSecondFinalBlowState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
+
+	~PlayerSecondFinalBlowState() = default;
+
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+};
+
+class PlayerThirdFinalBlowState : public IStateBase
+{
+	appState(PlayerThirdFinalBlowState)
+protected:
+	YakuzaAttackComboStateMachine* m_owner = nullptr;
+public:
+	PlayerThirdFinalBlowState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
+
+	~PlayerThirdFinalBlowState() = default;
+
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+};
+
+class PlayerFourthFinalBlowState : public IStateBase
+{
+	appState(PlayerFourthFinalBlowState)
+protected:
+	YakuzaAttackComboStateMachine* m_owner = nullptr;
+public:
+	PlayerFourthFinalBlowState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
+
+	~PlayerFourthFinalBlowState() = default;
 
 	//ステートイン
 	void OnEnter() override;
@@ -99,6 +173,7 @@ public:
 		en_punching_2_R,
 		en_punching_3_L,
 		en_kick_1,
+		en_kick_2,
 		num
 	};
 
@@ -127,7 +202,8 @@ public:
 		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Punching_1_L_Ev.tka", false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Punching_2_R_Ev.tka", false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Punching_3_L_Ev.tka", false });
-		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Kick_1_R.tka", false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Kick_1_R_EV.tka", false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Kick_2_L_EV.tka", false });
 	}
 
 	void CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) override
@@ -135,7 +211,11 @@ public:
 		AddAttackState<PlayerFirstAttackState>(useAttackStateMachine);
 		AddAttackState<PlayerSecondAttackState>(useAttackStateMachine);
 		AddAttackState<PlayerThirdAttackState>(useAttackStateMachine);
+		AddAttackState<PlayerFourthAttackState>(useAttackStateMachine);
 		AddAttackState<PlayerFirstFinalBlowState>(useAttackStateMachine);
+		AddAttackState<PlayerSecondFinalBlowState>(useAttackStateMachine);
+		AddAttackState<PlayerThirdFinalBlowState>(useAttackStateMachine);
+		AddAttackState<PlayerFourthFinalBlowState>(useAttackStateMachine);
 	}
 
 	float GetAttackPower(YakuzaAttackComboStateMachine* useAttackStateMachine) override;

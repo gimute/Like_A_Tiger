@@ -131,6 +131,7 @@ public:
 		AddAttackState<NormalYakuzaFirstAttackState>(useAttackStateMachine);
 		AddAttackState<NormalYakuzaSecondAttackState>(useAttackStateMachine);
 		AddAttackState<NormalYakuzaThirdAttackState>(useAttackStateMachine);
+		AddAttackState<NormalYakuzaFirstFinalBlowState>(useAttackStateMachine);
 	}
 
 	float GetAttackPower(YakuzaAttackComboStateMachine* useAttackStateMachine) override;

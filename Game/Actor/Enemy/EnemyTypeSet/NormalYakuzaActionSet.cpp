@@ -88,7 +88,7 @@ void NormalYakuzaSecondAttackState::OnUpdate()
 {
 	auto* stateMachine = m_owner->GetYakuzaStateMachine();
 
-	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(NormalYakuzaTypeSet::en_punching_1_L, 0.1f);
+	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(NormalYakuzaTypeSet::en_crossPunch_1_R, 0.1f);
 
 	if (stateMachine->GetAttackFlag() && !m_owner->GetIsNextCombo())
 	{
@@ -127,7 +127,7 @@ void NormalYakuzaSecondAttackState::OnExit()
 
 void NormalYakuzaThirdAttackState::OnEnter()
 {
-
+	m_owner->SetIsNextCombo(false);
 }
 
 //最後のコンボはこっちを参考に
@@ -147,16 +147,14 @@ void NormalYakuzaThirdAttackState::OnUpdate()
 
 void NormalYakuzaThirdAttackState::OnExit()
 {
-	m_owner->SetIsNextCombo(false);
 
-	m_owner->SetIsLastCombo(true);
 }
 
 //FirstFinalBlowState
 
 void NormalYakuzaFirstFinalBlowState::OnEnter()
 {
-
+	m_owner->SetIsNextCombo(false);
 }
 
 void NormalYakuzaFirstFinalBlowState::OnUpdate()
@@ -174,7 +172,5 @@ void NormalYakuzaFirstFinalBlowState::OnUpdate()
 
 void NormalYakuzaFirstFinalBlowState::OnExit()
 {
-	m_owner->SetIsNextCombo(false);
 
-	m_owner->SetIsLastCombo(true);
 }

@@ -5,12 +5,12 @@
 
 //攻撃終了ステート（コンストラクタで初期化時に入れる）
 
-void EnemyAiAttackEndState::OnEnter()
+void AttackEndState::OnEnter()
 {
-
+	m_owner->SetIsNextCombo(false);
 }
 
-void EnemyAiAttackEndState::OnUpdate()
+void AttackEndState::OnUpdate()
 {
 	auto* stateMachine = m_owner->GetYakuzaStateMachine();
 
@@ -19,11 +19,9 @@ void EnemyAiAttackEndState::OnUpdate()
 	m_owner->SetIsAttackEnds(true);
 }
 
-void EnemyAiAttackEndState::OnExit()
+void AttackEndState::OnExit()
 {
-	m_owner->SetIsNextCombo(false);
 
-	m_owner->SetIsLastCombo(true);
 }
 
 //
@@ -36,9 +34,9 @@ IStateBase* YakuzaAttackComboStateMachine::GetNextState()
 	//次のコンボが設定されていなかったら攻撃終了ステートへ
 	if (!nextState)
 	{
-		SetNowCombo(EnemyAiAttackEndState::ID());
+		SetNowCombo(AttackEndState::ID());
 
-		return FindClassUINT32TState(EnemyAiAttackEndState::ID());
+		return FindClassUINT32TState(AttackEndState::ID());
 	}
 
 	SetNowCombo(nextStateHush);
