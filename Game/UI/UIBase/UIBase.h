@@ -47,6 +47,7 @@ public:
 /// </summary>
 class UICanvas : public UIBase
 {
+public:
 	/**
 	* ’·‚¢Œ^–¼‚ÉA’Z‚­‚Ä•ª‚©‚è‚â‚·‚¢‚ ‚¾–¼‚ğ•t‚¯‚½
 	*/
