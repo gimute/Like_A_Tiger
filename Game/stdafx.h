@@ -10,6 +10,7 @@ extern K2EngineLow* g_k2EngineLow;
 
 #include "Core\ParameterManager.h"
 
+#include "Core\Curve.h"
 #include "UI\UIBase\UIBase.h"
 #include "UI\UIAnimation\UIAnimation.h"
 #include "UI\UILayout.h"

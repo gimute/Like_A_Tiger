@@ -55,6 +55,7 @@
     <ClCompile Include="Core\ParameterManager.cpp" />
     <ClCompile Include="Actor\YakuzaComponents\YakuzaCharacter.cpp" />
     <ClCompile Include="Actor\YakuzaComponents\YakuzaCharacterDamageManager.cpp" />
+    <ClCompile Include="Core\Curve.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -120,5 +121,6 @@
     <ClInclude Include="Core\ParameterManager.h" />
     <ClInclude Include="Actor\YakuzaComponents\YakuzaCharacter.h" />
     <ClInclude Include="Actor\YakuzaComponents\YakuzaCharacterDamageManager.h" />
+    <ClInclude Include="Core\Curve.h" />
   </ItemGroup>
 </Project>

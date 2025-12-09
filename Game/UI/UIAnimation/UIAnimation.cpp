@@ -78,7 +78,36 @@ void PositionUIAnimation::Update()
 		return;
 	}
 
-	UpdateCore();
+	m_curve.Update();
+
+	m_ui->m_transform.m_localPosition = m_curve.GetCurrentValue();
+
+	if (!m_curve.IsPlaying())
+	{
+		//Ÿ‚ğÄ¶
+		m_targetIndex++;
+
+		//Ä¶‚µ‚«‚Á‚½‚©
+		if (m_targetIndex == m_animationTimeList.size())
+		{
+			//‘S‚ÄÄ¶Š®—¹
+			m_isCompleted = true;
+			m_targetIndex = 0;
+
+		}
+		
+		m_curve.Play(
+			m_targetPositionList[m_targetIndex],
+			m_targetPositionList[m_targetIndex + 1],
+			m_animationTimeList[m_targetIndex],
+			EasingType::EaseInOut,
+			LoopMode::Once);
+		
+
+	}
+
+
+	//UpdateCore();
 }
 
 /*

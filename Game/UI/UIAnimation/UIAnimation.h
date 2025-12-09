@@ -82,6 +82,7 @@ class PositionUIAnimation : public UIAnimationBase
 {
 private:
 	std::vector<Vector3> m_targetPositionList;	//UIを動かす座標リスト
+	Curve<Vector3> m_curve;	//イーズインアウトなどの計算クラス
 public:
 	PositionUIAnimation(std::shared_ptr<UIBase> ui, const bool isLoop, std::vector<float> animationTimeList, std::vector<Vector3> targetPositionList)
 		:UIAnimationBase(ui, isLoop, animationTimeList)
@@ -89,6 +90,8 @@ public:
 	{
 		K2_ASSERT(m_targetPositionList.size() > 1, "ターゲット座標を2つ以上いれてください\n");
 		K2_ASSERT(m_targetPositionList.size() - 1 == m_animationTimeList.size(), "ターゲット座標の数とアニメーション時間の数を見直してください");
+
+		m_curve.Play(targetPositionList[0], targetPositionList[1], animationTimeList[0], EasingType::EaseInOut, LoopMode::Once);
 	}
 
 	void UpdateValue(float elapsedPercent) override;
