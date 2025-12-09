@@ -4,12 +4,11 @@
 #include "Actor\YakuzaComponents\YakuzaType.h"
 #include "Actor\YakuzaComponents\YakuzaTypeSetFactory.h"
 #include "Actor\YakuzaComponents\YakuzaCharacterDamageManager.h"
-
+#include "GameScene\UpdateOrder.h"
 
 //スタート関数
 bool Player::Start()
 {
-
 	//タイプセットからプレイヤーの物を取得
 	auto typeSet = YakuzaTypeSetFactory::GetInstance().Create(OthersYakuzaType::en_playerYakuza);
 	//タイプセットを使用してプレイヤーの攻撃ステートマシンを初期化
@@ -37,6 +36,19 @@ bool Player::Start()
 
 	SetAttackCollisionName("PlayerAttack");
 
+	//HPゲージ
+	m_hpGauge = NewGO<HPGauge>(UpdateOrder::UI, "UI");
+
+	m_hpGauge->Init();
+
+	m_hpGauge->SetVisible(true);
+
+	m_hpGauge->SetPosition(Vector3{ -750,400,0.0 });
+
+	m_hpGauge->SetMaxHP(GetYakuzaMaxHp());
+
+	m_hpGauge->SetHP(GetYakuzaMaxHp());
+	
 	return true;
 }
 

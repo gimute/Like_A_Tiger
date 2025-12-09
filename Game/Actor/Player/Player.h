@@ -3,6 +3,8 @@
 #include "Actor\YakuzaComponents\YakuzaStateMachine.h"
 #include "Actor\YakuzaComponents\YakuzaAnimationState.h"
 
+#include "UI\HPGauge.h"
+
 //プレイヤーが操作するキャラクターを継承したクラス
 class Player : public YakuzaCharacter
 {
@@ -20,4 +22,16 @@ public:
 	void Render(RenderContext& rc) override;
 
 	void OnHit(const char* hitCollisionName, CollisionObject* pairCollision) override;
+
+private:
+	//HPゲージ
+	HPGauge* m_hpGauge = nullptr;
+public:
+
+	inline void TakePlayerHp(float amount)
+	{
+		TakeDamage(amount);
+
+		m_hpGauge->SetHP(GetYakuzaCurrentHp());
+	}
 };

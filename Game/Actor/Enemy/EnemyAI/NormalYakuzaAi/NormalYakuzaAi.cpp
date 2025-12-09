@@ -64,12 +64,6 @@ void NormalYakuzaAiAttackState::OnUpdate()
 	{
 		moveVec = toTargetDire;
 
-		////近づいている最中にダメージを食らったら
-		//if (m_hasStateMachine->GetIsDamage())
-		//{
-		//	m_owner->SetAttackFlag(false);
-		//}
-
 		//攻撃可能範囲に入ったら
 		if (toTargetDist < NormalYakuzaAiAttackConstant::ATTACK_START_RADIUS)
 		{
