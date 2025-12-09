@@ -12,11 +12,11 @@ namespace NormalYakuzaAiConstant
 {
 	const float START_TRACKING_RADIUS = 700.0f;
 
-	const float WAITING_ATTACK_RADIUS = 400.0f;
+	const float WAITING_ATTACK_RADIUS = 200.0f;
 
 	const float EXIT_WAITING_ATTACK_RADIUS = 500.0f;
 
-	const float ATTACK_TIME = 5.0f;
+	const float ATTACK_TIME = 3.0f;
 
 	
 }
@@ -237,8 +237,10 @@ bool NormalYakuzaAi::CanChangeAttack()
 {
 	Vector3 targetPos = m_targetView.m_targetPosition;
 	Vector3 iPos = m_hasStateMachine->GetHasCharactarPos(); 
-	Vector3 targetToIVec = targetPos - iPos; float radius = 600.0f;
-	float radiusSq = radius * radius; float targetToVecLenSq = targetToIVec.LengthSq();
+	Vector3 targetToIVec = targetPos - iPos; 
+	float radius = 600.0f;
+	float radiusSq = radius * radius; 
+	float targetToVecLenSq = targetToIVec.LengthSq();
 
 	bool inRange = (targetToVecLenSq >= radiusSq);
 

@@ -53,7 +53,6 @@
     <ClCompile Include="UI\PoseMenu.cpp" />
     <ClCompile Include="Inventory\Types.cpp" />
     <ClCompile Include="Inventory\Inventory.cpp" />
-    <ClCompile Include="PoseMenu.cpp" />
     <ClCompile Include="UI\UILayout.cpp" />
     <ClCompile Include="Core\ParameterManager.cpp" />
     <ClCompile Include="Actor\YakuzaComponents\YakuzaCharacter.cpp" />
@@ -120,7 +119,6 @@
     <ClInclude Include="UI\PoseMenu.h" />
     <ClInclude Include="Inventory\Types.h" />
     <ClInclude Include="Inventory\Inventory.h" />
-    <ClInclude Include="PoseMenu.h" />
     <ClInclude Include="UI\UILayout.h" />
     <ClInclude Include="json\json.hpp" />
     <ClInclude Include="Core\ParameterManager.h" />
