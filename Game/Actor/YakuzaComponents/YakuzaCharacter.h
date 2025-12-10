@@ -73,6 +73,8 @@ public:
 
 		m_attackCollision->SetName(m_attackCollisionName);
 
+		m_attackCollision->SetIsEnable(true);
+
 		m_attackCollision->SetIsEnableAutoDelete(false);
 	}
 
@@ -161,6 +163,15 @@ public:
 		m_maxAnimationNum = ptr.size();
 
 		m_animationData = ptr;
+	}
+
+	inline void SetAttackCollisionIsEnable(bool setIs) 
+	{
+		if (!m_attackCollision)
+		{
+			return;
+		}
+		m_attackCollision->SetIsEnable(setIs); 
 	}
 };
 

@@ -61,7 +61,7 @@ void GameInScene::EnterScene()
    }
 	//m_poseMenu->Init();
 
-	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 
 
 	//NewGO<ProtoStage>(UpdateOrder::Actor);

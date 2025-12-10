@@ -82,6 +82,12 @@ void Player::Render(RenderContext& rc)
 
 void Player::OnHit(const char* hitCollisionName, CollisionObject* pairCollision)
 {
+	if (hitCollisionName == "enemyBodyCollision" &&
+		pairCollision == m_attackCollision)
+	{
+		DeleteAttackCollision();
+	}
+
 	//if (!m_attackCollision)
 	//{
 	//	SetIsAttackCollisionHit(false);
