@@ -43,8 +43,8 @@ void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(float sendDamage)
 	{
 		return;
 	}
-	//無敵時間開始
-	m_playerPtr->StartInvincible(3.0f);
+	////無敵時間開始
+	//m_playerPtr->StartInvincible(3.0f);
 
 	//ここにダメージ処理
 	m_playerPtr->GetYakuzaStateMachine().SetIsDamage(true);

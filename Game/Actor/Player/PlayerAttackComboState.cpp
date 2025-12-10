@@ -9,7 +9,7 @@ float PlayerYakuzaTypeSet::GetAttackPower(YakuzaAttackComboStateMachine* useAtta
 {
 	uint32_t nowStateId = useAttackStateMachine->GetNowCombo();
 
-	float attackPower;
+	float attackPower = 0.0f;
 
 	if (nowStateId == PlayerFirstAttackState::ID())
 	{
