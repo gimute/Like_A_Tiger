@@ -4,6 +4,7 @@
 
 #include "Actor\Enemy\EnemyMetaAi\Process\AttackRoleProcess.h"
 #include "Actor\Enemy\EnemyMetaAi\Process\TrakingRoleProcess.h"
+#include "Actor\Enemy\EnemyMetaAi\Process\BattleEndNotifyProcess.h"
 
 class IEnemyAi;
 
@@ -17,6 +18,8 @@ public:
 		AddProcess<AttackRoleProcess>();
 		//処理設定
 		AddProcess<TrakingRoleProcess>();
+		
+		AddProcess<BattleEndNotifyProcess>();
 	}
 	//デストラクタ
 	~EnemyMetaAi() = default;

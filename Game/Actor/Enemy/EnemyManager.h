@@ -13,11 +13,15 @@ class EnemyMetaAi;
 
 struct EnemyPair
 {
+	//エネミーのポインタ
 	Enemy* m_enemy = nullptr;
+	//エネミーAIのポインタ
 	std::unique_ptr<IEnemyAi> m_enemyAi = nullptr;
+	//エネミーの種類
 	EnemyYakuzaType m_type = EnemyYakuzaType::en_normalYakuza;
+	//エネミーのID
 	int m_enemyID = -1;
-
+	//コンストラクタ
 	EnemyPair(Enemy* enemy,IEnemyAi* enemyAi,EnemyYakuzaType type)
 		:m_enemy(enemy)
 		,m_enemyAi(enemyAi)
@@ -103,6 +107,30 @@ public:
 	inline TargetCharacterView GetTargetView()
 	{
 		return m_targetView;
+	}
+	//指定IDの敵グループが戦闘状態かどうかを設定
+	inline void SetEnemyGroupeInBattle(int id,bool setIs)
+	{
+		auto& groupeList = GetEnemyGroupList();
+
+		if (groupeList.size() < id)
+		{
+			return;
+		}
+
+		groupeList[id].isInBattle = setIs;
+	}
+	//指定IDが戦闘状態かどうかを取得
+	inline bool GetEnemyGroupeInBattle(int id)
+	{
+		auto& groupeList = GetEnemyGroupList();
+
+		if (groupeList.size() < id)
+		{
+			return false;
+		}
+
+		return groupeList[id].isInBattle;
 	}
 };
 

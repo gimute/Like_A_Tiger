@@ -72,6 +72,25 @@ void EnemyManager::RequestSpawnEnemyGroup(int spawnNum, const Vector3& spawnPoin
 void EnemyManager::Update()
 {
 	UpdateTargetView();
+
+	//ƒeƒXƒg
+
+	auto& testlist = GetEnemyGroupList();
+
+	for(auto & ptr : testlist)
+	{
+
+		if (ptr.isInBattle)
+		{
+			bool istrue = true;
+		}
+		else
+		{
+			bool isfalse = false;
+		}
+
+	}
+
 }
 
 void EnemyManager::UpdateTargetView()

@@ -57,6 +57,7 @@
     <ClCompile Include="Core\ParameterManager.cpp" />
     <ClCompile Include="Actor\YakuzaComponents\YakuzaCharacter.cpp" />
     <ClCompile Include="Actor\YakuzaComponents\YakuzaCharacterDamageManager.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyMetaAi\Process\BattleEndNotifyProcess.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -124,5 +125,6 @@
     <ClInclude Include="Core\ParameterManager.h" />
     <ClInclude Include="Actor\YakuzaComponents\YakuzaCharacter.h" />
     <ClInclude Include="Actor\YakuzaComponents\YakuzaCharacterDamageManager.h" />
+    <ClInclude Include="Actor\Enemy\EnemyMetaAi\Process\BattleEndNotifyProcess.h" />
   </ItemGroup>
 </Project>

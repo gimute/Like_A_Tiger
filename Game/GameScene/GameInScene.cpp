@@ -37,7 +37,7 @@ void GameInScene::EnterScene()
 
 	//敵生成テスト
 	//EnemyManager::GetInstance()->RequestSpawnEnemy(EnemyYakuzaType::en_normalYakuza,Vector3{1000.0,0.0,0.0});
-	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ 1000.0f,0.0f,0.0f });
+	//EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ 1000.0f,0.0f,0.0f });
 	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ -1000.0f,0.0f,0.0f });
 
 	EnemyManager::GetInstance()->SetEnemyTargetCharacter(m_player);
@@ -61,7 +61,7 @@ void GameInScene::EnterScene()
    }
 	//m_poseMenu->Init();
 
-	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 
 
 	//NewGO<ProtoStage>(UpdateOrder::Actor);

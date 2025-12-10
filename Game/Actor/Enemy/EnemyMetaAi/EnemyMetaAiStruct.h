@@ -44,7 +44,11 @@ struct MetaAiGroupState
 	IEnemyAi* m_nowAttackAi = nullptr;
 
 	//TrakingRoleProcess
-	bool m_isProcessEnd = false;
+	bool m_isTrakingProcessEnd = false;
+
+	//BattleEndNotifyProcess
+	bool m_isBattleEndProcessEnd = false;
+	float m_processStartTime = 0.0f;
 
 	// ˆ—•ÏX‚ÉŒÄ‚Î‚ê‚é‰Šú‰»
 	void ResetStateForProcess()
@@ -52,7 +56,7 @@ struct MetaAiGroupState
 		m_attackStartTime = 0.0f;
 		m_nowAttackAi = nullptr;
 
-		m_isProcessEnd = false;
+		m_isTrakingProcessEnd = false;
 	}
 };
 
