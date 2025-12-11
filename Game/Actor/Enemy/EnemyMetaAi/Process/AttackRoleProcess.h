@@ -7,6 +7,7 @@
 public:\
 	static constexpr uint32_t ID() { return Hash32(#name); }
 
+
 class AttackRoleProcess : public IMetaAiProcess
 {
 	appState(AttackRoleProcess)
@@ -15,10 +16,10 @@ public:
 	~AttackRoleProcess() = default;
 
 	//–ğŠ„‚ÌŒˆ’è
-	void AssignRoles(EnemyAiInfoGroupe* groupePtr) override;
+	void AssignRoles(MetaAiProccesInfo* groupePtr) override;
 	//Às‚Å‚«‚é‚©‚Ç‚¤‚©
-	bool IsApplicable(EnemyAiInfoGroupe* groupePtr) override;
+	bool IsApplicable(MetaAiProccesInfo* groupePtr) override;
 	//ˆ—‚ğ‘±‚¯‚é‚©‚Ç‚¤‚©
-	bool IsReady(EnemyAiInfoGroupe* groupePtr) override;
+	bool IsReady(MetaAiProccesInfo* groupePtr) override;
 };
 

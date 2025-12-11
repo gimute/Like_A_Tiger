@@ -10,20 +10,20 @@ namespace BattleEndNotifyProcessConstant
 	const float PROCESS_START_TIME = 3.0f;
 }
 
-void BattleEndNotifyProcess::AssignRoles(EnemyAiInfoGroupe* groupePtr)
+void BattleEndNotifyProcess::AssignRoles(MetaAiProccesInfo* groupePtr)
 {
-	EnemyManager::GetInstance()->SetEnemyGroupeInBattle(groupePtr->m_groupId, false);
+	EnemyManager::GetInstance()->SetEnemyGroupeInBattle(groupePtr->m_useGroupe->m_groupId, false);
 
 	groupePtr->m_grouoeState.m_isBattleEndProcessEnd = true;
 }
 
-bool BattleEndNotifyProcess::IsApplicable(EnemyAiInfoGroupe* groupePtr)
+bool BattleEndNotifyProcess::IsApplicable(MetaAiProccesInfo* groupePtr)
 {
 	int trakingEndEnemy = 0;
 	bool isBattleEnd = false;
-	auto enemyInfoList = groupePtr->m_enemyAiInfoList;
+	auto& enemyInfoList = groupePtr->m_useGroupe->m_enemyAiInfoList;
 
-	if (!EnemyManager::GetInstance()->GetEnemyGroupeInBattle(groupePtr->m_groupId))
+	if (!groupePtr->m_useGroupe->m_inBattle)
 	{
 		return false;
 	}
@@ -67,7 +67,7 @@ bool BattleEndNotifyProcess::IsApplicable(EnemyAiInfoGroupe* groupePtr)
 	return false;
 }
 
-bool BattleEndNotifyProcess::IsReady(EnemyAiInfoGroupe* groupePtr)
+bool BattleEndNotifyProcess::IsReady(MetaAiProccesInfo* groupePtr)
 {
 	if (groupePtr->m_grouoeState.m_isBattleEndProcessEnd)
 	{
@@ -77,7 +77,7 @@ bool BattleEndNotifyProcess::IsReady(EnemyAiInfoGroupe* groupePtr)
 	return true;
 }
 
-bool BattleEndNotifyProcess::ProcessStartTimer(EnemyAiInfoGroupe* groupePtr)
+bool BattleEndNotifyProcess::ProcessStartTimer(MetaAiProccesInfo* groupePtr)
 {
 	//タイマーが未セットなら初期化
 	if (groupePtr->m_grouoeState.m_processStartTime <= 0.0f)

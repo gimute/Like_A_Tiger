@@ -50,7 +50,7 @@ private:
 	//ターゲット正面ベクトル
 	Vector3 m_cameraFoward = Vector3::Zero;
 	//情報格納リスト
-	std::vector<EnemyAiInfoGroupe> m_enemyAiInfoGroupeList;
+	std::vector<MetaAiProccesInfo> m_metaAiProccesInfoList;
 	//処理格納リスト
 	std::unordered_map<uint32_t, std::unique_ptr<IMetaAiProcess>> m_processList;
 };

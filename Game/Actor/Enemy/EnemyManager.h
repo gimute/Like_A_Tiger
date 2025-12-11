@@ -11,6 +11,46 @@
 class Enemy;
 class EnemyMetaAi;
 
+struct EnemyMemberInfo
+{
+	//エネミーのポインタ
+	Enemy* m_enemy = nullptr;
+	//エネミーのAI
+	IEnemyAi* m_enemyAi = nullptr;
+	//エネミーの種類
+	EnemyYakuzaType m_enemyType = EnemyYakuzaType::en_normalYakuza;
+	//座標
+	Vector3 m_enemyPosition = Vector3::Zero;
+	//起動中か
+	bool m_isActive = false;
+
+	EnemyMemberInfo(
+		Enemy* enemy,
+		IEnemyAi* enemyAi,
+		EnemyYakuzaType enemyType,
+		const Vector3& enemyPos,
+		bool isActive
+	)
+		: m_enemy(enemy)
+		, m_enemyAi(enemyAi)
+		, m_enemyType(enemyType)
+		, m_enemyPosition(enemyPos)
+		, m_isActive(isActive)
+	{}
+
+	EnemyMemberInfo() = default;
+};
+
+struct EnemyInfoGroupe
+{
+	//グループID
+	int m_groupId = -1;
+	//所属している敵のリスト
+	std::vector<EnemyMemberInfo> m_enemyAiInfoList;
+	//戦闘中かどうか
+	bool m_inBattle = false;
+};
+
 struct EnemyPair
 {
 	//エネミーのポインタ
@@ -86,10 +126,14 @@ private:
 	EnemyMetaAi* m_enemyMetaAi = nullptr;
 	//敵のIDカウンター
 	int m_enemyIDCounter = 0;
+	//外部用データセット
+	std::vector<EnemyInfoGroupe> m_enemyInfoList;
 	//TargetView更新
 	void UpdateTargetView();
 	//半径ランダム座標選定
 	Vector3 GetRandomPointInRadius(const Vector3& point, float radius);
+	//データセットを更新
+	void UpdateEnemyDataSet();
 public:
 	inline std::vector<EnemyPair>& GetEnemyPairList()
 	{
@@ -98,6 +142,11 @@ public:
 	inline std::vector<EnemyGroup>& GetEnemyGroupList()
 	{
 		return m_enemyGroupList;
+	}
+	//エネミー系の作業に必要な情報を根こそぎ取得する
+	inline std::vector<EnemyInfoGroupe>& GetEnemyInfoList()
+	{
+		return m_enemyInfoList;
 	}
 	//敵のターゲットを設定
 	inline void SetEnemyTargetCharacter(Character* target)

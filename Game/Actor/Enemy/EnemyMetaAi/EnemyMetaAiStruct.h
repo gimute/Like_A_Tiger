@@ -3,37 +3,9 @@
 
 #include "Actor\Enemy\EnemyAI\IEnemyAi.h"
 #include "Actor\Enemy\EnemyMetaAi\IMetaAiProcess.h"
+#include "Actor\Enemy\EnemyManager.h"
 
-struct EnemyMemberInfo
-{
-	//エネミーのAI
-	IEnemyAi* m_enemyAi = nullptr;
-	//エネミーの種類
-	EnemyYakuzaType m_enemyType = EnemyYakuzaType::en_normalYakuza;
-	//座標
-	Vector3 m_enemyPosition = Vector3::Zero;
-	//
-	bool m_isInBattle = false;
-	bool m_isActive = false;
-
-	//役割決定用スコア
-	float m_roleScore = 0.0f;
-
-	EnemyMemberInfo(
-		IEnemyAi* enemyAi,
-		EnemyYakuzaType enemyType,
-		const Vector3& enemyPos,
-		bool isInBattle,
-		bool isActive
-	)
-		: m_enemyAi(enemyAi)
-		, m_enemyType(enemyType)
-		, m_enemyPosition(enemyPos)
-		, m_isInBattle(isInBattle)
-		, m_isActive(isActive)
-	{
-	}
-};
+class Enemy;
 
 class IMetaAiProcess;
 
@@ -42,6 +14,7 @@ struct MetaAiGroupState
 	//AttackRoleProcess
 	float m_attackStartTime = 0.0f;
 	IEnemyAi* m_nowAttackAi = nullptr;
+	std::vector<float> m_score;
 
 	//TrakingRoleProcess
 	bool m_isTrakingProcessEnd = false;
@@ -60,12 +33,10 @@ struct MetaAiGroupState
 	}
 };
 
-struct EnemyAiInfoGroupe
+struct MetaAiProccesInfo
 {
-	//グループID
-	int m_groupId = -1;
-	//所属している敵のリスト
-	std::vector<EnemyMemberInfo> m_enemyAiInfoList;
+	//管理しているグループ
+	EnemyInfoGroupe* m_useGroupe = nullptr;
 	//このグループに適用するMetaAI
 	IMetaAiProcess* m_useMetaAI = nullptr;
 	//前回仕様していた処理
