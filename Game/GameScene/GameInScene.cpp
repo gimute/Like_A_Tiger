@@ -8,6 +8,7 @@
 
 #include "Actor\Enemy\EnemyManager.h"
 #include "Actor\Enemy\EnemySystem.h"
+#include "UI\EnemysHpGauge.h"
 
 #include "Actor\BackGround\ProtoStage.h"
 
@@ -34,6 +35,9 @@ void GameInScene::EnterScene()
 
 	//敵AI生成
 	NewGO<EnemySystem>(UpdateOrder::AI, "enemy");
+
+	//敵HPを生成
+	NewGO<EnemysHpGauge>(UpdateOrder::UI, "enemy");
 
 	//敵生成テスト
 	//EnemyManager::GetInstance()->RequestSpawnEnemy(EnemyYakuzaType::en_normalYakuza,Vector3{1000.0,0.0,0.0});
