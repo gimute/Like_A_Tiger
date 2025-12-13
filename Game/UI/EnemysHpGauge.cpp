@@ -10,10 +10,7 @@ namespace EnemyHpGaugeConstant
 	const int ENEMY_HPUI_MAX = 4;
 
 	//HPUIの座標
-	const Vector3 HPUI_POSITION_TOP = Vector3{};
-	const Vector3 HPUI_POSITION_MIDDLE1 = Vector3{};
-	const Vector3 HPUI_POSITION_MIDDLE2;
-	const Vector3 HPUI_POSITION_BOTTOM;
+	const Vector3 HPUI_POSITION = Vector3{550.0f,-400.0f,0.0f};
 	//名前表示位置の加算値
 	const Vector3 HPUI_NAME_POSITION_ADDVALUE;
 }
@@ -29,7 +26,15 @@ bool EnemysHpGauge::Start()
 
 		newHpUi->Init();
 
-		newHpUi->SetVisible(false);
+		newHpUi->SetVisible(true);
+
+		Vector3 position = EnemyHpGaugeConstant::HPUI_POSITION;
+
+		position.y += hpNo * 50.0f;
+ 
+		newHpUi->SetPosition(position);
+
+		newHpUi->SetScale({0.2f,0.3f,0.0});
 
 		newInfo.m_hpGaugePtr = newHpUi;
 
@@ -94,7 +99,9 @@ bool EnemysHpGauge::SearchInBattleGroupe()
 		//現在のHPを保持
 		m_enemyHpList[HpNo].m_hasEnemyHp = m_enemyHpList[HpNo].m_proccesEnemyPtr->GetYakuzaCurrentHp();
 		//HPUI側の最大HPを設定
-		m_enemyHpList[HpNo].m_hpGaugePtr->SetMaxHP(m_enemyHpList[HpNo].m_hasEnemyHp);
+		m_enemyHpList[HpNo].m_hpGaugePtr->SetMaxHP(m_enemyHpList[HpNo].m_proccesEnemyPtr->GetYakuzaMaxHp());
+		//HPUI側のHPを設定
+		m_enemyHpList[HpNo].m_hpGaugePtr->SetHP(m_enemyHpList[HpNo].m_hasEnemyHp);
 	}
 
 	return true;
@@ -110,8 +117,11 @@ void EnemysHpGauge::UpdateEnemyGroupeHpInfo()
 		if (currentEnemyHp < hpPtr.m_hasEnemyHp)
 		{
 			hpPtr.m_hpGaugePtr->SetHP(currentEnemyHp);
+
+			hpPtr.m_hasEnemyHp = currentEnemyHp;
 		}
 	}
+
 }
 
 void EnemysHpGauge::Render(RenderContext& rc)

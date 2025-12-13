@@ -56,7 +56,9 @@ void Enemy::OnHit(const char* hitCollisionName, CollisionObject* pairCollision)
 			StartInvincible(3.0f);
 
 			//ƒ_ƒ[ƒWˆ—
-			float myDamage = YakuzaCharacterDamageManager::GetInstance()->GetPlayerYakuzaDamage();
+			float damage = YakuzaCharacterDamageManager::GetInstance()->GetPlayerYakuzaDamage();
+
+			TakeDamage(damage);
 
 			GetYakuzaStateMachine().SetIsDamage(true);
 		}

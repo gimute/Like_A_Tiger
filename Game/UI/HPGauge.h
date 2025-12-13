@@ -59,6 +59,7 @@ public:
 	void IncreaseHP(float val);
 
 	void SetPosition(Vector3 pos);
+	void SetScale(Vector3 scale);
 
 	/// <summary>
 	/// •\Ž¦”ñ•\Ž¦
