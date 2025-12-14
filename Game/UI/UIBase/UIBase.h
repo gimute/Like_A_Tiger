@@ -220,6 +220,8 @@ public:
 	virtual bool Start() override;
 	virtual void Update() override;
 	virtual void Render(RenderContext& rc) override;
+	virtual void SetPosition(Vector3 position);
+	virtual void SetScale(Vector3 scale);
 	virtual void SetText(const wchar_t* text);
 	virtual void SetColor(Vector4 color) override;
 	virtual void SetColor(float r, float g, float b, float a) override;

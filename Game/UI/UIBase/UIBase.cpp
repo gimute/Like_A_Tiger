@@ -249,7 +249,7 @@ void UIGauge::Render(RenderContext& rc)
 
 bool UIText::Start()
 {
-	m_isDraw = true;
+	m_isDraw = false;
 	m_isStart = true;
 	return true;
 }
@@ -264,6 +264,16 @@ void UIText::Update()
 	m_fontRender.SetPosition(m_transform.m_position);
 	m_fontRender.SetScale(m_transform.m_scale.x);
 	m_fontRender.SetColor(m_color);
+}
+
+void UIText::SetPosition(Vector3 position)
+{
+	m_transform.m_localPosition = position;
+}
+
+void UIText::SetScale(Vector3 scale)
+{
+	m_transform.m_localScale = scale;
 }
 
 void UIText::SetText(const wchar_t* text)

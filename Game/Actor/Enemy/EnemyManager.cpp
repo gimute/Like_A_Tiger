@@ -54,6 +54,9 @@ void EnemyManager::RequestSpawnEnemyGroup(int spawnNum, const Vector3& spawnPoin
 
 		pair.m_enemyID = m_enemyIDCounter;
 
+		//仮名なので注意
+		pair.m_enemyName = EnemyTempNames[i];
+
 		newEnemy->SetAi(pair.m_enemyAi.get());
 
 		//スポーン位置をランダム選定
@@ -175,6 +178,7 @@ void EnemyManager::UpdateEnemyDataSet()
 			IEnemyAi* aiInst = pair->m_enemyAi.get();
 			EnemyYakuzaType type = pair->m_type;
 			Vector3 enemyPos = pair->m_enemy->GetPosition();
+			const char* enemyName = pair->m_enemyName;
 			bool isActive = true;
 
 			EnemyMemberInfo info(
@@ -182,6 +186,7 @@ void EnemyManager::UpdateEnemyDataSet()
 				aiInst,
 				type,
 				enemyPos,
+				enemyName,
 				isActive
 			);
 

@@ -21,6 +21,8 @@ struct EnemyMemberInfo
 	EnemyYakuzaType m_enemyType = EnemyYakuzaType::en_normalYakuza;
 	//座標
 	Vector3 m_enemyPosition = Vector3::Zero;
+	//敵名
+	const char* m_enemyName;
 	//起動中か
 	bool m_isActive = false;
 
@@ -29,12 +31,14 @@ struct EnemyMemberInfo
 		IEnemyAi* enemyAi,
 		EnemyYakuzaType enemyType,
 		const Vector3& enemyPos,
+		const char* enemyName,
 		bool isActive
 	)
 		: m_enemy(enemy)
 		, m_enemyAi(enemyAi)
 		, m_enemyType(enemyType)
 		, m_enemyPosition(enemyPos)
+		, m_enemyName(enemyName)
 		, m_isActive(isActive)
 	{}
 
@@ -61,6 +65,8 @@ struct EnemyPair
 	EnemyYakuzaType m_type = EnemyYakuzaType::en_normalYakuza;
 	//エネミーのID
 	int m_enemyID = -1;
+	//エネミーの名前
+	const char* m_enemyName;
 	//コンストラクタ
 	EnemyPair(Enemy* enemy,IEnemyAi* enemyAi,EnemyYakuzaType type)
 		:m_enemy(enemy)
@@ -76,6 +82,15 @@ struct EnemyGroup
 	std::vector<int> m_enemyID;
 	//このグループが戦闘中か
 	bool isInBattle = false;
+};
+
+//エネミーの仮名
+constexpr const char* EnemyTempNames[] =
+{
+	"A",
+	"B",
+	"C",
+	"D"
 };
 
 class EnemyManager

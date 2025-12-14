@@ -20,8 +20,6 @@ public:
 		int hpBarSize_y;					//HPバーの縦サイズ
 	};
 
-	
-
 	//定数
 private:
 	//仮のHPバー用のデータ
@@ -41,6 +39,10 @@ private:
 	std::shared_ptr<UIImage> m_frame;	//フレーム
 	std::shared_ptr<UIGauge> m_HPBar;	//HPバー
 	std::shared_ptr<UIGauge> m_delayedHPBar;	//HP減少時にHPバーに遅れて追従するHPバー、ディレイHPバーと呼ぶことにする
+	std::shared_ptr<UIText> m_name;
+
+	//名前を使用するかどうか
+	bool m_isUseName = false;
 
 	float m_delayTimer = 0.2f;	//ディレイHPバーがHPバーに追従開始するまでのタイマー
 	float m_lerpVal = 0.0f;		//ディレイHPバーがHPバーにラープで追従する時用
@@ -53,6 +55,8 @@ public:
 	void Render(RenderContext& rc) override;
 	void Init(const HPGaugeUIInitData* initData = nullptr);
 
+	void InitUseName();
+
 	void SetMaxHP(float maxHP);
 	void SetHP(float nowHP);
 	void DecreaseHP(float val);
@@ -60,6 +64,11 @@ public:
 
 	void SetPosition(Vector3 pos);
 	void SetScale(Vector3 scale);
+	
+	void SetTextDraw(bool isSet);
+	void SetText(const wchar_t* name);
+	void SetNamePosition(Vector3 position);
+	void SetNameScale(Vector3 scale);
 
 	/// <summary>
 	/// 表示非表示

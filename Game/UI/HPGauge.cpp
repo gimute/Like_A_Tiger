@@ -10,6 +10,8 @@ HPGauge::HPGauge()
 	m_frame = m_canvas->CreateUI<UIImage>();
 	m_delayedHPBar = m_canvas->CreateUI<UIGauge>();
 	m_HPBar = m_canvas->CreateUI<UIGauge>();
+	//名前のみ別で生成
+	m_name = std::make_shared<UIText>();
 }
 
 HPGauge::~HPGauge()
@@ -27,11 +29,21 @@ void HPGauge::Update()
 	DelaydHPBarUpdate();
 
 	m_canvas->Update();
+
+	if (m_isUseName)
+	{
+		m_name->Update();
+	}
 }
 
 void HPGauge::Render(RenderContext& rc)
 {
 	m_canvas->Render(rc);
+
+	if (m_isUseName)
+	{
+		m_name->Render(rc);
+	}
 }
 
 void HPGauge::Init(const HPGaugeUIInitData* initData)
@@ -59,6 +71,14 @@ void HPGauge::Init(const HPGaugeUIInitData* initData)
 	//フレームとバーの位置を合わせる
 	m_HPBar->m_transform.m_localPosition = m_HPBar->m_transform.m_localPosition + Vector3((initData->frameSize_x - initData->hpBarSize_x) / 2, -((initData->frameSize_y - initData->hpBarSize_y) / 2), 0.0f);
 
+}
+
+void HPGauge::InitUseName()
+{
+	//使用できる設定に
+	m_isUseName = true;
+
+	m_name->Start();
 }
 
 void HPGauge::SetMaxHP(float maxHP)
@@ -100,6 +120,26 @@ void HPGauge::SetPosition(Vector3 pos)
 void HPGauge::SetScale(Vector3 scale)
 {
 	m_canvas->m_transform.m_localScale = scale;
+}
+
+void HPGauge::SetTextDraw(bool setIs)
+{
+	m_name->SetDrawFlag(setIs);
+}
+
+void HPGauge::SetText(const wchar_t* name)
+{
+	m_name->SetText(name);
+}
+
+void HPGauge::SetNamePosition(Vector3 position)
+{
+	m_name->SetPosition(position);
+}
+
+void HPGauge::SetNameScale(Vector3 scale)
+{
+	m_name->SetScale(scale);
 }
 
 void HPGauge::SetVisible(bool visible)

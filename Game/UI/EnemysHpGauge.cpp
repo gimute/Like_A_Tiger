@@ -21,24 +21,38 @@ bool EnemysHpGauge::Start()
 	for (int hpNo = 0;hpNo < EnemyHpGaugeConstant::ENEMY_HPUI_MAX;++hpNo)
 	{
 		EnemyHpInfo newInfo;
-
+		//HPUIの初期化
 		HPGauge* newHpUi = NewGO<HPGauge>(UpdateOrder::UI, "enemy");
 
 		newHpUi->Init();
 
-		newHpUi->SetVisible(true);
+		newHpUi->SetVisible(false);
 
-		Vector3 position = EnemyHpGaugeConstant::HPUI_POSITION;
+		Vector3 hpUiPosition = EnemyHpGaugeConstant::HPUI_POSITION;
 
-		position.y += hpNo * 50.0f;
+		hpUiPosition.y += hpNo * 50.0f;
  
-		newHpUi->SetPosition(position);
+		newHpUi->SetPosition(hpUiPosition);
 
 		newHpUi->SetScale({0.2f,0.3f,0.0});
+		//表示名Renderの初期化
+		//表示可能に設定する
+		newHpUi->InitUseName();
 
+		Vector3 fontPosition = hpUiPosition;
+
+		fontPosition.x += 110.0f;
+		fontPosition.y += -50.0f;
+		fontPosition.y += 10.0f * hpNo;
+
+		newHpUi->SetNamePosition(fontPosition);
+			
+		newHpUi->SetNameScale(Vector3{0.5f,0.5f,0.0});
+
+		newHpUi->SetTextDraw(false);
+
+		//情報系初期化
 		newInfo.m_hpGaugePtr = newHpUi;
-
-		newInfo.m_enemyName = "";
 
 		m_enemyHpList.push_back(newInfo);
 	}
@@ -54,7 +68,6 @@ void EnemysHpGauge::Update()
 	{
 		UpdateEnemyGroupeHpInfo();
 	}
-
 }
 
 bool EnemysHpGauge::SearchInBattleGroupe()
@@ -102,6 +115,19 @@ bool EnemysHpGauge::SearchInBattleGroupe()
 		m_enemyHpList[HpNo].m_hpGaugePtr->SetMaxHP(m_enemyHpList[HpNo].m_proccesEnemyPtr->GetYakuzaMaxHp());
 		//HPUI側のHPを設定
 		m_enemyHpList[HpNo].m_hpGaugePtr->SetHP(m_enemyHpList[HpNo].m_hasEnemyHp);
+		//HPUIに表示する敵名を設定
+		int len = MultiByteToWideChar(
+			CP_UTF8,
+			0,
+			groupeEnemyList[HpNo].m_enemyName,
+			-1,
+			m_enemyHpList[HpNo].m_enemyNameBuffer,
+			256
+		);
+		//表示する
+		m_enemyHpList[HpNo].m_hpGaugePtr->SetVisible(true);
+		//テキストも表示する
+		m_enemyHpList[HpNo].m_hpGaugePtr->SetTextDraw(true);
 	}
 
 	return true;
@@ -120,11 +146,12 @@ void EnemysHpGauge::UpdateEnemyGroupeHpInfo()
 
 			hpPtr.m_hasEnemyHp = currentEnemyHp;
 		}
+
+		hpPtr.m_hpGaugePtr->SetText(hpPtr.m_enemyNameBuffer);
 	}
 
 }
 
 void EnemysHpGauge::Render(RenderContext& rc)
 {
-
 }

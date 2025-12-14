@@ -10,8 +10,8 @@ struct EnemyHpInfo
 	HPGauge* m_hpGaugePtr = nullptr;
 	//処理中のエネミーのポインタ
 	Enemy* m_proccesEnemyPtr = nullptr;
-	//敵の名前
-	const char* m_enemyName;
+	//敵の名前バッファ
+	wchar_t m_enemyNameBuffer[256];
 	//HPUIが保持しているの敵のHP
 	int m_hasEnemyHp = 0;
 };
