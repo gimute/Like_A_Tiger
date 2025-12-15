@@ -9,24 +9,25 @@ float NormalYakuzaTypeSet::GetAttackPower(YakuzaAttackComboStateMachine* useAtta
 {
 	uint32_t nowStateId = useAttackStateMachine->GetNowCombo();
 
-	float attackPower = 0;
+	//float attackPower = 0;
+	float attackPower = 10;
 
-	if (nowStateId == NormalYakuzaFirstAttackState::ID())
-	{
-		attackPower = 10.0f;
-	}
-	else if (nowStateId == NormalYakuzaSecondAttackState::ID())
-	{
-		attackPower = 20.0f;
-	}
-	else if (nowStateId == NormalYakuzaThirdAttackState::ID())
-	{
-		attackPower = 30.0f;
-	}
-	else if (nowStateId == NormalYakuzaFirstFinalBlowState::ID())
-	{
-		attackPower = 50.0f;
-	}
+	//if (nowStateId == NormalYakuzaFirstAttackState::ID())
+	//{
+	//	attackPower = 10.0f;
+	//}
+	//else if (nowStateId == NormalYakuzaSecondAttackState::ID())
+	//{
+	//	attackPower = 20.0f;
+	//}
+	//else if (nowStateId == NormalYakuzaThirdAttackState::ID())
+	//{
+	//	attackPower = 30.0f;
+	//}
+	//else if (nowStateId == NormalYakuzaFirstFinalBlowState::ID())
+	//{
+	//	attackPower = 50.0f;
+	//}
 
 	return attackPower;
 }
@@ -42,7 +43,8 @@ void NormalYakuzaFirstAttackState::OnUpdate()
 {
 	auto* stateMachine = m_owner->GetYakuzaStateMachine();
 
-	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(NormalYakuzaTypeSet::en_punching_1_L,0.1f);
+	//m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(NormalYakuzaTypeSet::en_punching_1_L,0.1f);
+	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(NormalYakuzaTypeSet::en_punching_2_R, 0.1f);
 
 	if (stateMachine->GetAttackFlag() && !m_owner->GetIsNextCombo())
 	{

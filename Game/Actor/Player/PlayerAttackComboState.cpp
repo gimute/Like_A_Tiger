@@ -9,24 +9,25 @@ float PlayerYakuzaTypeSet::GetAttackPower(YakuzaAttackComboStateMachine* useAtta
 {
 	uint32_t nowStateId = useAttackStateMachine->GetNowCombo();
 
-	float attackPower = 0.0f;
+	//float attackPower = 0.0f;
+	float attackPower = 10.0f;
 
-	if (nowStateId == PlayerFirstAttackState::ID())
-	{
-		attackPower = 10.0f;
-	}
-	else if (nowStateId == PlayerSecondAttackState::ID())
-	{
-		attackPower = 20.0f;
-	}
-	else if (nowStateId == PlayerThirdAttackState::ID())
-	{
-		attackPower = 30.0f;
-	}
-	else if (nowStateId == PlayerFirstFinalBlowState::ID())
-	{
-		attackPower = 50.0f;
-	}
+	//if (nowStateId == PlayerFirstAttackState::ID())
+	//{
+	//	attackPower = 10.0f;
+	//}
+	//else if (nowStateId == PlayerSecondAttackState::ID())
+	//{
+	//	attackPower = 20.0f;
+	//}
+	//else if (nowStateId == PlayerThirdAttackState::ID())
+	//{
+	//	attackPower = 30.0f;
+	//}
+	//else if (nowStateId == PlayerFirstFinalBlowState::ID())
+	//{
+	//	attackPower = 50.0f;
+	//}
 
 	return attackPower;
 }
