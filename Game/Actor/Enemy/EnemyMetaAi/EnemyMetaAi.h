@@ -4,6 +4,7 @@
 
 #include "Actor\Enemy\EnemyMetaAi\Process\AttackRoleProcess.h"
 #include "Actor\Enemy\EnemyMetaAi\Process\TrakingRoleProcess.h"
+#include "Actor\Enemy\EnemyMetaAi\Process\BattleEndNotifyProcess.h"
 
 class IEnemyAi;
 
@@ -17,6 +18,8 @@ public:
 		AddProcess<AttackRoleProcess>();
 		//処理設定
 		AddProcess<TrakingRoleProcess>();
+		
+		AddProcess<BattleEndNotifyProcess>();
 	}
 	//デストラクタ
 	~EnemyMetaAi() = default;
@@ -47,7 +50,7 @@ private:
 	//ターゲット正面ベクトル
 	Vector3 m_cameraFoward = Vector3::Zero;
 	//情報格納リスト
-	std::vector<EnemyAiInfoGroupe> m_enemyAiInfoGroupeList;
+	std::vector<MetaAiProccesInfo> m_metaAiProccesInfoList;
 	//処理格納リスト
 	std::unordered_map<uint32_t, std::unique_ptr<IMetaAiProcess>> m_processList;
 };

@@ -13,7 +13,7 @@ namespace AttackRoleProcessConstant
 	const float ATTACK_END_TIME = 15.0f;
 }
 
-void AttackRoleProcess::AssignRoles(EnemyAiInfoGroupe* groupePtr)
+void AttackRoleProcess::AssignRoles(MetaAiProccesInfo* groupePtr)
 {
 	// タイマーが未セットなら初期化
 	if (groupePtr->m_grouoeState.m_attackStartTime <= 0.0f)
@@ -27,7 +27,7 @@ void AttackRoleProcess::AssignRoles(EnemyAiInfoGroupe* groupePtr)
 	// 0以上なら処理しない
 	if (groupePtr->m_grouoeState.m_attackStartTime >= 0.0f)
 	{
-		for (auto& ptr : groupePtr->m_enemyAiInfoList)
+		for (auto& ptr : groupePtr->m_useGroupe->m_enemyAiInfoList)
 		{
 			ptr.m_enemyAi->SetYakuzaRole(YakuzaRole::en_YakuzaRole_Wait);
 		}
@@ -35,17 +35,24 @@ void AttackRoleProcess::AssignRoles(EnemyAiInfoGroupe* groupePtr)
 		return;
 	}
 
+	//グループ内の敵のリスト
+	auto enemyList = groupePtr->m_useGroupe->m_enemyAiInfoList;
+	//スコアのリスト
+	auto& scoreList = groupePtr->m_grouoeState.m_score;
+	//初期化
+	scoreList.clear();
+	//敵の数分リサイズする
+	scoreList.resize(enemyList.size());
+
 	Vector3 targetPos = groupePtr->m_groupeTargetPosition;
 	Vector3 camFoward = groupePtr->m_camFoward;
 
 	//リストから情報を取り出して評価を行う
-	for (auto it = groupePtr->m_enemyAiInfoList.begin();
-		it != groupePtr->m_enemyAiInfoList.end();
-		)
+	for (int enemyId = 0;enemyId < enemyList.size(); ++enemyId)
 	{
 		//まずは距離計算等
 		//距離ベクトル
-		Vector3 distanceVec = it->m_enemyPosition - targetPos;
+		Vector3 distanceVec = enemyList[enemyId].m_enemyPosition - targetPos;
 		//正規化距離ベクトル
 		Vector3 normalizeDistanceVec = distanceVec;
 		normalizeDistanceVec.Normalize();
@@ -53,46 +60,66 @@ void AttackRoleProcess::AssignRoles(EnemyAiInfoGroupe* groupePtr)
 		//カメラの正面にいる敵には高スコア
 		float dot = Dot(camFoward, normalizeDistanceVec);
 		//スコア加算
-		it->m_roleScore += dot;
-
-		it++;
+		scoreList[enemyId] += dot;
 	}
 
-	//点数準に並び替える
-	std::sort(
-		groupePtr->m_enemyAiInfoList.begin(),
-		groupePtr->m_enemyAiInfoList.end(),
-		[](const EnemyMemberInfo& a, const EnemyMemberInfo& b)
+	//スコアリストのサイズを取得
+	const size_t size = scoreList.size();
+	//ソート用のリストを作成
+	std::vector<size_t> sortIndex(size);
+	//連番を振る(始めは０)
+	std::iota(sortIndex.begin(), sortIndex.end(), 0);
+
+	//ソート用のリストをスコアリストの値でソートする
+	std::sort(sortIndex.begin(), sortIndex.end(),
+		[&](size_t i1, size_t i2) 
 		{
-			return a.m_roleScore > b.m_roleScore;
+			return scoreList[i1] > scoreList[i2];
 		}
 	);
+	
+	//並べ替え後のクラスを格納したいためリストを作成
+	std::vector<EnemyMemberInfo> sortEnemyList(size);
+	for (size_t i = 0; i < size; i++)
+	{
+		sortEnemyList[i] = enemyList[sortIndex[i]];
+	}
+	
+	////点数準に並び替える
+	//std::sort(
+	//	enemyList.begin(),
+	//	enemyList.end(),
+	//	[](const EnemyMemberInfo& a, const EnemyMemberInfo& b)
+	//	{
+	//		return a.m_roleScore > b.m_roleScore;
+	//	}
+	//);
 
 	//一番上のヤツを攻撃役に
-	auto it = groupePtr->m_enemyAiInfoList.begin();
+	//auto it = groupePtr->m_useGroupe->m_enemyAiInfoList.begin();
+	auto it = sortEnemyList.begin();
 	it->m_enemyAi->SetYakuzaRole(YakuzaRole::en_YakuzaRole_Attack);
 	//今攻撃をしているAIを保持
 	groupePtr->m_grouoeState.m_nowAttackAi = it->m_enemyAi;
 	//一つ進めて
 	it++;
 	//他のヤツを待機に
-	for (auto itfor = it;itfor != groupePtr->m_enemyAiInfoList.end();)
+	for (auto itfor = it;itfor != sortEnemyList.end();)
 	{
 		itfor->m_enemyAi->SetYakuzaRole(YakuzaRole::en_YakuzaRole_Wait);
 
 		itfor++;
 	}
-
-	//スコアリセット
-	for (auto & ptr : groupePtr->m_enemyAiInfoList)
-	{
-		ptr.m_roleScore = 0.0f;
-	}
 }
 
-bool AttackRoleProcess::IsApplicable(EnemyAiInfoGroupe* groupePtr)
+bool AttackRoleProcess::IsApplicable(MetaAiProccesInfo* groupePtr)
 {
-	auto enemyInfoList = groupePtr->m_enemyAiInfoList;
+	auto enemyInfoList = groupePtr->m_useGroupe->m_enemyAiInfoList;
+
+	if (enemyInfoList.empty())
+	{
+		return false;
+	}
 
 	for (auto & ptr : enemyInfoList)
 	{
@@ -105,10 +132,8 @@ bool AttackRoleProcess::IsApplicable(EnemyAiInfoGroupe* groupePtr)
 	return false;
 }
 
-bool AttackRoleProcess::IsReady(EnemyAiInfoGroupe* groupePtr)
+bool AttackRoleProcess::IsReady(MetaAiProccesInfo* groupePtr)
 {
-	auto enemyInfoList = groupePtr->m_enemyAiInfoList;
-
 	////このままじゃ永遠に追ってくるのでタイマー付ける
 	// ちょっと難しいので検討
 	//途中抜けした際にタイマーがリセットされないのに対策必要かも
