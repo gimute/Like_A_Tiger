@@ -8,14 +8,14 @@
 namespace NormalYakuzaAiConstant
 {
 	const float MOVE_LIMIT_MAX = 450.0f;
-	const float MOVE_LIMIT_MIN = 250.0f;
+	const float MOVE_LIMIT_MIN = 50.0f;
 
 	const float BUFFER = 0.3;
 
 	const float FORWARD_WEIGHT = 0.6;
 	const float BACKWARD_WEIGHT = 0.8;
 
-	const float BACK_TIME = 1.5;
+	const float BACK_TIME = 3.0f;
 
 	const float RANDOM_TIME_MAX = 1.5f;
 	const float RANDOM_TIME_MIN = 0.5f;

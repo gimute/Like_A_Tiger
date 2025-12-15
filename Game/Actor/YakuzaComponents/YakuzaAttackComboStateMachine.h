@@ -5,15 +5,15 @@
 class YakuzaStateMachine;
 class YakuzaAttackComboStateMachine;
 
-class EnemyAiAttackEndState : public IStateBase
+class AttackEndState : public IStateBase
 {
-	appState(EnemyAiAttackEndState)
+	appState(AttackEndState)
 protected:
 	YakuzaAttackComboStateMachine* m_owner = nullptr;
 public:
-	EnemyAiAttackEndState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
+	AttackEndState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
 
-	~EnemyAiAttackEndState() = default;
+	~AttackEndState() = default;
 
 	uint32_t m_nextComboHash = 0;
 
@@ -31,7 +31,7 @@ public:
 	//コンストラクタ
 	YakuzaAttackComboStateMachine(YakuzaStateMachine* hasStateMachine) : m_hasStateMachine(hasStateMachine)
 	{
-		AddState<EnemyAiAttackEndState>(this);
+		AddState<AttackEndState>(this);
 	}
 	//デストラクタ
 	~YakuzaAttackComboStateMachine() = default;
@@ -52,8 +52,6 @@ private:
 	uint32_t m_nowCombo = 0;
 	//次のコンボを行うかどうか
 	bool m_isNextConbo = false;
-	//最後のコンボが実行されたかどうか
-	bool m_isLastCombo = false;
 	//攻撃中が終了したかどうか
 	bool m_isAttackEnds = true;
 public:
@@ -77,11 +75,7 @@ public:
 	inline void SetNowCombo(uint32_t hush) { m_nowCombo = hush; }
 
 	inline uint32_t GetNowCombo() { return m_nowCombo; }
-	
-	inline void SetIsLastCombo(bool setIs) { m_isLastCombo = setIs; }
-
-	inline bool GetIsLastCombo() { return m_isLastCombo; }
- 
+	 
 	inline void SetIsAttackEnds(bool setIs) { m_isAttackEnds = setIs; }
 
 	inline bool GetIsAttackEnds() { return m_isAttackEnds; }

@@ -228,6 +228,7 @@
     <ClCompile Include="Actor\Character.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\IEnemyAi.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyMetaAi\Process\AttackRoleProcess.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyMetaAi\Process\BattleEndNotifyProcess.cpp" />
     <ClCompile Include="Camera\CameraEntity.cpp" />
     <ClCompile Include="Camera\CameraManager.cpp" />
     <ClCompile Include="Actor\Enemy\Enemy.cpp" />
@@ -241,12 +242,15 @@
     <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiWaitingAttackState.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyMetaAi\EnemyMetaAi.cpp" />
     <ClCompile Include="Core\Curve.cpp" />
+    <ClCompile Include="UI\EnemysHpGauge.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameScene\GameInScene.cpp" />
     <ClCompile Include="GameScene\GameSceneManager.cpp" />
     <ClCompile Include="GameScene\GameTitleScene.cpp" />
+    <ClCompile Include="Inventory\Inventory.cpp" />
+    <ClCompile Include="Inventory\Types.cpp" />
+    <ClCompile Include="UI\PoseMenu.cpp" />
     <ClCompile Include="Core\ParameterManager.cpp" />
-    <ClCompile Include="PoseMenu.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\IEnemyAiState.cpp" />
     <ClCompile Include="UI\UILayout.cpp" />
@@ -281,6 +285,7 @@
     <ClInclude Include="Actor\Actor.h" />
     <ClInclude Include="Actor\Character.h" />
     <ClInclude Include="Actor\Enemy\EnemyMetaAi\Process\AttackRoleProcess.h" />
+    <ClInclude Include="Actor\Enemy\EnemyMetaAi\Process\BattleEndNotifyProcess.h" />
     <ClInclude Include="Camera\CameraUpdateData.h" />
     <ClInclude Include="Camera\CameraEntity.h" />
     <ClInclude Include="Camera\CameraManager.h" />
@@ -298,6 +303,7 @@
     <ClInclude Include="Actor\Enemy\EnemyMetaAi\EnemyMetaAi.h" />
     <ClInclude Include="Actor\Enemy\EnemyMetaAi\EnemyMetaAiStruct.h" />
     <ClInclude Include="Core\Curve.h" />
+    <ClInclude Include="UI\EnemysHpGauge.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameScene\GameInScene.h" />
     <ClInclude Include="GameScene\GameSceneManager.h" />
@@ -309,6 +315,9 @@
     <ClInclude Include="Actor\Player\PlayerController.h" />
     <ClInclude Include="Camera\ICameraController.h" />
     <ClInclude Include="Actor\Player\PlayerCameraController.h" />
+    <ClInclude Include="Inventory\Inventory.h" />
+    <ClInclude Include="Inventory\Types.h" />
+    <ClInclude Include="UI\PoseMenu.h" />
     <ClInclude Include="json\json.hpp" />
     <ClInclude Include="Core\ParameterManager.h" />
     <ClInclude Include="UI\UILayout.h" />
@@ -316,7 +325,6 @@
     <ClInclude Include="Actor\Enemy\EnemyMetaAi\IMetaAiProcess.h" />
     <ClInclude Include="Actor\Enemy\EnemyMetaAi\Process\TrakingRoleProcess.h" />
     <ClInclude Include="UI\UIAnimation\UIAnimation.h" />
-    <ClInclude Include="PoseMenu.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="UI\HPGauge.h" />
     <ClInclude Include="Actor\BackGround\ProtoStage.h" />

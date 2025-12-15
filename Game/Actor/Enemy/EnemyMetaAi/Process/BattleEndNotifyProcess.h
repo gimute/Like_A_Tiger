@@ -8,12 +8,14 @@ public:\
 	static constexpr uint32_t ID() { return Hash32(#name); }
 
 
-class AttackRoleProcess : public IMetaAiProcess
+class BattleEndNotifyProcess : public IMetaAiProcess
 {
-	appState(AttackRoleProcess)
+	appState(BattleEndNotifyProcess)
 public:
-	AttackRoleProcess() = default;
-	~AttackRoleProcess() = default;
+	BattleEndNotifyProcess() = default;
+	~BattleEndNotifyProcess() = default;
+
+	bool ProcessStartTimer(MetaAiProccesInfo* groupePtr);
 
 	//–ðŠ„‚ÌŒˆ’è
 	void AssignRoles(MetaAiProccesInfo* groupePtr) override;

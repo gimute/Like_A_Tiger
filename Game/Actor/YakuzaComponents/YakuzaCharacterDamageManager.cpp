@@ -38,16 +38,18 @@ YakuzaCharacterDamageManager* YakuzaCharacterDamageManager::m_instance = nullptr
 
 void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(float sendDamage)
 {
-	if (!m_playerPtr || 
+	if (!m_playerPtr ||
 		m_playerPtr->GetIsInvicible())
 	{
 		return;
 	}
-	//無敵時間開始
-	m_playerPtr->StartInvincible(3.0f);
+	////無敵時間開始
+	//m_playerPtr->StartInvincible(3.0f);
 
 	//ここにダメージ処理
 	m_playerPtr->GetYakuzaStateMachine().SetIsDamage(true);
+	
+	m_playerPtr->TakePlayerHp(sendDamage);
 }
 
 float YakuzaCharacterDamageManager::GetPlayerYakuzaDamage()

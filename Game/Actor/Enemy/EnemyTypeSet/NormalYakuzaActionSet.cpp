@@ -9,7 +9,7 @@ float NormalYakuzaTypeSet::GetAttackPower(YakuzaAttackComboStateMachine* useAtta
 {
 	uint32_t nowStateId = useAttackStateMachine->GetNowCombo();
 
-	float attackPower;
+	float attackPower = 0;
 
 	if (nowStateId == NormalYakuzaFirstAttackState::ID())
 	{
@@ -35,7 +35,7 @@ float NormalYakuzaTypeSet::GetAttackPower(YakuzaAttackComboStateMachine* useAtta
 
 void NormalYakuzaFirstAttackState::OnEnter()
 {
-
+	m_owner->SetIsNextCombo(false);
 }
 
 void NormalYakuzaFirstAttackState::OnUpdate()
@@ -74,21 +74,20 @@ void NormalYakuzaFirstAttackState::OnUpdate()
 
 void NormalYakuzaFirstAttackState::OnExit()
 {
-	m_owner->SetIsNextCombo(false);
 }
 
 //SecondAttackState
 
 void NormalYakuzaSecondAttackState::OnEnter()
 {
-
+	m_owner->SetIsNextCombo(false);
 }
 
 void NormalYakuzaSecondAttackState::OnUpdate()
 {
 	auto* stateMachine = m_owner->GetYakuzaStateMachine();
 
-	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(NormalYakuzaTypeSet::en_punching_1_L, 0.1f);
+	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(NormalYakuzaTypeSet::en_punching_2_R, 0.1f);
 
 	if (stateMachine->GetAttackFlag() && !m_owner->GetIsNextCombo())
 	{
@@ -98,7 +97,7 @@ void NormalYakuzaSecondAttackState::OnUpdate()
 	}
 	else if (stateMachine->GetFinishBrowFlag() && !m_owner->GetIsNextCombo())
 	{
-		m_nextComboHash = 0;
+		m_nextComboHash = NormalYakuzaSecondFinalBlowState::ID();
 
 		m_owner->SetIsNextCombo(true);
 	}
@@ -120,14 +119,14 @@ void NormalYakuzaSecondAttackState::OnUpdate()
 
 void NormalYakuzaSecondAttackState::OnExit()
 {
-	m_owner->SetIsNextCombo(false);
+
 }
 
 //ThirdAttackState
 
 void NormalYakuzaThirdAttackState::OnEnter()
 {
-
+	m_owner->SetIsNextCombo(false);
 }
 
 //最後のコンボはこっちを参考に
@@ -135,7 +134,27 @@ void NormalYakuzaThirdAttackState::OnUpdate()
 {
 	auto* stateMachine = m_owner->GetYakuzaStateMachine();
 
-	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(NormalYakuzaTypeSet::en_punching_2_R, 0.1f);
+	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(NormalYakuzaTypeSet::en_punching_3_L, 0.1f);
+
+	if (stateMachine->GetAttackFlag() && !m_owner->GetIsNextCombo())
+	{
+		m_nextComboHash = NormalYakuzaFourthAttackState::ID();
+
+		m_owner->SetIsNextCombo(true);
+	}
+	else if (stateMachine->GetFinishBrowFlag() && !m_owner->GetIsNextCombo())
+	{
+		m_nextComboHash = NormalYakuzaThirdFinalBlowState::ID();
+
+		m_owner->SetIsNextCombo(true);
+	}
+
+	if (stateMachine->GetIsComboTransition() && m_owner->GetIsNextCombo())
+	{
+		m_owner->SetNextCombo(m_nextComboHash);
+
+		stateMachine->SetIsComboTransition(false);
+	}
 
 	if (!m_owner->GetYakuzaStateMachine()->IsHasCharactarPlayAnimation())
 	{
@@ -147,34 +166,149 @@ void NormalYakuzaThirdAttackState::OnUpdate()
 
 void NormalYakuzaThirdAttackState::OnExit()
 {
-	m_owner->SetIsNextCombo(false);
 
-	m_owner->SetIsLastCombo(true);
+}
+
+//FourthAttackState
+
+void NormalYakuzaFourthAttackState::OnEnter()
+{
+	m_owner->SetIsNextCombo(false);
+}
+
+void NormalYakuzaFourthAttackState::OnUpdate()
+{
+	auto* stateMachine = m_owner->GetYakuzaStateMachine();
+
+	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(NormalYakuzaTypeSet::en_punching_1_L, 0.1f);
+
+	if (stateMachine->GetFinishBrowFlag() && !m_owner->GetIsNextCombo())
+	{
+		m_nextComboHash = NormalYakuzaFourthFinalBlowState::ID();
+
+		m_owner->SetIsNextCombo(true);
+	}
+
+	if (stateMachine->GetIsComboTransition() && m_owner->GetIsNextCombo())
+	{
+		m_owner->SetNextCombo(m_nextComboHash);
+
+		stateMachine->SetIsComboTransition(false);
+	}
+
+	if (!m_owner->GetYakuzaStateMachine()->IsHasCharactarPlayAnimation())
+	{
+		stateMachine->SetIsComboTransition(false);
+
+		m_owner->SetIsAttackEnds(true);
+	}
+}
+
+void NormalYakuzaFourthAttackState::OnExit()
+{
+
 }
 
 //FirstFinalBlowState
 
 void NormalYakuzaFirstFinalBlowState::OnEnter()
 {
-
+	m_owner->SetIsNextCombo(false);
 }
 
 void NormalYakuzaFirstFinalBlowState::OnUpdate()
 {
 	auto* stateMachine = m_owner->GetYakuzaStateMachine();
 
-	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(NormalYakuzaTypeSet::en_punching_3_L, 0.1f);
+	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(NormalYakuzaTypeSet::en_crossPunch_1_R, 0.1f);
 
 	if (!m_owner->GetYakuzaStateMachine()->IsHasCharactarPlayAnimation())
 	{
 		stateMachine->SetIsComboTransition(false);
+
 		m_owner->SetIsAttackEnds(true);
 	}
 }
 
 void NormalYakuzaFirstFinalBlowState::OnExit()
 {
-	m_owner->SetIsNextCombo(false);
 
-	m_owner->SetIsLastCombo(true);
+}
+
+//SecondFinalBlowState
+
+void NormalYakuzaSecondFinalBlowState::OnEnter()
+{
+	m_owner->SetIsNextCombo(false);
+}
+
+void NormalYakuzaSecondFinalBlowState::OnUpdate()
+{
+	auto* stateMachine = m_owner->GetYakuzaStateMachine();
+
+	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(NormalYakuzaTypeSet::en_crossPunch_1_R, 0.1f);
+
+	if (!m_owner->GetYakuzaStateMachine()->IsHasCharactarPlayAnimation())
+	{
+		stateMachine->SetIsComboTransition(false);
+
+		m_owner->SetIsAttackEnds(true);
+	}
+}
+
+void NormalYakuzaSecondFinalBlowState::OnExit()
+{
+
+}
+
+//ThirdFinalBlowState
+
+void NormalYakuzaThirdFinalBlowState::OnEnter()
+{
+	m_owner->SetIsNextCombo(false);
+}
+
+void NormalYakuzaThirdFinalBlowState::OnUpdate()
+{
+	auto* stateMachine = m_owner->GetYakuzaStateMachine();
+
+	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(NormalYakuzaTypeSet::en_crossPunch_1_R, 0.1f);
+
+	if (!m_owner->GetYakuzaStateMachine()->IsHasCharactarPlayAnimation())
+	{
+		stateMachine->SetIsComboTransition(false);
+
+		m_owner->SetIsAttackEnds(true);
+	}
+}
+
+void NormalYakuzaThirdFinalBlowState::OnExit()
+{
+
+}
+
+//FourthFinalBlowState
+
+void NormalYakuzaFourthFinalBlowState::OnEnter()
+{
+	m_owner->SetIsNextCombo(false);
+}
+
+void NormalYakuzaFourthFinalBlowState::OnUpdate()
+{
+	auto* stateMachine = m_owner->GetYakuzaStateMachine();
+
+	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(NormalYakuzaTypeSet::en_crossPunch_1_R, 0.1f);
+
+	if (!m_owner->GetYakuzaStateMachine()->IsHasCharactarPlayAnimation())
+	{
+		stateMachine->SetIsComboTransition(false);
+
+		m_owner->SetIsAttackEnds(true);
+	}
+}
+
+void NormalYakuzaFourthFinalBlowState::OnExit()
+{
+
 }

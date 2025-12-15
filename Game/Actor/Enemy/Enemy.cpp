@@ -52,11 +52,13 @@ void Enemy::OnHit(const char* hitCollisionName, CollisionObject* pairCollision)
 		//無敵じゃなかったら
 		if (!GetIsInvicible())
 		{
-			//無敵時間を開始する
-			StartInvincible(3.0f);
+			////無敵時間を開始する
+			//StartInvincible(3.0f);
 
 			//ダメージ処理
-			float myDamage = YakuzaCharacterDamageManager::GetInstance()->GetPlayerYakuzaDamage();
+			float damage = YakuzaCharacterDamageManager::GetInstance()->GetPlayerYakuzaDamage();
+
+			TakeDamage(damage);
 
 			GetYakuzaStateMachine().SetIsDamage(true);
 		}
@@ -65,6 +67,8 @@ void Enemy::OnHit(const char* hitCollisionName, CollisionObject* pairCollision)
 	if (hitCollisionName == "playerBodyCollision" &&
 		pairCollision == m_attackCollision)
 	{
+		DeleteAttackCollision();
+
 		float toPlayerDamage = GetYakuzaStateMachine().GetTypeSetAttackPower();
 
 		YakuzaCharacterDamageManager::GetInstance()->SendPlayerYakuzaDamage(toPlayerDamage);

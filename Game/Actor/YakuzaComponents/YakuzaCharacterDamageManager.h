@@ -1,5 +1,5 @@
 #pragma once
-#include "Actor\YakuzaComponents\YakuzaCharacter.h"
+#include "Actor\Player\Player.h"
 
 class YakuzaCharacterDamageManager
 {
@@ -44,7 +44,7 @@ public:
 	//	m_sendDamageOtherYakuzaList.push_back(setYakuza);
 	//}
 
-	void SetSendDamagePlayer(YakuzaCharacter* setPlayer)
+	void SetSendDamagePlayer(Player* setPlayer)
 	{
 		m_playerPtr = setPlayer;
 	}
@@ -52,7 +52,7 @@ public:
 	////ダメージを与えるその他のYakuzaのリスト
 	//std::vector<YakuzaCharacter*> m_sendDamageOtherYakuzaList;
 	//プレイヤーのポインタ
-	YakuzaCharacter* m_playerPtr = nullptr;
+	Player* m_playerPtr = nullptr;
 
 };
 
