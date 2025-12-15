@@ -22,6 +22,8 @@ public:
 	//•`‰æŠÖ”
 	virtual void Render(RenderContext& rc) override;
 
+	virtual void YakuzaCharacterDeadProcces() = 0;
+
 	inline void InitBodyCollision(YakuzaCharacter* useCharacter,const char* name)
 	{
 		m_bodyCollision = NewGO<CollisionObject>(0, "collision");
@@ -127,6 +129,17 @@ public:
 	inline void TakeDamage(float amount)
 	{
 		m_yakuzaCurrentHp -= amount;
+	}
+
+	//HP‚ğŒ©‚ÄDead‚©‚Ç‚¤‚©Šm”F
+	inline bool IsCharacterHpDead()
+	{
+		if (m_yakuzaCurrentHp <= 0.0f)
+		{
+			return true;
+		}
+
+		return false;
 	}
 
 	inline float GetYakuzaCurrentHp() { return m_yakuzaCurrentHp; }

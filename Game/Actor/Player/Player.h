@@ -23,6 +23,8 @@ public:
 
 	void OnHit(const char* hitCollisionName, CollisionObject* pairCollision) override;
 
+	void YakuzaCharacterDeadProcces() override;
+
 private:
 	//HPÉQÅ[ÉW
 	HPGauge* m_hpGauge = nullptr;

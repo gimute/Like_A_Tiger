@@ -27,5 +27,7 @@ public:
 	void SetAi(IEnemyAi* setAi) { m_hasAi = setAi; }
 
 	void OnHit(const char* hitCollisionName, CollisionObject* pairCollision) override;
+
+	void YakuzaCharacterDeadProcces() override;
 };
 

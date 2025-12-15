@@ -108,3 +108,8 @@ void Player::OnHit(const char* hitCollisionName, CollisionObject* pairCollision)
 	//	SetIsAttackCollisionHit(true);
 	//}
 }
+
+void Player::YakuzaCharacterDeadProcces()
+{
+
+}

@@ -6,6 +6,12 @@
 
 IStateBase* YakuzaStateMachine::GetNextState()
 {
+	//死亡したなら死亡ステートを更新する
+	if (CanChangeDead())
+	{
+		return FindClassNameState<YakuzaDeadState>();
+	}
+
 	//ダメージを受けたならダメージステートを更新する
 	if (CanChangeDamage())
 	{
@@ -99,6 +105,16 @@ bool YakuzaStateMachine::CanChangeDamage()
 	return false;
 }
 
+bool YakuzaStateMachine::CanChangeDead()
+{
+	if (m_isDead)
+	{
+		return true;
+	}
+
+	return false;
+}
+
 void YakuzaStateMachine::InitAttackStateMachine(uint32_t firstAttackStateHash, uint32_t firstFinishBrowStateHash)
 {
 	m_attackStateMachine = std::make_unique<YakuzaAttackComboStateMachine>(this);
@@ -128,6 +144,11 @@ void YakuzaStateMachine::HasCharactarPlayAnimation(int animationNum,float interp
 bool YakuzaStateMachine::IsHasCharactarPlayAnimation()
 {
 	return m_hasCharactar->GetModelRender()->IsPlayingAnimation();
+}
+
+void YakuzaStateMachine::HasCharacterDeadProcces()
+{
+	m_hasCharactar->YakuzaCharacterDeadProcces();
 }
 
 void YakuzaStateMachine::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName)

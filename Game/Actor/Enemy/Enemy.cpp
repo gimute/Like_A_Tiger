@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Enemy.h"
 #include "Actor\YakuzaComponents\YakuzaCharacterDamageManager.h"
+#include "Actor\Enemy\EnemyManager.h"
 
 bool Enemy::Start()
 {
@@ -73,4 +74,12 @@ void Enemy::OnHit(const char* hitCollisionName, CollisionObject* pairCollision)
 
 		YakuzaCharacterDamageManager::GetInstance()->SendPlayerYakuzaDamage(toPlayerDamage);
 	}
+}
+
+void Enemy::YakuzaCharacterDeadProcces()
+{
+	//“G‚ÌŽ€–Sˆ—
+
+	//ƒ}ƒl[ƒWƒƒ[‚ÉŽ€‚ñ‚¾‚±‚Æ‚ð“`‚¦‚é
+	EnemyManager::GetInstance()->RequestDeadEnemyProcces(*this);
 }

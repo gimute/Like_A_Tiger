@@ -163,3 +163,22 @@ public:
 	//ステートアウト
 	void OnExit() override;
 };
+
+class YakuzaDeadState : public IStateBase
+{
+	appState(YakuzaDeadState)
+protected:
+	YakuzaStateMachine* m_owner = nullptr;
+public:
+	//コンストラクタ
+	YakuzaDeadState(YakuzaStateMachine* stateMachine) : m_owner(stateMachine) {}
+	//デストラクタ
+	~YakuzaDeadState() = default;
+
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+};

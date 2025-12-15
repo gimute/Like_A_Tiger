@@ -74,6 +74,57 @@ void EnemyManager::RequestSpawnEnemyGroup(int spawnNum, const Vector3& spawnPoin
 	m_enemyGroupList.push_back(std::move(newGroup));
 }
 
+void EnemyManager::RequestDeadEnemyProcces(const Enemy& deadEnemyAddress)
+{
+	//削除したエネミーのID
+	int deleteEnemyId = -1;
+
+	//エネミーペアリスト削除処理
+	for (auto it = m_enemyPairList.begin();it != m_enemyPairList.end();)
+	{
+		//引数のアドレスと合うエネミーを検索
+		if (it->m_enemy == &deadEnemyAddress)
+		{
+			deleteEnemyId = it->m_enemyID;
+
+			it = m_enemyPairList.erase(it);
+		}
+		else
+		{
+			it++;
+		}
+	}
+
+	//グループリスト削除処理
+	for (auto it = m_enemyGroupList.begin();it != m_enemyGroupList.end();)
+	{
+		//グループ内IDを探す
+		for (auto idList = it->m_enemyID.begin();idList != it->m_enemyID.end();)
+		{
+			//IDが同じだったら
+			if (deleteEnemyId == *idList)
+			{
+				//削除
+				idList = it->m_enemyID.erase(idList);
+			}
+			else
+			{
+				idList++;
+			}
+		}
+
+		//もし削除してIDリストが空なら
+		if (it->m_enemyID.empty())
+		{
+			it = m_enemyGroupList.erase(it);
+		}
+		else
+		{
+			it++;
+		}
+	}
+}
+
 void EnemyManager::Update()
 {
 	//外部用のエネミー情報リスト
