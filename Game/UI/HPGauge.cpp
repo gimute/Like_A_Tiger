@@ -134,12 +134,12 @@ void HPGauge::SetText(const wchar_t* name)
 
 void HPGauge::SetNamePosition(Vector3 position)
 {
-	m_name->SetPosition(position);
+	m_name->m_transform.m_localPosition = position;
 }
 
 void HPGauge::SetNameScale(Vector3 scale)
 {
-	m_name->SetScale(scale);
+	m_name->m_transform.m_localScale = scale;
 }
 
 void HPGauge::SetVisible(bool visible)
