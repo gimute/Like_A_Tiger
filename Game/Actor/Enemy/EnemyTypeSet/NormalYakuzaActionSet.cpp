@@ -9,24 +9,32 @@ float NormalYakuzaTypeSet::GetAttackPower(YakuzaAttackComboStateMachine* useAtta
 {
 	uint32_t nowStateId = useAttackStateMachine->GetNowCombo();
 
-	float attackPower = 50;
+	//float attackPower = 0;
+	float attackPower = 10;
 
-	//if (nowStateId == NormalYakuzaFirstAttackState::ID())
-	//{
-	//	attackPower = 10.0f;
-	//}
-	//else if (nowStateId == NormalYakuzaSecondAttackState::ID())
-	//{
-	//	attackPower = 20.0f;
-	//}
-	//else if (nowStateId == NormalYakuzaThirdAttackState::ID())
-	//{
-	//	attackPower = 30.0f;
-	//}
-	//else if (nowStateId == NormalYakuzaFirstFinalBlowState::ID())
-	//{
-	//	attackPower = 50.0f;
-	//}
+	if (nowStateId == NormalYakuzaFirstAttackState::ID() || 
+		nowStateId == NormalYakuzaSecondAttackState::ID() ||
+		nowStateId == NormalYakuzaThirdAttackState::ID() ||
+		nowStateId == NormalYakuzaFourthAttackState::ID())
+	{
+		attackPower = 10.0f;
+	}
+	else if (nowStateId == NormalYakuzaFirstFinalBlowState::ID())
+	{
+		attackPower = 15.0f;
+	}
+	else if (nowStateId == NormalYakuzaSecondFinalBlowState::ID())
+	{
+		attackPower = 20.0f;
+	}
+	else if (nowStateId == NormalYakuzaThirdFinalBlowState::ID())
+	{
+		attackPower = 30.0f;
+	}
+	else if (nowStateId == NormalYakuzaFourthFinalBlowState::ID())
+	{
+		attackPower = 15.0f;
+	}
 
 	return attackPower;
 }

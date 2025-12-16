@@ -75,7 +75,7 @@ public:
 
 		m_attackCollision->SetName(m_attackCollisionName);
 
-		m_attackCollision->SetIsEnable(true);
+		//m_attackCollision->SetIsEnable(true);
 
 		m_attackCollision->SetIsEnableAutoDelete(false);
 	}
