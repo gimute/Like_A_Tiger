@@ -239,6 +239,8 @@ namespace nsK2EngineLow {
 	*/
 	static inline void DeleteGO(IGameObject* go)
 	{
+		go->Deleted();
+
 		GameObjectManager::GetInstance()->DeleteGameObject(go);
 	}
 }
