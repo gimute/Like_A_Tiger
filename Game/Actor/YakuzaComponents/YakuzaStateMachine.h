@@ -29,8 +29,6 @@ public:
 		AddState<YakuzaDeadState>(this);
 
 		InitStateMachineClassName<YakuzaIdleState>();
-
-		
 	}
 
 	//次のステート値を取得する関数
