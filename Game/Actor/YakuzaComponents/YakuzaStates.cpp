@@ -326,7 +326,7 @@ void YakuzaDeadState::OnUpdate()
 	//UŒ‚’†’f
 	m_owner->SetIsAttack(false);
 
-	m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_hitBody, 0.1f);
+	m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_backDeath, 0.1f);
 
 	if (!m_owner->IsHasCharactarPlayAnimation())
 	{

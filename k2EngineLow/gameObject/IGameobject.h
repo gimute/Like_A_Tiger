@@ -39,7 +39,7 @@ namespace nsK2EngineLow {
 		/// <summary>
 		/// DeleteGO‚³‚ê‚½‚Æ‚«‚ÉŒÄ‚Ño‚³‚ê‚éˆ—
 		/// </summary>
-		virtual void Deleted();
+		virtual void Deleted() {};
 
 		/*!
 			*@brief	XV

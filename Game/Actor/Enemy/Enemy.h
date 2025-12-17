@@ -8,13 +8,11 @@ class Enemy : public YakuzaCharacter
 {
 public:
 	//エネミーのアニメーションは外部から変更できるようにしたいためここをいじる
-private:
-	IEnemyAi* m_hasAi;
 public:
 	//コンストラクタ
 	Enemy() : YakuzaCharacter(this) {}
 	//デストラクタ
-	~Enemy() = default;
+	~Enemy(){}
 
 	//スタート関数
 	bool Start() override;
@@ -24,7 +22,6 @@ public:
 	void Render(RenderContext& rc) override;
 
 	//AI設定
-	void SetAi(IEnemyAi* setAi) { m_hasAi = setAi; }
 
 	void OnHit(const char* hitCollisionName, CollisionObject* pairCollision) override;
 

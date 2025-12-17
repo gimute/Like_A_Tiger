@@ -35,6 +35,10 @@ namespace nsK2EngineLow {
 		m_timer += g_gameTime->GetFrameDeltaTime();
 	}
 
+	void CollisionObject::Deleted()
+	{
+		m_owner = nullptr;
+	}
 
 	CollisionObjectManager::CollisionObjectManager()
 	{
@@ -57,6 +61,13 @@ namespace nsK2EngineLow {
 			{
 				if (m_collisionObjectVector[i]->IsHit(m_collisionObjectVector[j]))
 				{
+					//どちらかのコリジョンのオーナーが削除済みであれば処理しない
+					//if (!tmpPair.m_collisionA->GetOwner()||
+					//	!tmpPair.m_collisionB->GetOwner())
+					//{
+					//	continue;
+					//}
+
 					//重なっているのを見つけたら登録
 					tmpPair.m_collisionA = m_collisionObjectVector[i];
 					tmpPair.m_collisionB = m_collisionObjectVector[j];
@@ -68,8 +79,14 @@ namespace nsK2EngineLow {
 		//TODO:重なってるコリジョンの持ち主のHit処理呼び出し
 		for (auto& pair : m_overlapCollisionPair)
 		{
-			pair.m_collisionA->GetOwner()->OnHit(pair.m_collisionB->GetName(), pair.m_collisionA);
-			pair.m_collisionB->GetOwner()->OnHit(pair.m_collisionA->GetName(), pair.m_collisionB);
+			if (pair.m_collisionA->GetOwner())
+			{
+				pair.m_collisionA->GetOwner()->OnHit(pair.m_collisionB->GetName(), pair.m_collisionA);
+			}
+			if (pair.m_collisionB->GetOwner())
+			{
+				pair.m_collisionB->GetOwner()->OnHit(pair.m_collisionA->GetName(), pair.m_collisionB);
+			}
 		}
 
 		m_overlapCollisionPair.clear();

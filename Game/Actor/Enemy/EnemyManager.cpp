@@ -26,8 +26,6 @@ void EnemyManager::RequestSpawnEnemy(EnemyYakuzaType type, const Vector3& spawnP
 
 	pair.m_enemyAi = m_enemyAiFactory.GetInstance().Create(type, &newEnemy->GetYakuzaStateMachine());
 
-	newEnemy->SetAi(pair.m_enemyAi.get());
-
 	newEnemy->SetPosition(spawnPoint);
 
 	m_enemyPairList.push_back(std::move(pair));
@@ -56,8 +54,6 @@ void EnemyManager::RequestSpawnEnemyGroup(int spawnNum, const Vector3& spawnPoin
 
 		//仮名なので注意
 		pair.m_enemyName = EnemyTempNames[i];
-
-		newEnemy->SetAi(pair.m_enemyAi.get());
 
 		//スポーン位置をランダム選定
 		Vector3	randomSpawnPoint = GetRandomPointInRadius(spawnPoint, 100.0f);

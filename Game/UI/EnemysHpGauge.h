@@ -33,6 +33,8 @@ public:
 private:
 	//先頭中の敵集団を探す
 	bool SearchInBattleGroupe();
+	//戦闘中の敵グループを査定して、HP等を削除したりする処理
+	void RemoveDeadEnemyHpUI();
 	//戦闘中の敵HP情報を更新
 	void UpdateEnemyGroupeHpInfo();
 private:

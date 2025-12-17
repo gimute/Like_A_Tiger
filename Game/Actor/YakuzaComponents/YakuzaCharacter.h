@@ -13,7 +13,15 @@ public:
 		m_yakuzaStateMachine = std::make_unique<YakuzaStateMachine>(hasCharacter);
 	}
 	//デストラクタ
-	~YakuzaCharacter() = default;
+	~YakuzaCharacter()
+	{
+		if (m_bodyCollision)
+		{
+			DeleteGO(m_bodyCollision);
+		}
+		
+		DeleteAttackCollision();
+	}
 
 	//スタート関数
 	virtual bool Start() override;

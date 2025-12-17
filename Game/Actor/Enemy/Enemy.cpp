@@ -54,8 +54,17 @@ void Enemy::OnHit(const char* hitCollisionName, CollisionObject* pairCollision)
 		float damage = YakuzaCharacterDamageManager::GetInstance()->GetPlayerYakuzaDamage();
 		//ダメージ受ける
 		TakeDamage(damage);
-		//怯み処理
-		GetYakuzaStateMachine().SetIsDamage(true);
+
+		//死亡しているなら
+		if (IsCharacterHpDead())
+		{
+			GetYakuzaStateMachine().SetIsDead(true);
+		}
+		else
+		{
+			//怯み処理
+			GetYakuzaStateMachine().SetIsDamage(true);
+		}
 	}
 
 	if (hitCollisionName == "playerBodyCollision" &&
@@ -76,4 +85,7 @@ void Enemy::YakuzaCharacterDeadProcces()
 
 	//マネージャーに死んだことを伝える
 	EnemyManager::GetInstance()->RequestDeadEnemyProcces(*this);
+
+	//自身を削除する
+	DeleteGO(this);
 }
