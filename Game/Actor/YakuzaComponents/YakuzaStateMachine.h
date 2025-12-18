@@ -26,6 +26,7 @@ public:
 		AddState<YakuzaSwayState>(this);
 		AddState<YakuzaDefenseState>(this);
 		AddState<YakuzaDamageState>(this);
+		AddState<YakuzaDeadState>(this);
 
 		InitStateMachineClassName<YakuzaIdleState>();
 	}
@@ -58,6 +59,8 @@ private:
 	bool m_isAimMove = false;
 	//ダメージを受けたかどうか
 	bool m_isDamage = false;
+	//死んでしまったかどうか
+	bool m_isDead = false;
 	//狙い移動のキャラクターの位置
 	Vector3 m_aimMoveTargetPos = Vector3::Zero;
 	//このステートを扱うCharacterのポインタ
@@ -116,6 +119,10 @@ public:
 
 	inline bool GetIsDamage() { return m_isDamage; }
 
+	inline void SetIsDead(bool setIs) { m_isDead = setIs; }
+
+	inline bool GetIsDead() { return m_isDead; }
+		 
 	inline void SetAimMoveTargetPos(const Vector3& setPos) { m_aimMoveTargetPos = setPos; }
 
 	inline const Vector3& GetAimMoveTargetPos() { return m_aimMoveTargetPos; }
@@ -144,6 +151,8 @@ public:
 
 	bool IsHasCharactarPlayAnimation();
 
+	void HasCharacterDeadProcces();
+
 	void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);
 
 	CharacterController* GetHasCharactarCharaCon();
@@ -160,4 +169,6 @@ private:
 	bool CanChangeDefense();
 	//ダメージを受けたかどうか
 	bool CanChangeDamage();
+	//死亡したかどうか
+	bool CanChangeDead();
 };

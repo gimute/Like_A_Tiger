@@ -122,6 +122,8 @@ public:
 	void RequestSpawnEnemy(EnemyYakuzaType type,const Vector3& spawnPoint);
 	//グループスポーン依頼
 	void RequestSpawnEnemyGroup(int spawnNum,const Vector3& spawnPoint);
+	//死亡処理依頼
+	void RequestDeadEnemyProcces(const Enemy& deadEnemyAddress);
 	//更新
 	void Update();
 private:

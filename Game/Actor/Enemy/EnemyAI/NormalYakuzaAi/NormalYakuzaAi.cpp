@@ -215,7 +215,7 @@ bool NormalYakuzaAi::CanChangeWaitingAttack()
 
 	float radius = 0.0f;
 
-	if (IsNowStateClassName<EnemyAiWaitingAttackState>())
+	if (IsAiNowStateClassName<EnemyAiWaitingAttackState>())
 	{
 		radius = NormalYakuzaAiConstant::EXIT_WAITING_ATTACK_RADIUS;
 	}

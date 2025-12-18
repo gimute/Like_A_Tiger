@@ -299,8 +299,6 @@ void YakuzaDamageState::OnEnter()
 
 void YakuzaDamageState::OnUpdate()
 {	
-	//ƒ_ƒ[ƒW‚Å’†’f‚³‚ê‚és“®‚ðƒŠƒZƒbƒg
-	//UŒ‚—Þ
 	m_owner->SetIsAttack(false);
 
 	m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_hitBody, 0.1f);
@@ -312,6 +310,31 @@ void YakuzaDamageState::OnUpdate()
 }
 
 void YakuzaDamageState::OnExit()
+{
+
+}
+
+//DeadState
+
+void YakuzaDeadState::OnEnter()
+{
+
+}
+
+void YakuzaDeadState::OnUpdate()
+{
+	//UŒ‚’†’f
+	m_owner->SetIsAttack(false);
+
+	m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_backDeath, 0.1f);
+
+	if (!m_owner->IsHasCharactarPlayAnimation())
+	{
+		m_owner->HasCharacterDeadProcces();
+	}
+}
+
+void YakuzaDeadState::OnExit()
 {
 
 }

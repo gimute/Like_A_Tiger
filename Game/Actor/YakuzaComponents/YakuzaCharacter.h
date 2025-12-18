@@ -13,7 +13,15 @@ public:
 		m_yakuzaStateMachine = std::make_unique<YakuzaStateMachine>(hasCharacter);
 	}
 	//デストラクタ
-	~YakuzaCharacter() = default;
+	~YakuzaCharacter()
+	{
+		if (m_bodyCollision)
+		{
+			DeleteGO(m_bodyCollision);
+		}
+		
+		DeleteAttackCollision();
+	}
 
 	//スタート関数
 	virtual bool Start() override;
@@ -21,6 +29,8 @@ public:
 	virtual void Update() override;
 	//描画関数
 	virtual void Render(RenderContext& rc) override;
+
+	virtual void YakuzaCharacterDeadProcces() = 0;
 
 	inline void InitBodyCollision(YakuzaCharacter* useCharacter,const char* name)
 	{
@@ -127,6 +137,17 @@ public:
 	inline void TakeDamage(float amount)
 	{
 		m_yakuzaCurrentHp -= amount;
+	}
+
+	//HPを見てDeadかどうか確認
+	inline bool IsCharacterHpDead()
+	{
+		if (m_yakuzaCurrentHp <= 0.0f)
+		{
+			return true;
+		}
+
+		return false;
 	}
 
 	inline float GetYakuzaCurrentHp() { return m_yakuzaCurrentHp; }

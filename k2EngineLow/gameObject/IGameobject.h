@@ -35,6 +35,12 @@ namespace nsK2EngineLow {
 		* 適切に初期化を行ってください。
 		*/
 		virtual bool Start() { return true; }
+
+		/// <summary>
+		/// DeleteGOされたときに呼び出される処理
+		/// </summary>
+		virtual void Deleted() {};
+
 		/*!
 			*@brief	更新
 			*/

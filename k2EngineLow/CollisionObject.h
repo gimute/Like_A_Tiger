@@ -13,6 +13,8 @@ namespace nsK2EngineLow {
 		~CollisionObject();
 		bool Start();
 		void Update();
+
+		void Deleted() override;
 		/// <summary>
 	/// ボックス形状のゴーストオブジェクトを作成。
 	/// </summary>

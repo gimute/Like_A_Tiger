@@ -35,6 +35,12 @@ namespace nsK2EngineLow {
 		m_timer += g_gameTime->GetFrameDeltaTime();
 	}
 
+	void CollisionObject::Deleted()
+	{
+		if (g_collisionObjectManager) {
+			g_collisionObjectManager->RemoveCollisionObject(this);
+		}
+	}
 
 	CollisionObjectManager::CollisionObjectManager()
 	{
@@ -57,6 +63,13 @@ namespace nsK2EngineLow {
 			{
 				if (m_collisionObjectVector[i]->IsHit(m_collisionObjectVector[j]))
 				{
+					//どちらかのコリジョンのオーナーが削除済みであれば処理しない
+					//if (!tmpPair.m_collisionA->GetOwner()||
+					//	!tmpPair.m_collisionB->GetOwner())
+					//{
+					//	continue;
+					//}
+
 					//重なっているのを見つけたら登録
 					tmpPair.m_collisionA = m_collisionObjectVector[i];
 					tmpPair.m_collisionB = m_collisionObjectVector[j];

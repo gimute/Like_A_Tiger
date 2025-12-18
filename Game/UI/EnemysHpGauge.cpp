@@ -66,6 +66,8 @@ void EnemysHpGauge::Update()
 
 	if (isSerchInBattleGroupe)
 	{
+		RemoveDeadEnemyHpUI();
+
 		UpdateEnemyGroupeHpInfo();
 	}
 }
@@ -131,6 +133,28 @@ bool EnemysHpGauge::SearchInBattleGroupe()
 	}
 
 	return true;
+}
+
+void EnemysHpGauge::RemoveDeadEnemyHpUI()
+{
+	//¶‘¶‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ð”»’è
+	for (auto it = m_enemyHpList.begin();it != m_enemyHpList.end();)
+	{
+		bool isEnemyAlive = it->m_proccesEnemyPtr->IsDead();
+
+		if (isEnemyAlive)
+		{
+			HPGauge* deleteUi = it->m_hpGaugePtr;
+
+			DeleteGO(deleteUi);
+
+			it = m_enemyHpList.erase(it);
+		}
+		else
+		{
+			it++;
+		}
+	}
 }
 
 void EnemysHpGauge::UpdateEnemyGroupeHpInfo()

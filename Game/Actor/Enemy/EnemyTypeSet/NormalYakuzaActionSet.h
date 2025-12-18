@@ -200,6 +200,7 @@ public:
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Dodge_Left.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Guard.tka",true });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/BodyHit.tka",false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/BackDeath_E.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/CrossPunch_R_Ev.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Punching_1_L_Ev_test.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Punching_2_R_Ev.tka",false });

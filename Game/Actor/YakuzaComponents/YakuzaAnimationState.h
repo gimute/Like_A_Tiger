@@ -16,5 +16,6 @@ enum YakuzaAnimation
 	en_swayBack,
 	en_defense,
 	en_hitBody,
+	en_backDeath,
 	en_num
 };

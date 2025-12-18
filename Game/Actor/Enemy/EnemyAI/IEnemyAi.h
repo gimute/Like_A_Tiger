@@ -30,6 +30,8 @@ public:
 
 	IEnemyAi(YakuzaStateMachine* hasStateMachine) : m_hasStateMachine(hasStateMachine) {}
 
+	virtual ~IEnemyAi() = default;
+
 	inline void UpdateTargetView(TargetCharacterView view) { m_targetView = view; }
 
 	inline TargetCharacterView GetTargetView() { return m_targetView; }

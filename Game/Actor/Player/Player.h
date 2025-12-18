@@ -23,6 +23,11 @@ public:
 
 	void OnHit(const char* hitCollisionName, CollisionObject* pairCollision) override;
 
+	void YakuzaCharacterDeadProcces() override;
+
+	//死亡処理がおわったよフラグ
+	bool m_isDeadProccesEnd = false;
+
 private:
 	//HPゲージ
 	HPGauge* m_hpGauge = nullptr;

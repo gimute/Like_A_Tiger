@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Enemy.h"
 #include "Actor\YakuzaComponents\YakuzaCharacterDamageManager.h"
+#include "Actor\Enemy\EnemyManager.h"
 
 bool Enemy::Start()
 {
@@ -53,8 +54,17 @@ void Enemy::OnHit(const char* hitCollisionName, CollisionObject* pairCollision)
 		float damage = YakuzaCharacterDamageManager::GetInstance()->GetPlayerYakuzaDamage();
 		//ダメージ受ける
 		TakeDamage(damage);
-		//怯み処理
-		GetYakuzaStateMachine().SetIsDamage(true);
+
+		//死亡しているなら
+		if (IsCharacterHpDead())
+		{
+			GetYakuzaStateMachine().SetIsDead(true);
+		}
+		else
+		{
+			//怯み処理
+			GetYakuzaStateMachine().SetIsDamage(true);
+		}
 	}
 
 	if (hitCollisionName == "playerBodyCollision" &&
@@ -67,4 +77,15 @@ void Enemy::OnHit(const char* hitCollisionName, CollisionObject* pairCollision)
 		//ダメージ送る
 		YakuzaCharacterDamageManager::GetInstance()->SendPlayerYakuzaDamage(toPlayerDamage);
 	}
+}
+
+void Enemy::YakuzaCharacterDeadProcces()
+{
+	//敵の死亡処理
+
+	//マネージャーに死んだことを伝える
+	EnemyManager::GetInstance()->RequestDeadEnemyProcces(*this);
+
+	//自身を削除する
+	DeleteGO(this);
 }
