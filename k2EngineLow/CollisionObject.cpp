@@ -37,7 +37,9 @@ namespace nsK2EngineLow {
 
 	void CollisionObject::Deleted()
 	{
-		m_owner = nullptr;
+		if (g_collisionObjectManager) {
+			g_collisionObjectManager->RemoveCollisionObject(this);
+		}
 	}
 
 	CollisionObjectManager::CollisionObjectManager()
@@ -79,14 +81,8 @@ namespace nsK2EngineLow {
 		//TODO:重なってるコリジョンの持ち主のHit処理呼び出し
 		for (auto& pair : m_overlapCollisionPair)
 		{
-			if (pair.m_collisionA->GetOwner())
-			{
-				pair.m_collisionA->GetOwner()->OnHit(pair.m_collisionB->GetName(), pair.m_collisionA);
-			}
-			if (pair.m_collisionB->GetOwner())
-			{
-				pair.m_collisionB->GetOwner()->OnHit(pair.m_collisionA->GetName(), pair.m_collisionB);
-			}
+			pair.m_collisionA->GetOwner()->OnHit(pair.m_collisionB->GetName(), pair.m_collisionA);
+			pair.m_collisionB->GetOwner()->OnHit(pair.m_collisionA->GetName(), pair.m_collisionB);
 		}
 
 		m_overlapCollisionPair.clear();
