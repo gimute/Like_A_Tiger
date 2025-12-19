@@ -42,7 +42,7 @@ float PlayerYakuzaTypeSet::GetAttackPower(YakuzaAttackComboStateMachine* useAtta
 
 namespace 
 {
-	float ATTACK_MOVE_SPEED = 60.0f;
+	float ATTACK_MOVE_SPEED = 300.0f;
 	float ATTACK_ASSIST_FOV = 0.5f;
 	float ATTACK_ASSIST_DIS = 400.0f;
 }
