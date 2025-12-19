@@ -9,7 +9,6 @@
 
 bool Game::Start()
 {
-
 	//‰Šú‰»ˆ—‚Í•K—v‚Å‚ ‚ê‚Î’Ç‰Á—\’è
 	GameSceneManager::GetSceneManagerInstance()->InitGameSceneManager();
 

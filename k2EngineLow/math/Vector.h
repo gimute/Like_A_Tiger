@@ -38,6 +38,20 @@ namespace nsK2EngineLow {
 			vec = _v.vec;
 			return *this;
 		}
+
+		Vector2& operator+=(const Vector2& _v)
+		{
+			vec.x += _v.x;
+			vec.y += _v.y;
+			return *this;
+		}
+		Vector2& operator-=(const Vector2& _v)
+		{
+			vec.x -= _v.x;
+			vec.y -= _v.y;
+			return *this;
+		}
+
 		void Set(float _x, float _y)
 		{
 			vec.x = _x;
@@ -976,6 +990,35 @@ namespace nsK2EngineLow {
 			int v[4];
 		};
 	};
+
+	static inline Vector2 operator+(const Vector2& v0, const Vector2& v1)
+	{
+		Vector2 result;
+		result.x = v0.x + v1.x;
+		result.y = v0.y + v1.y;
+		return result;
+	}
+	static inline Vector2 operator-(const Vector2& v0, const Vector2& v1)
+	{
+		Vector2 result;
+		result.x = v0.x - v1.x;
+		result.y = v0.y - v1.y;
+		return result;
+	}
+	static inline Vector2 operator/(const Vector2& v0, float s)
+	{
+		Vector2 result;
+		result.x = v0.x / s;
+		result.y = v0.y / s;
+		return result;
+	}
+	static inline Vector2 operator*(const Vector2& v0, float s)
+	{
+		Vector2 result;
+		result.x = v0.x * s;
+		result.y = v0.y * s;
+		return result;
+	}
 	/// <summary>
 	/// ベクトル同士の加算。
 	/// </summary>

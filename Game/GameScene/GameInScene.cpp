@@ -74,7 +74,6 @@ void GameInScene::EnterScene()
 
 
 	//NewGO<ProtoStage>(UpdateOrder::Actor);
-
 }
 
 //ステート更新関数
