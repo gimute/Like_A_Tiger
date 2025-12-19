@@ -82,8 +82,6 @@ void Enemy::OnHit(const char* hitCollisionName, CollisionObject* pairCollision)
 void Enemy::YakuzaCharacterDeadProcces()
 {
 	//“G‚ÌŽ€–Sˆ—
-	DeleteBodyCollision();
-	DeleteAttackCollision();
 
 	//ƒ}ƒl[ƒWƒƒ[‚ÉŽ€‚ñ‚¾‚±‚Æ‚ð“`‚¦‚é
 	EnemyManager::GetInstance()->RequestDeadEnemyProcces(*this);

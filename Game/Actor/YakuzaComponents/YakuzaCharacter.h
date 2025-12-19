@@ -15,6 +15,8 @@ public:
 	//デストラクタ
 	~YakuzaCharacter()
 	{
+		DeleteBodyCollision();
+		DeleteAttackCollision();
 	}
 
 	//スタート関数
