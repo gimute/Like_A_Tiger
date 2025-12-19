@@ -162,8 +162,10 @@ bool AttackRoleProcess::IsReady(MetaAiProccesInfo* groupePtr)
 	//}
 
 	if (groupePtr->m_grouoeState.m_nowAttackAi &&
+		!groupePtr->m_grouoeState.m_nowAttackAi->GetHasYakuzaCharacterIsDead() &&
 		!groupePtr->m_grouoeState.m_nowAttackAi->IsAiNowStateClassName<IEnemyAttackAiState>() || 
 		groupePtr->m_grouoeState.m_nowAttackAi &&
+		!groupePtr->m_grouoeState.m_nowAttackAi->GetHasYakuzaCharacterIsDead() &&
 		groupePtr->m_grouoeState.m_nowAttackAi->GetYakuzaRole() == YakuzaRole::en_YakuzaRole_HitDamage)
 	{
 		groupePtr->m_grouoeState.m_attackStartTime = AttackRoleProcessConstant::ATTACK_START_TIME;

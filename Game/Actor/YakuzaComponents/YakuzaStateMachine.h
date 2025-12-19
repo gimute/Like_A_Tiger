@@ -151,6 +151,8 @@ public:
 
 	bool IsHasCharactarPlayAnimation();
 
+	bool IsHasCharacterDead();
+
 	void HasCharacterDeadProcces();
 
 	void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);
