@@ -111,5 +111,8 @@ void Player::OnHit(const char* hitCollisionName, CollisionObject* pairCollision)
 
 void Player::YakuzaCharacterDeadProcces()
 {
+	DeleteBodyCollision();
+	DeleteAttackCollision();
+
 	m_isDeadProccesEnd = true;
 }

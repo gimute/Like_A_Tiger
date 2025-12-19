@@ -15,13 +15,6 @@ public:
 	//デストラクタ
 	~YakuzaCharacter()
 	{
-		if (m_bodyCollision)
-		{
-			DeleteGO(m_bodyCollision);
-			m_bodyCollision = nullptr;
-		}
-		
-		DeleteAttackCollision();
 	}
 
 	//スタート関数
@@ -52,6 +45,16 @@ public:
 	inline CollisionObject& GetBodyCollision()
 	{
 		return *m_bodyCollision;
+	}
+
+	inline void DeleteBodyCollision()
+	{
+		if (!m_bodyCollision)
+		{
+			return;
+		}
+		DeleteGO(m_bodyCollision);
+		m_bodyCollision = nullptr;
 	}
 
 	inline void SetAttackCollisionName(const char* name)
