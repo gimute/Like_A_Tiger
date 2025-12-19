@@ -44,6 +44,8 @@ public:
 
 	inline bool GetIsInBattle() { return m_isInBattle; }
 
+	inline bool GetHasYakuzaCharacterIsDead() { return m_hasStateMachine->IsHasCharacterDead(); }
+
 	template<typename ClassName>
 	inline bool IsAiNowStateClassName()
 	{

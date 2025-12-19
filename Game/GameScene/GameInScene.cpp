@@ -18,6 +18,8 @@
 
 #include "Inventory/Inventory.h"
 
+#include "Actor\YakuzaComponents\YakuzaAttackAssistSystem.h"
+
 
 //ステート侵入関数
 void GameInScene::EnterScene()
@@ -33,6 +35,9 @@ void GameInScene::EnterScene()
 	m_playerController->SetPlayerCameraController(CameraManager::GetCameraManagerInstance()->GetCameraController<PlayerCameraController>());
 	//カメラ生成
 
+	//攻撃アシストを初期化
+	YakuzaAttackAssistSystem::GetIstance()->InitAttackAssistSystem(m_player);
+	
 	//敵AI生成
 	NewGO<EnemySystem>(UpdateOrder::AI, "enemy");
 

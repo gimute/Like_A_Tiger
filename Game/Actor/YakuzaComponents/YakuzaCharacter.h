@@ -15,11 +15,7 @@ public:
 	//デストラクタ
 	~YakuzaCharacter()
 	{
-		if (m_bodyCollision)
-		{
-			DeleteGO(m_bodyCollision);
-		}
-		
+		DeleteBodyCollision();
 		DeleteAttackCollision();
 	}
 
@@ -51,6 +47,16 @@ public:
 	inline CollisionObject& GetBodyCollision()
 	{
 		return *m_bodyCollision;
+	}
+
+	inline void DeleteBodyCollision()
+	{
+		if (!m_bodyCollision)
+		{
+			return;
+		}
+		DeleteGO(m_bodyCollision);
+		m_bodyCollision = nullptr;
 	}
 
 	inline void SetAttackCollisionName(const char* name)
@@ -96,6 +102,15 @@ public:
 		}
 		DeleteGO(m_attackCollision);
 		m_attackCollision = nullptr;
+	}
+
+	inline bool IsAttackCollisionActive()
+	{
+		if (m_attackCollision)
+		{
+			return true;
+		}
+		return false;
 	}
 
 protected:

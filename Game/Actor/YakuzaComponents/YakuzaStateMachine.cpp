@@ -146,6 +146,16 @@ bool YakuzaStateMachine::IsHasCharactarPlayAnimation()
 	return m_hasCharactar->GetModelRender()->IsPlayingAnimation();
 }
 
+bool YakuzaStateMachine::IsHasCharacterDead()
+{
+	return m_hasCharactar->IsDead();
+}
+
+bool YakuzaStateMachine::IsHasCharacterAttackCollisionActive()
+{
+	return m_hasCharactar->IsAttackCollisionActive();
+}
+
 void YakuzaStateMachine::HasCharacterDeadProcces()
 {
 	m_hasCharactar->YakuzaCharacterDeadProcces();

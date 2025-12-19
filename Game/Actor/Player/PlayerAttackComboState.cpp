@@ -2,6 +2,7 @@
 #include "PlayerAttackComboState.h"
 
 #include "Actor\YakuzaComponents\YakuzaStateMachine.h"
+#include "Actor\YakuzaComponents\YakuzaAttackAssistSystem.h"
 
 TypeSetAutoRegister<PlayerYakuzaTypeSet> PlayerYakuzaTypeSet::typeSet{ OthersYakuzaType::en_playerYakuza };
 
@@ -37,6 +38,13 @@ float PlayerYakuzaTypeSet::GetAttackPower(YakuzaAttackComboStateMachine* useAtta
 	}
 
 	return attackPower;
+}
+
+namespace 
+{
+	float ATTACK_MOVE_SPEED = 300.0f;
+	float ATTACK_ASSIST_FOV = 0.5f;
+	float ATTACK_ASSIST_DIS = 400.0f;
 }
 
 //PlayerFirstAttackState
@@ -82,13 +90,42 @@ void PlayerFirstAttackState::OnUpdate()
 		m_owner->SetIsAttackEnds(true);
 	}
 
+	//攻撃コリジョンが有効だったら移動処理はしない
+	if (m_owner->GetIsCreateAttackCollision())
+	{
+		return;
+	}
+
 	//移動処理、必要あれば
-	//Vector3 moveVec = stateMachine->GetHasCharactarForward() * 40.0f;
+	Vector3 pFoward = stateMachine->GetHasCharactarForward();
 
-	//Vector3 newPos = stateMachine->GetHasCharactarCharaCon()->Execute(moveVec, g_gameTime->GetFrameDeltaTime());
+	TargetingParam param(ATTACK_ASSIST_DIS, ATTACK_ASSIST_FOV, 0.8f, 0.2f);
 
-	//stateMachine->SetHasCharactarPosition(newPos);
+	YakuzaCharacter* enemy = YakuzaAttackAssistSystem::GetIstance()->GetPlayerNearEnemyPosition(param);
 
+	Vector3 moveVec = Vector3::Zero;
+
+	if (enemy)
+	{
+		moveVec = enemy->GetPosition() - stateMachine->GetHasCharactarPos();
+		moveVec.Normalize();
+		moveVec *= ATTACK_MOVE_SPEED;
+	}
+	else
+	{
+		moveVec = stateMachine->GetHasCharactarForward() * ATTACK_MOVE_SPEED;
+	}
+
+	Vector3 newPos = stateMachine->GetHasCharactarCharaCon()->Execute(moveVec, g_gameTime->GetFrameDeltaTime());
+
+	stateMachine->SetHasCharactarPosition(newPos);
+
+	stateMachine->GetHasCharactarRot().SetRotationYFromDirectionXZ(moveVec);
+
+	stateMachine->SetHasCharactarForward(Vector3::AxisZ);
+	stateMachine->GetHasCharactarRot().Apply(stateMachine->GetHasCharactarForward());
+
+	stateMachine->SetMoveVec(Vector3::Zero);
 }
 
 void PlayerFirstAttackState::OnExit()
@@ -137,6 +174,43 @@ void PlayerSecondAttackState::OnUpdate()
 
 		m_owner->SetIsAttackEnds(true);
 	}
+
+	//攻撃コリジョンが有効だったら移動処理はしない
+	if (m_owner->GetIsCreateAttackCollision())
+	{
+		return;
+	}
+
+	//移動処理、必要あれば
+	Vector3 pFoward = stateMachine->GetHasCharactarForward();
+
+	TargetingParam param(ATTACK_ASSIST_DIS, ATTACK_ASSIST_FOV, 0.8f, 0.2f);
+
+	YakuzaCharacter* enemy = YakuzaAttackAssistSystem::GetIstance()->GetPlayerNearEnemyPosition(param);
+
+	Vector3 moveVec = Vector3::Zero;
+
+	if (enemy)
+	{
+		moveVec = enemy->GetPosition() - stateMachine->GetHasCharactarPos();
+		moveVec.Normalize();
+		moveVec *= ATTACK_MOVE_SPEED;
+	}
+	else
+	{
+		moveVec = stateMachine->GetHasCharactarForward() * ATTACK_MOVE_SPEED;
+	}
+
+	Vector3 newPos = stateMachine->GetHasCharactarCharaCon()->Execute(moveVec, g_gameTime->GetFrameDeltaTime());
+
+	stateMachine->SetHasCharactarPosition(newPos);
+
+	stateMachine->GetHasCharactarRot().SetRotationYFromDirectionXZ(moveVec);
+
+	stateMachine->SetHasCharactarForward(Vector3::AxisZ);
+	stateMachine->GetHasCharactarRot().Apply(stateMachine->GetHasCharactarForward());
+
+	stateMachine->SetMoveVec(Vector3::Zero);
 }
 
 void PlayerSecondAttackState::OnExit()
@@ -183,6 +257,43 @@ void PlayerThirdAttackState::OnUpdate()
 
 		m_owner->SetIsAttackEnds(true);
 	}
+
+	//攻撃コリジョンが有効だったら移動処理はしない
+	if (m_owner->GetIsCreateAttackCollision())
+	{
+		return;
+	}
+
+	//移動処理、必要あれば
+	Vector3 pFoward = stateMachine->GetHasCharactarForward();
+
+	TargetingParam param(ATTACK_ASSIST_DIS, ATTACK_ASSIST_FOV, 0.8f, 0.2f);
+
+	YakuzaCharacter* enemy = YakuzaAttackAssistSystem::GetIstance()->GetPlayerNearEnemyPosition(param);
+
+	Vector3 moveVec = Vector3::Zero;
+
+	if (enemy)
+	{
+		moveVec = enemy->GetPosition() - stateMachine->GetHasCharactarPos();
+		moveVec.Normalize();
+		moveVec *= ATTACK_MOVE_SPEED;
+	}
+	else
+	{
+		moveVec = stateMachine->GetHasCharactarForward() * ATTACK_MOVE_SPEED;
+	}
+
+	Vector3 newPos = stateMachine->GetHasCharactarCharaCon()->Execute(moveVec, g_gameTime->GetFrameDeltaTime());
+
+	stateMachine->SetHasCharactarPosition(newPos);
+
+	stateMachine->GetHasCharactarRot().SetRotationYFromDirectionXZ(moveVec);
+
+	stateMachine->SetHasCharactarForward(Vector3::AxisZ);
+	stateMachine->GetHasCharactarRot().Apply(stateMachine->GetHasCharactarForward());
+
+	stateMachine->SetMoveVec(Vector3::Zero);
 }
 
 void PlayerThirdAttackState::OnExit()
@@ -225,6 +336,43 @@ void PlayerFourthAttackState::OnUpdate()
 
 		m_owner->SetIsAttackEnds(true);
 	}
+
+	//攻撃コリジョンが有効だったら移動処理はしない
+	if (m_owner->GetIsCreateAttackCollision())
+	{
+		return;
+	}
+
+	//移動処理、必要あれば
+	Vector3 pFoward = stateMachine->GetHasCharactarForward();
+
+	TargetingParam param(ATTACK_ASSIST_DIS, ATTACK_ASSIST_FOV, 0.8f, 0.2f);
+
+	YakuzaCharacter* enemy = YakuzaAttackAssistSystem::GetIstance()->GetPlayerNearEnemyPosition(param);
+
+	Vector3 moveVec = Vector3::Zero;
+
+	if (enemy)
+	{
+		moveVec = enemy->GetPosition() - stateMachine->GetHasCharactarPos();
+		moveVec.Normalize();
+		moveVec *= ATTACK_MOVE_SPEED;
+	}
+	else
+	{
+		moveVec = stateMachine->GetHasCharactarForward() * ATTACK_MOVE_SPEED;
+	}
+
+	Vector3 newPos = stateMachine->GetHasCharactarCharaCon()->Execute(moveVec, g_gameTime->GetFrameDeltaTime());
+
+	stateMachine->SetHasCharactarPosition(newPos);
+
+	stateMachine->GetHasCharactarRot().SetRotationYFromDirectionXZ(moveVec);
+
+	stateMachine->SetHasCharactarForward(Vector3::AxisZ);
+	stateMachine->GetHasCharactarRot().Apply(stateMachine->GetHasCharactarForward());
+
+	stateMachine->SetMoveVec(Vector3::Zero);
 }
 
 void PlayerFourthAttackState::OnExit()
@@ -251,6 +399,43 @@ void PlayerFirstFinalBlowState::OnUpdate()
 
 		m_owner->SetIsAttackEnds(true);
 	}
+
+	//攻撃コリジョンが有効だったら移動処理はしない
+	if (m_owner->GetIsCreateAttackCollision())
+	{
+		return;
+	}
+
+	//移動処理、必要あれば
+	Vector3 pFoward = stateMachine->GetHasCharactarForward();
+
+	TargetingParam param(ATTACK_ASSIST_DIS, ATTACK_ASSIST_FOV, 0.8f, 0.2f);
+
+	YakuzaCharacter* enemy = YakuzaAttackAssistSystem::GetIstance()->GetPlayerNearEnemyPosition(param);
+
+	Vector3 moveVec = Vector3::Zero;
+
+	if (enemy)
+	{
+		moveVec = enemy->GetPosition() - stateMachine->GetHasCharactarPos();
+		moveVec.Normalize();
+		moveVec *= ATTACK_MOVE_SPEED;
+	}
+	else
+	{
+		moveVec = stateMachine->GetHasCharactarForward() * ATTACK_MOVE_SPEED;
+	}
+
+	Vector3 newPos = stateMachine->GetHasCharactarCharaCon()->Execute(moveVec, g_gameTime->GetFrameDeltaTime());
+
+	stateMachine->SetHasCharactarPosition(newPos);
+
+	stateMachine->GetHasCharactarRot().SetRotationYFromDirectionXZ(moveVec);
+
+	stateMachine->SetHasCharactarForward(Vector3::AxisZ);
+	stateMachine->GetHasCharactarRot().Apply(stateMachine->GetHasCharactarForward());
+
+	stateMachine->SetMoveVec(Vector3::Zero);
 }
 
 void PlayerFirstFinalBlowState::OnExit()
@@ -277,6 +462,43 @@ void PlayerSecondFinalBlowState::OnUpdate()
 
 		m_owner->SetIsAttackEnds(true);
 	}
+
+	//攻撃コリジョンが有効だったら移動処理はしない
+	if (m_owner->GetIsCreateAttackCollision())
+	{
+		return;
+	}
+
+	//移動処理、必要あれば
+	Vector3 pFoward = stateMachine->GetHasCharactarForward();
+
+	TargetingParam param(ATTACK_ASSIST_DIS, ATTACK_ASSIST_FOV, 0.8f, 0.2f);
+
+	YakuzaCharacter* enemy = YakuzaAttackAssistSystem::GetIstance()->GetPlayerNearEnemyPosition(param);
+
+	Vector3 moveVec = Vector3::Zero;
+
+	if (enemy)
+	{
+		moveVec = enemy->GetPosition() - stateMachine->GetHasCharactarPos();
+		moveVec.Normalize();
+		moveVec *= ATTACK_MOVE_SPEED;
+	}
+	else
+	{
+		moveVec = stateMachine->GetHasCharactarForward() * ATTACK_MOVE_SPEED;
+	}
+
+	Vector3 newPos = stateMachine->GetHasCharactarCharaCon()->Execute(moveVec, g_gameTime->GetFrameDeltaTime());
+
+	stateMachine->SetHasCharactarPosition(newPos);
+
+	stateMachine->GetHasCharactarRot().SetRotationYFromDirectionXZ(moveVec);
+
+	stateMachine->SetHasCharactarForward(Vector3::AxisZ);
+	stateMachine->GetHasCharactarRot().Apply(stateMachine->GetHasCharactarForward());
+
+	stateMachine->SetMoveVec(Vector3::Zero);
 }
 
 void PlayerSecondFinalBlowState::OnExit()
@@ -303,6 +525,43 @@ void PlayerThirdFinalBlowState::OnUpdate()
 
 		m_owner->SetIsAttackEnds(true);
 	}
+
+	//攻撃コリジョンが有効だったら移動処理はしない
+	if (m_owner->GetIsCreateAttackCollision())
+	{
+		return;
+	}
+
+	//移動処理、必要あれば
+	Vector3 pFoward = stateMachine->GetHasCharactarForward();
+
+	TargetingParam param(ATTACK_ASSIST_DIS, ATTACK_ASSIST_FOV, 0.8f, 0.2f);
+
+	YakuzaCharacter* enemy = YakuzaAttackAssistSystem::GetIstance()->GetPlayerNearEnemyPosition(param);
+
+	Vector3 moveVec = Vector3::Zero;
+
+	if (enemy)
+	{
+		moveVec = enemy->GetPosition() - stateMachine->GetHasCharactarPos();
+		moveVec.Normalize();
+		moveVec *= ATTACK_MOVE_SPEED;
+	}
+	else
+	{
+		moveVec = stateMachine->GetHasCharactarForward() * ATTACK_MOVE_SPEED;
+	}
+
+	Vector3 newPos = stateMachine->GetHasCharactarCharaCon()->Execute(moveVec, g_gameTime->GetFrameDeltaTime());
+
+	stateMachine->SetHasCharactarPosition(newPos);
+
+	stateMachine->GetHasCharactarRot().SetRotationYFromDirectionXZ(moveVec);
+
+	stateMachine->SetHasCharactarForward(Vector3::AxisZ);
+	stateMachine->GetHasCharactarRot().Apply(stateMachine->GetHasCharactarForward());
+
+	stateMachine->SetMoveVec(Vector3::Zero);
 }
 
 void PlayerThirdFinalBlowState::OnExit()
@@ -329,6 +588,43 @@ void PlayerFourthFinalBlowState::OnUpdate()
 
 		m_owner->SetIsAttackEnds(true);
 	}
+
+	//攻撃コリジョンが有効だったら移動処理はしない
+	if (m_owner->GetIsCreateAttackCollision())
+	{
+		return;
+	}
+
+	//移動処理、必要あれば
+	Vector3 pFoward = stateMachine->GetHasCharactarForward();
+
+	TargetingParam param(ATTACK_ASSIST_DIS, ATTACK_ASSIST_FOV, 0.8f, 0.2f);
+
+	YakuzaCharacter* enemy = YakuzaAttackAssistSystem::GetIstance()->GetPlayerNearEnemyPosition(param);
+
+	Vector3 moveVec = Vector3::Zero;
+
+	if (enemy)
+	{
+		moveVec = enemy->GetPosition() - stateMachine->GetHasCharactarPos();
+		moveVec.Normalize();
+		moveVec *= ATTACK_MOVE_SPEED;
+	}
+	else
+	{
+		moveVec = stateMachine->GetHasCharactarForward() * ATTACK_MOVE_SPEED;
+	}
+
+	Vector3 newPos = stateMachine->GetHasCharactarCharaCon()->Execute(moveVec, g_gameTime->GetFrameDeltaTime());
+
+	stateMachine->SetHasCharactarPosition(newPos);
+
+	stateMachine->GetHasCharactarRot().SetRotationYFromDirectionXZ(moveVec);
+
+	stateMachine->SetHasCharactarForward(Vector3::AxisZ);
+	stateMachine->GetHasCharactarRot().Apply(stateMachine->GetHasCharactarForward());
+
+	stateMachine->SetMoveVec(Vector3::Zero);
 }
 
 void PlayerFourthFinalBlowState::OnExit()
