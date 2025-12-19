@@ -173,6 +173,8 @@ void YakuzaAttackState::OnUpdate()
 		if (attackStateMachine->GetIsAttackEnds())
 		{
 			m_owner->SetIsAttack(false);
+
+			attackStateMachine->SetIsCreateAttackCollision(false);
 		}
 
 		return;

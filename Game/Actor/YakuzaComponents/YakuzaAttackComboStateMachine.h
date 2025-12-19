@@ -54,6 +54,8 @@ private:
 	bool m_isNextConbo = false;
 	//UŒ‚’†‚ªI—¹‚µ‚½‚©‚Ç‚¤‚©
 	bool m_isAttackEnds = true;
+	//UŒ‚ƒRƒŠƒWƒ‡ƒ“‚ª¶¬‚³‚ê‚½‚©‚Ç‚¤‚©
+	bool m_isCriateAttackCollision = false;
 public:
 
 	inline void SetNextCombo(uint32_t setComboID) { m_nextCombo = setComboID; }
@@ -79,6 +81,10 @@ public:
 	inline void SetIsAttackEnds(bool setIs) { m_isAttackEnds = setIs; }
 
 	inline bool GetIsAttackEnds() { return m_isAttackEnds; }
+
+	inline void SetIsCreateAttackCollision(bool setIs) { m_isCriateAttackCollision = setIs; }
+
+	inline bool GetIsCreateAttackCollision() { return m_isCriateAttackCollision; }
 
 	void StartFirstAttack();
 

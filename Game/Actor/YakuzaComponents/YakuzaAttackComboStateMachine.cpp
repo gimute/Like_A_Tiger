@@ -30,6 +30,18 @@ IStateBase* YakuzaAttackComboStateMachine::GetNextState()
 {
 	uint32_t nextStateHush = GetNextCombo();
 	IStateBase* nextState = FindClassUINT32TState(nextStateHush);
+	
+	if (nextStateHush != GetNowCombo())
+	{
+		SetIsCreateAttackCollision(false);
+	}
+	else
+	{
+		if (m_hasStateMachine->IsHasCharacterAttackCollisionActive())
+		{
+			SetIsCreateAttackCollision(true);
+		}
+	}
 
 	//次のコンボが設定されていなかったら攻撃終了ステートへ
 	if (!nextState)

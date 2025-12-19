@@ -18,6 +18,7 @@ public:
 		if (m_bodyCollision)
 		{
 			DeleteGO(m_bodyCollision);
+			m_bodyCollision = nullptr;
 		}
 		
 		DeleteAttackCollision();
@@ -96,6 +97,15 @@ public:
 		}
 		DeleteGO(m_attackCollision);
 		m_attackCollision = nullptr;
+	}
+
+	inline bool IsAttackCollisionActive()
+	{
+		if (m_attackCollision)
+		{
+			return true;
+		}
+		return false;
 	}
 
 protected:

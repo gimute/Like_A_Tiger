@@ -90,6 +90,12 @@ void PlayerFirstAttackState::OnUpdate()
 		m_owner->SetIsAttackEnds(true);
 	}
 
+	//攻撃コリジョンが有効だったら移動処理はしない
+	if (m_owner->GetIsCreateAttackCollision())
+	{
+		return;
+	}
+
 	//移動処理、必要あれば
 	Vector3 pFoward = stateMachine->GetHasCharactarForward();
 
@@ -169,6 +175,12 @@ void PlayerSecondAttackState::OnUpdate()
 		m_owner->SetIsAttackEnds(true);
 	}
 
+	//攻撃コリジョンが有効だったら移動処理はしない
+	if (m_owner->GetIsCreateAttackCollision())
+	{
+		return;
+	}
+
 	//移動処理、必要あれば
 	Vector3 pFoward = stateMachine->GetHasCharactarForward();
 
@@ -246,6 +258,12 @@ void PlayerThirdAttackState::OnUpdate()
 		m_owner->SetIsAttackEnds(true);
 	}
 
+	//攻撃コリジョンが有効だったら移動処理はしない
+	if (m_owner->GetIsCreateAttackCollision())
+	{
+		return;
+	}
+
 	//移動処理、必要あれば
 	Vector3 pFoward = stateMachine->GetHasCharactarForward();
 
@@ -319,6 +337,12 @@ void PlayerFourthAttackState::OnUpdate()
 		m_owner->SetIsAttackEnds(true);
 	}
 
+	//攻撃コリジョンが有効だったら移動処理はしない
+	if (m_owner->GetIsCreateAttackCollision())
+	{
+		return;
+	}
+
 	//移動処理、必要あれば
 	Vector3 pFoward = stateMachine->GetHasCharactarForward();
 
@@ -374,6 +398,12 @@ void PlayerFirstFinalBlowState::OnUpdate()
 		stateMachine->SetIsComboTransition(false);
 
 		m_owner->SetIsAttackEnds(true);
+	}
+
+	//攻撃コリジョンが有効だったら移動処理はしない
+	if (m_owner->GetIsCreateAttackCollision())
+	{
+		return;
 	}
 
 	//移動処理、必要あれば
@@ -433,6 +463,12 @@ void PlayerSecondFinalBlowState::OnUpdate()
 		m_owner->SetIsAttackEnds(true);
 	}
 
+	//攻撃コリジョンが有効だったら移動処理はしない
+	if (m_owner->GetIsCreateAttackCollision())
+	{
+		return;
+	}
+
 	//移動処理、必要あれば
 	Vector3 pFoward = stateMachine->GetHasCharactarForward();
 
@@ -490,6 +526,12 @@ void PlayerThirdFinalBlowState::OnUpdate()
 		m_owner->SetIsAttackEnds(true);
 	}
 
+	//攻撃コリジョンが有効だったら移動処理はしない
+	if (m_owner->GetIsCreateAttackCollision())
+	{
+		return;
+	}
+
 	//移動処理、必要あれば
 	Vector3 pFoward = stateMachine->GetHasCharactarForward();
 
@@ -545,6 +587,12 @@ void PlayerFourthFinalBlowState::OnUpdate()
 		stateMachine->SetIsComboTransition(false);
 
 		m_owner->SetIsAttackEnds(true);
+	}
+
+	//攻撃コリジョンが有効だったら移動処理はしない
+	if (m_owner->GetIsCreateAttackCollision())
+	{
+		return;
 	}
 
 	//移動処理、必要あれば
