@@ -162,6 +162,13 @@ public:
 	CharacterController* GetHasCharactarCharaCon();
 
 	YakuzaAttackComboStateMachine* GetAttackStateMachine();
+
+	//YakuzaStateMachineが現在なんのステートであるかを取得
+	template<typename ClassName>
+	inline bool IsGetYakuzaStateMachineNowState()
+	{
+		return IsNowStateClassName<ClassName>();
+	}
 private:
 	//移動することができるかどうか
 	bool CanChangeWalk();
