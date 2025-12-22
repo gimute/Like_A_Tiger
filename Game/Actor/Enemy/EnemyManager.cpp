@@ -195,7 +195,7 @@ void EnemyManager::UpdateEnemyDataSet()
 		//新規でないならグループ情報を更新
 		else
 		{
-			existGroup[groupId].m_inBattle = enemyGroupList[groupId].isInBattle;
+			existGroup->m_inBattle = enemyGroupList[groupId].isInBattle;
 		}
 
 		//グループ内部の更新
