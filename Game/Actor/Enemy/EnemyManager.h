@@ -174,6 +174,11 @@ public:
 	{
 		return m_targetView;
 	}
+	//現在残りグループ数を表示(残り数はサイズから取得、グループ削除時に変動)
+	inline int GetCurrentEnemyGroupeNum()
+	{
+		return m_enemyGroupList.size();
+	}
 	//指定IDの敵グループが戦闘状態かどうかを設定
 	inline void SetEnemyGroupeInBattle(int id,bool setIs)
 	{

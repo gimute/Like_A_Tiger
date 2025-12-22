@@ -146,6 +146,8 @@ void EnemysHpGauge::RemoveDeadEnemyHpUI()
 		{
 			HPGauge* deleteUi = it->m_hpGaugePtr;
 
+			//削除だと生成しなおさないといけないので別案を考える
+
 			DeleteGO(deleteUi);
 
 			it = m_enemyHpList.erase(it);
@@ -153,6 +155,13 @@ void EnemysHpGauge::RemoveDeadEnemyHpUI()
 		else
 		{
 			it++;
+		}
+
+		//全てのHPが削除されたら
+		if (m_enemyHpList.empty())
+		{
+			//処理中のグループをNullに
+			m_proccesEnemyGroupe = nullptr;
 		}
 	}
 }
