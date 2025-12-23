@@ -6,6 +6,8 @@
 #include "Actor\Enemy\Enemy.h"
 #include "Actor\Enemy\EnemyMetaAi\EnemyMetaAi.h"
 
+#include "BattleArea\BattleAreaManager.h"
+
 #include "Random.h"
 
 //インスタンス初期化
@@ -14,6 +16,14 @@ EnemyManager* EnemyManager::m_instance = nullptr;
 EnemyManager::EnemyManager()
 {
 	m_enemyMetaAi = NewGO<EnemyMetaAi>(UpdateOrder::AI, "enemymetaai");
+
+	//戦闘エリアにプレイヤーが侵入した際にエネミーを戦闘状態にする処理
+	BattleAreaManager::GetInstance()->RegisterOnEnterListener(
+		[&](const BattleArea& area)
+		{
+			EnemyGroupeBattleSet(area.m_id);
+		}
+	);
 }
 
 void EnemyManager::RequestSpawnEnemy(EnemyYakuzaType type, const Vector3& spawnPoint)
@@ -66,6 +76,11 @@ void EnemyManager::RequestSpawnEnemyGroup(int spawnNum, const Vector3& spawnPoin
 
 		m_enemyIDCounter++;
 	}
+
+	//戦闘エリア生成
+	int areaId = BattleAreaManager::GetInstance()->CreateArea(spawnPoint, 400.0f);
+
+	newGroup.m_battleAreaId = areaId;
 
 	m_enemyGroupList.push_back(std::move(newGroup));
 }
@@ -189,6 +204,7 @@ void EnemyManager::UpdateEnemyDataSet()
 		{
 			EnemyInfoGroupe newGroup;
 			newGroup.m_groupId = groupId;
+			newGroup.m_battleAreaId = enemyGroupList[groupId].m_battleAreaId;
 			m_enemyInfoList.push_back(newGroup);
 			existGroup = &m_enemyInfoList.back();
 		}
@@ -285,4 +301,18 @@ Vector3 EnemyManager::GetRandomPointInRadius(const Vector3& point, float radius)
 	float distR = radius * std::cbrt(Random::Range(0.0f, 1.0f));
 
 	return point + dir * distR;
+}
+
+void EnemyManager::EnemyGroupeBattleSet(int battleAreaId)
+{
+	for (auto& infoPtr : GetEnemyInfoList())
+	{
+		if (infoPtr.m_battleAreaId == battleAreaId)
+		{
+			//戦闘状態にする
+			SetEnemyGroupeInBattle(infoPtr.m_groupId, true);
+
+			
+		}
+	}
 }

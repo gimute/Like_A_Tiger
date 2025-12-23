@@ -49,6 +49,8 @@ struct EnemyInfoGroupe
 {
 	//グループID
 	int m_groupId = -1;
+	//戦闘エリアID
+	int m_battleAreaId = -1;
 	//所属している敵のリスト
 	std::vector<EnemyMemberInfo> m_enemyAiInfoList;
 	//戦闘中かどうか
@@ -80,6 +82,8 @@ struct EnemyGroup
 {
 	//エネミーの１グループ
 	std::vector<int> m_enemyID;
+	//戦闘エリアのID
+	int m_battleAreaId = -1;
 	//このグループが戦闘中か
 	bool isInBattle = false;
 };
@@ -151,6 +155,8 @@ private:
 	Vector3 GetRandomPointInRadius(const Vector3& point, float radius);
 	//データセットを更新
 	void UpdateEnemyDataSet();
+	//戦闘エリアIDからどの敵を戦闘状態にするかを選択
+	void EnemyGroupeBattleSet(int battleAreaId);
 public:
 	inline std::vector<EnemyPair>& GetEnemyPairList()
 	{

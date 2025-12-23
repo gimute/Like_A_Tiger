@@ -48,7 +48,7 @@ private:
 	//インスタンス
 	static BattleAreaManager* m_instance;
 	//コンストラクタ
-	BattleAreaManager();
+	BattleAreaManager() {};
 	//コピー禁止
 	BattleAreaManager(const BattleAreaManager&) = delete;
 	//代入禁止にする

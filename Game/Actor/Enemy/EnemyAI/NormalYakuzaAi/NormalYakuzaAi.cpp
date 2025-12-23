@@ -144,19 +144,6 @@ IStateBase* NormalYakuzaAi::GetNextState()
 		return FindClassNameState<EnemyAiIdleState>();
 	}
 
-	//ŒÂX‚Ìˆ—”÷–­‚È‚Ì‚ÅC³—\’è
-	if (!m_attackFlag)
-	{
-		//’ÇÕ”»’è‚ÌƒoƒOC³
-		m_attackFlag = AttackTimer();
-	}
-	else
-	{
-		m_attackTestTime = NormalYakuzaAiConstant::ATTACK_TIME;
-
-		m_attackFlag = true;
-	}
-
 	if (CanChangeAttack())
 	{
 		return FindClassNameState<NormalYakuzaAiAttackState>();
@@ -169,104 +156,42 @@ IStateBase* NormalYakuzaAi::GetNextState()
 		return FindClassNameState<EnemyAiWaitingAttackState>();
 	}
 
-	if (CanChangeTraking())
-	{
-		return FindClassNameState<EnemyAiTrackingState>();
-	}
-
 	return FindClassNameState<EnemyAiIdleState>();
-}
-
-bool NormalYakuzaAi::CanChangeTraking()
-{
-	Vector3 targetPos = m_targetView.m_targetPosition;
-
-	Vector3 iPos = m_hasStateMachine->GetHasCharactarPos();
-
-	Vector3 targetToIVec = targetPos - iPos;
-		
-	float radius = NormalYakuzaAiConstant::START_TRACKING_RADIUS;
-
-	float radiusSq = radius * radius;
-
-	float targetToVecLenSq = targetToIVec.LengthSq();
-
-	if (m_yakuzaRole == YakuzaRole::en_YakuzaRole_Traking)
-	{
-		return true;
-	}
-
-	if (targetToVecLenSq <= radiusSq)
-	{
-		return true;
-	}
-
-	return false;
 }
 
 bool NormalYakuzaAi::CanChangeWaitingAttack()
 {
-
-	Vector3 targetPos = m_targetView.m_targetPosition;
-
-	Vector3 iPos = m_hasStateMachine->GetHasCharactarPos();
-
-	Vector3 targetToIVec = targetPos - iPos;
-
-	float radius = 0.0f;
-
-	if (IsAiNowStateClassName<EnemyAiWaitingAttackState>())
+	if (!m_isInBattle)
 	{
-		radius = NormalYakuzaAiConstant::EXIT_WAITING_ATTACK_RADIUS;
-	}
-	else
-	{
-		radius = NormalYakuzaAiConstant::WAITING_ATTACK_RADIUS;
-	}
-
-	float radiusSq = radius * radius;
-
-	if (targetToIVec.LengthSq() <= radiusSq)
-	{
-		return true;
-	}
-	return false;
-}
-
-bool NormalYakuzaAi::CanChangeAttack()
-{
-	Vector3 targetPos = m_targetView.m_targetPosition;
-	Vector3 iPos = m_hasStateMachine->GetHasCharactarPos(); 
-	Vector3 targetToIVec = targetPos - iPos; 
-	float radius = 600.0f;
-	float radiusSq = radius * radius; 
-	float targetToVecLenSq = targetToIVec.LengthSq();
-
-	bool inRange = (targetToVecLenSq >= radiusSq);
-
-	if (inRange)
-	{ 
 		return false;
-	} 
-	
-	if (!m_attackFlag) 
-	{ 
-		//‚±‚±‚ÉUŒ‚I—¹ƒ^ƒCƒ}[‚ğ•t‚¯‚é‚Ì‚ª‚¢‚¢‚©‚à
-		//UŒ‚I—¹”»’f‚ğ‘S‘ÌŠÇ—AI‚É”C‚¹‚é‚©ŒÂ•Ê‚Ì“G‚É”C‚¹‚é‚©Œˆ‚ß‚éB
+	}
 
-
+	if (m_attackFlag)
+	{
 		return false;
-	} 
+	}
 
 	return true;
 }
 
-bool NormalYakuzaAi::AttackTimer()
+bool NormalYakuzaAi::CanChangeAttack()
 {
+	if (!m_isInBattle)
+	{
+		return false;
+	}
+
 	if (m_yakuzaRole == YakuzaRole::en_YakuzaRole_Attack)
 	{
+		m_attackFlag = true;
+
 		return true;
 	}
 
+	return false;
+}
+
+bool NormalYakuzaAi::AttackTimer()
+{
 	return false;
 }

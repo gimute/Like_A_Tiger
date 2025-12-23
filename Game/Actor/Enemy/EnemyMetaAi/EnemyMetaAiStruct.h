@@ -19,6 +19,9 @@ struct MetaAiGroupState
 	//TrakingRoleProcess
 	bool m_isTrakingProcessEnd = false;
 
+	//BattleStartNotifyProcess
+	bool m_isBattleStartProcessEnd = false;
+
 	//BattleEndNotifyProcess
 	bool m_isBattleEndProcessEnd = false;
 	float m_processStartTime = 0.0f;
