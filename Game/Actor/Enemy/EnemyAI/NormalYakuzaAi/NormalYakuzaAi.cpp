@@ -123,8 +123,6 @@ void NormalYakuzaAiAttackState::OnExit()
 	m_attackEndFlag = true;
 	//狙い移動を停止
 	m_hasStateMachine->SetIsAimMove(false);
-	//タイマー初期化
-    m_owner->SetAttackTimer(NormalYakuzaAiConstant::ATTACK_TIME);
 	//ステート側に攻撃終了を伝える
 	m_owner->SetAttackFlag(false);
 }
@@ -176,22 +174,19 @@ bool NormalYakuzaAi::CanChangeWaitingAttack()
 
 bool NormalYakuzaAi::CanChangeAttack()
 {
+
 	if (!m_isInBattle)
 	{
 		return false;
 	}
 
-	if (m_yakuzaRole == YakuzaRole::en_YakuzaRole_Attack)
+	if (m_yakuzaRole == YakuzaRole::en_YakuzaRole_Attack ||
+		m_attackFlag)
 	{
 		m_attackFlag = true;
 
 		return true;
 	}
 
-	return false;
-}
-
-bool NormalYakuzaAi::AttackTimer()
-{
 	return false;
 }
