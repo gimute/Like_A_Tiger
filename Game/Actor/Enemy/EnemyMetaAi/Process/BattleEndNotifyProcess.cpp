@@ -12,7 +12,7 @@ namespace BattleEndNotifyProcessConstant
 
 void BattleEndNotifyProcess::AssignRoles(MetaAiProccesInfo* groupePtr)
 {
-	EnemyManager::GetInstance()->SetEnemyGroupeInBattle(groupePtr->m_useGroupe->m_groupId, false);
+	EnemyManager::GetInstance()->SetEnemyGroupeInBattle(groupePtr->m_useGroupeId, false);
 
 	groupePtr->m_grouoeState.m_isBattleEndProcessEnd = true;
 }
@@ -21,9 +21,9 @@ bool BattleEndNotifyProcess::IsApplicable(MetaAiProccesInfo* groupePtr)
 {
 	int trakingEndEnemy = 0;
 	bool isBattleEnd = false;
-	auto& enemyInfoList = groupePtr->m_useGroupe->m_enemyAiInfoList;
+	auto& enemyInfoList = groupePtr->FindGroup(groupePtr->m_useGroupeId)->m_enemyAiInfoList;
 
-	if (!groupePtr->m_useGroupe->m_inBattle)
+	if (!groupePtr->FindGroup(groupePtr->m_useGroupeId)->m_inBattle)
 	{
 		return false;
 	}

@@ -4,7 +4,7 @@
 void BattleStartNotifyProcess::AssignRoles(MetaAiProccesInfo* groupePtr)
 {
 	//エネミーのAIのリストを取得
-	auto& enemyAiList = groupePtr->m_useGroupe->m_enemyAiInfoList;
+	auto& enemyAiList = groupePtr->FindGroup(groupePtr->m_useGroupeId)->m_enemyAiInfoList;
 
 	//AIリスト全体に処理
 	for (auto& aiPtr : enemyAiList)
@@ -18,10 +18,8 @@ void BattleStartNotifyProcess::AssignRoles(MetaAiProccesInfo* groupePtr)
 
 bool BattleStartNotifyProcess::IsApplicable(MetaAiProccesInfo* groupePtr)
 {
-	//エネミーのグループを取得
-	auto& enemyGrope = groupePtr->m_useGroupe;
 	//エネミーのAIリストを取得
-	auto& enemyAI = enemyGrope->m_enemyAiInfoList;
+	auto& enemyAI = groupePtr->FindGroup(groupePtr->m_useGroupeId)->m_enemyAiInfoList;
 
 	//リストのAIが戦闘中かどうか
 	bool isAiInBattle = false;
@@ -39,7 +37,7 @@ bool BattleStartNotifyProcess::IsApplicable(MetaAiProccesInfo* groupePtr)
 		}
 	}
 
-	if (enemyGrope->m_inBattle)
+	if (groupePtr->FindGroup(groupePtr->m_useGroupeId)->m_inBattle)
 	{
 		//このグループは戦闘中
 		isGropeInBattle = true;

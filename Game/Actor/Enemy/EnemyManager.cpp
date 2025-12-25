@@ -82,6 +82,8 @@ void EnemyManager::RequestSpawnEnemyGroup(int spawnNum, const Vector3& spawnPoin
 
 	newGroup.m_battleAreaId = areaId;
 
+	newGroup.m_groupeId = m_enemyGroupIDCounter++;
+
 	m_enemyGroupList.push_back(std::move(newGroup));
 }
 
@@ -127,6 +129,8 @@ void EnemyManager::RequestDeadEnemyProcces(const Enemy& deadEnemyAddress)
 		//もし削除してIDリストが空なら
 		if (it->m_enemyID.empty())
 		{
+			BattleAreaManager::GetInstance()->RemoveArea(it->m_battleAreaId);
+
 			it = m_enemyGroupList.erase(it);
 		}
 		else
@@ -178,9 +182,10 @@ void EnemyManager::UpdateEnemyDataSet()
 
 	std::unordered_set<int> currentGroupIds;
 
-	for (int groupId = 0; groupId < enemyGroupList.size(); ++groupId)
+	//グループのIDがこのままでは要素数しか代入できないので修正予定
+	for (auto& groupPtr : enemyGroupList)
 	{
-		auto& group = enemyGroupList[groupId];
+		int groupId = groupPtr.m_groupeId;
 		currentGroupIds.insert(groupId);
 
 		//グループがすでにあるかを探索
@@ -204,21 +209,21 @@ void EnemyManager::UpdateEnemyDataSet()
 		{
 			EnemyInfoGroupe newGroup;
 			newGroup.m_groupId = groupId;
-			newGroup.m_battleAreaId = enemyGroupList[groupId].m_battleAreaId;
+			newGroup.m_battleAreaId = groupPtr.m_battleAreaId;
 			m_enemyInfoList.push_back(newGroup);
 			existGroup = &m_enemyInfoList.back();
 		}
 		//新規でないならグループ情報を更新
 		else
 		{
-			existGroup->m_inBattle = enemyGroupList[groupId].isInBattle;
+			existGroup->m_inBattle = groupPtr.isInBattle;
 		}
 
 		//グループ内部の更新
 		existGroup->m_enemyAiInfoList.clear();
 
 		//EnemyIdごとにEnemyMemberInfowo作成
-		for (auto& id : group.m_enemyID)
+		for (auto& id : groupPtr.m_enemyID)
 		{
 			EnemyPair* pair = nullptr;
 

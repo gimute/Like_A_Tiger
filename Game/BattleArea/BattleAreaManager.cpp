@@ -53,7 +53,7 @@ void BattleAreaManager::RemoveArea(int id)
 	{
 		if (areaIt->m_battleArea.m_id == id)
 		{
-			m_areas.erase(areaIt);
+			areaIt = m_areas.erase(areaIt);
 		}
 		else
 		{

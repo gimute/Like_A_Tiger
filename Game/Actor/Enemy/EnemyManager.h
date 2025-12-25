@@ -82,6 +82,8 @@ struct EnemyGroup
 {
 	//エネミーの１グループ
 	std::vector<int> m_enemyID;
+	//このグループのID
+	int m_groupeId = -1;
 	//戦闘エリアのID
 	int m_battleAreaId = -1;
 	//このグループが戦闘中か
@@ -147,6 +149,8 @@ private:
 	EnemyMetaAi* m_enemyMetaAi = nullptr;
 	//敵のIDカウンター
 	int m_enemyIDCounter = 0;
+	//敵のグループIDカウンター
+	int m_enemyGroupIDCounter = 0;
 	//外部用データセット
 	std::vector<EnemyInfoGroupe> m_enemyInfoList;
 	//TargetView更新
@@ -188,26 +192,26 @@ public:
 	//指定IDの敵グループが戦闘状態かどうかを設定
 	inline void SetEnemyGroupeInBattle(int id,bool setIs)
 	{
-		auto& groupeList = GetEnemyGroupList();
-
-		if (groupeList.size() < id)
+		for (auto& groupPtr : m_enemyGroupList)
 		{
-			return;
+			if (groupPtr.m_groupeId == id) 
+			{
+				groupPtr.isInBattle = setIs;
+			}
 		}
-
-		groupeList[id].isInBattle = setIs;
 	}
 	//指定IDが戦闘状態かどうかを取得
 	inline bool GetEnemyGroupeInBattle(int id)
 	{
-		auto& groupeList = GetEnemyGroupList();
-
-		if (groupeList.size() < id)
+		for (auto& groupPtr : m_enemyGroupList)
 		{
-			return false;
+			if (groupPtr.m_groupeId == id)
+			{
+				return groupPtr.isInBattle;
+			}
 		}
 
-		return groupeList[id].isInBattle;
+		return false;
 	}
 };
 
