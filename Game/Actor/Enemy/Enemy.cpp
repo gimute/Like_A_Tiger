@@ -75,7 +75,7 @@ void Enemy::OnHit(const char* hitCollisionName, CollisionObject* pairCollision)
 		//ダメージ取得
 		float toPlayerDamage = GetYakuzaStateMachine().GetTypeSetAttackPower();
 		//ダメージ送る
-		YakuzaCharacterDamageManager::GetInstance()->SendPlayerYakuzaDamage(toPlayerDamage);
+		YakuzaCharacterDamageManager::GetInstance()->SendPlayerYakuzaDamage(toPlayerDamage,GetPosition());
 	}
 }
 

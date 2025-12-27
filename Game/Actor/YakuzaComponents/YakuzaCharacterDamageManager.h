@@ -33,7 +33,8 @@ public:
 	////引数のコリジョンを持っているその他のYakuzaを検索して引数分のダメージを与える
 	//void SendOtherYakuzaDamage(const char* name, float sendDamage);
 	//プレイヤーにダメージを送る
-	void SendPlayerYakuzaDamage(float sendDamage);
+	void SendPlayerYakuzaDamage(float sendDamage,const Vector3& attackerPos);
+
 	//プレイヤーからダメージを受け取る
 	float GetPlayerYakuzaDamage();
 
@@ -48,6 +49,15 @@ public:
 	{
 		m_playerPtr = setPlayer;
 	}
+private:
+
+	//防御に成功しているかどうか
+	bool IsDefenseSuccessful(
+		const Vector3& defenderPos,
+		const Vector3& defenderForward,
+		const Vector3& attackerPos,
+		float defenseAngleCos = 0.0f
+	);
 
 	////ダメージを与えるその他のYakuzaのリスト
 	//std::vector<YakuzaCharacter*> m_sendDamageOtherYakuzaList;

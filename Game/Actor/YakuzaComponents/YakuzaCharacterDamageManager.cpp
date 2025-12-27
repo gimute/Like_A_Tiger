@@ -38,7 +38,7 @@ YakuzaCharacterDamageManager* YakuzaCharacterDamageManager::m_instance = nullptr
 //	}
 //}
 
-void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(float sendDamage)
+void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(float sendDamage, const Vector3& attackerPos)
 {
 	if (!m_playerPtr ||
 		m_playerPtr->GetIsInvicible())
@@ -50,13 +50,23 @@ void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(float sendDamage)
 
 	bool isDefense = false;
 
-	//ƒK[ƒhŽž‚Íƒ_ƒ[ƒW‚ð”¼Œ¸‚·‚é
+	//ƒK[ƒhŽž‚Íƒ_ƒ[ƒW‚ð0‚É‚·‚é
 	if(m_playerPtr->GetYakuzaStateMachine().
 		IsGetYakuzaStateMachineNowState<YakuzaDefenseState>())
 	{
-		isDefense = true;
+		//Šp“x‚É‚æ‚Á‚Ä–hŒä¬Œ÷”»’è
+		if (IsDefenseSuccessful(
+			m_playerPtr->GetPosition(),
+			m_playerPtr->GetForward(),
+			attackerPos,
+			0.3f//‘O‘¤–ñ140“x‚Í–hŒä¬Œ÷ˆµ‚¢
+		))
+		{
+			isDefense = true;
 
-		sendDamage /= 2;
+			//ƒ_ƒ[ƒW‚ð0‚É
+			sendDamage = 0;
+		}
 	}
 
 	m_playerPtr->TakePlayerHp(sendDamage);
@@ -73,6 +83,33 @@ void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(float sendDamage)
 			m_playerPtr->GetYakuzaStateMachine().SetIsDamage(true);
 		}
 	}	
+}
+
+bool YakuzaCharacterDamageManager::IsDefenseSuccessful(
+	const Vector3& defenderPos,
+	const Vector3& defenderForward,
+	const Vector3& attackerPos,
+	float defenseAngleCos
+)
+{
+	//–hŒäŽÒ‚©‚çUŒ‚ŽÒ‚Ö‚ÌƒxƒNƒgƒ‹‚ð‹‚ß‚é
+	Vector3 toAttacker = attackerPos - defenderPos;
+	toAttacker.Normalize();
+
+	//³–Ê•ûŒü‚à³‹K‰»
+	Vector3 foward = defenderForward;
+	foward.Normalize();
+
+	//“àÏ‚ð‹‚ß‚é
+	float dot = foward.Dot(toAttacker);
+
+	//³–Ê‘¤‚È‚ç•b‹›¬Œ÷
+	if (dot >= defenseAngleCos)
+	{
+		return true;
+	}
+
+	return false;
 }
 
 float YakuzaCharacterDamageManager::GetPlayerYakuzaDamage()
