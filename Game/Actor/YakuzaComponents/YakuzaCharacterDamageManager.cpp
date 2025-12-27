@@ -4,6 +4,8 @@
 #include "Actor\Enemy\EnemyManager.h"
 #include "Actor\Enemy\Enemy.h"
 
+#include "Actor\YakuzaComponents\YakuzaStates.h"
+
 //インスタンス初期化
 YakuzaCharacterDamageManager* YakuzaCharacterDamageManager::m_instance = nullptr;
 
@@ -46,6 +48,17 @@ void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(float sendDamage)
 	////無敵時間開始
 	//m_playerPtr->StartInvincible(3.0f);
 
+	bool isDefense = false;
+
+	//ガード時はダメージを半減する
+	if(m_playerPtr->GetYakuzaStateMachine().
+		IsGetYakuzaStateMachineNowState<YakuzaDefenseState>())
+	{
+		isDefense = true;
+
+		sendDamage /= 2;
+	}
+
 	m_playerPtr->TakePlayerHp(sendDamage);
 
 	//ここにダメージ処理
@@ -55,7 +68,10 @@ void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(float sendDamage)
 	}
 	else
 	{
-		m_playerPtr->GetYakuzaStateMachine().SetIsDamage(true);
+		if (!isDefense)
+		{
+			m_playerPtr->GetYakuzaStateMachine().SetIsDamage(true);
+		}
 	}	
 }
 
