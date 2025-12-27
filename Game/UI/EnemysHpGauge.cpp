@@ -66,6 +66,9 @@ bool EnemysHpGauge::CreateEnemyHpUI(int areaId)
 		return false;
 	}
 
+	//HPƒŠƒXƒg‚ğ‰Šú‰»
+	m_enemyHpList.clear();
+
 	//HP‚Ì¶¬
 	for (int hpNo = 0; hpNo < listSize; ++hpNo)
 	{
