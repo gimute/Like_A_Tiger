@@ -57,28 +57,17 @@ public:
 	//次のステートを取得
 	IStateBase* GetNextState() override;
 private:
-	//攻撃までの時間
-	float m_attackTestTime = 0.0f;
 	//攻撃フラグ
 	bool m_attackFlag = false;
-	//追跡状態に移行できるかどうか
-	bool CanChangeTraking();
 	//攻撃待機状態に移行できるかどうか
 	bool CanChangeWaitingAttack();
 	//攻撃に移行できるかどうか
 	bool CanChangeAttack();
-	//攻撃タイマー
-	bool AttackTimer();
 public:
 
 	inline void SetAttackFlag(bool setIs) { m_attackFlag = setIs; }
 
 	inline bool GetAttackFlag() { return m_attackFlag; }
-
-	inline void SetAttackTimer(float setTime) { m_attackTestTime = setTime; }
-
-	inline float GetAttackTimer() { return m_attackTestTime; }
-
 private:
 	static AiAutoRegister<NormalYakuzaAi> aiSet;
 };

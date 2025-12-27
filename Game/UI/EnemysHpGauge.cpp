@@ -5,6 +5,8 @@
 #include "Actor\Enemy\Enemy.h"
 #include "Actor\YakuzaComponents\YakuzaCharacter.h"
 
+#include "BattleArea\BattleAreaManager.h"
+
 namespace EnemyHpGaugeConstant
 {
 	const int ENEMY_HPUI_MAX = 4;
@@ -17,8 +19,58 @@ namespace EnemyHpGaugeConstant
 
 bool EnemysHpGauge::Start()
 {
-	//表示限界数は4体
-	for (int hpNo = 0;hpNo < EnemyHpGaugeConstant::ENEMY_HPUI_MAX;++hpNo)
+	BattleAreaManager::GetInstance()->RegisterOnEnterListener(
+		[&](const BattleArea& area)
+		{
+			 m_isCreateHpUi = CreateEnemyHpUI(area.m_id);
+		}
+	);
+
+	return true;
+}
+
+void EnemysHpGauge::Update()
+{
+	if (m_isCreateHpUi)
+	{
+		RemoveDeadEnemyHpUI();
+
+		UpdateEnemyGroupeHpInfo();
+	}
+}
+
+bool EnemysHpGauge::CreateEnemyHpUI(int areaId)
+{
+	auto& enemyInfoList = EnemyManager::GetInstance()->GetEnemyInfoList();
+
+	EnemyInfoGroupe* existGroup = nullptr;
+
+	for (auto& infoPtr : enemyInfoList)
+	{
+		if (infoPtr.m_battleAreaId == areaId)
+		{
+			existGroup = &infoPtr;
+
+			break;
+		}
+	}
+
+	int listSize = 0;
+
+	if (existGroup)
+	{
+		listSize = existGroup->m_enemyAiInfoList.size();
+	}
+	else
+	{
+		return false;
+	}
+
+	//HPリストを初期化
+	m_enemyHpList.clear();
+
+	//HPの生成
+	for (int hpNo = 0; hpNo < listSize; ++hpNo)
 	{
 		EnemyHpInfo newInfo;
 		//HPUIの初期化
@@ -31,10 +83,10 @@ bool EnemysHpGauge::Start()
 		Vector3 hpUiPosition = EnemyHpGaugeConstant::HPUI_POSITION;
 
 		hpUiPosition.y += hpNo * 50.0f;
- 
+
 		newHpUi->SetPosition(hpUiPosition);
 
-		newHpUi->SetScale({0.2f,0.3f,0.0});
+		newHpUi->SetScale({ 0.2f,0.3f,0.0 });
 		//表示名Renderの初期化
 		//表示可能に設定する
 		newHpUi->InitUseName();
@@ -46,8 +98,8 @@ bool EnemysHpGauge::Start()
 		fontPosition.y += 10.0f * hpNo;
 
 		newHpUi->SetNamePosition(fontPosition);
-			
-		newHpUi->SetNameScale(Vector3{0.5f,0.5f,0.0});
+
+		newHpUi->SetNameScale(Vector3{ 0.5f,0.5f,0.0 });
 
 		newHpUi->SetTextDraw(false);
 
@@ -57,57 +109,11 @@ bool EnemysHpGauge::Start()
 		m_enemyHpList.push_back(newInfo);
 	}
 
-	return true;
-}
-
-void EnemysHpGauge::Update()
-{
-	bool isSerchInBattleGroupe = SearchInBattleGroupe();
-
-	if (isSerchInBattleGroupe)
-	{
-		RemoveDeadEnemyHpUI();
-
-		UpdateEnemyGroupeHpInfo();
-	}
-}
-
-bool EnemysHpGauge::SearchInBattleGroupe()
-{
-	//もうすでに処理中ならtrue
-	if (m_proccesEnemyGroupe)
-	{
-		return true;
-	}
-
-	auto& enemyGoupeList = EnemyManager::GetInstance()->GetEnemyInfoList();
-
-	EnemyInfoGroupe* proccesGroupe = nullptr;
-
-	for (auto& groupePtr : enemyGoupeList)
-	{
-		//バトル中のグループを探す
-		if (groupePtr.m_inBattle)
-		{
-			proccesGroupe = &groupePtr;
-
-			break;
-		}
-	}
-
-	//見つからなかったらfalseを返す
-	if (!proccesGroupe)
-	{
-		return false;
-	}
-
-	//見つかったら保持させる
-	m_proccesEnemyGroupe = proccesGroupe;
-	//敵のポインタを登録する
 	//処理するグループの敵のリスト
-	auto& groupeEnemyList = m_proccesEnemyGroupe->m_enemyAiInfoList;
+	auto& groupeEnemyList = existGroup->m_enemyAiInfoList;
 
-	for (int HpNo = 0;HpNo < m_enemyHpList.size();++HpNo)
+	//生成したHPのリストに敵の情報を設定
+	for (int HpNo = 0; HpNo < m_enemyHpList.size(); ++HpNo)
 	{
 		//エネミーのポインタを保持
 		m_enemyHpList[HpNo].m_proccesEnemyPtr = groupeEnemyList[HpNo].m_enemy;
@@ -160,8 +166,8 @@ void EnemysHpGauge::RemoveDeadEnemyHpUI()
 		//全てのHPが削除されたら
 		if (m_enemyHpList.empty())
 		{
-			//処理中のグループをNullに
-			m_proccesEnemyGroupe = nullptr;
+			//フラグをfalseに
+			m_isCreateHpUi = false;
 		}
 	}
 }
@@ -187,4 +193,5 @@ void EnemysHpGauge::UpdateEnemyGroupeHpInfo()
 
 void EnemysHpGauge::Render(RenderContext& rc)
 {
+
 }

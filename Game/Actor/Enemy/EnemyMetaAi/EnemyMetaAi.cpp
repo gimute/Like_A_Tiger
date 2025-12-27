@@ -35,7 +35,7 @@ void EnemyMetaAi::EnemyAiDataCollect()
 	//ターゲットビュー
 	auto targetView = EnemyManager::GetInstance()->GetTargetView();
 
-	std::unordered_set<int> currentInfoIds;
+	std::unordered_set<int> currentGroupIds;
 
 	for (auto& listPtr : m_metaAiProccesInfoList)
 	{
@@ -45,19 +45,21 @@ void EnemyMetaAi::EnemyAiDataCollect()
 		listPtr.m_camFoward = g_camera3D->GetForward();
 	}
 
+	//ここ修正
+
 	//現在の情報リスト分回す
-	for (int infoId = 0; infoId < infoList.size(); ++infoId)
+	for (auto& infoPtr : infoList)
 	{
-		auto& info = infoList[infoId];
-		currentInfoIds.insert(infoId);
+		int groupId = infoPtr.m_groupId;
+		currentGroupIds.insert(groupId);
 
 		MetaAiProccesInfo* existInfo = nullptr;
 
-		for (auto & proccesInfoPtr : m_metaAiProccesInfoList)
+		for (auto & metaPtr : m_metaAiProccesInfoList)
 		{
-			if (proccesInfoPtr.m_useGroupe->m_groupId == infoId)
-			{
-				existInfo = &proccesInfoPtr;
+			if (metaPtr.m_useGroupeId == groupId)
+			{		
+				existInfo = &metaPtr;
 
 				break;
 			}
@@ -67,7 +69,7 @@ void EnemyMetaAi::EnemyAiDataCollect()
 		if (!existInfo)
 		{
 			MetaAiProccesInfo newInfo;
-			newInfo.m_useGroupe = &info;
+			newInfo.m_useGroupeId = groupId;
 			m_metaAiProccesInfoList.push_back(newInfo);
 		}
 	}
@@ -77,9 +79,9 @@ void EnemyMetaAi::EnemyAiDataCollect()
 		std::remove_if(
 			m_metaAiProccesInfoList.begin(),
 			m_metaAiProccesInfoList.end(),
-			[&](const MetaAiProccesInfo& g)
+			[&](const MetaAiProccesInfo& meta)
 			{
-				return currentInfoIds.count(g.m_useGroupe->m_groupId) == 0;
+				return currentGroupIds.count(meta.m_useGroupeId) == 0;
 			}
 		),
 		m_metaAiProccesInfoList.end()

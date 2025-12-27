@@ -31,7 +31,7 @@ void AttackRoleProcess::AssignRoles(MetaAiProccesInfo* groupePtr)
 	// 0以上なら処理しない
 	if (groupePtr->m_grouoeState.m_attackStartTime >= 0.0f)
 	{
-		for (auto& ptr : groupePtr->m_useGroupe->m_enemyAiInfoList)
+		for (auto& ptr : groupePtr->FindGroup(groupePtr->m_useGroupeId)->m_enemyAiInfoList)
 		{
 			ptr.m_enemyAi->SetYakuzaRole(YakuzaRole::en_YakuzaRole_Wait);
 		}
@@ -40,7 +40,7 @@ void AttackRoleProcess::AssignRoles(MetaAiProccesInfo* groupePtr)
 	}
 
 	//グループ内の敵のリスト
-	auto enemyList = groupePtr->m_useGroupe->m_enemyAiInfoList;
+	auto enemyList = groupePtr->FindGroup(groupePtr->m_useGroupeId)->m_enemyAiInfoList;
 
 	//使用する敵のデータを取り出す
 	std::vector<EnemyMemberInfo*> useEnemyInfoList;
@@ -136,7 +136,7 @@ void AttackRoleProcess::AssignRoles(MetaAiProccesInfo* groupePtr)
 
 bool AttackRoleProcess::IsApplicable(MetaAiProccesInfo* groupePtr)
 {
-	auto enemyInfoList = groupePtr->m_useGroupe->m_enemyAiInfoList;
+	auto enemyInfoList = groupePtr->FindGroup(groupePtr->m_useGroupeId)->m_enemyAiInfoList;
 
 	if (enemyInfoList.empty())
 	{

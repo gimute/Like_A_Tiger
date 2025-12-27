@@ -20,6 +20,8 @@
 
 #include "Actor\YakuzaComponents\YakuzaAttackAssistSystem.h"
 
+#include "BattleArea\BattleAreaManager.h"
+
 
 //ステート侵入関数
 void GameInScene::EnterScene()
@@ -83,6 +85,9 @@ void GameInScene::UpdateScene()
 {
 	//カメラ更新
 	CameraManager::GetCameraManagerInstance()->UpdateCamera();
+
+	//戦闘エリア更新
+	BattleAreaManager::GetInstance()->Update(m_player->GetPosition());
 
 	//EnemyManager更新
 	EnemyManager::GetInstance()->Update();
