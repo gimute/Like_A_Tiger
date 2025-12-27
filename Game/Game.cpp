@@ -6,9 +6,16 @@
 #include "GameScene\GameTitleScene.h"
 #include "GameScene\GameInScene.h"
 
+#include "InvisibleWall.h"
+
 
 bool Game::Start()
 {
+	EffectEngine::GetInstance()->ResistEffect(1, u"Assets/Effect/Circle.efk");
+	EffectEngine::GetInstance()->ResistEffect(2, u"Assets/Effect/Ring.efk");
+	EffectEngine::GetInstance()->ResistEffect(3, u"Assets/Effect/Wall.efk");
+	EffectEngine::GetInstance()->ResistEffect(4, u"Assets/Effect/WallLine.efk");
+
 	//‰Šú‰»ˆ—‚Í•K—v‚Å‚ ‚ê‚Î’Ç‰Á—\’è
 	GameSceneManager::GetSceneManagerInstance()->InitGameSceneManager();
 
