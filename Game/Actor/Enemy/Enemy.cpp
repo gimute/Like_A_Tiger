@@ -57,14 +57,14 @@ void Enemy::OnHit(const char* hitCollisionName, CollisionObject* pairCollision)
 		//ƒ_ƒ[ƒWŽæ“¾
 		float damage = YakuzaCharacterDamageManager::GetInstance()->GetPlayerYakuzaDamage();
 
-		if (damage >= 30.0f)
+		if (damage >= 10.0f)
 		{
 			isKnockBack = true;
 
 			param = KnockBackParam(
 				GetPosition() - EnemyManager::GetInstance()->GetTargetView().m_targetPosition,
 				300.0f,
-				0.3f
+				0.5f
 			);
 		}
 
