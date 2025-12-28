@@ -9,6 +9,30 @@
 
 #include "gameObject\IGameobject.h"
 
+//外部用のノックバック構造体
+struct KnockBackParam
+{
+	//吹き飛ぶ方向
+	Vector3 m_direction = Vector3::Zero;
+	//吹き飛ぶ力
+	float m_power = 0.0f;
+	//吹き飛ぶ時間
+	float m_duration = 0.0f;
+
+	KnockBackParam() = default;
+
+	KnockBackParam(
+		const Vector3& direction,
+		float power,
+		float duration
+	)
+		:m_direction(direction),
+		m_power(power),
+		m_duration(duration)
+	{
+	}
+};
+
 class Character;
 
 class YakuzaCharacter;
@@ -59,6 +83,10 @@ private:
 	bool m_isAimMove = false;
 	//ダメージを受けたかどうか
 	bool m_isDamage = false;
+	//ダメージを受けてノックバックが発生するかどうか
+	bool m_isDamageKnockBack = false;
+	//ノックバックのパラメーター
+	KnockBackParam m_knockBackParam;
 	//死んでしまったかどうか
 	bool m_isDead = false;
 	//狙い移動のキャラクターの位置
@@ -115,9 +143,15 @@ public:
 
 	inline bool GetIsAimMove() { return m_isAimMove; }
 
-	inline void SetIsDamage(bool setIs) { m_isDamage = setIs; }
+	void SetIsDamage(bool setIsDamage, bool setIsKnockBack, KnockBackParam param = KnockBackParam(Vector3{0.0f,0.0f,0.0f},0.0f,0.0f));
 
 	inline bool GetIsDamage() { return m_isDamage; }
+
+	inline bool GetIsDamageKnockBack() { return m_isDamageKnockBack; }
+
+	inline void SetKnockBackParam(const KnockBackParam& param) { m_knockBackParam = param; }
+
+	inline const KnockBackParam& GetKnockBackParam() { return m_knockBackParam; }
 
 	inline void SetIsDead(bool setIs) { m_isDead = setIs; }
 

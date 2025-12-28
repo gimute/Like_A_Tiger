@@ -49,6 +49,9 @@ void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(float sendDamage, cons
 	//m_playerPtr->StartInvincible(3.0f);
 
 	bool isDefense = false;
+	bool isKnockBack = false;
+
+	KnockBackParam param;
 
 	//ガード時はダメージを0にする
 	if(m_playerPtr->GetYakuzaStateMachine().
@@ -69,6 +72,17 @@ void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(float sendDamage, cons
 		}
 	}
 
+	if (sendDamage >= 10.0f)
+	{
+		isKnockBack = true;
+
+		param = KnockBackParam(
+			m_playerPtr->GetPosition() - attackerPos,
+			300.0f,
+			0.3f
+		);
+	}
+
 	m_playerPtr->TakePlayerHp(sendDamage);
 
 	//ここにダメージ処理
@@ -80,7 +94,7 @@ void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(float sendDamage, cons
 	{
 		if (!isDefense)
 		{
-			m_playerPtr->GetYakuzaStateMachine().SetIsDamage(true);
+			m_playerPtr->GetYakuzaStateMachine().SetIsDamage(true,isKnockBack,param);
 		}
 	}	
 }

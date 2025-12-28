@@ -50,8 +50,24 @@ void Enemy::OnHit(const char* hitCollisionName, CollisionObject* pairCollision)
 	if (hitCollisionName == "PlayerAttack" &&
 		pairCollision == m_bodyCollision)
 	{
+		bool isKnockBack = false;
+
+		KnockBackParam param;
+
 		//ダメージ取得
 		float damage = YakuzaCharacterDamageManager::GetInstance()->GetPlayerYakuzaDamage();
+
+		if (damage >= 30.0f)
+		{
+			isKnockBack = true;
+
+			param = KnockBackParam(
+				GetPosition() - EnemyManager::GetInstance()->GetTargetView().m_targetPosition,
+				300.0f,
+				0.3f
+			);
+		}
+
 		//ダメージ受ける
 		TakeDamage(damage);
 
@@ -63,7 +79,7 @@ void Enemy::OnHit(const char* hitCollisionName, CollisionObject* pairCollision)
 		else
 		{
 			//怯み処理
-			GetYakuzaStateMachine().SetIsDamage(true);
+			GetYakuzaStateMachine().SetIsDamage(true,isKnockBack,param);
 		}
 	}
 

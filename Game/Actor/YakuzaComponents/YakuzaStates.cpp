@@ -297,6 +297,12 @@ void YakuzaDefenseState::OnExit()
 
 void YakuzaDamageState::OnEnter()
 {
+	if (m_owner->GetIsDamageKnockBack())
+	{
+		m_isKnockEnd = false;
+
+		m_knockElapsed = 0.0f;
+	}
 }
 
 void YakuzaDamageState::OnUpdate()
@@ -305,15 +311,57 @@ void YakuzaDamageState::OnUpdate()
 
 	m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_hitBody, 0.1f);
 
-	if (!m_owner->IsHasCharactarPlayAnimation())
+	if (m_owner->GetIsDamageKnockBack())
 	{
-		m_owner->SetIsDamage(false);
+		UpdateKnockBack();
+	}
+
+	if (!m_owner->IsHasCharactarPlayAnimation() && m_isKnockEnd)
+	{
+		KnockBackParam param;
+		//ノックバック初期化含めてダメージフラグをリセット
+		m_owner->SetIsDamage(false,false,param);
 	}
 }
 
 void YakuzaDamageState::OnExit()
 {
 
+}
+
+void YakuzaDamageState::UpdateKnockBack()
+{
+	KnockBackParam param = m_owner->GetKnockBackParam();
+
+	//y軸は無視する
+	param.m_direction.y = 0.0f;
+
+	//ノックバック方向
+	Vector3 knockDir = param.m_direction;
+	//ノックバック力
+	float knockPower = param.m_power;
+
+
+	m_knockElapsed += g_gameTime->GetFrameDeltaTime();
+
+	float t = m_knockElapsed / param.m_duration;
+	t = btClamped(t, 0.0f, 1.0f);
+
+	//イージング処理(簡易)
+	float ease = 1.0f - t;
+
+	Vector3 moveVec = knockDir * knockPower * ease * g_gameTime->GetFrameDeltaTime();
+
+	//座標を移動
+	Vector3 newPos = m_owner->GetHasCharactarCharaCon()->Execute(moveVec, g_gameTime->GetFrameDeltaTime());
+
+	//座標を設定
+	m_owner->SetHasCharactarPosition(newPos);
+
+	if (t >= 1.0f)
+	{
+		m_isKnockEnd = true;
+	}
 }
 
 //DeadState

@@ -156,12 +156,19 @@ public:
 	//デストラクタ
 	~YakuzaDamageState() = default;
 
+	//ノックバックが終了したかどうか
+	bool m_isKnockEnd = true;
+	//ノックバック経過時間
+	float m_knockElapsed = 0.0f;
+
 	//ステートイン
 	void OnEnter() override;
 	//ステートアップデート
 	void OnUpdate() override;
 	//ステートアウト
 	void OnExit() override;
+private:
+	void UpdateKnockBack();
 };
 
 class YakuzaDeadState : public IStateBase

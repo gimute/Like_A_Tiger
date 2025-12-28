@@ -123,6 +123,16 @@ void YakuzaStateMachine::InitAttackStateMachine(uint32_t firstAttackStateHash, u
 	m_attackStateMachine->SetFirstFinishBrow(firstFinishBrowStateHash);
 }
 
+void YakuzaStateMachine::SetIsDamage(bool setIsDamage, bool setIsKnockBack, KnockBackParam param)
+{
+	//ダメージフラグ
+	m_isDamage = setIsDamage;
+	//ノックバックフラグ
+	m_isDamageKnockBack = setIsKnockBack;
+	//ノックバック内パラメーター
+	m_knockBackParam = param;
+}
+
 void YakuzaStateMachine::SetHasCharactarPosition(const Vector3& pos) { m_hasCharactar->SetPosition(pos); }
 
 const Vector3& YakuzaStateMachine::GetHasCharactarPos() { return m_hasCharactar->GetPosition(); }
