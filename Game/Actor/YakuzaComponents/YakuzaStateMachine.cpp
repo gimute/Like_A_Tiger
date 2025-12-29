@@ -135,13 +135,10 @@ void YakuzaStateMachine::SetIsDamage(bool setIsDamage, bool setIsKnockBack, Knoc
 
 void YakuzaStateMachine::ResetIsKnockBack(const KnockBackParam& param)
 {
+	//ノックバックフラグを立て直す
 	m_isDamageKnockBack = true;
+	//ノックバック内パラメーターを立て直す
 	m_knockBackParam = param;
-
-	if (IsNowStateClassName<YakuzaDamageState>())
-	{
-
-	}
 }
 
 void YakuzaStateMachine::SetHasCharactarPosition(const Vector3& pos) { m_hasCharactar->SetPosition(pos); }
