@@ -139,6 +139,9 @@ void YakuzaStateMachine::ResetIsKnockBack(const KnockBackParam& param)
 	m_isDamageKnockBack = true;
 	//ノックバック内パラメーターを立て直す
 	m_knockBackParam = param;
+
+	//アニメ～ジョンを一瞬だけ切り替える
+	HasCharactarPlayAnimation(YakuzaAnimation::en_fightingIdle, 0.1f);
 }
 
 void YakuzaStateMachine::SetHasCharactarPosition(const Vector3& pos) { m_hasCharactar->SetPosition(pos); }
