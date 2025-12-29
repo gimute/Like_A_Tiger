@@ -19,6 +19,9 @@ struct MetaAiGroupState
 	//TrakingRoleProcess
 	bool m_isTrakingProcessEnd = false;
 
+	//BattleStartNotifyProcess
+	bool m_isBattleStartProcessEnd = false;
+
 	//BattleEndNotifyProcess
 	bool m_isBattleEndProcessEnd = false;
 	float m_processStartTime = 0.0f;
@@ -35,8 +38,8 @@ struct MetaAiGroupState
 
 struct MetaAiProccesInfo
 {
-	//管理しているグループ
-	EnemyInfoGroupe* m_useGroupe = nullptr;
+	//管理しているグループのID
+	int m_useGroupeId = -1;
 	//このグループに適用するMetaAI
 	IMetaAiProcess* m_useMetaAI = nullptr;
 	//前回仕様していた処理
@@ -47,5 +50,18 @@ struct MetaAiProccesInfo
 	Vector3 m_groupeTargetPosition = Vector3::Zero;
 	//カメラの正面方向
 	Vector3 m_camFoward = Vector3::Zero;
+
+	EnemyInfoGroupe* FindGroup(int groupId)
+	{
+		for (auto& infoPtr : EnemyManager::GetInstance()->GetEnemyInfoList())
+		{
+			if (infoPtr.m_groupId == groupId)
+			{
+				return &infoPtr;
+			}
+		}
+
+		return nullptr;
+	}
 };
 

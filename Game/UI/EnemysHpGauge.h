@@ -31,16 +31,16 @@ public:
 	//レンダー関数
 	void Render(RenderContext& rc);
 private:
-	//先頭中の敵集団を探す
-	bool SearchInBattleGroupe();
+	//敵HPを生成する
+	bool CreateEnemyHpUI(int areaId);
 	//戦闘中の敵グループを査定して、HP等を削除したりする処理
 	void RemoveDeadEnemyHpUI();
 	//戦闘中の敵HP情報を更新
 	void UpdateEnemyGroupeHpInfo();
 private:
-	//処理中のエネミーグループ
-	EnemyInfoGroupe* m_proccesEnemyGroupe = nullptr;
 	//エネミーのHP情報のリスト
 	std::vector<EnemyHpInfo> m_enemyHpList;
+	//敵HPが生成されたかどうか
+	bool m_isCreateHpUi = false;
 };
 

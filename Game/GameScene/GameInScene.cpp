@@ -20,6 +20,8 @@
 
 #include "Actor\YakuzaComponents\YakuzaAttackAssistSystem.h"
 
+#include "BattleArea\BattleAreaManager.h"
+
 
 //ステート侵入関数
 void GameInScene::EnterScene()
@@ -48,6 +50,8 @@ void GameInScene::EnterScene()
 	//EnemyManager::GetInstance()->RequestSpawnEnemy(EnemyYakuzaType::en_normalYakuza,Vector3{1000.0,0.0,0.0});
 	//EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ 1000.0f,0.0f,0.0f });
 	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ -1000.0f,0.0f,0.0f });
+	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ 1000.0f,0.0f,0.0f });
+	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ -3000.0f,0.0f,0.0f });
 
 	EnemyManager::GetInstance()->SetEnemyTargetCharacter(m_player);
 
@@ -79,6 +83,9 @@ void GameInScene::UpdateScene()
 	//カメラ更新
 	CameraManager::GetCameraManagerInstance()->UpdateCamera();
 
+	//戦闘エリア更新
+	BattleAreaManager::GetInstance()->Update(m_player->GetPosition());
+
 	//EnemyManager更新
 	EnemyManager::GetInstance()->Update();
 
@@ -93,6 +100,11 @@ void GameInScene::UpdateScene()
 	///   		});
 	///   }
 
+	//敵残りグループ数による処理テスト
+	if (0 >= EnemyManager::GetInstance()->GetCurrentEnemyGroupeNum())
+	{
+		bool test = true;
+	}
 }
 
 //ステート退出関数

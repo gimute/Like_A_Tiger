@@ -1,0 +1,25 @@
+#pragma once
+#include "Actor\Enemy\EnemyMetaAi\IMetaAiProcess.h"
+
+#include "CRC32.h"
+
+#define appState(name)	\
+public:\
+	static constexpr uint32_t ID() { return Hash32(#name); }
+
+
+class BattleStartNotifyProcess : public IMetaAiProcess
+{
+	appState(BattleStartNotifyProcess)
+public:
+	BattleStartNotifyProcess() = default;
+	~BattleStartNotifyProcess() = default;
+
+	//–ğŠ„‚ÌŒˆ’è
+	void AssignRoles(MetaAiProccesInfo* groupePtr) override;
+	//Às‚Å‚«‚é‚©‚Ç‚¤‚©
+	bool IsApplicable(MetaAiProccesInfo* groupePtr) override;
+	//ˆ—‚ğ‘±‚¯‚é‚©‚Ç‚¤‚©
+	bool IsReady(MetaAiProccesInfo* groupePtr) override;
+};
+

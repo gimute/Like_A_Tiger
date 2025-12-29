@@ -5,6 +5,10 @@
 #include "Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiTrackingState.h"
 #include "Actor\Enemy\EnemyAI\EnemyAiState\IEnemyAttackAiState.h"
 
+#include "Actor\Enemy\Enemy.h"
+#include "Actor\YakuzaComponents\YakuzaStateMachine.h"
+#include "Actor\YakuzaComponents\YakuzaStates.h"
+
 namespace AttackRoleProcessConstant
 {
 	//攻撃開始までの時間
@@ -27,7 +31,7 @@ void AttackRoleProcess::AssignRoles(MetaAiProccesInfo* groupePtr)
 	// 0以上なら処理しない
 	if (groupePtr->m_grouoeState.m_attackStartTime >= 0.0f)
 	{
-		for (auto& ptr : groupePtr->m_useGroupe->m_enemyAiInfoList)
+		for (auto& ptr : groupePtr->FindGroup(groupePtr->m_useGroupeId)->m_enemyAiInfoList)
 		{
 			ptr.m_enemyAi->SetYakuzaRole(YakuzaRole::en_YakuzaRole_Wait);
 		}
@@ -36,23 +40,49 @@ void AttackRoleProcess::AssignRoles(MetaAiProccesInfo* groupePtr)
 	}
 
 	//グループ内の敵のリスト
-	auto enemyList = groupePtr->m_useGroupe->m_enemyAiInfoList;
+	auto enemyList = groupePtr->FindGroup(groupePtr->m_useGroupeId)->m_enemyAiInfoList;
+
+	//使用する敵のデータを取り出す
+	std::vector<EnemyMemberInfo*> useEnemyInfoList;
+
+	for (auto & infoPtr : enemyList)
+	{
+		//現在が死亡ステートまたはダメージステート、現在死亡済みだったら飛ばす
+		if (infoPtr.m_enemy->GetYakuzaStateMachine()
+			.IsGetYakuzaStateMachineNowState<YakuzaDeadState>() ||
+			infoPtr.m_enemy->GetYakuzaStateMachine()
+			.IsGetYakuzaStateMachineNowState<YakuzaDamageState>() ||
+			infoPtr.m_enemy->GetYakuzaStateMachine()
+			.IsHasCharacterDead())
+		{
+			continue;
+		}
+
+		useEnemyInfoList.push_back(&infoPtr);
+	}
+
+	//もしも誰も攻撃できる状態で無ければ戻す
+	if (useEnemyInfoList.empty())
+	{
+		return;
+	}
+
 	//スコアのリスト
 	auto& scoreList = groupePtr->m_grouoeState.m_score;
 	//初期化
 	scoreList.clear();
 	//敵の数分リサイズする
-	scoreList.resize(enemyList.size());
+	scoreList.resize(useEnemyInfoList.size());
 
 	Vector3 targetPos = groupePtr->m_groupeTargetPosition;
 	Vector3 camFoward = groupePtr->m_camFoward;
 
 	//リストから情報を取り出して評価を行う
-	for (int enemyId = 0;enemyId < enemyList.size(); ++enemyId)
+	for (int enemyId = 0;enemyId < useEnemyInfoList.size(); ++enemyId)
 	{
 		//まずは距離計算等
 		//距離ベクトル
-		Vector3 distanceVec = enemyList[enemyId].m_enemyPosition - targetPos;
+		Vector3 distanceVec = useEnemyInfoList[enemyId]->m_enemyPosition - targetPos;
 		//正規化距離ベクトル
 		Vector3 normalizeDistanceVec = distanceVec;
 		normalizeDistanceVec.Normalize();
@@ -80,24 +110,16 @@ void AttackRoleProcess::AssignRoles(MetaAiProccesInfo* groupePtr)
 	
 	//並べ替え後のクラスを格納したいためリストを作成
 	std::vector<EnemyMemberInfo> sortEnemyList(size);
+
 	for (size_t i = 0; i < size; i++)
 	{
-		sortEnemyList[i] = enemyList[sortIndex[i]];
+		sortEnemyList[i] = *useEnemyInfoList[sortIndex[i]];
 	}
 	
-	////点数準に並び替える
-	//std::sort(
-	//	enemyList.begin(),
-	//	enemyList.end(),
-	//	[](const EnemyMemberInfo& a, const EnemyMemberInfo& b)
-	//	{
-	//		return a.m_roleScore > b.m_roleScore;
-	//	}
-	//);
-
 	//一番上のヤツを攻撃役に
 	//auto it = groupePtr->m_useGroupe->m_enemyAiInfoList.begin();
 	auto it = sortEnemyList.begin();
+
 	it->m_enemyAi->SetYakuzaRole(YakuzaRole::en_YakuzaRole_Attack);
 	//今攻撃をしているAIを保持
 	groupePtr->m_grouoeState.m_nowAttackAi = it->m_enemyAi;
@@ -114,7 +136,7 @@ void AttackRoleProcess::AssignRoles(MetaAiProccesInfo* groupePtr)
 
 bool AttackRoleProcess::IsApplicable(MetaAiProccesInfo* groupePtr)
 {
-	auto enemyInfoList = groupePtr->m_useGroupe->m_enemyAiInfoList;
+	auto enemyInfoList = groupePtr->FindGroup(groupePtr->m_useGroupeId)->m_enemyAiInfoList;
 
 	if (enemyInfoList.empty())
 	{
@@ -137,35 +159,12 @@ bool AttackRoleProcess::IsReady(MetaAiProccesInfo* groupePtr)
 	////このままじゃ永遠に追ってくるのでタイマー付ける
 	// ちょっと難しいので検討
 	//途中抜けした際にタイマーがリセットされないのに対策必要かも
-	//if (m_nowAttackAi &&
-	//	m_nowAttackAi->IsAiNowStateClassName<IEnemyAttackAiState>())
-	//{
-	//	// タイマーが未セットなら初期化
-	//	if (m_attackStartTimer <= 0.0f)
-	//	{
-	//		m_attackStartTimer = AttackRoleProcessConstant::ATTACK_END_TIME;
-	//	}
 
-	//	// タイマー更新
-	//	m_attackEndTimer -= g_gameTime->GetFrameDeltaTime();
-
-	//	if (m_attackEndTimer <= 0.0f)
-	//	{
-	//		m_nowAttackAi->SetYakuzaRole(YakuzaRole::en_YakuzaRole_Wait);
-
-	//		m_attackEndTimer = AttackRoleProcessConstant::ATTACK_END_TIME;
-
-	//		m_nowAttackAi = nullptr;
-
-	//		return false;
-	//	}
-	//}
+	//多分死亡した時にちょうど攻撃役に選定されるやつが出てるので、選定時に死亡しているなら飛ばす的な処理がいるかも
 
 	if (groupePtr->m_grouoeState.m_nowAttackAi &&
-		!groupePtr->m_grouoeState.m_nowAttackAi->GetHasYakuzaCharacterIsDead() &&
 		!groupePtr->m_grouoeState.m_nowAttackAi->IsAiNowStateClassName<IEnemyAttackAiState>() || 
 		groupePtr->m_grouoeState.m_nowAttackAi &&
-		!groupePtr->m_grouoeState.m_nowAttackAi->GetHasYakuzaCharacterIsDead() &&
 		groupePtr->m_grouoeState.m_nowAttackAi->GetYakuzaRole() == YakuzaRole::en_YakuzaRole_HitDamage)
 	{
 		groupePtr->m_grouoeState.m_attackStartTime = AttackRoleProcessConstant::ATTACK_START_TIME;

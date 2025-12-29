@@ -5,6 +5,7 @@
 #include "Actor\Enemy\EnemyMetaAi\Process\AttackRoleProcess.h"
 #include "Actor\Enemy\EnemyMetaAi\Process\TrakingRoleProcess.h"
 #include "Actor\Enemy\EnemyMetaAi\Process\BattleEndNotifyProcess.h"
+#include "Actor\Enemy\EnemyMetaAi\Process\BattleStartNotifyProcess.h"	
 
 class IEnemyAi;
 
@@ -16,8 +17,10 @@ public:
 	{
 		//ˆ—İ’è
 		AddProcess<AttackRoleProcess>();
-		//ˆ—İ’è
-		AddProcess<TrakingRoleProcess>();
+		////ˆ—İ’è
+		//AddProcess<TrakingRoleProcess>();
+
+		AddProcess<BattleStartNotifyProcess>();
 		
 		AddProcess<BattleEndNotifyProcess>();
 	}
