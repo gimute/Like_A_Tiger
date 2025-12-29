@@ -6,9 +6,14 @@
 #include "GameScene\GameTitleScene.h"
 #include "GameScene\GameInScene.h"
 
+#include "InvisibleWall.h"
+
 
 bool Game::Start()
 {
+	//ゲーム中で使うエフェクトの準備
+	InitEffect();
+
 	//初期化処理は必要であれば追加予定
 	GameSceneManager::GetSceneManagerInstance()->InitGameSceneManager();
 
@@ -34,4 +39,12 @@ void Game::Update()
 void Game::Render(RenderContext& rc)
 {
 
+}
+
+void Game::InitEffect()
+{
+	EffectEngine::GetInstance()->ResistEffect(1, u"Assets/Effect/InvisibleWall/Circle.efk");
+	EffectEngine::GetInstance()->ResistEffect(2, u"Assets/Effect/InvisibleWall/Ring.efk");
+	EffectEngine::GetInstance()->ResistEffect(3, u"Assets/Effect/InvisibleWall/Wall.efk");
+	EffectEngine::GetInstance()->ResistEffect(4, u"Assets/Effect/InvisibleWall/WallLine.efk");
 }

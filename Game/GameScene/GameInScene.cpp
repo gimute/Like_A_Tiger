@@ -75,9 +75,6 @@ void GameInScene::EnterScene()
 	//m_poseMenu->Init();
 
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
-
-
-	//NewGO<ProtoStage>(UpdateOrder::Actor);
 }
 
 //ステート更新関数
