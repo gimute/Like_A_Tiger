@@ -351,9 +351,8 @@ void YakuzaDamageState::UpdateKnockBack()
 	float ease = 1.0f - t;
 
 	Vector3 moveVec = knockDir * knockPower * ease * g_gameTime->GetFrameDeltaTime();
-
-	//À•W‚ðˆÚ“®
-	Vector3 newPos = m_owner->GetHasCharactarCharaCon()->Execute(moveVec, g_gameTime->GetFrameDeltaTime());
+	
+	Vector3 newPos = m_owner->GetHasCharactarPos() + moveVec;
 
 	//À•W‚ðÝ’è
 	m_owner->SetHasCharactarPosition(newPos);

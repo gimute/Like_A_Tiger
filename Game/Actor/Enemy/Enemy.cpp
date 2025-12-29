@@ -61,10 +61,13 @@ void Enemy::OnHit(const char* hitCollisionName, CollisionObject* pairCollision)
 		{
 			isKnockBack = true;
 
+			Vector3 distNomal = GetPosition() - EnemyManager::GetInstance()->GetTargetView().m_targetPosition;
+			distNomal.Normalize();
+
 			param = KnockBackParam(
-				GetPosition() - EnemyManager::GetInstance()->GetTargetView().m_targetPosition,
+				distNomal,
 				300.0f,
-				0.5f
+				0.3f
 			);
 		}
 

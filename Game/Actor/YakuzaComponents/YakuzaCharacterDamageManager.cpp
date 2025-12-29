@@ -76,8 +76,11 @@ void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(float sendDamage, cons
 	{
 		isKnockBack = true;
 
+		Vector3 distNomal = m_playerPtr->GetPosition() - attackerPos;
+		distNomal.Normalize();
+
 		param = KnockBackParam(
-			m_playerPtr->GetPosition() - attackerPos,
+			distNomal,
 			300.0f,
 			0.3f
 		);
