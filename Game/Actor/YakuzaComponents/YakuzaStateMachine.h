@@ -19,6 +19,13 @@ struct KnockBackParam
 	//吹き飛ぶ時間
 	float m_duration = 0.0f;
 
+	//ステートマシン内用の変数
+	//ノックバックが終了したかどうか
+	bool m_isEndKnockBack = false;
+	//経過時間
+	float m_knockElapsed = 0.0f;
+
+
 	KnockBackParam() = default;
 
 	KnockBackParam(
@@ -145,13 +152,15 @@ public:
 
 	void SetIsDamage(bool setIsDamage, bool setIsKnockBack, KnockBackParam param = KnockBackParam(Vector3{0.0f,0.0f,0.0f},0.0f,0.0f));
 
+	void ResetIsKnockBack(const KnockBackParam& param);
+
 	inline bool GetIsDamage() { return m_isDamage; }
 
 	inline bool GetIsDamageKnockBack() { return m_isDamageKnockBack; }
 
 	inline void SetKnockBackParam(const KnockBackParam& param) { m_knockBackParam = param; }
 
-	inline const KnockBackParam& GetKnockBackParam() { return m_knockBackParam; }
+	inline KnockBackParam* GetKnockBackParam() { return &m_knockBackParam; }
 
 	inline void SetIsDead(bool setIs) { m_isDead = setIs; }
 

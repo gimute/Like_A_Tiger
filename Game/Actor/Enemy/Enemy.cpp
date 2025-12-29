@@ -82,7 +82,14 @@ void Enemy::OnHit(const char* hitCollisionName, CollisionObject* pairCollision)
 		else
 		{
 			//‹¯‚İˆ—
-			GetYakuzaStateMachine().SetIsDamage(true,isKnockBack,param);
+			if (GetYakuzaStateMachine().GetIsDamage())
+			{
+				GetYakuzaStateMachine().ResetIsKnockBack(param);
+			}
+			else
+			{
+				GetYakuzaStateMachine().SetIsDamage(true, isKnockBack, param);
+			}
 		}
 	}
 

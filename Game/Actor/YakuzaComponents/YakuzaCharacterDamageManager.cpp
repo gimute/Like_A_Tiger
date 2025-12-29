@@ -97,7 +97,14 @@ void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(float sendDamage, cons
 	{
 		if (!isDefense)
 		{
-			m_playerPtr->GetYakuzaStateMachine().SetIsDamage(true,isKnockBack,param);
+			if (m_playerPtr->GetYakuzaStateMachine().GetIsDamage())
+			{
+				m_playerPtr->GetYakuzaStateMachine().ResetIsKnockBack(param);
+			}
+			else
+			{
+				m_playerPtr->GetYakuzaStateMachine().SetIsDamage(true, isKnockBack, param);
+			}
 		}
 	}	
 }
