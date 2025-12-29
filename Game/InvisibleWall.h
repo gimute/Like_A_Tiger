@@ -15,6 +15,7 @@ class InvisibleWallShape
 public:
     enum ShapeName
     {
+        Box,
         Circle,
         ShapeNum
     };
@@ -59,16 +60,24 @@ protected:
 
 };
 
-class BoxInvisibleWall : public InvisibleWallBase
+class InvisibleWall : public InvisibleWallBase
 {
 public:
-    BoxInvisibleWall();
-    ~BoxInvisibleWall();
+    InvisibleWall();
+    ~InvisibleWall();
 
     bool Start() override;
     void Update() override;
 
-    void Create(Vector3 pos, Vector3 size);
+    /// <summary>
+    /// ìßñæï«ÇÃê∂ê¨
+    /// å˙Ç›ÇÕàÍíË
+    /// </summary>
+    /// <param name="pos">ç¿ïW</param>
+    /// <param name="Width">â°ïù</param>
+    /// <param name="Hight">çÇÇ≥</param>
+    /// <param name="angle">Yé≤âÒì]äpìx</param>
+    void Create(Vector3 pos, float width, float hight, float angle);
     void Delete();
 };
 
@@ -81,6 +90,11 @@ public:
     bool Start() override;
     void Update() override;
 
+    /// <summary>
+    /// ìßñæï«ÇÃê∂ê¨
+    /// </summary>
+    /// <param name="pos">ç¿ïW</param>
+    /// <param name="radius">îºåa</param>
     void Create(Vector3 pos, float radius);
     void Delete();
 };

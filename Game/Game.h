@@ -6,5 +6,10 @@ public:
 	void Update();
 	void Render(RenderContext& rc);
 private:
+	/// <summary>
+	/// エフェクトの準備
+	/// 主にEffectEngineへの登録
+	/// </summary>
+	void InitEffect();
 };
 

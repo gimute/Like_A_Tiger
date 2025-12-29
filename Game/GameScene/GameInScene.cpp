@@ -20,19 +20,10 @@
 
 #include "Actor\YakuzaComponents\YakuzaAttackAssistSystem.h"
 
-#include "InvisibleWall.h"
 
 //ステート侵入関数
 void GameInScene::EnterScene()
 {
-	m_circleWall = NewGO<CircleInvisibleWall>(0);
-
-	m_circleWall->Create(Vector3::Zero, 1000.0f);
-
-	m_box.Init("Assets/modelData/Collision/Box.tkm");
-
-	//m_collision.CreateFromModel(m_box.GetModel(), m_box.GetModel().GetWorldMatrix());
-
 	//プレイヤーコントローラー生成
 	m_playerController = NewGO<PlayerController>(UpdateOrder::Input, "playercontroller");
 	//プレイヤー生成
@@ -80,9 +71,6 @@ void GameInScene::EnterScene()
 	//m_poseMenu->Init();
 
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
-
-
-	//NewGO<ProtoStage>(UpdateOrder::Actor);
 }
 
 //ステート更新関数

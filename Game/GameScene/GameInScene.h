@@ -7,8 +7,6 @@ class PoseMenu;
 
 class Inventory;
 
-class CircleInvisibleWall;
-
 class GameInScene :
     public IGameSceneState
 {
@@ -49,12 +47,5 @@ private:
     PoseMenu* m_poseMenu = nullptr;
 
     Inventory* m_inventory = nullptr;
-
-    CircleInvisibleWall* m_circleWall = nullptr;
-
-    ModelRender m_box;
-
-    PhysicsStaticObject m_collision;    //•ÇƒRƒŠƒWƒ‡ƒ“
-
 };
 
