@@ -41,6 +41,11 @@ void EnemysHpGauge::Update()
 
 bool EnemysHpGauge::CreateEnemyHpUI(int areaId)
 {
+	if (m_isCreateHpUi)
+	{
+		return true;
+	}
+
 	auto& enemyInfoList = EnemyManager::GetInstance()->GetEnemyInfoList();
 
 	EnemyInfoGroupe* existGroup = nullptr;
