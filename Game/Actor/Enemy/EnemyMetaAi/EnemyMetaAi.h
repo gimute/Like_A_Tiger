@@ -22,7 +22,7 @@ public:
 
 		AddProcess<BattleStartNotifyProcess>();
 		
-		AddProcess<BattleEndNotifyProcess>();
+		//AddProcess<BattleEndNotifyProcess>();
 	}
 	//デストラクタ
 	~EnemyMetaAi() = default;
