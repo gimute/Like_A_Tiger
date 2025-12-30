@@ -123,6 +123,27 @@ void YakuzaStateMachine::InitAttackStateMachine(uint32_t firstAttackStateHash, u
 	m_attackStateMachine->SetFirstFinishBrow(firstFinishBrowStateHash);
 }
 
+void YakuzaStateMachine::SetIsDamage(bool setIsDamage, bool setIsKnockBack, KnockBackParam param)
+{
+	//ダメージフラグ
+	m_isDamage = setIsDamage;
+	//ノックバックフラグ
+	m_isDamageKnockBack = setIsKnockBack;
+	//ノックバック内パラメーター
+	m_knockBackParam = param;
+}
+
+void YakuzaStateMachine::ResetIsKnockBack(const KnockBackParam& param)
+{
+	//ノックバックフラグを立て直す
+	m_isDamageKnockBack = true;
+	//ノックバック内パラメーターを立て直す
+	m_knockBackParam = param;
+
+	//アニメーションを一瞬だけ切り替える
+	HasCharactarPlayAnimation(YakuzaAnimation::en_fightingIdle, 0.1f);
+}
+
 void YakuzaStateMachine::SetHasCharactarPosition(const Vector3& pos) { m_hasCharactar->SetPosition(pos); }
 
 const Vector3& YakuzaStateMachine::GetHasCharactarPos() { return m_hasCharactar->GetPosition(); }

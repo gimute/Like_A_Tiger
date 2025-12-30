@@ -4,6 +4,8 @@
 #include "Actor\Enemy\EnemyManager.h"
 #include "Actor\Enemy\Enemy.h"
 
+#include "Actor\YakuzaComponents\YakuzaStates.h"
+
 //インスタンス初期化
 YakuzaCharacterDamageManager* YakuzaCharacterDamageManager::m_instance = nullptr;
 
@@ -36,7 +38,7 @@ YakuzaCharacterDamageManager* YakuzaCharacterDamageManager::m_instance = nullptr
 //	}
 //}
 
-void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(float sendDamage)
+void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(float sendDamage, const Vector3& attackerPos)
 {
 	if (!m_playerPtr ||
 		m_playerPtr->GetIsInvicible())
@@ -45,6 +47,44 @@ void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(float sendDamage)
 	}
 	////無敵時間開始
 	//m_playerPtr->StartInvincible(3.0f);
+
+	bool isDefense = false;
+	bool isKnockBack = false;
+
+	KnockBackParam param;
+
+	//ガード時はダメージを0にする
+	if(m_playerPtr->GetYakuzaStateMachine().
+		IsGetYakuzaStateMachineNowState<YakuzaDefenseState>())
+	{
+		//角度によって防御成功判定
+		if (IsDefenseSuccessful(
+			m_playerPtr->GetPosition(),
+			m_playerPtr->GetForward(),
+			attackerPos,
+			0.3f//前側約140度は防御成功扱い
+		))
+		{
+			isDefense = true;
+
+			//ダメージを0に
+			sendDamage = 0;
+		}
+	}
+
+	if (sendDamage >= 10.0f)
+	{
+		isKnockBack = true;
+
+		Vector3 distNomal = m_playerPtr->GetPosition() - attackerPos;
+		distNomal.Normalize();
+
+		param = KnockBackParam(
+			distNomal,
+			300.0f,
+			0.3f
+		);
+	}
 
 	m_playerPtr->TakePlayerHp(sendDamage);
 
@@ -55,8 +95,45 @@ void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(float sendDamage)
 	}
 	else
 	{
-		m_playerPtr->GetYakuzaStateMachine().SetIsDamage(true);
+		if (!isDefense)
+		{
+			if (m_playerPtr->GetYakuzaStateMachine().GetIsDamage())
+			{
+				m_playerPtr->GetYakuzaStateMachine().ResetIsKnockBack(param);
+			}
+			else
+			{
+				m_playerPtr->GetYakuzaStateMachine().SetIsDamage(true, isKnockBack, param);
+			}
+		}
 	}	
+}
+
+bool YakuzaCharacterDamageManager::IsDefenseSuccessful(
+	const Vector3& defenderPos,
+	const Vector3& defenderForward,
+	const Vector3& attackerPos,
+	float defenseAngleCos
+)
+{
+	//防御者から攻撃者へのベクトルを求める
+	Vector3 toAttacker = attackerPos - defenderPos;
+	toAttacker.Normalize();
+
+	//正面方向も正規化
+	Vector3 foward = defenderForward;
+	foward.Normalize();
+
+	//内積を求める
+	float dot = foward.Dot(toAttacker);
+
+	//正面側なら秒魚成功
+	if (dot >= defenseAngleCos)
+	{
+		return true;
+	}
+
+	return false;
 }
 
 float YakuzaCharacterDamageManager::GetPlayerYakuzaDamage()
