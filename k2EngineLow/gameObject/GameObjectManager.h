@@ -92,6 +92,7 @@ namespace nsK2EngineLow {
 			}
 			if (gameObject != nullptr)
 			{
+				gameObject->Deleted();
 				gameObject->Dead();
 			}
 		}
@@ -239,8 +240,6 @@ namespace nsK2EngineLow {
 	*/
 	static inline void DeleteGO(IGameObject* go)
 	{
-		go->Deleted();
-
 		GameObjectManager::GetInstance()->DeleteGameObject(go);
 	}
 }
