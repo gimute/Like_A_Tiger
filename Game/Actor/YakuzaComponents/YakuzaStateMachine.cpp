@@ -140,7 +140,7 @@ void YakuzaStateMachine::ResetIsKnockBack(const KnockBackParam& param)
 	//ノックバック内パラメーターを立て直す
 	m_knockBackParam = param;
 
-	//アニメ～ジョンを一瞬だけ切り替える
+	//アニメーションを一瞬だけ切り替える
 	HasCharactarPlayAnimation(YakuzaAnimation::en_fightingIdle, 0.1f);
 }
 
