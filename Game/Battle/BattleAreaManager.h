@@ -101,6 +101,9 @@ private:
 		AreaState() = default;
 	};
 
+	//戦闘エリア侵入をバトルマネージャーに通知
+	void NotifyOnBattleManagerEnter(AreaState areaState);
+
 	//エリアの識別子カウント
 	int m_areaCountNum = 0;
 	//エリアのリスト

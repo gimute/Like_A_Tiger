@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "BattleAreaManager.h"
 
+#include "Actor\Enemy\EnemyManager.h"
+#include "Battle\BattleManager.h"
+
 BattleAreaManager* BattleAreaManager::m_instance = nullptr;
 
 int BattleAreaManager::CreateArea(
@@ -41,6 +44,9 @@ void BattleAreaManager::Update(const Vector3& playerPos)
 			{
 				listener(areaPtr.m_battleArea);
 			}
+
+			//バトルマネージャーにも通知
+			NotifyOnBattleManagerEnter(areaPtr);
 		}
 
 		areaPtr.m_isPlayerInside = nowInside;
@@ -60,4 +66,26 @@ void BattleAreaManager::RemoveArea(int id)
 			areaIt++;
 		}
 	}
+}
+
+void BattleAreaManager::NotifyOnBattleManagerEnter(AreaState areaState)
+{
+	auto& enemyInfoList = EnemyManager::GetInstance()->GetEnemyInfoList();
+	//戦闘に参加する敵グループ情報
+	EnemyInfoGroupe* enemyGroupeInfoPtr = nullptr;
+
+	for (auto& enemyGroupeInfo : enemyInfoList)
+	{
+		if (enemyGroupeInfo.m_battleAreaId == areaState.m_battleArea.m_id)
+		{
+			//BattleManagerに戦闘状態にするように指示
+			enemyGroupeInfoPtr = &enemyGroupeInfo;
+
+			break;
+		}
+	}
+
+	BattleManager::GetInstance()->StartBattle(
+		BattleInfo(enemyGroupeInfoPtr)
+	);
 }

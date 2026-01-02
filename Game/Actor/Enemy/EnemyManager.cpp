@@ -6,7 +6,8 @@
 #include "Actor\Enemy\Enemy.h"
 #include "Actor\Enemy\EnemyMetaAi\EnemyMetaAi.h"
 
-#include "BattleArea\BattleAreaManager.h"
+#include "Battle\BattleAreaManager.h"
+#include "Battle\BattleManager.h"
 
 #include "Random.h"
 
@@ -18,10 +19,18 @@ EnemyManager::EnemyManager()
 	m_enemyMetaAi = NewGO<EnemyMetaAi>(UpdateOrder::AI, "enemymetaai");
 
 	//戦闘エリアにプレイヤーが侵入した際にエネミーを戦闘状態にする処理
-	BattleAreaManager::GetInstance()->RegisterOnEnterListener(
-		[&](const BattleArea& area)
+	//BattleAreaManager::GetInstance()->RegisterOnEnterListener(
+	//	[&](const BattleArea& area)
+	//	{
+	//		EnemyGroupeBattleSet(area.m_id);
+	//	}
+	//);
+
+	//戦闘開始をバトルマネージャーから通知されるように登録
+	BattleManager::GetInstance()->RegisterBattleStartCallBack(
+		[&](const BattleStartEventInfo& eventInfo)
 		{
-			EnemyGroupeBattleSet(area.m_id);
+			EnemyGroupeBattleSet(*eventInfo.m_enemyGroupeInfo);
 		}
 	);
 }
@@ -108,7 +117,7 @@ void EnemyManager::RequestDeadEnemyProcces(const Enemy& deadEnemyAddress)
 		}
 	}
 
-	//グループリスト削除処理
+	//グループリストID削除処理
 	for (auto it = m_enemyGroupList.begin();it != m_enemyGroupList.end();)
 	{
 		//グループ内IDを探す
@@ -126,11 +135,9 @@ void EnemyManager::RequestDeadEnemyProcces(const Enemy& deadEnemyAddress)
 			}
 		}
 
-		//もし削除してIDリストが空なら
-		if (it->m_enemyID.empty())
+		//グループの削除フラグが立っていたら削除
+		if (it->m_isDelete)
 		{
-			BattleAreaManager::GetInstance()->RemoveArea(it->m_battleAreaId);
-
 			it = m_enemyGroupList.erase(it);
 		}
 		else
@@ -308,16 +315,7 @@ Vector3 EnemyManager::GetRandomPointInRadius(const Vector3& point, float radius)
 	return point + dir * distR;
 }
 
-void EnemyManager::EnemyGroupeBattleSet(int battleAreaId)
+void EnemyManager::EnemyGroupeBattleSet(EnemyInfoGroupe& battleInEnemyGroupe)
 {
-	for (auto& infoPtr : GetEnemyInfoList())
-	{
-		if (infoPtr.m_battleAreaId == battleAreaId)
-		{
-			//戦闘状態にする
-			SetEnemyGroupeInBattle(infoPtr.m_groupId, true);
-
-			
-		}
-	}
+	SetEnemyGroupeInBattle(battleInEnemyGroupe.m_groupId, true);
 }

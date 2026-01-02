@@ -32,7 +32,7 @@ public:
 	void Render(RenderContext& rc);
 private:
 	//敵HPを生成する
-	bool CreateEnemyHpUI(int areaId);
+	bool CreateEnemyHpUI(EnemyInfoGroupe* enemyGroupeInfoPtr);
 	//戦闘中の敵グループを査定して、HP等を削除したりする処理
 	void RemoveDeadEnemyHpUI();
 	//戦闘中の敵HP情報を更新
