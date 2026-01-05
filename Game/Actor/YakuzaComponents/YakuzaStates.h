@@ -162,8 +162,6 @@ public:
 	void OnUpdate() override;
 	//ステートアウト
 	void OnExit() override;
-private:
-	void UpdateKnockBack();
 };
 
 class YakuzaDeadState : public IStateBase

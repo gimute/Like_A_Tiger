@@ -152,6 +152,8 @@ public:
 
 	void SetIsDamage(bool setIsDamage, bool setIsKnockBack, KnockBackParam param = KnockBackParam(Vector3{0.0f,0.0f,0.0f},0.0f,0.0f));
 
+	void SetIsDefense(bool setIsKnockBack, KnockBackParam param = KnockBackParam(Vector3{ 0.0f,0.0f,0.0f }, 0.0f, 0.0f));
+
 	void ResetIsKnockBack(const KnockBackParam& param);
 
 	inline bool GetIsDamage() { return m_isDamage; }
@@ -197,6 +199,8 @@ public:
 	bool IsHasCharacterDead();
 
 	bool IsHasCharacterAttackCollisionActive();
+
+	void HasCharacterKnockBackProcces(KnockBackParam& param);
 
 	void HasCharacterDeadProcces();
 

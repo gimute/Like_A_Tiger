@@ -24,15 +24,15 @@ IStateBase* YakuzaStateMachine::GetNextState()
 		return FindClassNameState<YakuzaAttackState>();
 	}
 
+	if (CanChangeDefense())
+	{
+		return FindClassNameState<YakuzaDefenseState>();
+	}
+
 	//回避中なら、回避ボタンが押されたら
 	if (CanChangeSway())
 	{
 		return FindClassNameState<YakuzaSwayState>();
-	}
-
-	if (CanChangeDefense())
-	{
-		return FindClassNameState<YakuzaDefenseState>();
 	}
 
 	if (GetIsAimMove())
@@ -85,7 +85,8 @@ bool YakuzaStateMachine::CanChangeSway()
 
 bool YakuzaStateMachine::CanChangeDefense()
 {
-	if (GetDefenseFlag() &&
+	if (GetIsDamageKnockBack() ||
+		GetDefenseFlag() &&
 		!GetIsSway() &&
 		!GetIsAttack())
 	{
@@ -121,6 +122,14 @@ void YakuzaStateMachine::InitAttackStateMachine(uint32_t firstAttackStateHash, u
 
 	m_attackStateMachine->SetFirstAttack(firstAttackStateHash);
 	m_attackStateMachine->SetFirstFinishBrow(firstFinishBrowStateHash);
+}
+
+void YakuzaStateMachine::SetIsDefense(bool setIsKnockBack, KnockBackParam param)
+{
+	//ノックバックフラグ
+	m_isDamageKnockBack = setIsKnockBack;
+	//ノックバック内パラメーター
+	m_knockBackParam = param;
 }
 
 void YakuzaStateMachine::SetIsDamage(bool setIsDamage, bool setIsKnockBack, KnockBackParam param)
@@ -175,6 +184,38 @@ bool YakuzaStateMachine::IsHasCharacterDead()
 bool YakuzaStateMachine::IsHasCharacterAttackCollisionActive()
 {
 	return m_hasCharactar->IsAttackCollisionActive();
+}
+
+void YakuzaStateMachine::HasCharacterKnockBackProcces(KnockBackParam& param)
+{
+	//y軸は無視する
+	param.m_direction.y = 0.0f;
+
+	//ノックバック方向
+	Vector3 knockDir = param.m_direction;
+	//ノックバック力
+	float knockPower = param.m_power;
+
+
+	param.m_knockElapsed += g_gameTime->GetFrameDeltaTime();
+
+	float t = param.m_knockElapsed / param.m_duration;
+	t = btClamped(t, 0.0f, 1.0f);
+
+	//イージング処理(簡易)
+	float ease = 1.0f - t;
+
+	Vector3 moveVec = knockDir * knockPower * ease * g_gameTime->GetFrameDeltaTime();
+
+	Vector3 newPos = GetHasCharactarCharaCon()->Execute(moveVec, 1.0f);
+
+	//座標を設定
+	SetHasCharactarPosition(newPos);
+
+	if (t >= 1.0f)
+	{
+		param.m_isEndKnockBack = true;
+	}
 }
 
 void YakuzaStateMachine::HasCharacterDeadProcces()
