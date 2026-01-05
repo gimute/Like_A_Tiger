@@ -135,20 +135,14 @@ void EnemyManager::RequestDeadEnemyProcces(const Enemy& deadEnemyAddress)
 			}
 		}
 
-		//グループの削除フラグが立っていたら削除
-		if (it->m_isDelete)
-		{
-			it = m_enemyGroupList.erase(it);
-		}
-		else
-		{
-			it++;
-		}
+		it++;
 	}
 }
 
 void EnemyManager::Update()
 {
+	//エネミーグループリスト更新処理
+	UpdateEnemyGroupe();
 	//外部用のエネミー情報リスト
 	UpdateEnemyDataSet();
 
@@ -172,6 +166,24 @@ void EnemyManager::Update()
 
 	}
 
+}
+
+void EnemyManager::UpdateEnemyGroupe()
+{
+	for (auto it = m_enemyGroupList.begin(); it != m_enemyGroupList.end();)
+	{
+		//グループの削除フラグが経っていたら削除
+		if (it->m_isDelete)
+		{
+			BattleAreaManager::GetInstance()->RemoveArea(it->m_battleAreaId);
+
+			it = m_enemyGroupList.erase(it);
+		}
+		else
+		{
+			it++;
+		}
+	}
 }
 
 void EnemyManager::UpdateEnemyDataSet()

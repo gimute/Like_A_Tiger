@@ -159,6 +159,8 @@ private:
 	void UpdateTargetView();
 	//半径ランダム座標選定
 	Vector3 GetRandomPointInRadius(const Vector3& point, float radius);
+	//エネミーグループ情報更新
+	void UpdateEnemyGroupe();
 	//データセットを更新
 	void UpdateEnemyDataSet();
 	//戦闘エリアIDからどの敵を戦闘状態にするかを選択

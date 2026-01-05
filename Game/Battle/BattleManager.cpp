@@ -47,6 +47,8 @@ void BattleManager::EnemyAliveCheck()
 	//Œ»Ýˆ—’†‚Ì“GƒOƒ‹[ƒvî•ñ‚ª‚È‚¯‚ê‚Îˆ—‚ð”²‚¯‚é
 	if (!m_currentBattleEnemyGroupe)
 	{
+		m_currentBattleState = BattleState::en_None;
+
 		return;
 	}
 
@@ -60,5 +62,9 @@ void BattleManager::EnemyAliveCheck()
 		EnemyManager::GetInstance()->SetEnemyGroupeDeleteFlag(
 			m_currentBattleEnemyGroupe->m_groupId,true
 		);
+
+		m_currentBattleEnemyGroupe = nullptr;
+
+		m_currentBattleState = BattleState::en_BattleEnding;
 	}
 }
