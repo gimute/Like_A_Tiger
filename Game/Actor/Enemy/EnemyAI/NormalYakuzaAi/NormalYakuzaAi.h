@@ -18,17 +18,17 @@ public:
 	//デストラクタ
 	~NormalYakuzaAiAttackState() = default;
 
+	//攻撃接近処理
+	bool ShouldApproachForAttack();
+	//攻撃処理
+	void PerformAttack();
 	//追撃判定
 	bool ShouldPerformChaseAttack();
 	
 	//攻撃範囲内に入っているかどうか
 	bool m_isInAttackDis = false;
-	//追撃フラグ
-	bool m_performAttackFlag = false;
 	//攻撃終了フラグ
 	bool m_attackEndFlag = true;
-	//実行コンボ数
-	int m_comboNum = 0;
 
 	//ステートイン
 	void OnEnter() override;

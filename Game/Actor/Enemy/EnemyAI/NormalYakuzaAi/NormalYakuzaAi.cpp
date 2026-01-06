@@ -7,20 +7,6 @@
 
 #include "Random.h"
 
-//定数等
-namespace NormalYakuzaAiConstant
-{
-	const float START_TRACKING_RADIUS = 700.0f;
-
-	const float WAITING_ATTACK_RADIUS = 200.0f;
-
-	const float EXIT_WAITING_ATTACK_RADIUS = 500.0f;
-
-	const float ATTACK_TIME = 3.0f;
-
-	
-}
-
 namespace NormalYakuzaAiAttackConstant
 {
 	const float ATTACK_START_RADIUS = 50.0f;
@@ -31,16 +17,29 @@ namespace NormalYakuzaAiAttackConstant
 void NormalYakuzaAiAttackState::OnEnter()
 {
 	m_hasStateMachine->SetIsAimMove(true);
+	//AIステートを攻撃中に設定
+	m_owner->SetAiState(YakuzaAiState::en_YakuzaAiState_Attacking);
+	//集団制御用の役割を攻撃中役割に変更
+	m_owner->SetYakuzaRole(YakuzaGroupeRole::en_YakuzaRole_Attacking);
 }
 
 void NormalYakuzaAiAttackState::OnUpdate()
 {
-	//フラグ初期化
-	m_hasStateMachine->SetAttackFlag(false);
-	m_hasStateMachine->SetFinishBrowFlag(false);
-	//計算のための値
-	//攻撃用のステートマシン
-	auto attackState = m_hasStateMachine->GetAttackStateMachine();
+	//もうすでに攻撃範囲に入っていたらそのまま処理
+	//入っていなければ接近処理を行う
+	if (m_isInAttackDis || 
+		ShouldApproachForAttack())
+	{
+		//攻撃範囲に入っているのでフラグを立てて、攻撃終了までは処理を続行させる
+		m_isInAttackDis = true;
+
+		//攻撃処理
+		PerformAttack();
+	}
+}
+
+bool NormalYakuzaAiAttackState::ShouldApproachForAttack()
+{	
 	//ターゲットビュー
 	auto targetView = m_owner->GetTargetView();
 	//自身の座標
@@ -59,20 +58,30 @@ void NormalYakuzaAiAttackState::OnUpdate()
 	//移動ベクトル
 	Vector3 moveVec = Vector3::Zero;
 
-	//攻撃に向かう
-	if (!m_isInAttackDis)
+
+	//攻撃可能範囲に入ったら
+	if (toTargetDist < NormalYakuzaAiAttackConstant::ATTACK_START_RADIUS)
 	{
+		//攻撃範囲に入っているので移動処理はせず、trueを返す
+		return true;
+	}
+	else
+	{
+		//攻撃範囲に入っていないので移動処理を行い、falseを返す
 		moveVec = toTargetDire;
 
-		//攻撃可能範囲に入ったら
-		if (toTargetDist < NormalYakuzaAiAttackConstant::ATTACK_START_RADIUS)
-		{
-			m_isInAttackDis = true;
-		}
-
 		m_hasStateMachine->SetMoveVec(moveVec);
-		return;
+		return false;
 	}
+}
+
+void NormalYakuzaAiAttackState::PerformAttack()
+{
+	//アタックステート初期化
+	m_hasStateMachine->ResetAttackFlagsMachine();
+	//攻撃用のステートマシン
+	auto attackState = m_hasStateMachine->GetAttackStateMachine();
+
 
 	//攻撃が終了したら終了処理
 	if (!m_attackEndFlag &&
@@ -82,7 +91,7 @@ void NormalYakuzaAiAttackState::OnUpdate()
 
 		m_attackEndFlag = true;
 
-		m_owner->SetAttackFlag(false);
+		m_owner->SetAiState(YakuzaAiState::en_YakuzaAiState_WaitMove);
 
 		return;
 	}
@@ -121,10 +130,14 @@ void NormalYakuzaAiAttackState::OnExit()
 {
 	//アタックステート内で攻撃終了を伝える
 	m_attackEndFlag = true;
+	//接近フラグをリセット
+	m_isInAttackDis = false;
 	//狙い移動を停止
 	m_hasStateMachine->SetIsAimMove(false);
+	//集団制御用の役割を攻撃終了役割に変更
+	m_owner->SetYakuzaRole(YakuzaGroupeRole::en_YakuzaRole_AttackEnd);
 	//ステート側に攻撃終了を伝える
-	m_owner->SetAttackFlag(false);
+	m_hasStateMachine->ResetAttackFlagsMachine();
 }
 
 //StateMachine
@@ -136,8 +149,10 @@ IStateBase* NormalYakuzaAi::GetNextState()
 	//ダメージを受けている最中は操作不可
 	if (m_hasStateMachine->GetIsDamage())
 	{
-		//ダメージ
-		m_yakuzaRole = YakuzaRole::en_YakuzaRole_HitDamage;
+		//集団制御用の役割をダメージを受けている役割に変更
+		m_yakuzaRole = YakuzaGroupeRole::en_YakuzaRoleHitDamage;
+		//AIステートを待ち移動に設定
+		m_aiState = YakuzaAiState::en_YakuzaAiState_WaitMove;
 		//とりあえずダメージ終了まで待機
 		return FindClassNameState<EnemyAiIdleState>();
 	}
@@ -149,8 +164,6 @@ IStateBase* NormalYakuzaAi::GetNextState()
 
 	if (CanChangeWaitingAttack())
 	{
-		m_yakuzaRole = m_yakuzaRole = YakuzaRole::en_YakuzaRole_Wait;
-
 		return FindClassNameState<EnemyAiWaitingAttackState>();
 	}
 
@@ -164,27 +177,24 @@ bool NormalYakuzaAi::CanChangeWaitingAttack()
 		return false;
 	}
 
-	if (m_attackFlag)
+	if (m_aiState == YakuzaAiState::en_YakuzaAiState_WaitMove)
 	{
-		return false;
+		return true;
 	}
 
-	return true;
+	return false;
 }
 
 bool NormalYakuzaAi::CanChangeAttack()
 {
-
 	if (!m_isInBattle)
 	{
 		return false;
 	}
 
-	if (m_yakuzaRole == YakuzaRole::en_YakuzaRole_Attack ||
-		m_attackFlag)
+	if (m_aiState == YakuzaAiState::en_YakuzaAiState_Attacking ||
+		m_yakuzaRole == YakuzaGroupeRole::en_YakuzaRole_AttackReady)
 	{
-		m_attackFlag = true;
-
 		return true;
 	}
 

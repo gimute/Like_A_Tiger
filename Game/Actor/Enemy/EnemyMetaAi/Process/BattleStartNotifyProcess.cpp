@@ -10,7 +10,7 @@ void BattleStartNotifyProcess::AssignRoles(MetaAiProccesInfo* groupePtr)
 	for (auto& aiPtr : enemyAiList)
 	{
 		//í“¬’†‚É‚·‚é
-		aiPtr.m_enemyAi->SetIsInBattle(true);
+		aiPtr.m_enemyAi->BattleStartEnemyAI();
 	}
 
 	groupePtr->m_grouoeState.m_isBattleStartProcessEnd = true;

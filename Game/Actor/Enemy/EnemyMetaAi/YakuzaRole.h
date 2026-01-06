@@ -1,12 +1,19 @@
 #pragma once
 
-
-
-enum YakuzaRole
+enum YakuzaGroupeRole
 {
-	en_YakuzaRole_None,
-	en_YakuzaRole_Traking,
-	en_YakuzaRole_Wait,
-	en_YakuzaRole_Attack,
-	en_YakuzaRole_HitDamage
+	en_YakuzaRole_Free,
+	en_yakuzaRole_AttackWait,
+	en_YakuzaRole_AttackReady,
+	en_YakuzaRole_Attacking,
+	en_YakuzaRole_AttackEnd,
+	en_YakuzaRoleHitDamage
 };
+
+enum YakuzaAiState
+{
+	en_YakuzaAiState_Idle,
+	en_YakuzaAiState_WaitMove,
+	en_YakuzaAiState_Attacking,
+};
+

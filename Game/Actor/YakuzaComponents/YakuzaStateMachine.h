@@ -180,6 +180,8 @@ public:
 
 	void InitAttackStateMachine(uint32_t firstAttackStateHash,uint32_t firstFinishBrowStateHash);
 
+	void ResetAttackFlagsMachine();
+
 	void SetHasCharactarPosition(const Vector3& pos);
 
 	const Vector3& GetHasCharactarPos();

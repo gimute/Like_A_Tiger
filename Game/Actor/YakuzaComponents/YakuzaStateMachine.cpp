@@ -124,6 +124,12 @@ void YakuzaStateMachine::InitAttackStateMachine(uint32_t firstAttackStateHash, u
 	m_attackStateMachine->SetFirstFinishBrow(firstFinishBrowStateHash);
 }
 
+void YakuzaStateMachine::ResetAttackFlagsMachine()
+{
+	m_attackFlag = false;
+	m_finishBrowFlag = false;
+}
+
 void YakuzaStateMachine::SetIsDefense(bool setIsKnockBack, KnockBackParam param)
 {
 	//ノックバックフラグ
