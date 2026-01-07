@@ -14,6 +14,9 @@ bool Game::Start()
 	//ゲーム中で使うエフェクトの準備
 	InitEffect();
 
+	//ゲーム中で使うエフェクトの準備
+	InitSound();
+
 	//初期化処理は必要であれば追加予定
 	GameSceneManager::GetSceneManagerInstance()->InitGameSceneManager();
 
@@ -47,4 +50,9 @@ void Game::InitEffect()
 	EffectEngine::GetInstance()->ResistEffect(2, u"Assets/Effect/InvisibleWall/Ring.efk");
 	EffectEngine::GetInstance()->ResistEffect(3, u"Assets/Effect/InvisibleWall/Wall.efk");
 	EffectEngine::GetInstance()->ResistEffect(4, u"Assets/Effect/InvisibleWall/WallLine.efk");
+}
+
+void Game::InitSound()
+{
+	g_soundEngine->ResistWaveFileBank(0, "Assets/Sound/punch.wav");	//パンチヒット音
 }
