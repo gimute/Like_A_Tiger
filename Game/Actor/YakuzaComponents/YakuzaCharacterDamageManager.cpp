@@ -66,9 +66,6 @@ void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(float sendDamage, cons
 		))
 		{
 			isDefense = true;
-
-			//ダメージを0に
-			sendDamage = 0;
 		}
 	}
 
@@ -86,11 +83,16 @@ void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(float sendDamage, cons
 		);
 	}
 
-	m_playerPtr->TakePlayerHp(sendDamage);
+	if (!isDefense)
+	{
+		m_playerPtr->TakePlayerHp(sendDamage);
+	}
 
 	//ここにダメージ処理
 	if (m_playerPtr->IsCharacterHpDead())
 	{
+		m_playerPtr->GetYakuzaStateMachine().ResetIsKnockBack(param);
+
 		m_playerPtr->GetYakuzaStateMachine().SetIsDead(true);
 	}
 	else
@@ -105,6 +107,10 @@ void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(float sendDamage, cons
 			{
 				m_playerPtr->GetYakuzaStateMachine().SetIsDamage(true, isKnockBack, param);
 			}
+		}
+		else
+		{
+			m_playerPtr->GetYakuzaStateMachine().SetIsDefense(true, param);
 		}
 	}	
 }

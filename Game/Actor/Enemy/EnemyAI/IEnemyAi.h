@@ -36,11 +36,20 @@ public:
 
 	inline TargetCharacterView GetTargetView() { return m_targetView; }
 
-	inline void SetYakuzaRole(YakuzaRole role) { m_yakuzaRole = role; }
+	inline void SetAiState(YakuzaAiState state) { m_aiState = state; }
 
-	inline YakuzaRole GetYakuzaRole() { return m_yakuzaRole; }
+	inline YakuzaAiState GetAiState() { return m_aiState; }
 
-	inline void SetIsInBattle(bool isInBattle) { m_isInBattle = isInBattle; }
+	inline void SetYakuzaRole(YakuzaGroupeRole role) { m_yakuzaRole = role; }
+
+	inline YakuzaGroupeRole GetYakuzaRole() { return m_yakuzaRole; }
+
+	inline void BattleStartEnemyAI() 
+	{
+		m_aiState = en_YakuzaAiState_WaitMove;
+
+		m_isInBattle = true;
+	}
 
 	inline bool GetIsInBattle() { return m_isInBattle; }
 
@@ -61,7 +70,9 @@ protected:
 	YakuzaStateMachine* m_hasStateMachine = nullptr;
 	//ターゲットビュー
 	TargetCharacterView m_targetView;
-	//役割
-	YakuzaRole m_yakuzaRole = en_YakuzaRole_None;
+	//このAI自身のステート
+	YakuzaAiState m_aiState = en_YakuzaAiState_Idle;
+	//集団制御内の役割
+	YakuzaGroupeRole m_yakuzaRole = en_YakuzaRole_Free;
 };
 

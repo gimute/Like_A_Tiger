@@ -77,6 +77,8 @@ void Enemy::OnHit(const char* hitCollisionName, CollisionObject* pairCollision)
 		//Ž€–S‚µ‚Ä‚¢‚é‚È‚ç
 		if (IsCharacterHpDead())
 		{
+			GetYakuzaStateMachine().ResetIsKnockBack(param);
+
 			GetYakuzaStateMachine().SetIsDead(true);
 		}
 		else

@@ -19,6 +19,11 @@ namespace AttackRoleProcessConstant
 
 void AttackRoleProcess::AssignRoles(MetaAiProccesInfo* groupePtr)
 {
+	if (groupePtr->m_grouoeState.m_nowAttackAi)
+	{
+		return;
+	}
+
 	// タイマーが未セットなら初期化
 	if (groupePtr->m_grouoeState.m_attackStartTime <= 0.0f)
 	{
@@ -28,14 +33,9 @@ void AttackRoleProcess::AssignRoles(MetaAiProccesInfo* groupePtr)
 	// タイマー更新
 	groupePtr->m_grouoeState.m_attackStartTime -= g_gameTime->GetFrameDeltaTime();
 
-	// 0以上なら処理しない
+	//タイマーがまだ残っているなら処理終了
 	if (groupePtr->m_grouoeState.m_attackStartTime >= 0.0f)
 	{
-		for (auto& ptr : groupePtr->FindGroup(groupePtr->m_useGroupeId)->m_enemyAiInfoList)
-		{
-			ptr.m_enemyAi->SetYakuzaRole(YakuzaRole::en_YakuzaRole_Wait);
-		}
-
 		return;
 	}
 
@@ -120,7 +120,7 @@ void AttackRoleProcess::AssignRoles(MetaAiProccesInfo* groupePtr)
 	//auto it = groupePtr->m_useGroupe->m_enemyAiInfoList.begin();
 	auto it = sortEnemyList.begin();
 
-	it->m_enemyAi->SetYakuzaRole(YakuzaRole::en_YakuzaRole_Attack);
+	it->m_enemyAi->SetYakuzaRole(YakuzaGroupeRole::en_YakuzaRole_AttackReady);
 	//今攻撃をしているAIを保持
 	groupePtr->m_grouoeState.m_nowAttackAi = it->m_enemyAi;
 	//一つ進めて
@@ -128,7 +128,7 @@ void AttackRoleProcess::AssignRoles(MetaAiProccesInfo* groupePtr)
 	//他のヤツを待機に
 	for (auto itfor = it;itfor != sortEnemyList.end();)
 	{
-		itfor->m_enemyAi->SetYakuzaRole(YakuzaRole::en_YakuzaRole_Wait);
+		itfor->m_enemyAi->SetYakuzaRole(YakuzaGroupeRole::en_yakuzaRole_AttackWait);
 
 		itfor++;
 	}
@@ -163,13 +163,18 @@ bool AttackRoleProcess::IsReady(MetaAiProccesInfo* groupePtr)
 	//多分死亡した時にちょうど攻撃役に選定されるやつが出てるので、選定時に死亡しているなら飛ばす的な処理がいるかも
 
 	if (groupePtr->m_grouoeState.m_nowAttackAi &&
-		!groupePtr->m_grouoeState.m_nowAttackAi->IsAiNowStateClassName<IEnemyAttackAiState>() || 
+		groupePtr->m_grouoeState.m_nowAttackAi->GetYakuzaRole() == YakuzaGroupeRole::en_YakuzaRole_AttackEnd ||
 		groupePtr->m_grouoeState.m_nowAttackAi &&
-		groupePtr->m_grouoeState.m_nowAttackAi->GetYakuzaRole() == YakuzaRole::en_YakuzaRole_HitDamage)
+		groupePtr->m_grouoeState.m_nowAttackAi->GetYakuzaRole() == YakuzaGroupeRole::en_YakuzaRoleHitDamage)
 	{
 		groupePtr->m_grouoeState.m_attackStartTime = AttackRoleProcessConstant::ATTACK_START_TIME;
 
 		groupePtr->m_grouoeState.m_nowAttackAi = nullptr;
+
+		for (auto& ptr : groupePtr->FindGroup(groupePtr->m_useGroupeId)->m_enemyAiInfoList)
+		{
+			ptr.m_enemyAi->SetYakuzaRole(YakuzaGroupeRole::en_yakuzaRole_AttackWait);
+		}
 
 		return false;
 	}

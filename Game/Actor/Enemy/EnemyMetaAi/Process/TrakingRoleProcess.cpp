@@ -10,7 +10,7 @@ void TrakingRoleProcess::AssignRoles(MetaAiProccesInfo* groupePtr)
 
 	for (auto& ptr : enemyInfoList)
 	{
-		ptr.m_enemyAi->SetYakuzaRole(YakuzaRole::en_YakuzaRole_Traking);
+		//ptr.m_enemyAi->SetYakuzaRole(YakuzaRole::en_YakuzaRole_Traking);
 	}
 
 	EnemyManager::GetInstance()->SetEnemyGroupeInBattle(groupePtr->m_useGroupeId, true);
