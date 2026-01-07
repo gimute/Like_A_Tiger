@@ -57,6 +57,9 @@ void GameInScene::EnterScene()
 
 	EnemyManager::GetInstance()->SetEnemyTargetCharacter(m_player);
 
+	//戦闘マネージャー初期化
+	BattleManager::GetInstance()->InitBattleManager();
+
 	NewGO<ProtoStage>(UpdateOrder::Actor);
 
 	m_inventory = Inventory::Create();

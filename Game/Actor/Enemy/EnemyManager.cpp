@@ -33,6 +33,7 @@ EnemyManager::EnemyManager()
 			EnemyGroupeBattleSet(*eventInfo.m_enemyGroupeInfo);
 		}
 	);
+
 }
 
 void EnemyManager::RequestSpawnEnemy(EnemyYakuzaType type, const Vector3& spawnPoint)
@@ -175,8 +176,6 @@ void EnemyManager::UpdateEnemyGroupe()
 		//グループの削除フラグが経っていたら削除
 		if (it->m_isDelete)
 		{
-			BattleAreaManager::GetInstance()->RemoveArea(it->m_battleAreaId);
-
 			it = m_enemyGroupList.erase(it);
 		}
 		else
