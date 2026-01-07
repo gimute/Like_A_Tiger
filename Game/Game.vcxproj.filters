@@ -62,6 +62,9 @@
     <ClCompile Include="UI\EnemysHpGauge.cpp" />
     <ClCompile Include="Actor\YakuzaComponents\YakuzaAttackAssistSystem.cpp" />
     <ClCompile Include="InvisibleWall.cpp" />
+    <ClCompile Include="Battle\BattleAreaManager.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyMetaAi\Process\BattleStartNotifyProcess.cpp" />
+    <ClCompile Include="Battle\BattleManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -134,5 +137,8 @@
     <ClInclude Include="UI\EnemysHpGauge.h" />
     <ClInclude Include="Actor\YakuzaComponents\YakuzaAttackAssistSystem.h" />
     <ClInclude Include="InvisibleWall.h" />
+    <ClInclude Include="Battle\BattleAreaManager.h" />
+    <ClInclude Include="Actor\Enemy\EnemyMetaAi\Process\BattleStartNotifyProcess.h" />
+    <ClInclude Include="Battle\BattleManager.h" />
   </ItemGroup>
 </Project>

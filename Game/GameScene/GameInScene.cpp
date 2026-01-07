@@ -10,6 +10,8 @@
 #include "Actor\Enemy\EnemySystem.h"
 #include "UI\EnemysHpGauge.h"
 
+#include "Battle\BattleManager.h"
+
 #include "Actor\BackGround\ProtoStage.h"
 
 #include "GameScene\UpdateOrder.h"
@@ -20,7 +22,7 @@
 
 #include "Actor\YakuzaComponents\YakuzaAttackAssistSystem.h"
 
-#include "BattleArea\BattleAreaManager.h"
+#include "Battle\BattleAreaManager.h"
 
 
 //ステート侵入関数
@@ -88,6 +90,9 @@ void GameInScene::UpdateScene()
 
 	//EnemyManager更新
 	EnemyManager::GetInstance()->Update();
+
+	//戦闘マネージャー更新
+	BattleManager::GetInstance()->Update();
 
 	///   // UIへ情報を渡す
 	///   {

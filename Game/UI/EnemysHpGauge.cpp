@@ -5,7 +5,8 @@
 #include "Actor\Enemy\Enemy.h"
 #include "Actor\YakuzaComponents\YakuzaCharacter.h"
 
-#include "BattleArea\BattleAreaManager.h"
+//#include "Battle\BattleAreaManager.h"
+#include "Battle\BattleManager.h"
 
 namespace EnemyHpGaugeConstant
 {
@@ -19,10 +20,18 @@ namespace EnemyHpGaugeConstant
 
 bool EnemysHpGauge::Start()
 {
-	BattleAreaManager::GetInstance()->RegisterOnEnterListener(
-		[&](const BattleArea& area)
+	//BattleAreaManager::GetInstance()->RegisterOnEnterListener(
+	//	[&](const BattleArea& area)
+	//	{
+	//		 m_isCreateHpUi = CreateEnemyHpUI(area.m_id);
+	//	}
+	//);
+
+	//戦闘開始をバトルマネージャーから通知されるように登録
+	BattleManager::GetInstance()->RegisterBattleStartCallBack(
+		[&](const BattleStartEventInfo& eventInfo)
 		{
-			 m_isCreateHpUi = CreateEnemyHpUI(area.m_id);
+			m_isCreateHpUi = CreateEnemyHpUI(eventInfo.m_enemyGroupeInfo);
 		}
 	);
 
@@ -39,7 +48,7 @@ void EnemysHpGauge::Update()
 	}
 }
 
-bool EnemysHpGauge::CreateEnemyHpUI(int areaId)
+bool EnemysHpGauge::CreateEnemyHpUI(EnemyInfoGroupe* enemyGroupeInfoPtr)
 {
 	if (m_isCreateHpUi)
 	{
@@ -48,17 +57,7 @@ bool EnemysHpGauge::CreateEnemyHpUI(int areaId)
 
 	auto& enemyInfoList = EnemyManager::GetInstance()->GetEnemyInfoList();
 
-	EnemyInfoGroupe* existGroup = nullptr;
-
-	for (auto& infoPtr : enemyInfoList)
-	{
-		if (infoPtr.m_battleAreaId == areaId)
-		{
-			existGroup = &infoPtr;
-
-			break;
-		}
-	}
+	EnemyInfoGroupe* existGroup = enemyGroupeInfoPtr;
 
 	int listSize = 0;
 

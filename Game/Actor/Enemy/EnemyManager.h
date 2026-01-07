@@ -88,6 +88,8 @@ struct EnemyGroup
 	int m_battleAreaId = -1;
 	//このグループが戦闘中か
 	bool isInBattle = false;
+	//このグループの削除フラグ
+	bool m_isDelete = false;
 };
 
 //エネミーの仮名
@@ -157,10 +159,12 @@ private:
 	void UpdateTargetView();
 	//半径ランダム座標選定
 	Vector3 GetRandomPointInRadius(const Vector3& point, float radius);
+	//エネミーグループ情報更新
+	void UpdateEnemyGroupe();
 	//データセットを更新
 	void UpdateEnemyDataSet();
 	//戦闘エリアIDからどの敵を戦闘状態にするかを選択
-	void EnemyGroupeBattleSet(int battleAreaId);
+	void EnemyGroupeBattleSet(EnemyInfoGroupe& battleInEnemyGroupe);
 public:
 	inline std::vector<EnemyPair>& GetEnemyPairList()
 	{
@@ -212,6 +216,17 @@ public:
 		}
 
 		return false;
+	}
+	//指定IDの敵グループの削除フラグを設定
+	void SetEnemyGroupeDeleteFlag(int id, bool setIs)
+	{
+		for (auto& groupPtr : m_enemyGroupList)
+		{
+			if (groupPtr.m_groupeId == id)
+			{
+				groupPtr.m_isDelete = setIs;
+			}
+		}
 	}
 };
 
