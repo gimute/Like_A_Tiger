@@ -8,6 +8,7 @@
 
 #include "InvisibleWall.h"
 
+#include "Load\LoadManager.h"
 
 bool Game::Start()
 {
@@ -25,6 +26,9 @@ bool Game::Start()
 	//初期化はゲームタイトルシーンにする
 	GameSceneManager::GetSceneManagerInstance()->ReqestInitSceneState<GameTitleScene>();
 
+	//ロードマネージャーを初期化
+	LoadManager::GetInstance()->InitLoadManager();
+
 	return true;
 }
 
@@ -33,6 +37,8 @@ void Game::Update()
 
 	//ゲームシーンマネージャーの更新
 	GameSceneManager::GetSceneManagerInstance()->UpdateGameSceneState();
+	//ロードマネージャーの更新
+	LoadManager::GetInstance()->Update();
 
 }
 
