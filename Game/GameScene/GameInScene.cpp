@@ -23,6 +23,7 @@
 #include "Actor\YakuzaComponents\YakuzaAttackAssistSystem.h"
 
 #include "Battle\BattleAreaManager.h"
+#include "Load\LoadManager.h"
 
 
 //ステート侵入関数

@@ -66,6 +66,8 @@
     <ClCompile Include="Actor\Enemy\EnemyMetaAi\Process\BattleStartNotifyProcess.cpp" />
     <ClCompile Include="Battle\BattleManager.cpp" />
     <ClCompile Include="Sound\SoundManager.cpp" />
+    <ClCompile Include="Load\LoadManager.cpp" />
+    <ClCompile Include="Load\LoadScreenSprite.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -142,5 +144,7 @@
     <ClInclude Include="Actor\Enemy\EnemyMetaAi\Process\BattleStartNotifyProcess.h" />
     <ClInclude Include="Battle\BattleManager.h" />
     <ClInclude Include="Sound\SoundManager.h" />
+    <ClInclude Include="Load\LoadManager.h" />
+    <ClInclude Include="Load\LoadScreenSprite.h" />
   </ItemGroup>
 </Project>
