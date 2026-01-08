@@ -25,6 +25,7 @@ bool Game::Start()
 
 	//初期化はゲームタイトルシーンにする
 	GameSceneManager::GetSceneManagerInstance()->ReqestInitSceneState<GameTitleScene>();
+	GameSceneManager::GetSceneManagerInstance()->CurrentStateEnter();
 
 	//ロードマネージャーを初期化
 	LoadManager::GetInstance()->InitLoadManager();

@@ -83,6 +83,11 @@ void GameInScene::EnterScene()
 //ステート更新関数
 void GameInScene::UpdateScene()
 {
+	if (!LoadManager::GetInstance()->LoadFadeInEnd())
+	{
+		LoadManager::GetInstance()->LoadEnd();
+	}
+
 	//カメラ更新
 	CameraManager::GetCameraManagerInstance()->UpdateCamera();
 

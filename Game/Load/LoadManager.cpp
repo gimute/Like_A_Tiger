@@ -10,7 +10,7 @@ LoadManager* LoadManager::m_instance = nullptr;
 
 void LoadManager::InitLoadManager()
 {
-	m_loadScreenSprite = NewGO<LoadScreenSprite>(UpdateOrder::UI, "loadScreen");
+	m_loadScreenSprite = NewGO<LoadScreenSprite>(UpdateOrder::LoadUI, "loadScreen");
 }
 
 void LoadManager::LoadStart(float fadeInWaitTime)

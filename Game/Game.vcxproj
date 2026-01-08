@@ -257,7 +257,7 @@
     <ClCompile Include="Inventory\Types.cpp" />
     <ClCompile Include="UI\PoseMenu.cpp" />
     <ClCompile Include="Core\ParameterManager.cpp" />
-    <ClCompile Include="Title.cpp" />
+    <ClCompile Include="GameScene\Title\Title.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\IEnemyAiState.cpp" />
     <ClCompile Include="UI\UILayout.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAiState\IEnemyAttackAiState.cpp" />
@@ -338,7 +338,7 @@
     <ClInclude Include="Actor\Enemy\EnemyMetaAi\IMetaAiProcess.h" />
     <ClInclude Include="Actor\Enemy\EnemyMetaAi\Process\TrakingRoleProcess.h" />
     <ClInclude Include="UI\UIAnimation\UIAnimation.h" />
-    <ClInclude Include="Title.h" />
+    <ClInclude Include="GameScene\Title\Title.h" />
     <ClInclude Include="UI\HPGauge.h" />
     <ClInclude Include="Actor\BackGround\ProtoStage.h" />
     <ClInclude Include="Actor\Player\PlayerAttackComboState.h" />

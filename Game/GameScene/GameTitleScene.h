@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GameScene\IGameSceneState.h"
+#include "GameScene\Title\Title.h"
 
 class GameTitleScene :
     public IGameSceneState
@@ -33,5 +34,10 @@ class GameTitleScene :
     /// <param name="nextState"></param>
     /// <returns></returns>
 	bool ReqestSceneState(uint32_t& nextState) override;
+private:
+    //タイトルスプライト
+    Title* m_titleSprite = nullptr;
+    //次のシーンに進んでいいか
+    bool m_isGoNextScene = false;
 };
 
