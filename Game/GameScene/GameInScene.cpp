@@ -25,6 +25,7 @@
 #include "Battle\BattleAreaManager.h"
 #include "Load\LoadManager.h"
 
+#include "GameScene\GameResultScene.h"
 
 //ステート侵入関数
 void GameInScene::EnterScene()
@@ -52,9 +53,9 @@ void GameInScene::EnterScene()
 	//敵生成テスト
 	//EnemyManager::GetInstance()->RequestSpawnEnemy(EnemyYakuzaType::en_normalYakuza,Vector3{1000.0,0.0,0.0});
 	//EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ 1000.0f,0.0f,0.0f });
-	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ -1000.0f,0.0f,0.0f });
-	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ 1000.0f,0.0f,0.0f });
-	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ -3000.0f,0.0f,0.0f });
+	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(1,Vector3{ -1000.0f,0.0f,0.0f });
+	//EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ 1000.0f,0.0f,0.0f });
+	//EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ -3000.0f,0.0f,0.0f });
 
 	EnemyManager::GetInstance()->SetEnemyTargetCharacter(m_player);
 
@@ -83,10 +84,7 @@ void GameInScene::EnterScene()
 //ステート更新関数
 void GameInScene::UpdateScene()
 {
-	if (!LoadManager::GetInstance()->LoadFadeInEnd())
-	{
-		LoadManager::GetInstance()->LoadEnd();
-	}
+	GameStateUpdate();
 
 	//カメラ更新
 	CameraManager::GetCameraManagerInstance()->UpdateCamera();
@@ -111,10 +109,36 @@ void GameInScene::UpdateScene()
 	///   		});
 	///   }
 
-	//敵残りグループ数による処理テスト
-	if (0 >= EnemyManager::GetInstance()->GetCurrentEnemyGroupeNum())
+}
+
+void GameInScene::GameStateUpdate()
+{
+	switch (m_gameState)
 	{
-		bool test = true;
+	case en_gameLoad:
+
+		if (!LoadManager::GetInstance()->LoadFadeInEnd())
+		{
+			LoadManager::GetInstance()->LoadEnd();
+
+			m_gameState = GameState::en_firstEnemyGroupe;
+		}
+
+		break;
+	case en_firstEnemyGroupe:
+
+		//敵残りグループ数による処理テスト
+		if (0 >= EnemyManager::GetInstance()->GetCurrentEnemyGroupeNum())
+		{
+			m_gameState = GameState::en_gameEnd;
+		}
+
+		break;
+	case en_gameEnd:
+
+		LoadManager::GetInstance()->LoadStart(3.0f);
+
+		break;
 	}
 }
 
@@ -127,5 +151,13 @@ void GameInScene::ExitScene()
 //ステート変更要求関数
 bool GameInScene::ReqestSceneState(uint32_t& nextState)
 {
+	if (m_gameState == GameState::en_gameEnd &&
+		LoadManager::GetInstance()->LoadFadeOutEnd())
+	{
+		nextState = GameResultScene::ID();
+
+		return true;
+	}
+
 	return false;
 }

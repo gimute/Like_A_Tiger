@@ -100,7 +100,6 @@ void LoadManager::Update()
 		}
 		case en_loadFadeInExecuting:
 		{
-
 			//ƒ[ƒh‚ª–¾‚¯‚«‚Á‚½‚ç
 			if (m_loadScreenSprite->IsFadeIn())
 			{

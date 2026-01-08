@@ -67,6 +67,8 @@
     <ClCompile Include="Battle\BattleManager.cpp" />
     <ClCompile Include="Load\LoadManager.cpp" />
     <ClCompile Include="Load\LoadScreenSprite.cpp" />
+    <ClCompile Include="GameScene\GameResultScene.cpp" />
+    <ClCompile Include="GameScene\Result\Result.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -144,5 +146,7 @@
     <ClInclude Include="Battle\BattleManager.h" />
     <ClInclude Include="Load\LoadManager.h" />
     <ClInclude Include="Load\LoadScreenSprite.h" />
+    <ClInclude Include="GameScene\GameResultScene.h" />
+    <ClInclude Include="GameScene\Result\Result.h" />
   </ItemGroup>
 </Project>

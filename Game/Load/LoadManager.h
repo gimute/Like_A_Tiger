@@ -55,12 +55,22 @@ public:
 	//ロードの画面が暗転しきったかどうか
 	inline bool LoadFadeOutEnd()
 	{
-		return m_loadScreenSprite->IsFadeOut();
+		if (m_loadManagerProcees != LoadManagerProcees::en_loadFadeOutWait)
+		{
+			return false;
+		}
+
+		return true;
 	}
 	//ロードの画面が明けきったかどうか
 	inline bool LoadFadeInEnd()
 	{
-		return m_loadScreenSprite->IsFadeIn();
+		if (m_loadManagerProcees != LoadManagerProcees::en_loadStandby)
+		{
+			return false;
+		}
+
+		return true;
 	}
 private:
 	//フェードアウト待機時間
