@@ -1,34 +1,31 @@
 #pragma once
 #include "GameScene\IGameSceneState.h"
-#include "GameScene\Result\Result.h"
 
-enum ResultState
+enum GameOverState
 {
-	en_ResultStandby,
-	en_ResultLoadIn,
-	en_ResultWaitButtonTrigger,
-	en_ResultProceesEnd
+	en_GameOverStandby,
+	en_GameOverLoadIn,
+	en_GameOverWaitButton,
+	en_GameOverProceesEnd
 };
 
-class GameResultScene :
+class GameOverScene : 
 	public IGameSceneState
 {
-	appState(GameResultScene)
-public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	GameResultScene() = default;
+	GameOverScene() = default;
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~GameResultScene() = default;
+	~GameOverScene() = default;
 	/// <summary>
 	/// 純粋仮想関数、ステートに入るときに呼ばれる
 	/// </summary>
 	void EnterScene() override;
 	/// <summary>
-	/// 純粋仮想関数、ステートから出るときに呼ばれる;
+	/// 純粋仮想関数、ステートから出るときに呼ばれる
 	/// </summary>
 	void UpdateScene() override;
 	/// <summary>
@@ -42,11 +39,9 @@ public:
 	/// <returns></returns>
 	bool ReqestSceneState(uint32_t& nextState) override;
 private:
-	//リザルトのプロセス
-	ResultState m_resultState = ResultState::en_ResultStandby;
+	//ゲームオーバーのステート
+	GameOverState m_gameOverState = GameOverState::en_GameOverStandby;
 	//リザルトのスプライト
-	Result* m_resultSprite = nullptr;
-	//次のシーンに進んでいいか
-	bool m_isGoNextScene = false;
+
 };
 

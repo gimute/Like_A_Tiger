@@ -34,7 +34,7 @@ void GameInScene::EnterScene()
 	//プレイヤー生成
 	m_player = NewGO<Player>(UpdateOrder::Charactar, "player");
 	//カメラ生成
-	CameraManager::GetCameraManagerInstance()->CreateCamera<PlayerCameraController>(m_playerController);
+	CameraManager::GetCameraManagerInstance()->CreateCamera<PlayerCameraController>();
 	//プレイヤーコントローラー設定
 	m_playerController->SetPlayer(m_player);
 	m_playerController->SetPlayerCameraController(CameraManager::GetCameraManagerInstance()->GetCameraController<PlayerCameraController>());
@@ -52,7 +52,7 @@ void GameInScene::EnterScene()
 	//敵生成テスト
 	//EnemyManager::GetInstance()->RequestSpawnEnemy(EnemyYakuzaType::en_normalYakuza,Vector3{1000.0,0.0,0.0});
 	//EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ 1000.0f,0.0f,0.0f });
-	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(1,Vector3{ -1000.0f,0.0f,0.0f });
+	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ -1000.0f,0.0f,0.0f });
 	//EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ 1000.0f,0.0f,0.0f });
 	//EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ -3000.0f,0.0f,0.0f });
 	//エネミーのターゲットを設定
@@ -164,6 +164,8 @@ void GameInScene::DeleteGameObjects()
 	DeleteGO(m_enemysHpGauge);
 	//プレイヤーの削除
 	DeleteGO(m_player);
+	//カメラ削除
+	CameraManager::GetCameraManagerInstance()->DeleteCamera();
 	//インベントリ
 	Inventory::Delete();
 }

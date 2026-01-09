@@ -245,6 +245,8 @@
     <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiWaitingAttackState.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyMetaAi\EnemyMetaAi.cpp" />
     <ClCompile Include="Core\Curve.cpp" />
+    <ClCompile Include="GameScene\GameOver\GameOver.cpp" />
+    <ClCompile Include="GameScene\GameOverScene.cpp" />
     <ClCompile Include="GameScene\GameResultScene.cpp" />
     <ClCompile Include="InvisibleWall.cpp" />
     <ClCompile Include="Load\LoadScreenSprite.cpp" />
@@ -315,6 +317,8 @@
     <ClInclude Include="Actor\Enemy\EnemyMetaAi\EnemyMetaAi.h" />
     <ClInclude Include="Actor\Enemy\EnemyMetaAi\EnemyMetaAiStruct.h" />
     <ClInclude Include="Core\Curve.h" />
+    <ClInclude Include="GameScene\GameOver\GameOver.h" />
+    <ClInclude Include="GameScene\GameOverScene.h" />
     <ClInclude Include="GameScene\GameResultScene.h" />
     <ClInclude Include="InvisibleWall.h" />
     <ClInclude Include="Load\LoadScreenSprite.h" />
