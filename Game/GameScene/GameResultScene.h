@@ -4,10 +4,10 @@
 
 enum ResultState
 {
-	en_Standby,
-	en_LoadIn,
-	en_WaitButtonTrigger,
-	en_ProceesEnd
+	en_ResultStandby,
+	en_ResultLoadIn,
+	en_ResultWaitButtonTrigger,
+	en_ResultProceesEnd
 };
 
 class GameResultScene :
@@ -43,7 +43,7 @@ public:
 	bool ReqestSceneState(uint32_t& nextState) override;
 private:
 	//リザルトのプロセス
-	ResultState m_resultState = ResultState::en_Standby;
+	ResultState m_resultState = ResultState::en_ResultStandby;
 	//リザルトのスプライト
 	Result* m_resultSprite = nullptr;
 	//次のシーンに進んでいいか

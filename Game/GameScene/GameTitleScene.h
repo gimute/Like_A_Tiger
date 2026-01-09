@@ -3,6 +3,14 @@
 #include "GameScene\IGameSceneState.h"
 #include "GameScene\Title\Title.h"
 
+enum TitleState
+{
+    en_TitleStandby,
+    en_TitleLoadIn,
+    en_TitleWaitButtonTrigger,
+    en_TitleProceesEnd
+};
+
 class GameTitleScene :
     public IGameSceneState
 {
@@ -37,7 +45,7 @@ class GameTitleScene :
 private:
     //タイトルスプライト
     Title* m_titleSprite = nullptr;
-    //次のシーンに進んでいいか
-    bool m_isGoNextScene = false;
+    //タイトルのステート
+    TitleState m_titleState = TitleState::en_TitleStandby;
 };
 
