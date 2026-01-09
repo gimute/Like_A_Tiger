@@ -16,7 +16,7 @@
 //インスタンス初期化
 EnemyManager* EnemyManager::m_instance = nullptr;
 
-EnemyManager::EnemyManager()
+void EnemyManager::InitEnemyManager()
 {
 	//戦闘開始をバトルマネージャーから通知されるように登録
 	BattleManager::GetInstance()->RegisterBattleStartCallBack(
@@ -25,10 +25,7 @@ EnemyManager::EnemyManager()
 			EnemyGroupeBattleSet(*eventInfo.m_enemyGroupeInfo);
 		}
 	);
-}
 
-void EnemyManager::InitEnemyManager()
-{
 	m_enemyMetaAi = NewGO<EnemyMetaAi>(UpdateOrder::AI, "enemymetaai");
 	m_enemyAiSystem = NewGO<EnemySystem>(UpdateOrder::AI, "enemy");
 }
@@ -150,6 +147,9 @@ void EnemyManager::RequestResetEnemysProcees()
 		DeleteGO(m_enemyMetaAi);
 		//AIシステムを削除
 		DeleteGO(m_enemyAiSystem);
+		//カウンター類を0に
+		m_enemyIDCounter = 0;
+		m_enemyGroupIDCounter = 0;
 
 		return;
 	}
@@ -171,6 +171,9 @@ void EnemyManager::RequestResetEnemysProcees()
 	DeleteGO(m_enemyMetaAi);
 	//AIシステムを削除
 	DeleteGO(m_enemyAiSystem);
+	//カウンター類を0に
+	m_enemyIDCounter = 0;
+	m_enemyGroupIDCounter = 0;
 }
 
 void EnemyManager::Update()

@@ -109,7 +109,7 @@ private:
 	//インスタンス
 	static EnemyManager* m_instance;
 	//コンストラクタ
-	EnemyManager();
+	EnemyManager() = default;
 	//コピー禁止
 	EnemyManager(const EnemyManager&) = delete;
 	//代入禁止にする

@@ -14,7 +14,7 @@ public:
 private:
 	//GameOverUI用のデータ
 	const GameOverInitData defaultGameOver = {
-		"",
+		"Assets/spriteData/GameOver/TestGameOver.DDS",
 		1600.0f,
 		900.0f
 	};

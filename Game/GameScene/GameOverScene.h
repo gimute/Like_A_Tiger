@@ -9,9 +9,13 @@ enum GameOverState
 	en_GameOverProceesEnd
 };
 
+class GameOver;
+
 class GameOverScene : 
 	public IGameSceneState
 {
+	appState(GameOverScene);
+public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
@@ -42,6 +46,6 @@ private:
 	//ゲームオーバーのステート
 	GameOverState m_gameOverState = GameOverState::en_GameOverStandby;
 	//リザルトのスプライト
-
+	GameOver* m_gameOverSprite = nullptr;
 };
 

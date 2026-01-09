@@ -97,6 +97,9 @@ public:
 	//更新
 	void Update();
 
+	//バトルマネージャーをリセット
+	void ResetBattleManager();
+
 private:
 	//敵生存確認関数
 	void EnemyAliveCheck();

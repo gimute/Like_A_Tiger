@@ -14,10 +14,12 @@ enum GameState
 {
     //ゲームロード中
     en_gameLoad,
-    //最初の敵群
-    en_firstEnemyGroupe,
-    //ゲーム終了に以降
-    en_gameEnd
+    //ゲーム更新
+    en_gameUpdate,
+    //ゲームオーバー処理に移行
+    en_gameOver,
+    //ゲームクリア処理に移行
+    en_gameClear
 };
 
 class GameInScene :

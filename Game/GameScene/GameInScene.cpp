@@ -25,6 +25,7 @@
 #include "Load\LoadManager.h"
 
 #include "GameScene\GameResultScene.h"
+#include "GameScene\GameOverScene.h"
 
 //ステート侵入関数
 void GameInScene::EnterScene()
@@ -52,7 +53,7 @@ void GameInScene::EnterScene()
 	//敵生成テスト
 	//EnemyManager::GetInstance()->RequestSpawnEnemy(EnemyYakuzaType::en_normalYakuza,Vector3{1000.0,0.0,0.0});
 	//EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ 1000.0f,0.0f,0.0f });
-	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ -1000.0f,0.0f,0.0f });
+	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(1,Vector3{ -1000.0f,0.0f,0.0f });
 	//EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ 1000.0f,0.0f,0.0f });
 	//EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ -3000.0f,0.0f,0.0f });
 	//エネミーのターゲットを設定
@@ -122,20 +123,34 @@ void GameInScene::GameStateUpdate()
 		{
 			LoadManager::GetInstance()->LoadEnd();
 
-			m_gameState = GameState::en_firstEnemyGroupe;
+			m_gameState = GameState::en_gameUpdate;
 		}
 
 		break;
-	case en_firstEnemyGroupe:
+	case en_gameUpdate:
 
 		//敵残りグループ数による処理テスト
 		if (0 >= EnemyManager::GetInstance()->GetCurrentEnemyGroupeNum())
 		{
-			m_gameState = GameState::en_gameEnd;
+			m_gameState = GameState::en_gameClear;
+		}
+
+		if (0 >= m_player->GetYakuzaCurrentHp())
+		{
+			m_gameState = GameState::en_gameOver;
 		}
 
 		break;
-	case en_gameEnd:
+	case en_gameOver:
+
+		//プレイヤーのアニメーションが終わったら
+		if (m_player->GetYakuzaStateMachine().IsHasCharactarPlayAnimation())
+		{
+			LoadManager::GetInstance()->LoadStart(3.0f);
+		}
+
+		break;
+	case en_gameClear:
 
 		LoadManager::GetInstance()->LoadStart(3.0f);
 
@@ -158,6 +173,10 @@ void GameInScene::DeleteGameObjects()
 	YakuzaAttackAssistSystem::GetIstance()->RemoveAttackAssistSystem();
 	//敵全体を削除
 	EnemyManager::GetInstance()->RequestResetEnemysProcees();
+	//戦闘エリアをリセット
+	BattleAreaManager::GetInstance()->ResetAreaManager();
+	//バトルマネージャーをリセット
+	BattleManager::GetInstance()->ResetBattleManager();
 	//ステージ削除
 	DeleteGO(m_protoStage);
 	//エネミーのHP削除
@@ -173,10 +192,17 @@ void GameInScene::DeleteGameObjects()
 //ステート変更要求関数
 bool GameInScene::ReqestSceneState(uint32_t& nextState)
 {
-	if (m_gameState == GameState::en_gameEnd &&
+	if (m_gameState == GameState::en_gameClear &&
 		LoadManager::GetInstance()->LoadFadeOutEnd())
 	{
 		nextState = GameResultScene::ID();
+
+		return true;
+	}
+	else if (m_gameState == GameState::en_gameOver &&
+		LoadManager::GetInstance()->LoadFadeOutEnd())
+	{
+		nextState = GameOverScene::ID();
 
 		return true;
 	}
