@@ -12,7 +12,10 @@ public:
 	//コンストラクタ
 	Player() : YakuzaCharacter(this) {}
 	//デストラクタ
-	~Player() = default;
+	~Player() 
+	{
+		DeleteGO(m_hpGauge);
+	}
 
 	//スタート関数
 	bool Start() override;

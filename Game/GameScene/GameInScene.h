@@ -4,6 +4,9 @@
 class Player;
 class PlayerController;
 class PoseMenu;
+class ProtoStage;
+
+class EnemysHpGauge;
 
 class Inventory;
 
@@ -52,6 +55,10 @@ public:
     /// ゲームステート更新
     /// </summary>
     void GameStateUpdate();
+    /// <summary>
+    /// ゲームオブジェクト削除
+    /// </summary>
+    void DeleteGameObjects();
 private:
     ///プレイヤーのポインタ
     Player* m_player = nullptr;
@@ -61,6 +68,10 @@ private:
     PoseMenu* m_poseMenu = nullptr;
 
     Inventory* m_inventory = nullptr;
+    //プロトステージ
+    ProtoStage* m_protoStage = nullptr;
+    //エネミーのHP
+    EnemysHpGauge* m_enemysHpGauge = nullptr;
     //ゲーム内ステート
     GameState m_gameState = GameState::en_gameLoad;
 };

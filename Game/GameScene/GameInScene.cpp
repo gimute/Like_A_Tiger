@@ -7,7 +7,6 @@
 #include "Camera\CameraManager.h"
 
 #include "Actor\Enemy\EnemyManager.h"
-#include "Actor\Enemy\EnemySystem.h"
 #include "UI\EnemysHpGauge.h"
 
 #include "Battle\BattleManager.h"
@@ -43,12 +42,12 @@ void GameInScene::EnterScene()
 
 	//攻撃アシストを初期化
 	YakuzaAttackAssistSystem::GetIstance()->InitAttackAssistSystem(m_player);
-	
-	//敵AI生成
-	NewGO<EnemySystem>(UpdateOrder::AI, "enemy");
+
+	//敵マネージャー初期化
+	EnemyManager::GetInstance()->InitEnemyManager();
 
 	//敵HPを生成
-	NewGO<EnemysHpGauge>(UpdateOrder::UI, "enemy");
+	m_enemysHpGauge = NewGO<EnemysHpGauge>(UpdateOrder::UI, "enemy");
 
 	//敵生成テスト
 	//EnemyManager::GetInstance()->RequestSpawnEnemy(EnemyYakuzaType::en_normalYakuza,Vector3{1000.0,0.0,0.0});
@@ -56,10 +55,10 @@ void GameInScene::EnterScene()
 	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(1,Vector3{ -1000.0f,0.0f,0.0f });
 	//EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ 1000.0f,0.0f,0.0f });
 	//EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ -3000.0f,0.0f,0.0f });
-
+	//エネミーのターゲットを設定
 	EnemyManager::GetInstance()->SetEnemyTargetCharacter(m_player);
-
-	NewGO<ProtoStage>(UpdateOrder::Actor);
+	//プロトステージ生成
+	m_protoStage = NewGO<ProtoStage>(UpdateOrder::Actor);
 
 	m_inventory = Inventory::Create();
 
@@ -79,6 +78,8 @@ void GameInScene::EnterScene()
 	//m_poseMenu->Init();
 
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+
+   m_gameState = GameState::en_gameLoad;
 }
 
 //ステート更新関数
@@ -145,6 +146,25 @@ void GameInScene::GameStateUpdate()
 //ステート退出関数
 void GameInScene::ExitScene()
 {
+	//オブジェクト削除処理
+	DeleteGameObjects();
+}
+
+void GameInScene::DeleteGameObjects()
+{
+	//プレイヤーコントローラー
+	DeleteGO(m_playerController);
+	//攻撃アシスト解除
+	YakuzaAttackAssistSystem::GetIstance()->RemoveAttackAssistSystem();
+	//敵全体を削除
+	EnemyManager::GetInstance()->RequestResetEnemysProcees();
+	//ステージ削除
+	DeleteGO(m_protoStage);
+	//エネミーのHP削除
+	DeleteGO(m_enemysHpGauge);
+	//プレイヤーの削除
+	DeleteGO(m_player);
+	//インベントリ
 	Inventory::Delete();
 }
 

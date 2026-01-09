@@ -10,6 +10,7 @@
 
 class Enemy;
 class EnemyMetaAi;
+class EnemySystem;
 
 struct EnemyMemberInfo
 {
@@ -126,12 +127,16 @@ public:
 
 		return m_instance;
 	}
+	//メタAI生成依頼
+	void InitEnemyManager();
 	//スポーン依頼
 	void RequestSpawnEnemy(EnemyYakuzaType type,const Vector3& spawnPoint);
 	//グループスポーン依頼
 	void RequestSpawnEnemyGroup(int spawnNum,const Vector3& spawnPoint);
 	//死亡処理依頼
 	void RequestDeadEnemyProcces(const Enemy& deadEnemyAddress);
+	//全体リセット依頼
+	void RequestResetEnemysProcees();
 	//更新
 	void Update();
 private:
@@ -149,6 +154,8 @@ private:
 	TargetCharacterView m_targetView;
 	//メタAI
 	EnemyMetaAi* m_enemyMetaAi = nullptr;
+	//AI制御
+	EnemySystem* m_enemyAiSystem = nullptr;
 	//敵のIDカウンター
 	int m_enemyIDCounter = 0;
 	//敵のグループIDカウンター

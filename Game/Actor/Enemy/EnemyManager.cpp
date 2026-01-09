@@ -9,6 +9,8 @@
 #include "Battle\BattleAreaManager.h"
 #include "Battle\BattleManager.h"
 
+#include "Actor\Enemy\EnemySystem.h"
+
 #include "Random.h"
 
 //インスタンス初期化
@@ -16,16 +18,6 @@ EnemyManager* EnemyManager::m_instance = nullptr;
 
 EnemyManager::EnemyManager()
 {
-	m_enemyMetaAi = NewGO<EnemyMetaAi>(UpdateOrder::AI, "enemymetaai");
-
-	//戦闘エリアにプレイヤーが侵入した際にエネミーを戦闘状態にする処理
-	//BattleAreaManager::GetInstance()->RegisterOnEnterListener(
-	//	[&](const BattleArea& area)
-	//	{
-	//		EnemyGroupeBattleSet(area.m_id);
-	//	}
-	//);
-
 	//戦闘開始をバトルマネージャーから通知されるように登録
 	BattleManager::GetInstance()->RegisterBattleStartCallBack(
 		[&](const BattleStartEventInfo& eventInfo)
@@ -33,6 +25,12 @@ EnemyManager::EnemyManager()
 			EnemyGroupeBattleSet(*eventInfo.m_enemyGroupeInfo);
 		}
 	);
+}
+
+void EnemyManager::InitEnemyManager()
+{
+	m_enemyMetaAi = NewGO<EnemyMetaAi>(UpdateOrder::AI, "enemymetaai");
+	m_enemyAiSystem = NewGO<EnemySystem>(UpdateOrder::AI, "enemy");
 }
 
 void EnemyManager::RequestSpawnEnemy(EnemyYakuzaType type, const Vector3& spawnPoint)
@@ -137,6 +135,42 @@ void EnemyManager::RequestDeadEnemyProcces(const Enemy& deadEnemyAddress)
 
 		it++;
 	}
+}
+
+void EnemyManager::RequestResetEnemysProcees()
+{
+	//まずエネミーがいないかを確かめる
+	if (m_enemyPairList.empty() &&
+		m_enemyGroupList.empty())
+	{
+		//どちらも空だったら
+		//情報リストを空にする
+		m_enemyInfoList.clear();
+		//メタAIを削除
+		DeleteGO(m_enemyMetaAi);
+		//AIシステムを削除
+		DeleteGO(m_enemyAiSystem);
+
+		return;
+	}
+
+	//もしエネミーが残っている場合は削除処理を行う
+	m_enemyGroupList.clear();
+	m_enemyInfoList.clear();
+
+	for (auto pairIt = m_enemyPairList.begin();pairIt != m_enemyPairList.end();)
+	{
+		if (pairIt->m_enemy)
+		{
+			DeleteGO(pairIt->m_enemy);
+		}
+
+		pairIt = m_enemyPairList.erase(pairIt);
+	}
+	//メタAIを削除
+	DeleteGO(m_enemyMetaAi);
+	//AIシステムを削除
+	DeleteGO(m_enemyAiSystem);
 }
 
 void EnemyManager::Update()
