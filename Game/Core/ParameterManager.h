@@ -11,23 +11,69 @@
 
 #include <iostream>
 #include <fstream>
+#include "CRC32.h"
+
+#ifdef K2_DEBUG
+#define APP_PARAM_HOT_RELOAD
+#endif
 
 /////////////////////////////////////////////
 // パラメーター
 /////////////////////////////////////////////
 
+#ifdef APP_PARAM_HOT_RELOAD
+
+#define appParameter(name)\
+public:\
+static constexpr uint32_t ID() {return Hash32(#name);}\
+std::function<void(const nlohmann::json& j, name& p)> load;
+
+#else //APP_PARAM_HOT_RELOAD
+#define appParameter(name)\
+public:\
+static constexpr uint32_t ID() {return Hash32(#name);}
+
+#endif //APP_PARAM_HOT_RELOAD
+
+
+
 //パラメーター基底構造体
-struct IParameter {};
+struct IParameter 
+{
+#ifdef APP_PARAM_HOT_RELOAD
+	std::string m_path;		//パラメーターのファイルパス
+	time_t m_lastWriteTime;	//最終更新時刻
+	virtual void Load(const nlohmann::json& j) {};
+#endif // APP_PARAM_HOT_RELOAD
+};
 
 //プレイヤーのステータス
 struct PlayerStatusParamater : public IParameter
 {
+	appParameter(PlayerStatusParamater);
+
+#ifdef APP_PARAM_HOT_RELOAD
+	void Load(const nlohmann::json& j) override
+	{
+		load(j, *this);
+	}
+#endif // APP_PARAM_HOT_RELOAD
+
 	float maxHP;	//最大HP
 };
 
 //エネミーのステータス
 struct EnemyStatusParamater : public IParameter
 {
+	appParameter(EnemyStatusParamater);
+
+#ifdef APP_PARAM_HOT_RELOAD
+	void Load(const nlohmann::json& j) override
+	{
+		load(j, *this);
+	}
+#endif // APP_PARAM_HOT_RELOAD
+
 	float maxHP;	//最大HP
 };
 
@@ -40,7 +86,7 @@ class ParameterManager
 {
 private:
 	using ParameterVector = std::vector<IParameter*>;
-	using ParameterMap = std::map<std::string, ParameterVector>;
+	using ParameterMap = std::map<uint32_t, ParameterVector>;
 
 private:
 	ParameterMap m_parameterMap;	//パラメータとIDのリスト
@@ -52,7 +98,7 @@ private:
 public:
 	/// <summary>
 	/// パラメーターファイルを読み込む
-	/// どんなパラメーターがあるのかはマネージャーにはわからないので関数ポインタで読み込み処理を受け取る
+	/// 関数ポインタで読み込み処理を受け取る
 	/// </summary>
 	/// <typeparam name="T">パラメーターの種類</typeparam>
 	/// <param name="path">ファイルパス</param>
@@ -72,27 +118,34 @@ public:
 		file >> jsonRoot;
 
 		//読み込んだパラメーターを一時的に持つ受け皿
-		ParameterVector tmpParameters;
+		ParameterVector parameters;
 
 		for (const auto& j : jsonRoot)
 		{
 			T* parameter = new T();
+#ifdef APP_PARAM_HOT_RELOAD
+			parameter->m_path = std::string(path);
+			parameter->m_lastWriteTime = GetFileLastWriteTime(path);
+			parameter->load = func;
+#endif // APP_PARAM_HOT_RELOAD
+
 			//パラメータ読み込み処理
 			func(j, *parameter);
-			tmpParameters.push_back(static_cast<IParameter*>(parameter));
+			parameters.push_back(static_cast<IParameter*>(parameter));
 		}
 
 		//パラメーターを登録
-		m_parameterMap.emplace(path, tmpParameters);
+		m_parameterMap.emplace(T::ID(), parameters);
 	}
 
 	/// <summary>
 	/// パラメーター解放
 	/// </summary>
 	/// <param name="path">解放するパラメーターのファイルパス</param>
+	template <typename T>
 	void UnloadParameter(const char* path)
 	{
-		auto it = m_parameterMap.find(path);
+		auto it = m_parameterMap.find(T::ID);
 		if (it != m_parameterMap.end())
 		{
 			auto& parameters = it->second;
@@ -112,9 +165,9 @@ public:
 	/// <param name="index">一つのファイルに複数のパラメーターを入れた場合は何番目かこれで指定する</param>
 	/// <returns></returns>
 	template <typename T>
-	const T* GetParameter(const char* path, const int index = 0) const
+	const T* GetParameter(const int index = 0) const
 	{
-		const auto parameters = GetParameters<T>(path);
+		const auto parameters = GetParameters<T>();
 		if (parameters.size() == 0)
 		{
 			return nullptr;
@@ -134,11 +187,11 @@ public:
 	/// <param name="path">取得するパラメーターのファイルパス</param>
 	/// <returns></returns>
 	template <typename T>
-	const std::vector<T*> GetParameters(const char* path) const
+	const std::vector<T*> GetParameters() const
 	{
 		std::vector<T*> parameters;
 
-		auto it = m_parameterMap.find(path);
+		auto it = m_parameterMap.find(T::ID());
 		if (it != m_parameterMap.end())
 		{
 			for (auto* parameter : it->second)
@@ -156,14 +209,70 @@ public:
 	/// <param name="path"></param>
 	/// <param name="func"></param>
 	template<typename T>
-	void ForEach(const char* path, std::function<void(const T&)> func) const
+	void ForEach(std::function<void(const T&)> func) const
 	{
-		const std::vector<T*> parameters = GetParameters<T>(path);
+		const std::vector<T*> parameters = GetParameters<T>();
 		for (const T* parameter : parameters)
 		{
 			func(*parameter);
 		}
 	}
+
+public:
+#ifdef APP_PARAM_HOT_RELOAD
+	void Update()
+	{
+		for (auto paramPair : m_parameterMap)
+		{
+			for (auto param : paramPair.second)
+			{
+				if (CheckFileModified(param))
+				{
+					std::ifstream file(param->m_path);
+					if (!file.is_open())
+					{
+						return;
+					}
+
+					nlohmann::json jsonRoot;
+					file >> jsonRoot;
+
+					ParameterVector parameters;
+
+					for (const auto& j : jsonRoot)
+					{
+						param->m_lastWriteTime = GetFileLastWriteTime(param->m_path.c_str());
+						param->Load(j);
+					}
+				}
+			}
+		}
+	}
+
+	//ファイル更新日時取得
+	static time_t GetFileLastWriteTime(const char* path)
+	{
+		struct stat result;
+		//stat関数でファイル情報を取得(0なら成功)
+		if (stat(path, &result) == 0)
+		{
+			return result.st_mtime;
+		}
+
+		return 0;
+	}
+
+	//ファイル更新チェック
+	static bool CheckFileModified(const IParameter* param)
+	{
+		//ファイルの更新日時から変更があったか確認
+		if (GetFileLastWriteTime(param->m_path.c_str()) > param->m_lastWriteTime)
+		{
+			return true;
+		}
+		return false;
+	}
+#endif // APP_PARAM_HOT_RELOAD
 
 
 	/*
