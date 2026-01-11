@@ -17,7 +17,7 @@ float NormalYakuzaTypeSet::GetAttackPower(YakuzaAttackComboStateMachine* useAtta
 		nowStateId == NormalYakuzaThirdAttackState::ID() ||
 		nowStateId == NormalYakuzaFourthAttackState::ID())
 	{
-		attackPower = 1000.0f;
+		attackPower = 10.0f;
 	}
 	else if (nowStateId == NormalYakuzaFirstFinalBlowState::ID())
 	{
