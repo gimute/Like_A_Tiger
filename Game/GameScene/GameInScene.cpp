@@ -56,6 +56,9 @@ void GameInScene::EnterScene()
 	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ -3000.0f,0.0f,0.0f });
 	//エネミーのターゲットを設定
 	EnemyManager::GetInstance()->SetEnemyTargetCharacter(m_player);
+
+	//戦闘マネージャー初期化
+	BattleManager::GetInstance()->InitBattleManager();
 	//プロトステージ生成
 	m_protoStage = NewGO<ProtoStage>(UpdateOrder::Actor);
 

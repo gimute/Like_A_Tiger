@@ -94,6 +94,6 @@ void BattleAreaManager::NotifyOnBattleManagerEnter(AreaState areaState)
 	}
 
 	BattleManager::GetInstance()->StartBattle(
-		BattleInfo(enemyGroupeInfoPtr)
+		BattleInfo(enemyGroupeInfoPtr,&areaState.m_battleArea)
 	);
 }

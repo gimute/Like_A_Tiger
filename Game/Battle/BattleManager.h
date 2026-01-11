@@ -1,5 +1,8 @@
 #pragma once
 #include "Actor\Enemy\EnemyManager.h"
+#include "Battle\BattleAreaManager.h"
+
+#include "InvisibleWall.h"
 
 enum class BattleState
 {
@@ -13,25 +16,38 @@ struct BattleInfo
 {
 	EnemyInfoGroupe* m_enemyGroupeInfo = nullptr;
 
+	BattleArea* m_battleArea = nullptr;
+
 	BattleInfo() = default;
 
 	BattleInfo(
-		EnemyInfoGroupe* enemyGroupeInfo
+		EnemyInfoGroupe* enemyGroupeInfo,
+		BattleArea* battleArea
 	)
 		: m_enemyGroupeInfo(enemyGroupeInfo)
+		, m_battleArea(battleArea)
 	{}
+};
+
+struct BattleUpdateEventInfo
+{
+	//今のところ何もない
 };
 
 struct BattleStartEventInfo
 {
 	EnemyInfoGroupe* m_enemyGroupeInfo = nullptr;
 
+	Vector3 m_battleAreaCenter = Vector3::Zero;
+
 	BattleStartEventInfo() = default;
 
 	BattleStartEventInfo(
-		EnemyInfoGroupe* enemyGroupeInfo
+		EnemyInfoGroupe* enemyGroupeInfo,
+		Vector3 battleAreaCenter
 	)
 		: m_enemyGroupeInfo(enemyGroupeInfo)
+		, m_battleAreaCenter(battleAreaCenter)
 	{
 	}
 };
@@ -46,6 +62,8 @@ class BattleManager
 private:
 	//戦闘開始コールバック関数型
 	using BattleStartCallBack = std::function<void(const BattleStartEventInfo&)>;
+	//戦闘中コールバック関数型
+	using BattleUpdateCallBack = std::function<void(const BattleUpdateEventInfo&)>;
 	//戦闘終了コールバック関数型
 	using BattleEndCallBack = std::function<void(const BattleEndEventInfo&)>;
 private:
@@ -80,6 +98,13 @@ public:
 		m_battleStartCallBackList.push_back(std::move(callBack));
 	}
 
+	inline void RegisterBattleUpdateCallBack(
+		BattleUpdateCallBack callBack
+	)
+	{
+		m_battleUpdateCallBackList.push_back(std::move(callBack));
+	}
+
 	//戦闘終了コールバック登録
 	inline void RegisterBattleEndCallBack(
 		BattleEndCallBack callBack
@@ -87,6 +112,9 @@ public:
 	{
 		m_battleEndCallBackList.push_back(std::move(callBack));
 	}
+
+	//戦闘マネージャー初期化
+	void InitBattleManager();
 
 	//戦闘開始
 	void StartBattle(BattleInfo battleInfo);
@@ -103,8 +131,16 @@ public:
 private:
 	//敵生存確認関数
 	void EnemyAliveCheck();
+	//戦闘中コールバック実行
+	void InBattleUpdate();
+	//戦闘開始時透明壁生成関数
+	void CreateBattleInvisibleWall(Vector3 centerPos);
+	//戦闘終了時透明壁削除関数
+	void RemoveBattleInvisibleWall();
 	//戦闘開始コールバックリスト
 	std::vector<BattleStartCallBack> m_battleStartCallBackList;
+	//戦闘中コールバックリスト
+	std::vector<BattleUpdateCallBack> m_battleUpdateCallBackList;
 	//戦闘終了コールバックリスト
 	std::vector<BattleEndCallBack> m_battleEndCallBackList;
 
@@ -112,5 +148,7 @@ private:
 	BattleState m_currentBattleState = BattleState::en_None;
 	//現在戦闘中の敵グループ情報
 	EnemyInfoGroupe* m_currentBattleEnemyGroupe = nullptr;
+	//戦闘中の透明壁
+	CircleInvisibleWall* m_battleInvisibleWall = nullptr;
 };
 

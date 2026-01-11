@@ -1,33 +1,61 @@
 #include "stdafx.h"
 #include "BattleManager.h"
 
-#include "Battle\BattleAreaManager.h"
+#include "GameScene\UpdateOrder.h"
 
 BattleManager* BattleManager::m_instance = nullptr;
 
+void BattleManager::InitBattleManager()
+{
+	//æˆ¦é—˜é–‹å§‹æ™‚ã«é€æ˜å£ã‚’ç”Ÿæˆã™ã‚‹å‡¦ç†ã‚’ç™»éŒ²
+	RegisterBattleStartCallBack(
+		[&](const BattleStartEventInfo& eventInfo)
+		{
+			CreateBattleInvisibleWall(
+				eventInfo.m_battleAreaCenter
+			);
+		}
+	);
+}
+
 void BattleManager::StartBattle(BattleInfo battleInfo)
 {
-	//í“¬ŠJnƒCƒxƒ“ƒgî•ñì¬
+	//æˆ¦é—˜é–‹å§‹ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±ä½œæˆ
 	BattleStartEventInfo eventInfo(
-		battleInfo.m_enemyGroupeInfo
+		battleInfo.m_enemyGroupeInfo,
+		battleInfo.m_battleArea->m_areaCenter
 	);
 
-	//Œ»İí“¬’†‚Ì“GƒOƒ‹[ƒvî•ñ‚ğ•Û‘¶
+	//ç¾åœ¨æˆ¦é—˜ä¸­ã®æ•µã‚°ãƒ«ãƒ¼ãƒ—æƒ…å ±ã‚’ä¿å­˜
 	m_currentBattleEnemyGroupe = battleInfo.m_enemyGroupeInfo;
 
-	//“o˜^‚³‚ê‚Ä‚¢‚éƒR[ƒ‹ƒoƒbƒN‚ğŒÄ‚Ño‚·
+	//ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’å‘¼ã³å‡ºã™
 	for (auto& cb : m_battleStartCallBackList)
 	{
 		cb(eventInfo);
 	}
 
-	//Œ»İ‚Ìí“¬ó‘Ô‚ğí“¬’†‚É•ÏX
+	//æˆ¦é—˜ã‚¨ãƒªã‚¢ã‚’å‰Šé™¤
+	BattleAreaManager::GetInstance()->RemoveArea(eventInfo.m_enemyGroupeInfo->m_battleAreaId);
+
+	//ç¾åœ¨ã®æˆ¦é—˜çŠ¶æ…‹ã‚’æˆ¦é—˜ä¸­ã«å¤‰æ›´
 	m_currentBattleState = BattleState::en_InBattle;
+}
+
+void BattleManager::InBattleUpdate()
+{
+	//æˆ¦é—˜ä¸­ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±ä½œæˆ
+	BattleUpdateEventInfo eventInfo;
+
+	for (auto& cb : m_battleUpdateCallBackList)
+	{
+		cb(eventInfo);
+	}
 }
 
 void BattleManager::EndBattle()
 {
-	//í“¬I—¹ƒCƒxƒ“ƒgî•ñì¬
+	//æˆ¦é—˜çµ‚äº†ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±ä½œæˆ
 	BattleEndEventInfo eventInfo;
 
 	for (auto& cb : m_battleEndCallBackList)
@@ -38,27 +66,36 @@ void BattleManager::EndBattle()
 
 void BattleManager::Update()
 {
-	//“G¶‘¶Šm”F
-	EnemyAliveCheck();
+	if (m_currentBattleState == BattleState::en_InBattle)
+	{
+		//æ•µç”Ÿå­˜ç¢ºèª
+		EnemyAliveCheck();
+		//æˆ¦é—˜ä¸­ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯æ›´æ–°
+		InBattleUpdate();
+		//ã¤ã„ã§ã«é€æ˜å£æ›´æ–°
+		if (m_battleInvisibleWall)
+		{
+			m_battleInvisibleWall->Update();
+		}
+	}
 }
 
 void BattleManager::EnemyAliveCheck()
 {
-	//Œ»İˆ—’†‚Ì“GƒOƒ‹[ƒvî•ñ‚ª‚È‚¯‚ê‚Îˆ—‚ğ”²‚¯‚é
+	//ç¾åœ¨å‡¦ç†ä¸­ã®æ•µã‚°ãƒ«ãƒ¼ãƒ—æƒ…å ±ãŒãªã‘ã‚Œã°å‡¦ç†ã‚’æŠœã‘ã‚‹
 	if (!m_currentBattleEnemyGroupe)
 	{
-		m_currentBattleState = BattleState::en_None;
-
 		return;
 	}
 
-	//“GƒOƒ‹[ƒv“à‚Ì“G‚ª‘S‚Ä€–S‚µ‚Ä‚¢‚é‚©Šm”F
+	//æ•µã‚°ãƒ«ãƒ¼ãƒ—å†…ã®æ•µãŒå…¨ã¦æ­»äº¡ã—ã¦ã„ã‚‹ã‹ç¢ºèª
 	if (m_currentBattleEnemyGroupe->m_enemyAiInfoList.empty())
 	{
-		//‘S‚Ä€–S‚µ‚Ä‚¢‚é‚È‚çí“¬I—¹ˆ—‚ğs‚¤
+		//å…¨ã¦æ­»äº¡ã—ã¦ã„ã‚‹ãªã‚‰æˆ¦é—˜çµ‚äº†å‡¦ç†ã‚’è¡Œã†
 		EndBattle();
-
-		//w’è‚Ì“GƒOƒ‹[ƒv‚Éíœƒtƒ‰ƒO‚ğ—§‚Ä‚é
+		//ã¤ã„ã§ã«é€æ˜å£ã‚’å‰Šé™¤
+		RemoveBattleInvisibleWall();
+		//æŒ‡å®šã®æ•µã‚°ãƒ«ãƒ¼ãƒ—ã«å‰Šé™¤ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹
 		EnemyManager::GetInstance()->SetEnemyGroupeDeleteFlag(
 			m_currentBattleEnemyGroupe->m_groupId,true
 		);
@@ -69,6 +106,25 @@ void BattleManager::EnemyAliveCheck()
 	}
 }
 
+void BattleManager::CreateBattleInvisibleWall(Vector3 centerPos)
+{
+	//é€æ˜å£ç”Ÿæˆå‡¦ç†
+	m_battleInvisibleWall = NewGO<CircleInvisibleWall>(UpdateOrder::Actor, "invisibleWall");
+
+	m_battleInvisibleWall->Create(
+		centerPos,
+		600.0f
+	);
+}
+
+void BattleManager::RemoveBattleInvisibleWall()
+{
+	//é€æ˜å£å‰Šé™¤å‡¦ç†
+	if (m_battleInvisibleWall)
+	{
+		m_battleInvisibleWall->Delete();
+		m_battleInvisibleWall = nullptr;
+	}
 void BattleManager::ResetBattleManager()
 {
 	m_battleStartCallBackList.clear();
