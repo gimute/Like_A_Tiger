@@ -66,6 +66,14 @@ void UICanvas::SetColor(float r, float g, float b, float a)
 	}
 }
 
+void UICanvas::SetTransmittance(float setTransmittance)
+{
+	for (auto ui : m_uiList)
+	{
+		ui->SetTransmittance(setTransmittance);
+	}
+}
+
 Vector4 UICanvas::GetColor()
 {
 	//一旦白を返すようにしておく
@@ -143,6 +151,11 @@ void UIImage::SetColor(Vector4 color)
 void UIImage::SetColor(float r, float g, float b, float a)
 {
 	m_mulColor = Vector4(r, g, b, a);
+}
+
+void UIImage::SetTransmittance(float setTransmittance)
+{
+	m_mulColor.a = setTransmittance;
 }
 
 Vector4 UIImage::GetColor()

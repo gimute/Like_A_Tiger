@@ -9,24 +9,16 @@
 #include "Battle\BattleAreaManager.h"
 #include "Battle\BattleManager.h"
 
+#include "Actor\Enemy\EnemySystem.h"
+
 #include "Random.h"
 
-//ƒCƒ“ƒXƒ^ƒ“ƒX‰Šú‰»
+//ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åˆæœŸåŒ–
 EnemyManager* EnemyManager::m_instance = nullptr;
 
-EnemyManager::EnemyManager()
+void EnemyManager::InitEnemyManager()
 {
-	m_enemyMetaAi = NewGO<EnemyMetaAi>(UpdateOrder::AI, "enemymetaai");
-
-	//í“¬ƒGƒŠƒA‚ÉƒvƒŒƒCƒ„[‚ªN“ü‚µ‚½Û‚ÉƒGƒlƒ~[‚ğí“¬ó‘Ô‚É‚·‚éˆ—
-	//BattleAreaManager::GetInstance()->RegisterOnEnterListener(
-	//	[&](const BattleArea& area)
-	//	{
-	//		EnemyGroupeBattleSet(area.m_id);
-	//	}
-	//);
-
-	//í“¬ŠJn‚ğƒoƒgƒ‹ƒ}ƒl[ƒWƒƒ[‚©‚ç’Ê’m‚³‚ê‚é‚æ‚¤‚É“o˜^
+	//æˆ¦é—˜é–‹å§‹ã‚’ãƒãƒˆãƒ«ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã‹ã‚‰é€šçŸ¥ã•ã‚Œã‚‹ã‚ˆã†ã«ç™»éŒ²
 	BattleManager::GetInstance()->RegisterBattleStartCallBack(
 		[&](const BattleStartEventInfo& eventInfo)
 		{
@@ -34,6 +26,8 @@ EnemyManager::EnemyManager()
 		}
 	);
 
+	m_enemyMetaAi = NewGO<EnemyMetaAi>(UpdateOrder::AI, "enemymetaai");
+	m_enemyAiSystem = NewGO<EnemySystem>(UpdateOrder::AI, "enemy");
 }
 
 void EnemyManager::RequestSpawnEnemy(EnemyYakuzaType type, const Vector3& spawnPoint)
@@ -59,7 +53,7 @@ void EnemyManager::RequestSpawnEnemyGroup(int spawnNum, const Vector3& spawnPoin
 	{
 		EnemyPair pair;
 
-		//ƒ^ƒCƒv‚ğƒ‰ƒ“ƒ_ƒ€‘I’è
+		//ã‚¿ã‚¤ãƒ—ã‚’ãƒ©ãƒ³ãƒ€ãƒ é¸å®š
 		int randomType = 0;
 		//Random::Range(EnemyYakuzaType::en_normalYakuza)
 		EnemyYakuzaType type = static_cast<EnemyYakuzaType>(randomType);
@@ -72,10 +66,10 @@ void EnemyManager::RequestSpawnEnemyGroup(int spawnNum, const Vector3& spawnPoin
 
 		pair.m_enemyID = m_enemyIDCounter;
 
-		//‰¼–¼‚È‚Ì‚Å’ˆÓ
+		//ä»®åãªã®ã§æ³¨æ„
 		pair.m_enemyName = EnemyTempNames[i];
 
-		//ƒXƒ|[ƒ“ˆÊ’u‚ğƒ‰ƒ“ƒ_ƒ€‘I’è
+		//ã‚¹ãƒãƒ¼ãƒ³ä½ç½®ã‚’ãƒ©ãƒ³ãƒ€ãƒ é¸å®š
 		Vector3	randomSpawnPoint = GetRandomPointInRadius(spawnPoint, 100.0f);
 	
 		newEnemy->SetPosition(randomSpawnPoint);
@@ -87,7 +81,7 @@ void EnemyManager::RequestSpawnEnemyGroup(int spawnNum, const Vector3& spawnPoin
 		m_enemyIDCounter++;
 	}
 
-	//í“¬ƒGƒŠƒA¶¬
+	//æˆ¦é—˜ã‚¨ãƒªã‚¢ç”Ÿæˆ
 	int areaId = BattleAreaManager::GetInstance()->CreateArea(spawnPoint, 400.0f);
 
 	newGroup.m_battleAreaId = areaId;
@@ -99,13 +93,13 @@ void EnemyManager::RequestSpawnEnemyGroup(int spawnNum, const Vector3& spawnPoin
 
 void EnemyManager::RequestDeadEnemyProcces(const Enemy& deadEnemyAddress)
 {
-	//íœ‚µ‚½ƒGƒlƒ~[‚ÌID
+	//å‰Šé™¤ã—ãŸã‚¨ãƒãƒŸãƒ¼ã®ID
 	int deleteEnemyId = -1;
 
-	//ƒGƒlƒ~[ƒyƒAƒŠƒXƒgíœˆ—
+	//ã‚¨ãƒãƒŸãƒ¼ãƒšã‚¢ãƒªã‚¹ãƒˆå‰Šé™¤å‡¦ç†
 	for (auto it = m_enemyPairList.begin();it != m_enemyPairList.end();)
 	{
-		//ˆø”‚ÌƒAƒhƒŒƒX‚Æ‡‚¤ƒGƒlƒ~[‚ğŒŸõ
+		//å¼•æ•°ã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã¨åˆã†ã‚¨ãƒãƒŸãƒ¼ã‚’æ¤œç´¢
 		if (it->m_enemy == &deadEnemyAddress)
 		{
 			deleteEnemyId = it->m_enemyID;
@@ -118,16 +112,16 @@ void EnemyManager::RequestDeadEnemyProcces(const Enemy& deadEnemyAddress)
 		}
 	}
 
-	//ƒOƒ‹[ƒvƒŠƒXƒgIDíœˆ—
+	//ã‚°ãƒ«ãƒ¼ãƒ—ãƒªã‚¹ãƒˆIDå‰Šé™¤å‡¦ç†
 	for (auto it = m_enemyGroupList.begin();it != m_enemyGroupList.end();)
 	{
-		//ƒOƒ‹[ƒv“àID‚ğ’T‚·
+		//ã‚°ãƒ«ãƒ¼ãƒ—å†…IDã‚’æ¢ã™
 		for (auto idList = it->m_enemyID.begin();idList != it->m_enemyID.end();)
 		{
-			//ID‚ª“¯‚¶‚¾‚Á‚½‚ç
+			//IDãŒåŒã˜ã ã£ãŸã‚‰
 			if (deleteEnemyId == *idList)
 			{
-				//íœ
+				//å‰Šé™¤
 				idList = it->m_enemyID.erase(idList);
 			}
 			else
@@ -140,16 +134,58 @@ void EnemyManager::RequestDeadEnemyProcces(const Enemy& deadEnemyAddress)
 	}
 }
 
+void EnemyManager::RequestResetEnemysProcees()
+{
+	//ã¾ãšã‚¨ãƒãƒŸãƒ¼ãŒã„ãªã„ã‹ã‚’ç¢ºã‹ã‚ã‚‹
+	if (m_enemyPairList.empty() &&
+		m_enemyGroupList.empty())
+	{
+		//ã©ã¡ã‚‰ã‚‚ç©ºã ã£ãŸã‚‰
+		//æƒ…å ±ãƒªã‚¹ãƒˆã‚’ç©ºã«ã™ã‚‹
+		m_enemyInfoList.clear();
+		//ãƒ¡ã‚¿AIã‚’å‰Šé™¤
+		DeleteGO(m_enemyMetaAi);
+		//AIã‚·ã‚¹ãƒ†ãƒ ã‚’å‰Šé™¤
+		DeleteGO(m_enemyAiSystem);
+		//ã‚«ã‚¦ãƒ³ã‚¿ãƒ¼é¡ã‚’0ã«
+		m_enemyIDCounter = 0;
+		m_enemyGroupIDCounter = 0;
+
+		return;
+	}
+
+	//ã‚‚ã—ã‚¨ãƒãƒŸãƒ¼ãŒæ®‹ã£ã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤å‡¦ç†ã‚’è¡Œã†
+	m_enemyGroupList.clear();
+	m_enemyInfoList.clear();
+
+	for (auto pairIt = m_enemyPairList.begin();pairIt != m_enemyPairList.end();)
+	{
+		if (pairIt->m_enemy)
+		{
+			DeleteGO(pairIt->m_enemy);
+		}
+
+		pairIt = m_enemyPairList.erase(pairIt);
+	}
+	//ãƒ¡ã‚¿AIã‚’å‰Šé™¤
+	DeleteGO(m_enemyMetaAi);
+	//AIã‚·ã‚¹ãƒ†ãƒ ã‚’å‰Šé™¤
+	DeleteGO(m_enemyAiSystem);
+	//ã‚«ã‚¦ãƒ³ã‚¿ãƒ¼é¡ã‚’0ã«
+	m_enemyIDCounter = 0;
+	m_enemyGroupIDCounter = 0;
+}
+
 void EnemyManager::Update()
 {
-	//ƒGƒlƒ~[ƒOƒ‹[ƒvƒŠƒXƒgXVˆ—
+	//ã‚¨ãƒãƒŸãƒ¼ã‚°ãƒ«ãƒ¼ãƒ—ãƒªã‚¹ãƒˆæ›´æ–°å‡¦ç†
 	UpdateEnemyGroupe();
-	//ŠO•”—p‚ÌƒGƒlƒ~[î•ñƒŠƒXƒg
+	//å¤–éƒ¨ç”¨ã®ã‚¨ãƒãƒŸãƒ¼æƒ…å ±ãƒªã‚¹ãƒˆ
 	UpdateEnemyDataSet();
 
 	UpdateTargetView();
 
-	//ƒeƒXƒg
+	//ãƒ†ã‚¹ãƒˆ
 
 	auto& testlist = GetEnemyGroupList();
 
@@ -173,7 +209,7 @@ void EnemyManager::UpdateEnemyGroupe()
 {
 	for (auto it = m_enemyGroupList.begin(); it != m_enemyGroupList.end();)
 	{
-		//ƒOƒ‹[ƒv‚Ìíœƒtƒ‰ƒO‚ªŒo‚Á‚Ä‚¢‚½‚çíœ
+		//ã‚°ãƒ«ãƒ¼ãƒ—ã®å‰Šé™¤ãƒ•ãƒ©ã‚°ãŒçµŒã£ã¦ã„ãŸã‚‰å‰Šé™¤
 		if (it->m_isDelete)
 		{
 			it = m_enemyGroupList.erase(it);
@@ -200,13 +236,13 @@ void EnemyManager::UpdateEnemyDataSet()
 
 	std::unordered_set<int> currentGroupIds;
 
-	//ƒOƒ‹[ƒv‚ÌID‚ª‚±‚Ì‚Ü‚Ü‚Å‚Í—v‘f”‚µ‚©‘ã“ü‚Å‚«‚È‚¢‚Ì‚ÅC³—\’è
+	//ã‚°ãƒ«ãƒ¼ãƒ—ã®IDãŒã“ã®ã¾ã¾ã§ã¯è¦ç´ æ•°ã—ã‹ä»£å…¥ã§ããªã„ã®ã§ä¿®æ­£äºˆå®š
 	for (auto& groupPtr : enemyGroupList)
 	{
 		int groupId = groupPtr.m_groupeId;
 		currentGroupIds.insert(groupId);
 
-		//ƒOƒ‹[ƒv‚ª‚·‚Å‚É‚ ‚é‚©‚ğ’Tõ
+		//ã‚°ãƒ«ãƒ¼ãƒ—ãŒã™ã§ã«ã‚ã‚‹ã‹ã‚’æ¢ç´¢
 		EnemyInfoGroupe* existGroup = nullptr;
 
 		for (auto& g : m_enemyInfoList)
@@ -219,10 +255,10 @@ void EnemyManager::UpdateEnemyDataSet()
 			}
 		}
 
-		//‚±‚ÌƒOƒ‹[ƒv‚ªí“¬’†‚©‚Ç‚¤‚©
+		//ã“ã®ã‚°ãƒ«ãƒ¼ãƒ—ãŒæˆ¦é—˜ä¸­ã‹ã©ã†ã‹
 		bool isInBattle = false;
 
-		//–³‚¢‚È‚çV‹K’Ç‰Á
+		//ç„¡ã„ãªã‚‰æ–°è¦è¿½åŠ 
 		if (!existGroup)
 		{
 			EnemyInfoGroupe newGroup;
@@ -231,16 +267,16 @@ void EnemyManager::UpdateEnemyDataSet()
 			m_enemyInfoList.push_back(newGroup);
 			existGroup = &m_enemyInfoList.back();
 		}
-		//V‹K‚Å‚È‚¢‚È‚çƒOƒ‹[ƒvî•ñ‚ğXV
+		//æ–°è¦ã§ãªã„ãªã‚‰ã‚°ãƒ«ãƒ¼ãƒ—æƒ…å ±ã‚’æ›´æ–°
 		else
 		{
 			existGroup->m_inBattle = groupPtr.isInBattle;
 		}
 
-		//ƒOƒ‹[ƒv“à•”‚ÌXV
+		//ã‚°ãƒ«ãƒ¼ãƒ—å†…éƒ¨ã®æ›´æ–°
 		existGroup->m_enemyAiInfoList.clear();
 
-		//EnemyId‚²‚Æ‚ÉEnemyMemberInfowoì¬
+		//EnemyIdã”ã¨ã«EnemyMemberInfowoä½œæˆ
 		for (auto& id : groupPtr.m_enemyID)
 		{
 			EnemyPair* pair = nullptr;
@@ -280,7 +316,7 @@ void EnemyManager::UpdateEnemyDataSet()
 		}
 	}
 
-	//¡ƒtƒŒ[ƒ€‚É–³‚¢GroupId‚Ííœ
+	//ä»Šãƒ•ãƒ¬ãƒ¼ãƒ ã«ç„¡ã„GroupIdã¯å‰Šé™¤
 	m_enemyInfoList.erase(
 		std::remove_if(
 			m_enemyInfoList.begin(),

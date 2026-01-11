@@ -71,6 +71,8 @@ public:
 	int CreateArea(const Vector3& center, float radius);
 	//エリア削除
 	void RemoveArea(int id);
+	//エリアマネージャーリセット
+	void ResetAreaManager();
 
 	//更新
 	void Update(const Vector3& playerPos);

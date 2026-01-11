@@ -29,6 +29,11 @@ void GameSceneManager::InitGameSceneManager()
 
 }
 
+void GameSceneManager::CurrentStateEnter()
+{
+	m_currentState->EnterScene();
+}
+
 void GameSceneManager::UpdateGameSceneState()
 {
 	if (m_currentState)

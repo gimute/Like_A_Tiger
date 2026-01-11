@@ -68,6 +68,14 @@ void BattleAreaManager::RemoveArea(int id)
 	}
 }
 
+void BattleAreaManager::ResetAreaManager()
+{
+	m_areaCountNum = 0;
+
+	m_onEnterListeners.clear();
+	m_areas.clear();
+}
+
 void BattleAreaManager::NotifyOnBattleManagerEnter(AreaState areaState)
 {
 	auto& enemyInfoList = EnemyManager::GetInstance()->GetEnemyInfoList();

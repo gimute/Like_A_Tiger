@@ -45,6 +45,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	// ここからゲームループ。
 	while (DispatchWindowMessage())
 	{
+#ifdef APP_PARAM_HOT_RELOAD
+		ParameterManager::GetInstance().Update();
+#endif APP_PARAM_HOT_RELOAD
+
 		//追加したコード
 		auto& renderContext = g_graphicsEngine->GetRenderContext();
 		//

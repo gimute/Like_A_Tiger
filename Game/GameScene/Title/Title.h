@@ -16,13 +16,13 @@ public:
 private:
 	//TitleUI用のデータ
 	const TitleInitData defaultTitle = {
-		"Assets\spriteData\Title\Title_LikeTiger.DDS",
+		"Assets/spriteData/Title/Title_LikeTiger.DDS",
 		1920,
 		1080,
 	};
 
 private:
-	UICanvas m_canvas;
+	std::shared_ptr<UICanvas> m_canvas;
 	std::shared_ptr<UIImage> m_titleUI;		//タイトルUI
 
 public:

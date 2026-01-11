@@ -5,6 +5,8 @@
 #include "Camera\ICameraController.h"
 #include "Camera\CameraEntity.h"
 
+#include "Actor\Player\PlayerCameraController.h"
+
 class CameraManager
 {
 private:
@@ -12,7 +14,10 @@ private:
 	///インスタンス
 	static CameraManager* m_cameraManagerInstance;
 	///コンストラクタ
-	CameraManager() = default;
+	CameraManager()
+	{
+		AddCameraController<PlayerCameraController>();
+	}
 	///コピー禁止
 	CameraManager(const CameraManager&) = delete;
 	///代入禁止
@@ -37,14 +42,16 @@ public:
 		//カメラ生成
 		m_cameraEntity = NewGO<CameraEntity>(0, "camera");
 
-		//カメラコントローラーリストに登録
-		m_cameraControllerList.emplace(
-			InitControllClass::ID(),
-			std::make_unique<InitControllClass>(std::forward<Args>(args)...)
-		);
-
 		//切り替え先のカメラコントローラーに設定
 		m_nextCameraController = m_cameraControllerList[InitControllClass::ID()].get();
+	}
+	///カメラ削除
+	void DeleteCamera()
+	{
+		if (m_cameraEntity)
+		{
+			DeleteGO(m_cameraEntity);
+		}
 	}
 	///カメラコントローラー登録
 	template<typename ControllClass,typename... Args>

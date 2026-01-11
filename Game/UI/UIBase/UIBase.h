@@ -21,6 +21,8 @@ public:
 
 	virtual void SetColor(Vector4 mulColor) {};
 	virtual void SetColor(float r, float g, float b, float a) {};
+	virtual void SetTransmittance(float setTransmittance) {};
+
 	virtual Vector4 GetColor() = 0;
 
 	/// <summary>
@@ -77,6 +79,7 @@ public:
 
 	void SetColor(Vector4 mulColor) override;
 	void SetColor(float r, float g, float b, float a)override;
+	void SetTransmittance(float setTransmittance)override;
 	Vector4 GetColor()override;
 
 	/// <summary>
@@ -143,6 +146,11 @@ public:
 	/// <param name="mulColor"></param>
 	virtual void SetColor(Vector4 mulColor) override;
 	virtual void SetColor(float r, float g, float b, float a) override;
+	/// <summary>
+	/// “§‰ß—¦İ’è
+	/// </summary>
+	/// <param name="setTransmittance"></param>
+	virtual void SetTransmittance(float setTransmittance) override;
 	/// <summary>
 	/// æZƒJƒ‰[æ“¾
 	/// </summary>

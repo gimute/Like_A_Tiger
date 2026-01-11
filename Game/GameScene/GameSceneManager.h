@@ -101,11 +101,15 @@ public:
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	template<typename T>
-	inline void ReqestInitSceneState()
+	void ReqestInitSceneState()
 	{
 		//ステートを探して変更
 		m_currentState = FindState(T::ID());
 	}
+	/// <summary>
+	/// 現在設定してあるシーンのEnterを実行(初期化の際に仕様)
+	/// </summary>
+	void CurrentStateEnter();
 private:
 	/// <summary>
 	/// ステート探索関数
