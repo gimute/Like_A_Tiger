@@ -5,6 +5,8 @@
 #include "GameScene\GameSceneManager.h"
 #include "GameScene\GameTitleScene.h"
 #include "GameScene\GameInScene.h"
+#include "GameScene\GameResultScene.h"
+#include "GameScene\GameOverScene.h"
 
 #include "InvisibleWall.h"
 
@@ -21,10 +23,15 @@ bool Game::Start()
 	//ゲームタイトルのシーンを追加
 	GameSceneManager::GetSceneManagerInstance()->AddSceneState<GameTitleScene>();
 	//ゲームインシーンを追加
-	GameSceneManager::GetSceneManagerInstance()->AddSceneState<GameInScene>();
+	GameSceneManager::GetSceneManagerInstance()->AddSceneState<GameInScene>(); 
+	//ゲームのリザルトシーンを追加
+	GameSceneManager::GetSceneManagerInstance()->AddSceneState<GameResultScene>();
+	//ゲームオーバーのシーンを追加
+	GameSceneManager::GetSceneManagerInstance()->AddSceneState<GameOverScene>();
 
 	//初期化はゲームタイトルシーンにする
 	GameSceneManager::GetSceneManagerInstance()->ReqestInitSceneState<GameTitleScene>();
+	GameSceneManager::GetSceneManagerInstance()->CurrentStateEnter();
 
 	//ロードマネージャーを初期化
 	LoadManager::GetInstance()->InitLoadManager();

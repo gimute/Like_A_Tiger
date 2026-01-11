@@ -6,5 +6,6 @@ enum UpdateOrder
 	AI,
 	UI,
 	Charactar,
-	Actor
+	Actor,
+	LoadUI,
 };

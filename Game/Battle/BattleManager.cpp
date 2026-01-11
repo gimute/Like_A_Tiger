@@ -68,3 +68,9 @@ void BattleManager::EnemyAliveCheck()
 		m_currentBattleState = BattleState::en_BattleEnding;
 	}
 }
+
+void BattleManager::ResetBattleManager()
+{
+	m_battleStartCallBackList.clear();
+	m_battleEndCallBackList.clear();
+}

@@ -245,9 +245,13 @@
     <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiWaitingAttackState.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyMetaAi\EnemyMetaAi.cpp" />
     <ClCompile Include="Core\Curve.cpp" />
+    <ClCompile Include="GameScene\GameOver\GameOver.cpp" />
+    <ClCompile Include="GameScene\GameOverScene.cpp" />
+    <ClCompile Include="GameScene\GameResultScene.cpp" />
     <ClCompile Include="InvisibleWall.cpp" />
     <ClCompile Include="Load\LoadScreenSprite.cpp" />
     <ClCompile Include="Load\LoadManager.cpp" />
+    <ClCompile Include="GameScene\Result\Result.cpp" />
     <ClCompile Include="UI\EnemysHpGauge.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameScene\GameInScene.cpp" />
@@ -257,7 +261,7 @@
     <ClCompile Include="Inventory\Types.cpp" />
     <ClCompile Include="UI\PoseMenu.cpp" />
     <ClCompile Include="Core\ParameterManager.cpp" />
-    <ClCompile Include="Title.cpp" />
+    <ClCompile Include="GameScene\Title\Title.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\IEnemyAiState.cpp" />
     <ClCompile Include="UI\UILayout.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAiState\IEnemyAttackAiState.cpp" />
@@ -313,9 +317,13 @@
     <ClInclude Include="Actor\Enemy\EnemyMetaAi\EnemyMetaAi.h" />
     <ClInclude Include="Actor\Enemy\EnemyMetaAi\EnemyMetaAiStruct.h" />
     <ClInclude Include="Core\Curve.h" />
+    <ClInclude Include="GameScene\GameOver\GameOver.h" />
+    <ClInclude Include="GameScene\GameOverScene.h" />
+    <ClInclude Include="GameScene\GameResultScene.h" />
     <ClInclude Include="InvisibleWall.h" />
     <ClInclude Include="Load\LoadScreenSprite.h" />
     <ClInclude Include="Load\LoadManager.h" />
+    <ClInclude Include="GameScene\Result\Result.h" />
     <ClInclude Include="UI\EnemysHpGauge.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameScene\GameInScene.h" />
@@ -338,7 +346,7 @@
     <ClInclude Include="Actor\Enemy\EnemyMetaAi\IMetaAiProcess.h" />
     <ClInclude Include="Actor\Enemy\EnemyMetaAi\Process\TrakingRoleProcess.h" />
     <ClInclude Include="UI\UIAnimation\UIAnimation.h" />
-    <ClInclude Include="Title.h" />
+    <ClInclude Include="GameScene\Title\Title.h" />
     <ClInclude Include="UI\HPGauge.h" />
     <ClInclude Include="Actor\BackGround\ProtoStage.h" />
     <ClInclude Include="Actor\Player\PlayerAttackComboState.h" />

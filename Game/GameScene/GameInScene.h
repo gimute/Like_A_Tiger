@@ -4,13 +4,28 @@
 class Player;
 class PlayerController;
 class PoseMenu;
+class ProtoStage;
+
+class EnemysHpGauge;
 
 class Inventory;
+
+enum GameState
+{
+    //ゲームロード中
+    en_gameLoad,
+    //ゲーム更新
+    en_gameUpdate,
+    //ゲームオーバー処理に移行
+    en_gameOver,
+    //ゲームクリア処理に移行
+    en_gameClear
+};
 
 class GameInScene :
     public IGameSceneState
 {
-	appState(GameInScene);
+	appState(GameInScene)
 public:
     /// <summary>
     /// コンストラクタ
@@ -38,6 +53,14 @@ public:
     /// <param name="nextState"></param>
     /// <returns></returns>
     bool ReqestSceneState(uint32_t& nextState) override;
+    /// <summary>
+    /// ゲームステート更新
+    /// </summary>
+    void GameStateUpdate();
+    /// <summary>
+    /// ゲームオブジェクト削除
+    /// </summary>
+    void DeleteGameObjects();
 private:
     ///プレイヤーのポインタ
     Player* m_player = nullptr;
@@ -47,5 +70,11 @@ private:
     PoseMenu* m_poseMenu = nullptr;
 
     Inventory* m_inventory = nullptr;
+    //プロトステージ
+    ProtoStage* m_protoStage = nullptr;
+    //エネミーのHP
+    EnemysHpGauge* m_enemysHpGauge = nullptr;
+    //ゲーム内ステート
+    GameState m_gameState = GameState::en_gameLoad;
 };
 

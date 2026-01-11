@@ -15,10 +15,7 @@ class PlayerCameraController :
 	appState(PlayerCameraController)
 public:
     ///コンストラクタ
-	PlayerCameraController(PlayerController* playerController) : m_playerController(nullptr)
-	{ 
-		m_playerController = playerController;
-	}
+	PlayerCameraController() = default;
     ///デストラクタ
     ~PlayerCameraController() = default;
 	///カメラ初期化
@@ -28,8 +25,6 @@ public:
 	///カメラ終了
     void ExitCamera() override;
 private:
-	///プレイヤーへのポインタ
-	PlayerController* m_playerController = nullptr;
 	//注視点から視点までのベクトル
 	Vector3 m_toCameraPos = Vector3::Zero;
 	//中視点位置

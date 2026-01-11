@@ -15,8 +15,20 @@ void YakuzaAttackAssistSystem::InitAttackAssistSystem(YakuzaCharacter* playerYak
 	m_playerYakuzaCharacterPtr = playerYakuzaCharacter;
 }
 
+void YakuzaAttackAssistSystem::RemoveAttackAssistSystem()
+{
+	//プレイヤーのポインタをNULLに
+	m_playerYakuzaCharacterPtr = nullptr;
+}
+
 YakuzaCharacter* YakuzaAttackAssistSystem::GetPlayerNearEnemyPosition(const TargetingParam& param)
 {
+	//プレイヤーのポインタがNULLだったら
+	if (!m_playerYakuzaCharacterPtr)
+	{
+		return nullptr; 
+	}
+
 	//一番近い敵ポインタ
 	YakuzaCharacter* bestEnemy = nullptr;
 	//一番近い敵スコア

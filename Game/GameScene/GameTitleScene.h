@@ -1,6 +1,15 @@
 #pragma once
 
 #include "GameScene\IGameSceneState.h"
+#include "GameScene\Title\Title.h"
+
+enum TitleState
+{
+    en_TitleStandby,
+    en_TitleLoadIn,
+    en_TitleWaitButtonTrigger,
+    en_TitleProceesEnd
+};
 
 class GameTitleScene :
     public IGameSceneState
@@ -33,5 +42,10 @@ class GameTitleScene :
     /// <param name="nextState"></param>
     /// <returns></returns>
 	bool ReqestSceneState(uint32_t& nextState) override;
+private:
+    //タイトルスプライト
+    Title* m_titleSprite = nullptr;
+    //タイトルのステート
+    TitleState m_titleState = TitleState::en_TitleStandby;
 };
 

@@ -58,6 +58,8 @@ public:
 	}
 	//初期化
 	void InitAttackAssistSystem(YakuzaCharacter* playerYakuzaCharacter);
+	//解除
+	void RemoveAttackAssistSystem();
 
 	//プレイヤーから一番近い敵座標を取得する
 	YakuzaCharacter* GetPlayerNearEnemyPosition(const TargetingParam& param);

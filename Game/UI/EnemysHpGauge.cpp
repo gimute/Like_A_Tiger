@@ -18,6 +18,21 @@ namespace EnemyHpGaugeConstant
 	const Vector3 HPUI_NAME_POSITION_ADDVALUE;
 }
 
+EnemysHpGauge::~EnemysHpGauge()
+{
+	if (m_enemyHpList.empty())
+	{
+		return;
+	}
+
+	for (auto & listPtr : m_enemyHpList)
+	{
+		DeleteGO(listPtr.m_hpGaugePtr);
+	}
+
+	m_enemyHpList.clear();
+}
+
 bool EnemysHpGauge::Start()
 {
 	//BattleAreaManager::GetInstance()->RegisterOnEnterListener(

@@ -22,7 +22,7 @@ public:
 	//コンストラクタ
 	EnemysHpGauge() = default;
 	//デストラクタ
-	~EnemysHpGauge() = default;
+	~EnemysHpGauge();
 
 	//スタート関数
 	bool Start() override;

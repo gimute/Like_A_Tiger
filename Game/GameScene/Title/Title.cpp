@@ -2,7 +2,9 @@
 #include "Title.h"
 
 Title::Title(){
-	m_titleUI = m_canvas.CreateUI<UIImage>();
+	m_canvas = std::make_shared<UICanvas>();
+
+	m_titleUI = m_canvas->CreateUI<UIImage>();
 }
 
 Title::~Title() {
@@ -14,11 +16,11 @@ bool Title::Start() {
 }
 
 void Title::Update() {
-	m_canvas.Update();
+	m_canvas->Update();
 }
 
 void Title::Render(RenderContext& rc) {
-	m_canvas.Render(rc);
+	m_canvas->Render(rc);
 }
 
 void Title::Init(const TitleInitData* initData) {
@@ -29,6 +31,8 @@ void Title::Init(const TitleInitData* initData) {
 	}
 
 	m_titleUI->Init(initData->titleFilePath, initData->frameSize_x, initData->frameSiza_y);
-	m_titleUI->SetPivot(0.0f, 1.0f);
+	m_titleUI->SetPivot(0.5f, 0.5f);
+
+	m_canvas->m_transform.m_localPosition = Vector3(0.0f, 0.0f, 0.0f);
 }
 
