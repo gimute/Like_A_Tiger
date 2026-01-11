@@ -123,10 +123,21 @@ void BattleManager::RemoveBattleInvisibleWall()
 	if (m_battleInvisibleWall)
 	{
 		m_battleInvisibleWall->Delete();
+		DeleteGO(m_battleInvisibleWall);
 		m_battleInvisibleWall = nullptr;
 	}
+}
+
 void BattleManager::ResetBattleManager()
 {
 	m_battleStartCallBackList.clear();
 	m_battleEndCallBackList.clear();
+
+	//透明壁削除処理
+	if (m_battleInvisibleWall)
+	{
+		m_battleInvisibleWall->Delete();
+		DeleteGO(m_battleInvisibleWall);
+		m_battleInvisibleWall = nullptr;
+	}
 }
