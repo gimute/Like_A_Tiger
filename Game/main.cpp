@@ -34,6 +34,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//パラメーターマネージャー生成
 	ParameterManager::CreateInstance();
 
+	//サウンドマネージャー生成
+	SoundManager::CreateInstance();
+
 	CollisionObjectManager m_collisionObjectManager;
 	g_collisionObjectManager = &m_collisionObjectManager;
 

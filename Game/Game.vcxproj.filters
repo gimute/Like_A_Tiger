@@ -65,6 +65,7 @@
     <ClCompile Include="Battle\BattleAreaManager.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyMetaAi\Process\BattleStartNotifyProcess.cpp" />
     <ClCompile Include="Battle\BattleManager.cpp" />
+    <ClCompile Include="Sound\SoundManager.cpp" />
     <ClCompile Include="Load\LoadManager.cpp" />
     <ClCompile Include="Load\LoadScreenSprite.cpp" />
     <ClCompile Include="GameScene\GameResultScene.cpp" />
@@ -146,6 +147,7 @@
     <ClInclude Include="Battle\BattleAreaManager.h" />
     <ClInclude Include="Actor\Enemy\EnemyMetaAi\Process\BattleStartNotifyProcess.h" />
     <ClInclude Include="Battle\BattleManager.h" />
+    <ClInclude Include="Sound\SoundManager.h" />
     <ClInclude Include="Load\LoadManager.h" />
     <ClInclude Include="Load\LoadScreenSprite.h" />
     <ClInclude Include="GameScene\GameResultScene.h" />

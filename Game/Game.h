@@ -11,5 +11,11 @@ private:
 	/// å‚ÉEffectEngine‚Ö‚Ì“o˜^
 	/// </summary>
 	void InitEffect();
+
+	/// <summary>
+	/// ƒTƒEƒ“ƒh‚Ì€”õ
+	/// å‚ÉSoundEngine‚Ö‚Ì“o˜^
+	/// </summary>
+	void InitSound();
 };
 
