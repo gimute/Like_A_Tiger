@@ -176,7 +176,9 @@ public:
 
 	inline IYakuzaTypeSet& GetTypeSet() { return *m_typeSet.get(); }
 
-	inline float GetTypeSetAttackPower() { return m_typeSet.get()->GetAttackPower(m_attackStateMachine.get()); }
+	inline YakuzaDamageDatas GetTypeSetAttackPower() { return m_typeSet.get()->GetAttackPower(m_attackStateMachine.get()); }
+
+	inline YakuzaAttackSEDatas GetAttackSEDatas(uint32_t stateID) { return m_typeSet.get()->GetAttackSEDatas(stateID); }
 
 	void InitAttackStateMachine(uint32_t firstAttackStateHash,uint32_t firstFinishBrowStateHash);
 

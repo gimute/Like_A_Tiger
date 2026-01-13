@@ -175,6 +175,8 @@ void YakuzaAttackState::OnUpdate()
 			m_owner->SetIsAttack(false);
 
 			attackStateMachine->SetIsCreateAttackCollision(false);
+
+			attackStateMachine->ResetAttackStateMachine();
 		}
 
 		return;
@@ -186,6 +188,8 @@ void YakuzaAttackState::OnExit()
 {
 	m_owner->SetIsAttack(false);
 	m_owner->GetAttackStateMachine()->SetIsAttackEnds(true);
+	auto* attackStateMachine = m_owner->GetAttackStateMachine();
+	attackStateMachine->ResetAttackStateMachine();
 }
 
 //SwayState

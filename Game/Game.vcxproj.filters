@@ -154,5 +154,6 @@
     <ClInclude Include="GameScene\Result\Result.h" />
     <ClInclude Include="GameScene\GameOverScene.h" />
     <ClInclude Include="GameScene\GameOver\GameOver.h" />
+    <ClInclude Include="Sound\SoundId.h" />
   </ItemGroup>
 </Project>

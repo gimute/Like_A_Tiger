@@ -12,6 +12,8 @@
 
 #include "Load\LoadManager.h"
 
+#include "Sound\SoundId.h"
+
 bool Game::Start()
 {
 	//ゲーム中で使うエフェクトの準備
@@ -67,5 +69,11 @@ void Game::InitEffect()
 
 void Game::InitSound()
 {
-	g_soundEngine->ResistWaveFileBank(0, "Assets/Sound/punch.wav");	//パンチヒット音
+	g_soundEngine->ResistWaveFileBank(se_hittingLightA, "Assets/Sound/HittingSound/hitting_light_A.wav");	//パンチヒット音
+	g_soundEngine->ResistWaveFileBank(se_hittingLightB, "Assets/Sound/HittingSound/hitting_light_B.wav");	//パンチヒット音
+	g_soundEngine->ResistWaveFileBank(se_hittingHeavyA, "Assets/Sound/HittingSound/hitting_heavy_A.wav");	//パンチヒット音
+	g_soundEngine->ResistWaveFileBank(se_hittingHeavyB, "Assets/Sound/HittingSound/hitting_heavy_B.wav");	//パンチヒット音
+	g_soundEngine->ResistWaveFileBank(se_hittingDefenseA, "Assets/Sound/HittingSound/hitting_defense_A.wav");	//パンチヒット音
+	g_soundEngine->ResistWaveFileBank(se_cuttingWindLigthA, "Assets/Sound/CuttingWindSound/cuttingWind_light_A.wav");	//風切り音
+	g_soundEngine->ResistWaveFileBank(se_cuttingWindHeavyA, "Assets/Sound/CuttingWindSound/cuttingWind_heavy_A.wav");	//風切り音
 }
