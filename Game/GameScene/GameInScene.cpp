@@ -27,6 +27,8 @@
 #include "GameScene\GameResultScene.h"
 #include "GameScene\GameOverScene.h"
 
+#include "UI/MiniMap.h"
+
 //ステート侵入関数
 void GameInScene::EnterScene()
 {
@@ -82,6 +84,15 @@ void GameInScene::EnterScene()
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 
    m_gameState = GameState::en_gameLoad;
+
+   m_test = NewGO<MiniMap>(0);
+
+   m_test->SetPlayer(m_player);
+   m_test->AddBattlePoint(Vector3{ -1000.0f,0.0f,0.0f });
+   m_test->AddBattlePoint(Vector3{ 1000.0f,0.0f,0.0f });
+   m_test->AddBattlePoint(Vector3{ -3000.0f,0.0f,0.0f });
+
+   m_test->SetPosition(Vector3(-600.0f, -300.0f, 0.0f));
 }
 
 //ステート更新関数

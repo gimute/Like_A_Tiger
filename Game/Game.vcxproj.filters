@@ -72,6 +72,7 @@
     <ClCompile Include="GameScene\Result\Result.cpp" />
     <ClCompile Include="GameScene\GameOverScene.cpp" />
     <ClCompile Include="GameScene\GameOver\GameOver.cpp" />
+    <ClCompile Include="UI\MiniMap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -154,5 +155,6 @@
     <ClInclude Include="GameScene\Result\Result.h" />
     <ClInclude Include="GameScene\GameOverScene.h" />
     <ClInclude Include="GameScene\GameOver\GameOver.h" />
+    <ClInclude Include="UI\MiniMap.h" />
   </ItemGroup>
 </Project>
