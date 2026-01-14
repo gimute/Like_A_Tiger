@@ -3,6 +3,9 @@
 #include "Actor\YakuzaComponents\YakuzaStateMachine.h"
 #include "Actor\YakuzaComponents\YakuzaAnimationState.h"
 
+#include "Sound\SoundManager.h"
+#include "Sound\SoundId.h"
+
 ///IdleState
 
 void YakuzaIdleState::OnEnter()
@@ -239,6 +242,9 @@ void YakuzaSwayState::OnEnter()
 		}
 	}
 
+	//Œø‰Ê‰¹‚ðo‚·
+	SoundManager::Get().PlaySE(SoundId::se_kickingGroundA,false,false,0.5f);
+
 	m_owner->SetIsSway(true);
 }
 
@@ -270,6 +276,8 @@ void YakuzaSwayState::OnUpdate()
 
 	if (!m_owner->IsHasCharactarPlayAnimation())
 	{
+		SoundManager::Get().PlaySE(SoundId::se_GroundFrictionA,false,false,0.5f);
+
 		m_owner->SetIsSway(false);
 	}
 }

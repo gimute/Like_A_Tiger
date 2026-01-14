@@ -11,5 +11,9 @@ enum SoundId
 	//•—Ø‚è‰¹
 	se_cuttingWindLigthA,
 	se_cuttingWindHeavyA,
+	//“®ì‰¹
+	se_FootstepsA,
+	se_kickingGroundA,
+	se_GroundFrictionA,
 };
 

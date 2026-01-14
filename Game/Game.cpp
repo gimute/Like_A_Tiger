@@ -76,4 +76,7 @@ void Game::InitSound()
 	g_soundEngine->ResistWaveFileBank(se_hittingDefenseA, "Assets/Sound/HittingSound/hitting_defense_A.wav");	//パンチヒット音
 	g_soundEngine->ResistWaveFileBank(se_cuttingWindLigthA, "Assets/Sound/CuttingWindSound/cuttingWind_light_A.wav");	//風切り音
 	g_soundEngine->ResistWaveFileBank(se_cuttingWindHeavyA, "Assets/Sound/CuttingWindSound/cuttingWind_heavy_A.wav");	//風切り音
+	g_soundEngine->ResistWaveFileBank(se_FootstepsA, "Assets/Sound/YakuzaMoveingSound/Footsteps_A.wav");	//足音
+	g_soundEngine->ResistWaveFileBank(se_kickingGroundA, "Assets/Sound/YakuzaMoveingSound/KickingGround_A.wav");	//地面を蹴る音
+	g_soundEngine->ResistWaveFileBank(se_GroundFrictionA, "Assets/Sound/YakuzaMoveingSound/GroundFriction_A.wav");	//地面をこする音
 }
