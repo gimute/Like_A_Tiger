@@ -24,6 +24,23 @@ void AttackEndState::OnExit()
 
 }
 
+//攻撃終了時にAttackComboStateMachineを初期化するためのだけのステート
+
+void ResetState::OnEnter()
+{
+
+}
+
+void ResetState::OnUpdate()
+{
+
+}
+
+void ResetState::OnExit()
+{
+
+}
+
 //
 
 IStateBase* YakuzaAttackComboStateMachine::GetNextState()
@@ -31,6 +48,12 @@ IStateBase* YakuzaAttackComboStateMachine::GetNextState()
 	uint32_t nextStateHush = GetNextCombo();
 	IStateBase* nextState = FindClassUINT32TState(nextStateHush);
 	
+	//現在のステートがリセットだったら今のコンボハッシュ値を変更せずに返す
+	if (nextStateHush == ResetState::ID())
+	{
+		return nextState;
+	}
+
 	if (nextStateHush != GetNowCombo())
 	{
 		SetIsCreateAttackCollision(false);
@@ -73,6 +96,12 @@ void YakuzaAttackComboStateMachine::StartFirstFinishBrow()
 	SetNextCombo(m_firstFinishBrow);
 }
 
+void YakuzaAttackComboStateMachine::ResetAttackStateMachine()
+{
+	SetNextCombo(ResetState::ID());
+	
+	UpdateStateMachine();
+}
 
 YakuzaStateMachine* YakuzaAttackComboStateMachine::GetYakuzaStateMachine()
 {

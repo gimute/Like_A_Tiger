@@ -209,17 +209,31 @@ public:
 
 	void CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) override
 	{
-		AddAttackState<PlayerFirstAttackState>(useAttackStateMachine);
-		AddAttackState<PlayerSecondAttackState>(useAttackStateMachine);
-		AddAttackState<PlayerThirdAttackState>(useAttackStateMachine);
-		AddAttackState<PlayerFourthAttackState>(useAttackStateMachine);
-		AddAttackState<PlayerFirstFinalBlowState>(useAttackStateMachine);
-		AddAttackState<PlayerSecondFinalBlowState>(useAttackStateMachine);
-		AddAttackState<PlayerThirdFinalBlowState>(useAttackStateMachine);
-		AddAttackState<PlayerFourthFinalBlowState>(useAttackStateMachine);
+		AddAttackState<PlayerFirstAttackState>(useAttackStateMachine,
+			{ 10.0f,150.0f,SoundId::se_hittingLightA },
+			{ SoundId::se_cuttingWindLigthA });
+		AddAttackState<PlayerSecondAttackState>(useAttackStateMachine,
+			{ 10.0f,150.0f,SoundId::se_hittingLightB },
+			{ SoundId::se_cuttingWindLigthA});
+		AddAttackState<PlayerThirdAttackState>(useAttackStateMachine,
+			{ 10.0f,150.0f,SoundId::se_hittingLightA },
+			{ SoundId::se_cuttingWindLigthA});
+		AddAttackState<PlayerFourthAttackState>(useAttackStateMachine,
+			{ 10.0f,150.0f,SoundId::se_hittingLightB },
+			{ SoundId::se_cuttingWindLigthA});
+		AddAttackState<PlayerFirstFinalBlowState>(useAttackStateMachine,
+			{ 15.0f,300.0f,SoundId::se_hittingHeavyB },
+			{ SoundId::se_cuttingWindHeavyA});
+		AddAttackState<PlayerSecondFinalBlowState>(useAttackStateMachine,
+			{ 30.0f,300.0f,SoundId::se_hittingHeavyB },
+			{ SoundId::se_cuttingWindHeavyA });
+		AddAttackState<PlayerThirdFinalBlowState>(useAttackStateMachine,
+			{ 30.0f,300.0f,SoundId::se_hittingHeavyB },
+			{ SoundId::se_cuttingWindHeavyA });
+		AddAttackState<PlayerFourthFinalBlowState>(useAttackStateMachine,
+			{ 40.0f,300.0f,SoundId::se_hittingHeavyB },
+			{ SoundId::se_cuttingWindHeavyA });
 	}
-
-	float GetAttackPower(YakuzaAttackComboStateMachine* useAttackStateMachine) override;
 private:
 	static TypeSetAutoRegister<PlayerYakuzaTypeSet> typeSet;
 };

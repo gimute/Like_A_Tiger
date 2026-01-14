@@ -5,45 +5,15 @@
 
 TypeSetAutoRegister<NormalYakuzaTypeSet> NormalYakuzaTypeSet::typeSet{ EnemyYakuzaType::en_normalYakuza };
 
-float NormalYakuzaTypeSet::GetAttackPower(YakuzaAttackComboStateMachine* useAttackStateMachine)
-{
-	uint32_t nowStateId = useAttackStateMachine->GetNowCombo();
-
-	//float attackPower = 0;
-	float attackPower = 10;
-
-	if (nowStateId == NormalYakuzaFirstAttackState::ID() || 
-		nowStateId == NormalYakuzaSecondAttackState::ID() ||
-		nowStateId == NormalYakuzaThirdAttackState::ID() ||
-		nowStateId == NormalYakuzaFourthAttackState::ID())
-	{
-		attackPower = 10.0f;
-	}
-	else if (nowStateId == NormalYakuzaFirstFinalBlowState::ID())
-	{
-		attackPower = 15.0f;
-	}
-	else if (nowStateId == NormalYakuzaSecondFinalBlowState::ID())
-	{
-		attackPower = 20.0f;
-	}
-	else if (nowStateId == NormalYakuzaThirdFinalBlowState::ID())
-	{
-		attackPower = 30.0f;
-	}
-	else if (nowStateId == NormalYakuzaFourthFinalBlowState::ID())
-	{
-		attackPower = 15.0f;
-	}
-
-	return attackPower;
-}
-
 //FirstAttackState
 
 void NormalYakuzaFirstAttackState::OnEnter()
 {
 	m_owner->SetIsNextCombo(false);
+
+	YakuzaAttackSEDatas seData = m_owner->GetYakuzaStateMachine()->GetAttackSEDatas(NormalYakuzaFirstAttackState::ID());
+
+	SoundManager::Get().PlaySE(seData.m_cuttingWindId);
 }
 
 void NormalYakuzaFirstAttackState::OnUpdate()
@@ -89,6 +59,10 @@ void NormalYakuzaFirstAttackState::OnExit()
 void NormalYakuzaSecondAttackState::OnEnter()
 {
 	m_owner->SetIsNextCombo(false);
+
+	YakuzaAttackSEDatas seData = m_owner->GetYakuzaStateMachine()->GetAttackSEDatas(NormalYakuzaFirstAttackState::ID());
+
+	SoundManager::Get().PlaySE(seData.m_cuttingWindId);
 }
 
 void NormalYakuzaSecondAttackState::OnUpdate()
@@ -135,6 +109,10 @@ void NormalYakuzaSecondAttackState::OnExit()
 void NormalYakuzaThirdAttackState::OnEnter()
 {
 	m_owner->SetIsNextCombo(false);
+
+	YakuzaAttackSEDatas seData = m_owner->GetYakuzaStateMachine()->GetAttackSEDatas(NormalYakuzaFirstAttackState::ID());
+
+	SoundManager::Get().PlaySE(seData.m_cuttingWindId);
 }
 
 //最後のコンボはこっちを参考に
@@ -182,6 +160,10 @@ void NormalYakuzaThirdAttackState::OnExit()
 void NormalYakuzaFourthAttackState::OnEnter()
 {
 	m_owner->SetIsNextCombo(false);
+
+	YakuzaAttackSEDatas seData = m_owner->GetYakuzaStateMachine()->GetAttackSEDatas(NormalYakuzaFirstAttackState::ID());
+
+	SoundManager::Get().PlaySE(seData.m_cuttingWindId);
 }
 
 void NormalYakuzaFourthAttackState::OnUpdate()
@@ -222,6 +204,10 @@ void NormalYakuzaFourthAttackState::OnExit()
 void NormalYakuzaFirstFinalBlowState::OnEnter()
 {
 	m_owner->SetIsNextCombo(false);
+
+	YakuzaAttackSEDatas seData = m_owner->GetYakuzaStateMachine()->GetAttackSEDatas(NormalYakuzaFirstAttackState::ID());
+
+	SoundManager::Get().PlaySE(seData.m_cuttingWindId);
 }
 
 void NormalYakuzaFirstFinalBlowState::OnUpdate()
@@ -248,6 +234,10 @@ void NormalYakuzaFirstFinalBlowState::OnExit()
 void NormalYakuzaSecondFinalBlowState::OnEnter()
 {
 	m_owner->SetIsNextCombo(false);
+
+	YakuzaAttackSEDatas seData = m_owner->GetYakuzaStateMachine()->GetAttackSEDatas(NormalYakuzaFirstAttackState::ID());
+
+	SoundManager::Get().PlaySE(seData.m_cuttingWindId);
 }
 
 void NormalYakuzaSecondFinalBlowState::OnUpdate()
@@ -274,6 +264,10 @@ void NormalYakuzaSecondFinalBlowState::OnExit()
 void NormalYakuzaThirdFinalBlowState::OnEnter()
 {
 	m_owner->SetIsNextCombo(false);
+
+	YakuzaAttackSEDatas seData = m_owner->GetYakuzaStateMachine()->GetAttackSEDatas(NormalYakuzaFirstAttackState::ID());
+
+	SoundManager::Get().PlaySE(seData.m_cuttingWindId);
 }
 
 void NormalYakuzaThirdFinalBlowState::OnUpdate()
@@ -300,6 +294,10 @@ void NormalYakuzaThirdFinalBlowState::OnExit()
 void NormalYakuzaFourthFinalBlowState::OnEnter()
 {
 	m_owner->SetIsNextCombo(false);
+
+	YakuzaAttackSEDatas seData = m_owner->GetYakuzaStateMachine()->GetAttackSEDatas(NormalYakuzaFirstAttackState::ID());
+
+	SoundManager::Get().PlaySE(seData.m_cuttingWindId);
 }
 
 void NormalYakuzaFourthFinalBlowState::OnUpdate()

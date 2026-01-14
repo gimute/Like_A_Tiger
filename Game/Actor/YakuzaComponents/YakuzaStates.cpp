@@ -3,6 +3,9 @@
 #include "Actor\YakuzaComponents\YakuzaStateMachine.h"
 #include "Actor\YakuzaComponents\YakuzaAnimationState.h"
 
+#include "Sound\SoundManager.h"
+#include "Sound\SoundId.h"
+
 ///IdleState
 
 void YakuzaIdleState::OnEnter()
@@ -175,6 +178,8 @@ void YakuzaAttackState::OnUpdate()
 			m_owner->SetIsAttack(false);
 
 			attackStateMachine->SetIsCreateAttackCollision(false);
+
+			attackStateMachine->ResetAttackStateMachine();
 		}
 
 		return;
@@ -186,6 +191,8 @@ void YakuzaAttackState::OnExit()
 {
 	m_owner->SetIsAttack(false);
 	m_owner->GetAttackStateMachine()->SetIsAttackEnds(true);
+	auto* attackStateMachine = m_owner->GetAttackStateMachine();
+	attackStateMachine->ResetAttackStateMachine();
 }
 
 //SwayState
@@ -235,6 +242,9 @@ void YakuzaSwayState::OnEnter()
 		}
 	}
 
+	//Œø‰Ê‰¹‚ðo‚·
+	SoundManager::Get().PlaySE(SoundId::se_kickingGroundA,false,false,0.5f);
+
 	m_owner->SetIsSway(true);
 }
 
@@ -266,6 +276,8 @@ void YakuzaSwayState::OnUpdate()
 
 	if (!m_owner->IsHasCharactarPlayAnimation())
 	{
+		SoundManager::Get().PlaySE(SoundId::se_GroundFrictionA,false,false,0.5f);
+
 		m_owner->SetIsSway(false);
 	}
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "Actor\Player\Player.h"
+#include "Actor\Enemy\Enemy.h"
 
 class YakuzaCharacterDamageManager
 {
@@ -27,16 +28,14 @@ public:
 		return m_instance;
 	}
 	
-	
-	////引数のコリジョンを持っている敵を検索して引数分のダメージを与える
-	//void SendEnemyDamage(const char* name, float sendDamage);
-	////引数のコリジョンを持っているその他のYakuzaを検索して引数分のダメージを与える
-	//void SendOtherYakuzaDamage(const char* name, float sendDamage);
+	//ポインタの敵にダメージを送る
+	void SendEnemyYakuzaDamage(Enemy* sendEnemy, YakuzaDamageDatas sendDamage);
+
 	//プレイヤーにダメージを送る
-	void SendPlayerYakuzaDamage(float sendDamage,const Vector3& attackerPos);
+	void SendPlayerYakuzaDamage(YakuzaDamageDatas sendDamage,const Vector3& attackerPos);
 
 	//プレイヤーからダメージを受け取る
-	float GetPlayerYakuzaDamage();
+	YakuzaDamageDatas GetPlayerYakuzaDamage();
 
 	
 

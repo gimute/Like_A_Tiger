@@ -6,40 +6,6 @@
 
 TypeSetAutoRegister<PlayerYakuzaTypeSet> PlayerYakuzaTypeSet::typeSet{ OthersYakuzaType::en_playerYakuza };
 
-float PlayerYakuzaTypeSet::GetAttackPower(YakuzaAttackComboStateMachine* useAttackStateMachine)
-{
-	uint32_t nowStateId = useAttackStateMachine->GetNowCombo();
-
-	//float attackPower = 0.0f;
-	float attackPower = 10.0f;
-
-	if (nowStateId == PlayerFirstAttackState::ID() ||
-		nowStateId == PlayerSecondAttackState::ID() ||
-		nowStateId == PlayerThirdAttackState::ID() ||
-		nowStateId == PlayerFourthAttackState::ID())
-	{
-		attackPower = 10.0f;
-	}
-	else if (nowStateId == PlayerFirstFinalBlowState::ID())
-	{
-		attackPower = 15.0f;
-	}
-	else if (nowStateId == PlayerSecondFinalBlowState::ID())
-	{
-		attackPower = 30.0f;
-	}
-	else if (nowStateId == PlayerThirdFinalBlowState::ID())
-	{
-		attackPower = 30.0f;
-	}
-	else if (nowStateId == PlayerFourthFinalBlowState::ID())
-	{
-		attackPower = 40.0f;
-	}
-
-	return attackPower;
-}
-
 namespace 
 {
 	float ATTACK_MOVE_SPEED = 300.0f;
@@ -51,7 +17,9 @@ namespace
 
 void PlayerFirstAttackState::OnEnter()
 {
+	YakuzaAttackSEDatas seData = m_owner->GetYakuzaStateMachine()->GetAttackSEDatas(PlayerFirstAttackState::ID());
 
+	SoundManager::Get().PlaySE(seData.m_cuttingWindId);
 }
 
 //‚±‚ê‚ðŒ©–{‚É
@@ -137,7 +105,9 @@ void PlayerFirstAttackState::OnExit()
 
 void PlayerSecondAttackState::OnEnter()
 {
+	YakuzaAttackSEDatas seData = m_owner->GetYakuzaStateMachine()->GetAttackSEDatas(PlayerFirstAttackState::ID());
 
+	SoundManager::Get().PlaySE(seData.m_cuttingWindId);
 }
 
 void PlayerSecondAttackState::OnUpdate()
@@ -222,7 +192,9 @@ void PlayerSecondAttackState::OnExit()
 
 void PlayerThirdAttackState::OnEnter()
 {
+	YakuzaAttackSEDatas seData = m_owner->GetYakuzaStateMachine()->GetAttackSEDatas(PlayerFirstAttackState::ID());
 
+	SoundManager::Get().PlaySE(seData.m_cuttingWindId);
 }
 
 void PlayerThirdAttackState::OnUpdate()
@@ -305,7 +277,9 @@ void PlayerThirdAttackState::OnExit()
 
 void PlayerFourthAttackState::OnEnter()
 {
+	YakuzaAttackSEDatas seData = m_owner->GetYakuzaStateMachine()->GetAttackSEDatas(PlayerFirstAttackState::ID());
 
+	SoundManager::Get().PlaySE(seData.m_cuttingWindId);
 }
 
 void PlayerFourthAttackState::OnUpdate()
@@ -384,7 +358,9 @@ void PlayerFourthAttackState::OnExit()
 
 void PlayerFirstFinalBlowState::OnEnter()
 {
+	YakuzaAttackSEDatas seData = m_owner->GetYakuzaStateMachine()->GetAttackSEDatas(PlayerFirstAttackState::ID());
 
+	SoundManager::Get().PlaySE(seData.m_cuttingWindId);
 }
 
 void PlayerFirstFinalBlowState::OnUpdate()
@@ -447,7 +423,9 @@ void PlayerFirstFinalBlowState::OnExit()
 
 void PlayerSecondFinalBlowState::OnEnter()
 {
+	YakuzaAttackSEDatas seData = m_owner->GetYakuzaStateMachine()->GetAttackSEDatas(PlayerFirstAttackState::ID());
 
+	SoundManager::Get().PlaySE(seData.m_cuttingWindId);
 }
 
 void PlayerSecondFinalBlowState::OnUpdate()
@@ -510,7 +488,9 @@ void PlayerSecondFinalBlowState::OnExit()
 
 void PlayerThirdFinalBlowState::OnEnter()
 {
+	YakuzaAttackSEDatas seData = m_owner->GetYakuzaStateMachine()->GetAttackSEDatas(PlayerFirstAttackState::ID());
 
+	SoundManager::Get().PlaySE(seData.m_cuttingWindId);
 }
 
 void PlayerThirdFinalBlowState::OnUpdate()
@@ -573,7 +553,9 @@ void PlayerThirdFinalBlowState::OnExit()
 
 void PlayerFourthFinalBlowState::OnEnter()
 {
+	YakuzaAttackSEDatas seData = m_owner->GetYakuzaStateMachine()->GetAttackSEDatas(PlayerFirstAttackState::ID());
 
+	SoundManager::Get().PlaySE(seData.m_cuttingWindId);
 }
 
 void PlayerFourthFinalBlowState::OnUpdate()

@@ -6,39 +6,90 @@
 
 #include "Actor\YakuzaComponents\YakuzaStates.h"
 
+#include "Sound\SoundManager.h"
+
 //インスタンス初期化
 YakuzaCharacterDamageManager* YakuzaCharacterDamageManager::m_instance = nullptr;
 
-//void YakuzaCharacterDamageManager::SendEnemyDamage(const char* name, float sendDamage)
-//{
-//	auto & enemyList = EnemyManager::GetInstance()->GetEnemyPairList();
-//
-//	for (auto & enemyPtr : enemyList)
-//	{
-//		auto & bodyCollision = enemyPtr.m_enemy->GetBodyCollision();
-//		
-//		if (name == bodyCollision.GetName())
-//		{
-//			//ここにHP処理を入れる
-//			int b = 0;
-//		}
-//	}
-//}
-//
-//void YakuzaCharacterDamageManager::SendOtherYakuzaDamage(const char* name, float sendDamage)
-//{
-//	for (auto & otherPtr : m_sendDamageOtherYakuzaList)
-//	{
-//		auto& bodyCollision = otherPtr->GetBodyCollision();
-//
-//		if (name == bodyCollision.GetName())
-//		{
-//			int b = 0;
-//		}
-//	}
-//}
+void YakuzaCharacterDamageManager::SendEnemyYakuzaDamage(Enemy* sendEnemy, YakuzaDamageDatas sendDamage)
+{
+	if (!sendEnemy ||
+		sendEnemy->GetIsInvicible())
+	{
+		return;
+	}
 
-void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(float sendDamage, const Vector3& attackerPos)
+	Vector3 sendEnemyPos = sendEnemy->GetPosition();
+
+	bool isDefense = false;
+	bool isKnockBack = false;
+
+	KnockBackParam param;
+
+	//ガード時はダメージを0にする
+	if (m_playerPtr->GetYakuzaStateMachine().
+		IsGetYakuzaStateMachineNowState<YakuzaDefenseState>())
+	{
+		//角度によって防御成功判定
+		if (IsDefenseSuccessful(
+			sendEnemyPos,
+			sendEnemy->GetForward(),
+			m_playerPtr->GetPosition(),
+			0.3f//前側約140度は防御成功扱い
+		))
+		{
+			isDefense = true;
+		}
+	}
+
+	Vector3 distNomal = sendEnemyPos - m_playerPtr->GetPosition();
+	distNomal.Normalize();
+
+	param = KnockBackParam(
+		distNomal,
+		sendDamage.m_knockBackPow,
+		0.3f
+	);
+
+	if (!isDefense)
+	{
+		sendEnemy->TakeDamage(sendDamage.m_attackPow);
+	}
+
+	//ここにダメージ処理
+	if (sendEnemy->IsCharacterHpDead())
+	{
+		sendEnemy->GetYakuzaStateMachine().ResetIsKnockBack(param);
+
+		sendEnemy->GetYakuzaStateMachine().SetIsDead(true);
+	}
+	else
+	{
+		if (!isDefense)
+		{
+			if (sendEnemy->GetYakuzaStateMachine().GetIsDamage())
+			{
+				sendEnemy->GetYakuzaStateMachine().ResetIsKnockBack(param);
+			}
+			else
+			{
+				sendEnemy->GetYakuzaStateMachine().SetIsDamage(true, true, param);
+			}
+		}
+		else
+		{
+			sendEnemy->GetYakuzaStateMachine().SetIsDefense(true, param);
+			
+			SoundManager::Get().PlaySE(SoundId::se_hittingDefenseA);
+
+			return;
+		}
+	}
+
+	SoundManager::Get().PlaySE(sendDamage.m_seId);
+}
+
+void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(YakuzaDamageDatas sendDamage, const Vector3& attackerPos)
 {
 	if (!m_playerPtr ||
 		m_playerPtr->GetIsInvicible())
@@ -49,7 +100,6 @@ void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(float sendDamage, cons
 	//m_playerPtr->StartInvincible(3.0f);
 
 	bool isDefense = false;
-	bool isKnockBack = false;
 
 	KnockBackParam param;
 
@@ -69,23 +119,18 @@ void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(float sendDamage, cons
 		}
 	}
 
-	if (sendDamage >= 10.0f)
-	{
-		isKnockBack = true;
+	Vector3 distNomal = m_playerPtr->GetPosition() - attackerPos;
+	distNomal.Normalize();
 
-		Vector3 distNomal = m_playerPtr->GetPosition() - attackerPos;
-		distNomal.Normalize();
-
-		param = KnockBackParam(
-			distNomal,
-			300.0f,
-			0.3f
-		);
-	}
+	param = KnockBackParam(
+		distNomal,
+		sendDamage.m_knockBackPow,
+		0.3f
+	);
 
 	if (!isDefense)
 	{
-		m_playerPtr->TakePlayerHp(sendDamage);
+		m_playerPtr->TakePlayerHp(sendDamage.m_attackPow);
 	}
 
 	//ここにダメージ処理
@@ -105,14 +150,20 @@ void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(float sendDamage, cons
 			}
 			else
 			{
-				m_playerPtr->GetYakuzaStateMachine().SetIsDamage(true, isKnockBack, param);
+				m_playerPtr->GetYakuzaStateMachine().SetIsDamage(true, true, param);
 			}
 		}
 		else
 		{
 			m_playerPtr->GetYakuzaStateMachine().SetIsDefense(true, param);
+
+			SoundManager::Get().PlaySE(SoundId::se_hittingDefenseA);
+
+			return;
 		}
 	}	
+
+	SoundManager::Get().PlaySE(sendDamage.m_seId);
 }
 
 bool YakuzaCharacterDamageManager::IsDefenseSuccessful(
@@ -142,11 +193,13 @@ bool YakuzaCharacterDamageManager::IsDefenseSuccessful(
 	return false;
 }
 
-float YakuzaCharacterDamageManager::GetPlayerYakuzaDamage()
+YakuzaDamageDatas YakuzaCharacterDamageManager::GetPlayerYakuzaDamage()
 {
 	if (!m_playerPtr)
 	{
-		return 0.0f;
+		YakuzaDamageDatas nullData;
+
+		return nullData;
 	}
 
 	return m_playerPtr->GetYakuzaStateMachine().GetTypeSetAttackPower();

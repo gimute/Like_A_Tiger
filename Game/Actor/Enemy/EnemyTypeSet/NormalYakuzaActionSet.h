@@ -209,17 +209,31 @@ public:
 
 	void CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) override
 	{
-		AddAttackState<NormalYakuzaFirstAttackState>(useAttackStateMachine);
-		AddAttackState<NormalYakuzaSecondAttackState>(useAttackStateMachine);
-		AddAttackState<NormalYakuzaThirdAttackState>(useAttackStateMachine);
-		AddAttackState<NormalYakuzaFourthAttackState>(useAttackStateMachine);
-		AddAttackState<NormalYakuzaFirstFinalBlowState>(useAttackStateMachine);
-		AddAttackState<NormalYakuzaSecondFinalBlowState>(useAttackStateMachine);
-		AddAttackState<NormalYakuzaThirdFinalBlowState>(useAttackStateMachine);
-		AddAttackState<NormalYakuzaFourthFinalBlowState>(useAttackStateMachine);
+		AddAttackState<NormalYakuzaFirstAttackState>(useAttackStateMachine,
+			{10.0f,150.0f,SoundId::se_hittingLightA},
+			{SoundId::se_cuttingWindLigthA});
+		AddAttackState<NormalYakuzaSecondAttackState>(useAttackStateMachine,
+			{ 10.0f,150.0f,SoundId::se_hittingLightB },
+			{ SoundId::se_cuttingWindLigthA});
+		AddAttackState<NormalYakuzaThirdAttackState>(useAttackStateMachine,
+			{ 10.0f,150.0f,SoundId::se_hittingLightA},
+			{ SoundId::se_cuttingWindLigthA});
+		AddAttackState<NormalYakuzaFourthAttackState>(useAttackStateMachine,
+			{ 10.0f,150.0f,SoundId::se_hittingLightB }, 
+			{ SoundId::se_cuttingWindLigthA});
+		AddAttackState<NormalYakuzaFirstFinalBlowState>(useAttackStateMachine,
+			{ 15.0f,300.0f,SoundId::se_hittingLightA },
+			{ SoundId::se_cuttingWindHeavyA });
+		AddAttackState<NormalYakuzaSecondFinalBlowState>(useAttackStateMachine,
+			{ 20.0f,300.0f,SoundId::se_hittingHeavyA },
+			{ SoundId::se_cuttingWindHeavyA });
+		AddAttackState<NormalYakuzaThirdFinalBlowState>(useAttackStateMachine,
+			{ 30.0f,300.0f,SoundId::se_hittingHeavyA }, 
+			{ SoundId::se_cuttingWindHeavyA });
+		AddAttackState<NormalYakuzaFourthFinalBlowState>(useAttackStateMachine,
+			{ 15.0f,300.0f,SoundId::se_hittingHeavyB },
+			{ SoundId::se_cuttingWindHeavyA });
 	}
-
-	float GetAttackPower(YakuzaAttackComboStateMachine* useAttackStateMachine) override;
 private:
 	static TypeSetAutoRegister<NormalYakuzaTypeSet> typeSet;
 };
