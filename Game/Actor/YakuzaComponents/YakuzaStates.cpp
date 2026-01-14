@@ -195,6 +195,91 @@ void YakuzaAttackState::OnExit()
 	attackStateMachine->ResetAttackStateMachine();
 }
 
+//GrabState
+
+void YakuzaGrabState::OnEnter()
+{
+	//まずは掴めるかどうか判定
+	//そもそも掴み対象がnullだったら
+	if (!m_owner->GetGrabbingYakuzaCharacter())
+	{
+		//掴めない
+		m_grabState = en_missingGrab;
+		return;
+	}
+
+	Vector3 iPos = m_owner->GetHasCharactarPos();
+	Vector3 iFoward = m_owner->GetHasCharactarForward();
+	Vector3 grabYakuzaPos = m_owner->GetGrabbingYakuzaCharacter()->GetPosition();
+
+	//まず自身から掴み対象へのベクトルを求める
+	Vector3 toGrabYakuzaVec = grabYakuzaPos - iPos;
+	//正規化
+	toGrabYakuzaVec.Normalize();
+
+	//正面値も正規化
+	iFoward.Normalize();
+
+	//内積をもとめる
+	float dot = iFoward.Dot(toGrabYakuzaVec);
+
+	//正面側なら
+	if (dot >= 0.3f)
+	{
+		//掴める
+		m_grabState = en_grabbingMovement;
+	}
+	else
+	{
+		//掴めない
+		m_grabState = en_missingGrab;
+	}
+}
+
+void YakuzaGrabState::OnUpdate()
+{
+	Vector3 moveVec = Vector3::Zero;
+	Vector3 newPos = Vector3::Zero;
+
+	switch (m_grabState)
+	{
+	case YakuzaGrabState::en_missingGrab:
+
+		//前方向に前進させて空振りとする
+		Vector3 iForward = m_owner->GetHasCharactarForward();
+
+		moveVec = iForward * 300.0f;
+
+		newPos = m_owner->GetHasCharactarCharaCon()->Execute(moveVec, g_gameTime->GetFrameDeltaTime());
+
+		break;
+	case YakuzaGrabState::en_grabbingMovement:
+
+		moveVec = ->GetPosition() - stateMachine->GetHasCharactarPos();
+
+		break;
+	case YakuzaGrabState::en_grabbing:
+		break;
+	default:
+		break;
+	}
+
+	//位置設定等
+	m_owner->SetHasCharactarPosition(newPos);
+
+	m_owner->GetHasCharactarRot().SetRotationYFromDirectionXZ(moveVec);
+
+	m_owner->SetHasCharactarForward(Vector3::AxisZ);
+	m_owner->GetHasCharactarRot().Apply(m_owner->GetHasCharactarForward());
+
+	m_owner->SetMoveVec(Vector3::Zero);
+}
+
+void YakuzaGrabState::OnExit()
+{
+
+}
+
 //SwayState
 
 void YakuzaSwayState::OnEnter()

@@ -21,6 +21,11 @@ IStateBase* YakuzaStateMachine::GetNextState()
 		return FindClassNameState<YakuzaDamageState>();
 	}
 
+	if (CanChangeGrab())
+	{
+		return FindClassNameState<YakuzaGrabState>();
+	}
+
 	//攻撃中なら現在更新中のアタックステートを更新する
 	if (CanChangeAttack())
 	{
@@ -119,6 +124,21 @@ bool YakuzaStateMachine::CanChangeDead()
 	return false;
 }
 
+bool YakuzaStateMachine::CanChangeGrab()
+{
+	if (m_isGrab &&
+		!m_isGrabbed &&
+		!m_isAttack &&
+		!m_defenseFlag &&
+		!m_swayFlag &&
+		!m_isDamage)
+	{
+		return true;
+	}
+
+	return false;
+}
+
 void YakuzaStateMachine::InitAttackStateMachine(uint32_t firstAttackStateHash, uint32_t firstFinishBrowStateHash)
 {
 	m_attackStateMachine = std::make_unique<YakuzaAttackComboStateMachine>(this);
@@ -160,6 +180,20 @@ void YakuzaStateMachine::ResetIsKnockBack(const KnockBackParam& param)
 
 	//アニメーションを一瞬だけ切り替える
 	HasCharactarPlayAnimation(YakuzaAnimation::en_fightingIdle, 0.1f);
+}
+
+void YakuzaStateMachine::GrabStart(YakuzaCharacter* grabYakuza)
+{
+	//グラブフラグを立てる
+	m_isGrab = true;
+	//掴むヤツを決定
+	m_grabbingYakuza = grabYakuza;
+}
+
+void YakuzaStateMachine::GrabEnd()
+{
+	//掴み終了
+	m_isGrab = false;
 }
 
 void YakuzaStateMachine::SetHasCharactarPosition(const Vector3& pos) { m_hasCharactar->SetPosition(pos); }
@@ -225,6 +259,34 @@ void YakuzaStateMachine::HasCharacterKnockBackProcces(KnockBackParam& param)
 	{
 		param.m_isEndKnockBack = true;
 	}
+}
+
+bool YakuzaStateMachine::HasCharacterCanGrabableProcces()
+{
+	Vector3 iPos = GetHasCharactarPos();
+	Vector3 iFoward = GetHasCharactarForward();
+	Vector3 grabYakuzaPos = m_grabbingYakuza->GetPosition();
+
+	//まず自身から掴み対象へのベクトルを求める
+	Vector3 toGrabYakuzaVec = grabYakuzaPos - iPos;
+	//正規化
+	toGrabYakuzaVec.Normalize();
+
+	//正面値も正規化
+	iFoward.Normalize();
+
+	//内積をもとめる
+	float dot = iFoward.Dot(toGrabYakuzaVec);
+
+	//正面側なら
+	if (dot >= 0.3f)
+	{
+		//掴める
+		return true;
+	}
+
+	//掴めない
+	return false;
 }
 
 void YakuzaStateMachine::HasCharacterDeadProcces()

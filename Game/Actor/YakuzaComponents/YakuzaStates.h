@@ -94,6 +94,35 @@ public:
 	void OnExit() override;
 };
 
+class YakuzaGrabState : public IStateBase
+{
+	appState(YakuzaGrabState)
+protected:
+	YakuzaStateMachine* m_owner = nullptr;
+public:
+	//コンストラクタ
+	YakuzaGrabState(YakuzaStateMachine* stateMachine) : m_owner(stateMachine) {}
+	//デストラクタ
+	~YakuzaGrabState() = default;
+
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+private:
+	enum GrabState
+	{
+		en_standby,
+		en_missingGrab,
+		en_grabbingMovement,
+		en_grabbing
+	};
+
+	GrabState m_grabState = en_standby;
+};
+
 class YakuzaSwayState : public IStateBase
 {
 	appState(YakuzaSwayState)

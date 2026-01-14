@@ -54,6 +54,7 @@ public:
 		AddState<YakuzaWalkState>(this);
 		AddState<YakuzaAimMoveState>(this);
 		AddState<YakuzaAttackState>(this);
+		AddState<YakuzaGrabState>(this);
 		AddState<YakuzaSwayState>(this);
 		AddState<YakuzaDefenseState>(this);
 		AddState<YakuzaDamageState>(this);
@@ -94,6 +95,14 @@ private:
 	bool m_isDamageKnockBack = false;
 	//ノックバックのパラメーター
 	KnockBackParam m_knockBackParam;
+	//掴み中か
+	bool m_isGrab = false;
+	//掴まれているか
+	bool m_isGrabbed = false;
+	//掴み有効範囲
+	float m_graspableRange = 100.0f;
+	//掴み中のキャラクターポインタ
+	YakuzaCharacter* m_grabbingYakuza = nullptr;
 	//死んでしまったかどうか
 	bool m_isDead = false;
 	//狙い移動のキャラクターの位置
@@ -164,6 +173,12 @@ public:
 
 	inline KnockBackParam* GetKnockBackParam() { return &m_knockBackParam; }
 
+	inline void GrabStart(YakuzaCharacter* grabYakuza = nullptr);
+
+	inline void GrabEnd();
+
+	inline YakuzaCharacter* GetGrabbingYakuzaCharacter() { return m_grabbingYakuza; }
+
 	inline void SetIsDead(bool setIs) { m_isDead = setIs; }
 
 	inline bool GetIsDead() { return m_isDead; }
@@ -206,6 +221,8 @@ public:
 
 	void HasCharacterKnockBackProcces(KnockBackParam& param);
 
+	bool HasCharacterCanGrabableProcces();
+
 	void HasCharacterDeadProcces();
 
 	void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);
@@ -233,4 +250,6 @@ private:
 	bool CanChangeDamage();
 	//死亡したかどうか
 	bool CanChangeDead();
+	//掴めるかどうか
+	bool CanChangeGrab();
 };
