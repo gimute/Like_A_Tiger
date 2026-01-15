@@ -69,7 +69,7 @@ void NormalYakuzaSecondAttackState::OnUpdate()
 {
 	auto* stateMachine = m_owner->GetYakuzaStateMachine();
 
-	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(NormalYakuzaTypeSet::en_punching_2_R, 0.1f);
+	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(NormalYakuzaTypeSet::en_punching_3_L, 0.1f);
 
 	if (stateMachine->GetAttackFlag() && !m_owner->GetIsNextCombo())
 	{
@@ -120,7 +120,7 @@ void NormalYakuzaThirdAttackState::OnUpdate()
 {
 	auto* stateMachine = m_owner->GetYakuzaStateMachine();
 
-	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(NormalYakuzaTypeSet::en_punching_3_L, 0.1f);
+	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(NormalYakuzaTypeSet::en_punching_1_L, 0.1f);
 
 	if (stateMachine->GetAttackFlag() && !m_owner->GetIsNextCombo())
 	{
@@ -170,7 +170,7 @@ void NormalYakuzaFourthAttackState::OnUpdate()
 {
 	auto* stateMachine = m_owner->GetYakuzaStateMachine();
 
-	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(NormalYakuzaTypeSet::en_punching_1_L, 0.1f);
+	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(NormalYakuzaTypeSet::en_punching_3_L, 0.1f);
 
 	if (stateMachine->GetFinishBrowFlag() && !m_owner->GetIsNextCombo())
 	{
