@@ -112,15 +112,6 @@ public:
 	//ステートアウト
 	void OnExit() override;
 private:
-	enum GrabState
-	{
-		en_standby,
-		en_missingGrab,
-		en_grabbingMovement,
-		en_grabbing
-	};
-
-	GrabState m_grabState = en_standby;
 };
 
 class YakuzaSwayState : public IStateBase
