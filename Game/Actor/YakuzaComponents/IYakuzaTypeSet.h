@@ -12,7 +12,49 @@
 
 #include "Sound\SoundId.h"
 
-class YakuzaTypeSetFactory;
+class YakuzaTypeSetFactory; 
+
+enum YakuzaCamp
+{
+	en_campNone,
+	en_campEnemy,
+	en_campPlayer
+};
+
+struct AttackStateInitData
+{
+	//この攻撃ステートを扱うステートマシン
+	YakuzaAttackComboStateMachine* hasOwner = nullptr;
+	//次の通常攻撃コンボハッシュ値
+	uint32_t nextAttackHash = 0;
+	//次のファイナルブロウ攻撃コンボハッシュ値
+	uint32_t nextFinalBrowHash = 0;
+	//再生するアニメーションナンバー
+	int playAnimationNo = -1;
+	//この攻撃ステートをどちらの陣営が使っているか
+	YakuzaCamp yakuzaCamp = YakuzaCamp::en_campNone;
+	//攻撃スピード
+	float attackSpeed = 0.0f;
+	
+	AttackStateInitData() = default;
+
+	AttackStateInitData(
+		YakuzaAttackComboStateMachine* hasStateMachine,
+		YakuzaCamp yakuzaCamp,
+		uint32_t nextAttackHash,
+		uint32_t nextFinalBrowHash,
+		int playAnimationNo,
+		float attackSpeed
+	)
+		: hasOwner(hasStateMachine)
+		, yakuzaCamp(yakuzaCamp)
+		, nextAttackHash(nextAttackHash)
+		, nextFinalBrowHash(nextFinalBrowHash)
+		, playAnimationNo(playAnimationNo)
+		, attackSpeed(attackSpeed)
+	{
+	}
+};
 
 template<class ClassType>
 class TypeSetAutoRegister
@@ -73,6 +115,8 @@ struct YakuzaAttackSEDatas
 class IYakuzaTypeSet
 {
 public:
+	//コンストラクタ
+	IYakuzaTypeSet(YakuzaCamp camp) : m_yakuzaCamp(camp){ }
 	//デストラクタ
 	virtual ~IYakuzaTypeSet() = default;
 	//ステート生成
@@ -91,12 +135,30 @@ protected:
 	std::unordered_map<uint32_t,YakuzaDamageDatas> m_yakuzaDamageDataList;
 
 	std::unordered_map<uint32_t, YakuzaAttackSEDatas> m_yakuzaAttackSEList;
+	//陣営
+	YakuzaCamp m_yakuzaCamp = en_campNone;
 
 	//攻撃ステートを追加＋攻撃時データを追加
 	template<typename ClassName>
 	inline void AddAttackState(YakuzaAttackComboStateMachine* useAttackStateMachine, YakuzaDamageDatas damageData,YakuzaAttackSEDatas seData)
 	{
 		useAttackStateMachine->AddState<ClassName>(useAttackStateMachine);
+
+		m_yakuzaDamageDataList.emplace(
+			ClassName::ID(),
+			damageData
+		);
+
+		m_yakuzaAttackSEList.emplace(
+			ClassName::ID(),
+			seData
+		);
+	}
+
+	template<typename ClassName>
+	inline void AddAttackState(AttackStateInitData initData, YakuzaDamageDatas damageData, YakuzaAttackSEDatas seData)
+	{
+		initData.hasOwner->AddState<ClassName>(initData);
 
 		m_yakuzaDamageDataList.emplace(
 			ClassName::ID(),

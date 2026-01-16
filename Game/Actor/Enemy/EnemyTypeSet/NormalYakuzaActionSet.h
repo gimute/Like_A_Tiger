@@ -1,70 +1,55 @@
 #pragma once
-#include "StateMachineComponents\IState.h"
 #include "Actor\YakuzaComponents\IYakuzaTypeSet.h"
+#include "Actor\YakuzaComponents\YakuzaGenericAttackState.h"
+
 #include "CRC32.h"
 
 #define appState(name)	\
 public:\
 	static constexpr uint32_t ID() { return Hash32(#name); }
 
-class NormalYakuzaFirstAttackState : public IStateBase
+class NormalYakuzaFirstAttackState : public YakuzaGenericAttackState
 {
 	appState(NormalYakuzaFirstAttackState)
-protected:
-	YakuzaAttackComboStateMachine* m_owner = nullptr;
 public:
-	NormalYakuzaFirstAttackState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
-
+	NormalYakuzaFirstAttackState(
+		AttackStateInitData initData
+	)
+		: YakuzaGenericAttackState(initData)
+	{
+		m_hasAttackStateHash = NormalYakuzaFirstAttackState::ID();
+	}
 	~NormalYakuzaFirstAttackState() = default;
-
-	uint32_t m_nextComboHash = 0;
-
-	//ステートイン
-	void OnEnter() override;
-	//ステートアップデート
-	void OnUpdate() override;
-	//ステートアウト
-	void OnExit() override;
 };
 
-class NormalYakuzaSecondAttackState : public IStateBase
+class NormalYakuzaSecondAttackState : public YakuzaGenericAttackState
 {
 	appState(NormalYakuzaSecondAttackState)
-protected:
-	YakuzaAttackComboStateMachine* m_owner = nullptr;
 public:
-	NormalYakuzaSecondAttackState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
+	NormalYakuzaSecondAttackState(
+		AttackStateInitData initData
+	)
+		: YakuzaGenericAttackState(initData)
+	{
+		m_hasAttackStateHash = NormalYakuzaSecondAttackState::ID();
+	}
 
 	~NormalYakuzaSecondAttackState() = default;
-
-	uint32_t m_nextComboHash = 0;
-
-	//ステートイン
-	void OnEnter() override;
-	//ステートアップデート
-	void OnUpdate() override;
-	//ステートアウト
-	void OnExit() override;
 };
 
-class NormalYakuzaThirdAttackState : public IStateBase
+class NormalYakuzaThirdAttackState : public YakuzaGenericAttackState
 {
 	appState(NormalYakuzaThirdAttackState)
-protected:
-	YakuzaAttackComboStateMachine* m_owner = nullptr;
 public:
-	NormalYakuzaThirdAttackState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
+	NormalYakuzaThirdAttackState(
+		AttackStateInitData initData
+	)
+		: YakuzaGenericAttackState(initData)
+	{
+		m_hasAttackStateHash = NormalYakuzaThirdAttackState::ID();
+	}
 
 	~NormalYakuzaThirdAttackState() = default;
-
-	uint32_t m_nextComboHash = 0;
-	
-	//ステートイン
-	void OnEnter() override;
-	//ステートアップデート
-	void OnUpdate() override;
-	//ステートアウト
-	void OnExit() override;
 };
 
 class NormalYakuzaFourthAttackState : public IStateBase
@@ -180,7 +165,7 @@ public:
 		en_punching_3_L
 	};
 
-	NormalYakuzaTypeSet()
+	NormalYakuzaTypeSet() : IYakuzaTypeSet(en_campEnemy)
 	{
 		m_firstAttackID = NormalYakuzaFirstAttackState::ID();
 
@@ -209,13 +194,16 @@ public:
 
 	void CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) override
 	{
-		AddAttackState<NormalYakuzaFirstAttackState>(useAttackStateMachine,
+		AddAttackState<NormalYakuzaFirstAttackState>(
+			{ useAttackStateMachine,m_yakuzaCamp,NormalYakuzaSecondAttackState::ID(),NormalYakuzaFirstFinalBlowState::ID(),en_punching_1_L,150.0f},
 			{10.0f,150.0f,SoundId::se_hittingLightA},
 			{SoundId::se_cuttingWindLigthA});
-		AddAttackState<NormalYakuzaSecondAttackState>(useAttackStateMachine,
+		AddAttackState<NormalYakuzaSecondAttackState>(
+			{ useAttackStateMachine,m_yakuzaCamp,NormalYakuzaThirdAttackState::ID(),NormalYakuzaSecondFinalBlowState::ID(),en_punching_3_L,150.0f },
 			{ 10.0f,150.0f,SoundId::se_hittingLightB },
 			{ SoundId::se_cuttingWindLigthA});
-		AddAttackState<NormalYakuzaThirdAttackState>(useAttackStateMachine,
+		AddAttackState<NormalYakuzaThirdAttackState>(
+			{ useAttackStateMachine,m_yakuzaCamp,NormalYakuzaFourthAttackState::ID(),NormalYakuzaThirdFinalBlowState::ID(),en_punching_1_L,150.0f },
 			{ 10.0f,150.0f,SoundId::se_hittingLightA},
 			{ SoundId::se_cuttingWindLigthA});
 		AddAttackState<NormalYakuzaFourthAttackState>(useAttackStateMachine,
