@@ -13,7 +13,10 @@ public:
 	NormalYakuzaAiAttackState(YakuzaStateMachine* stateMachine, NormalYakuzaAi* hasAi)
 		: IEnemyAttackAiState(stateMachine)
 		, m_owner(hasAi)
-	{}
+	{
+		m_attackCombos.push_back({ en_normalAttack,en_normalAttack,en_finishBrow});
+		m_attackCombos.push_back({ en_normalAttack,en_normalAttack,en_normalAttack,en_normalAttack,en_finishBrow});
+	}
 
 	//デストラクタ
 	~NormalYakuzaAiAttackState() = default;
@@ -22,9 +25,7 @@ public:
 	bool ShouldApproachForAttack();
 	//攻撃処理
 	void PerformAttack();
-	//追撃判定
-	bool ShouldPerformChaseAttack();
-	
+
 	//攻撃範囲内に入っているかどうか
 	bool m_isInAttackDis = false;
 	//攻撃終了フラグ
