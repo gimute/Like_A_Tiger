@@ -1,4 +1,5 @@
 #pragma once
+#include "Actor\YakuzaComponents\IYakuzaTypeSet.h"
 
 //シングルトンパターンで作成
 
@@ -13,6 +14,12 @@ struct TargetingParam
 	float m_distanceWeight = 0.0f;
 	//前方優先の重み(1に近いほど真正面にいる敵を選定)
 	float m_forwardWeight = 0.0f;
+	//座標
+	Vector3 m_yakuzaPos = Vector3::Zero;
+	//正面値
+	Vector3 m_yakuzaForward = Vector3::Zero;
+	//陣営設定
+	YakuzaCamp m_yakuzaCamp = en_campNone;
 
 	//コンストラクタ
 	TargetingParam() {};
@@ -21,11 +28,17 @@ struct TargetingParam
 		float maxDistance,
 		float fovCos,
 		float distanceWeight,
-		float forwardWeight
+		float forwardWeight,
+		Vector3 pos,
+		Vector3 foward,
+		YakuzaCamp yakuzaCamp
 	) : m_maxDistance(maxDistance),
 		m_fovCos(fovCos),
 		m_distanceWeight(distanceWeight),
-		m_forwardWeight(forwardWeight)
+		m_forwardWeight(forwardWeight),
+		m_yakuzaPos(pos),
+		m_yakuzaForward(foward),
+		m_yakuzaCamp(yakuzaCamp)
 	{}
 };
 
@@ -61,8 +74,13 @@ public:
 	//解除
 	void RemoveAttackAssistSystem();
 
+	//近くのヤクザのポインタを取得(陣営によって処理が変わる)
+	YakuzaCharacter* GetNearYakuza(const TargetingParam& param);
+
+	//敵から一番近いプレイヤー座標を取得する
+	YakuzaCharacter* GetPlayerYakuzaPointer(const TargetingParam& param);
 	//プレイヤーから一番近い敵座標を取得する
-	YakuzaCharacter* GetPlayerNearEnemyPosition(const TargetingParam& param);
+	YakuzaCharacter* GetEnemyYakuzaPointer(const TargetingParam& param);
 private:
 	//プレイヤーのYakuzaCharacterのポインタ格納変数
 	YakuzaCharacter* m_playerYakuzaCharacterPtr = nullptr;
