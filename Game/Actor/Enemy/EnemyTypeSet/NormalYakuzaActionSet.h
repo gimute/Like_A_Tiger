@@ -195,15 +195,15 @@ public:
 	void CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) override
 	{
 		AddAttackState<NormalYakuzaFirstAttackState>(
-			{ useAttackStateMachine,m_yakuzaCamp,NormalYakuzaSecondAttackState::ID(),NormalYakuzaFirstFinalBlowState::ID(),en_punching_1_L,150.0f},
+			{ useAttackStateMachine,m_yakuzaCamp,NormalYakuzaSecondAttackState::ID(),NormalYakuzaFirstFinalBlowState::ID(),en_punching_1_L,50.0f},
 			{10.0f,150.0f,SoundId::se_hittingLightA},
 			{SoundId::se_cuttingWindLigthA});
 		AddAttackState<NormalYakuzaSecondAttackState>(
-			{ useAttackStateMachine,m_yakuzaCamp,NormalYakuzaThirdAttackState::ID(),NormalYakuzaSecondFinalBlowState::ID(),en_punching_3_L,150.0f },
+			{ useAttackStateMachine,m_yakuzaCamp,NormalYakuzaThirdAttackState::ID(),NormalYakuzaSecondFinalBlowState::ID(),en_punching_3_L,50.0f },
 			{ 10.0f,150.0f,SoundId::se_hittingLightB },
 			{ SoundId::se_cuttingWindLigthA});
 		AddAttackState<NormalYakuzaThirdAttackState>(
-			{ useAttackStateMachine,m_yakuzaCamp,NormalYakuzaFourthAttackState::ID(),NormalYakuzaThirdFinalBlowState::ID(),en_punching_1_L,150.0f },
+			{ useAttackStateMachine,m_yakuzaCamp,NormalYakuzaFourthAttackState::ID(),NormalYakuzaThirdFinalBlowState::ID(),en_punching_1_L,50.0f },
 			{ 10.0f,150.0f,SoundId::se_hittingLightA},
 			{ SoundId::se_cuttingWindLigthA});
 		AddAttackState<NormalYakuzaFourthAttackState>(useAttackStateMachine,
