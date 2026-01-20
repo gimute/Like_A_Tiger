@@ -48,9 +48,9 @@ struct IParameter
 };
 
 //プレイヤーのステータス
-struct PlayerStatusParamater : public IParameter
+struct PlayerStatusParameter : public IParameter
 {
-	appParameter(PlayerStatusParamater);
+	appParameter(PlayerStatusParameter);
 
 #ifdef APP_PARAM_HOT_RELOAD
 	void Load(const nlohmann::json& j) override
@@ -63,9 +63,9 @@ struct PlayerStatusParamater : public IParameter
 };
 
 //エネミーのステータス
-struct EnemyStatusParamater : public IParameter
+struct EnemyStatusParameter : public IParameter
 {
-	appParameter(EnemyStatusParamater);
+	appParameter(EnemyStatusParameter);
 
 #ifdef APP_PARAM_HOT_RELOAD
 	void Load(const nlohmann::json& j) override
@@ -75,6 +75,26 @@ struct EnemyStatusParamater : public IParameter
 #endif // APP_PARAM_HOT_RELOAD
 
 	float maxHP;	//最大HP
+};
+
+//ミニマップに使用する画像情報
+struct MiniMapImageParameter : public IParameter
+{
+	appParameter(MiniMapImageParameter);
+
+#ifdef APP_PARAM_HOT_RELOAD
+	void Load(const nlohmann::json& j) override
+	{
+		load(j, *this);
+	}
+#endif // APP_PARAM_HOT_RELOAD
+
+	std::string mapImagePath;
+	float mapImageWidth;
+	float mapImageHeight;
+	std::string playerIconImagePath;
+	std::string enemyIconImagePath;
+	float iconSize;
 };
 
 #undef appParameter

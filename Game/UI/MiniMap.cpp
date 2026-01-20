@@ -5,13 +5,31 @@
 
 MiniMap::MiniMap()
 {
+	ParameterManager::GetInstance().LoadParameter<MiniMapImageParameter>("Assets/Json/MiniMap.json", [](const nlohmann::json& j, MiniMapImageParameter& p)
+		{
+			p.mapImagePath = j["MapImagePath"].get<std::string>();
+			p.mapImageWidth = j["MapImageWidth"].get<float>();
+			p.mapImageHeight = j["MapImageHeight"].get<float>();
+			p.playerIconImagePath = j["PlayerIconImagePath"].get<std::string>();
+			p.enemyIconImagePath = j["EnemyIconImagePath"].get<std::string>();
+			p.iconSize = j["IconSize"].get<float>();
+		});
+
+	auto* parameter = ParameterManager::GetInstance().GetParameter<MiniMapImageParameter>();
+
+
 	m_canvas = std::make_shared<UICanvas>();
 
 	m_mapImage = m_canvas->CreateUI<UIImage>();
-	m_mapImage->Init("Assets/spriteData/MiniMap/MapImage.DDS", 256, 256);
+	m_mapImage->Init(parameter->mapImagePath.c_str(), parameter->mapImageWidth, parameter->mapImageHeight);
 
 	m_playerIcon = m_canvas->CreateUI<UIImage>();
-	m_playerIcon->Init("Assets/spriteData/MiniMap/PlayerIcon.DDS", 10, 10);
+	m_playerIcon->Init(parameter->playerIconImagePath.c_str(), parameter->iconSize, parameter->iconSize);
+
+	m_enemyIconData.imageFilePath = parameter->enemyIconImagePath;
+	m_enemyIconData.iconSize = parameter->iconSize;
+
+	//ParameterManager::GetInstance().UnloadParameter<MiniMapImageParameter>("Assets/Json/MiniMap.json");
 }
 
 MiniMap::~MiniMap()
@@ -42,7 +60,7 @@ void MiniMap::AddBattlePoint(Vector3 pos)
 	BattlePointUIData battlePointUI;
 
 	battlePointUI.battlePointIcon = m_canvas->CreateUI<UIImage>();
-	battlePointUI.battlePointIcon->Init("Assets/spriteData/MiniMap/EnemyIcon.DDS", 10, 10);
+	battlePointUI.battlePointIcon->Init(m_enemyIconData.imageFilePath.c_str(), m_enemyIconData.iconSize, m_enemyIconData.iconSize);
 
 	battlePointUI.battleAreaPos = pos;
 

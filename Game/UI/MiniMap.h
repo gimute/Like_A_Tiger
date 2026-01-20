@@ -11,6 +11,12 @@ class MiniMap : public IGameObject
 		Vector3 battleAreaPos;
 	};
 
+	struct EnemyIconData
+	{
+		std::string imageFilePath;
+		float iconSize;
+	};
+
 public:
 	MiniMap();
 	~MiniMap();
@@ -49,6 +55,7 @@ private:
 
 	std::vector<BattlePointUIData> m_battlePointUIDataList;
 
+	EnemyIconData m_enemyIconData;
 
 private:
 	void CalcBattlePointUIPos();
