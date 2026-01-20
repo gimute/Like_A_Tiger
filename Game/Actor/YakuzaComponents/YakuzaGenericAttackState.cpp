@@ -23,7 +23,7 @@ void YakuzaGenericAttackState::OnUpdate()
 {
 	auto* stateMachine = m_owner->GetYakuzaStateMachine();
 
-	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(m_playAnimationNo, 0.1f);
+	m_owner->GetYakuzaStateMachine()->HasCharactarPlayAnimation(m_playAnimationNo, 0.1f,m_attackAnimSpeed);
 
 	if (stateMachine->GetAttackFlag() && !m_owner->GetIsNextCombo())
 	{

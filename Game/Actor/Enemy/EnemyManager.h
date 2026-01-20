@@ -149,7 +149,7 @@ private:
 	//エネミーのグループリスト
 	std::vector<EnemyGroup> m_enemyGroupList;
 	//敵のターゲットのCharactar
-	Character* m_targetCharacter = nullptr;
+	YakuzaCharacter* m_targetCharacter = nullptr;
 	//ターゲットのビュー情報
 	TargetCharacterView m_targetView;
 	//メタAI
@@ -187,7 +187,7 @@ public:
 		return m_enemyInfoList;
 	}
 	//敵のターゲットを設定
-	inline void SetEnemyTargetCharacter(Character* target)
+	inline void SetEnemyTargetCharacter(YakuzaCharacter* target)
 	{
 		m_targetCharacter = target;
 	}

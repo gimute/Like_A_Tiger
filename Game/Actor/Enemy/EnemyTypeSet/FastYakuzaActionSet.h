@@ -1,10 +1,30 @@
 #pragma once
 #include "Actor\YakuzaComponents\IYakuzaTypeSet.h"
+#include "Actor\YakuzaComponents\YakuzaGenericAttackState.h"
+
+class FastYakuzaFirstAttackState : public YakuzaGenericAttackState
+{
+	appState(FastYakuzaFirstAttackState)
+public:
+	FastYakuzaFirstAttackState(
+		AttackStateInitData initData
+	)
+		: YakuzaGenericAttackState(initData)
+	{
+		m_hasAttackStateHash = FastYakuzaFirstAttackState::ID();
+	}
+	~FastYakuzaFirstAttackState() = default;
+};
 
 class FastYakuzaActionSet : public IYakuzaTypeSet
 {
 	appState(FastYakuzaActionSet)
 public:
+
+	enum FastYakuzaAnimation
+	{
+		en_
+	};
 
 	FastYakuzaActionSet() : IYakuzaTypeSet(en_campEnemy)
 	{
@@ -32,7 +52,10 @@ public:
 
 	void CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) override
 	{
-
+		AddAttackState<FastYakuzaFirstAttackState>(
+			{ useAttackStateMachine,m_yakuzaCamp,0,0,0 },
+			{ 10.0f,150.0f,SoundId::se_hittingLightA },
+			{ SoundId::se_cuttingWindLigthA });
 	}
 
 private:

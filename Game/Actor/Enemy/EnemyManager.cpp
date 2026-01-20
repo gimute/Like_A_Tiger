@@ -336,6 +336,8 @@ void EnemyManager::UpdateTargetView()
 
 	m_targetView.m_targetForward = m_targetCharacter->GetForward();
 
+	m_targetView.m_isTargetAttacking = m_targetCharacter->GetYakuzaStateMachine().GetIsAttack();
+
 	for (auto it = m_enemyPairList.begin();it != m_enemyPairList.end();)
 	{
 		it->m_enemyAi->UpdateTargetView(m_targetView);

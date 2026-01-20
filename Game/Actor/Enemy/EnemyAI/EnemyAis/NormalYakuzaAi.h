@@ -58,17 +58,10 @@ public:
 	//次のステートを取得
 	IStateBase* GetNextState() override;
 private:
-	//攻撃フラグ
-	bool m_attackFlag = false;
 	//攻撃待機状態に移行できるかどうか
 	bool CanChangeWaitingAttack();
 	//攻撃に移行できるかどうか
 	bool CanChangeAttack();
-public:
-
-	inline void SetAttackFlag(bool setIs) { m_attackFlag = setIs; }
-
-	inline bool GetAttackFlag() { return m_attackFlag; }
 private:
 	static AiAutoRegister<NormalYakuzaAi> aiSet;
 };
