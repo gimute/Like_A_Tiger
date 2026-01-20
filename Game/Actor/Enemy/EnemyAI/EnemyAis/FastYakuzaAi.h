@@ -79,6 +79,8 @@ public:
 		AddState<EnemyAiIdleState>(controllStateMachine, this);
 		AddState<EnemyAiTrackingState>(controllStateMachine, this);
 		AddState<EnemyAiWaitingAttackState>(controllStateMachine, this);
+		AddState<FastYakuzaAiAttackState>(controllStateMachine, this);
+		AddState<FastYakuzaDodgeState>(controllStateMachine, this);
 
 		InitStateMachineClassName<EnemyAiIdleState>();
 	}
