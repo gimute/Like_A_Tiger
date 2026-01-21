@@ -78,7 +78,7 @@ private:
     EnemysHpGauge* m_enemysHpGauge = nullptr;
     //ゲーム内ステート
     GameState m_gameState = GameState::en_gameLoad;
-
-    MiniMap* m_test = nullptr;
+    //ミニマップ
+    MiniMap* m_miniMap = nullptr;
 };
 

@@ -165,7 +165,7 @@ public:
 	template <typename T>
 	void UnloadParameter(const char* path)
 	{
-		auto it = m_parameterMap.find(T::ID);
+		auto it = m_parameterMap.find(T::ID());
 		if (it != m_parameterMap.end())
 		{
 			auto& parameters = it->second;

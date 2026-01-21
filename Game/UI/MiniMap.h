@@ -11,6 +11,7 @@ class MiniMap : public IGameObject
 		Vector3 battleAreaPos;
 	};
 
+	//エネミーアイコン生成用のデータ構造体
 	struct EnemyIconData
 	{
 		std::string imageFilePath;

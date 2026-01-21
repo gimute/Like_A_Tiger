@@ -29,7 +29,7 @@ MiniMap::MiniMap()
 	m_enemyIconData.imageFilePath = parameter->enemyIconImagePath;
 	m_enemyIconData.iconSize = parameter->iconSize;
 
-	//ParameterManager::GetInstance().UnloadParameter<MiniMapImageParameter>("Assets/Json/MiniMap.json");
+	ParameterManager::GetInstance().UnloadParameter<MiniMapImageParameter>("Assets/Json/MiniMap.json");
 }
 
 MiniMap::~MiniMap()
@@ -69,6 +69,18 @@ void MiniMap::AddBattlePoint(Vector3 pos)
 
 void MiniMap::CalcBattlePointUIPos()
 {
+	//プレイヤーアイコンの向き設定
+	//UIに適応する回転のためプレイヤーのY軸回転をZ軸の回転として求める
+	Vector3 playerForward = m_player->GetForward();
+	playerForward.y = playerForward.z;
+	playerForward.z = 0.0f;
+
+	Quaternion playerIconRot = Quaternion::Identity; 
+	playerIconRot.SetRotation(Vector3::AxisY, playerForward);
+
+	m_playerIcon->m_transform.m_localRotation = playerIconRot;
+
+	//バトルポイントアイコンのの位置を設定
 	for (auto& battlePointUIData : m_battlePointUIDataList)
 	{
 		//プレイヤーからバトルポイントへのベクトルを計算

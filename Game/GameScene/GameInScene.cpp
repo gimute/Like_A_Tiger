@@ -59,6 +59,16 @@ void GameInScene::EnterScene()
 	//エネミーのターゲットを設定
 	EnemyManager::GetInstance()->SetEnemyTargetCharacter(m_player);
 
+	//ミニマップ用意
+	m_miniMap = NewGO<MiniMap>(0);
+
+	m_miniMap->SetPlayer(m_player);
+	m_miniMap->AddBattlePoint(Vector3{ -1000.0f,0.0f,0.0f });
+	m_miniMap->AddBattlePoint(Vector3{ 1000.0f,0.0f,0.0f });
+	m_miniMap->AddBattlePoint(Vector3{ -3000.0f,0.0f,0.0f });
+
+	m_miniMap->SetPosition(Vector3(-600.0f, -300.0f, 0.0f));
+
 	//戦闘マネージャー初期化
 	BattleManager::GetInstance()->InitBattleManager();
 	//プロトステージ生成
@@ -84,15 +94,6 @@ void GameInScene::EnterScene()
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 
    m_gameState = GameState::en_gameLoad;
-
-   m_test = NewGO<MiniMap>(0);
-
-   m_test->SetPlayer(m_player);
-   m_test->AddBattlePoint(Vector3{ -1000.0f,0.0f,0.0f });
-   m_test->AddBattlePoint(Vector3{ 1000.0f,0.0f,0.0f });
-   m_test->AddBattlePoint(Vector3{ -3000.0f,0.0f,0.0f });
-
-   m_test->SetPosition(Vector3(-600.0f, -300.0f, 0.0f));
 }
 
 //ステート更新関数
