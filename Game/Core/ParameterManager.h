@@ -26,7 +26,8 @@
 #define appParameter(name)\
 public:\
 static constexpr uint32_t ID() {return Hash32(#name);}\
-std::function<void(const nlohmann::json& j, name& p)> load;
+std::function<void(const nlohmann::json& j, name& p)> load;\
+void Load(const nlohmann::json& j){ load(j, *this); }
 
 #else //APP_PARAM_HOT_RELOAD
 #define appParameter(name)\
@@ -52,13 +53,6 @@ struct PlayerStatusParameter : public IParameter
 {
 	appParameter(PlayerStatusParameter);
 
-#ifdef APP_PARAM_HOT_RELOAD
-	void Load(const nlohmann::json& j) override
-	{
-		load(j, *this);
-	}
-#endif // APP_PARAM_HOT_RELOAD
-
 	float maxHP;	//最大HP
 };
 
@@ -67,13 +61,6 @@ struct EnemyStatusParameter : public IParameter
 {
 	appParameter(EnemyStatusParameter);
 
-#ifdef APP_PARAM_HOT_RELOAD
-	void Load(const nlohmann::json& j) override
-	{
-		load(j, *this);
-	}
-#endif // APP_PARAM_HOT_RELOAD
-
 	float maxHP;	//最大HP
 };
 
@@ -81,13 +68,6 @@ struct EnemyStatusParameter : public IParameter
 struct MiniMapImageParameter : public IParameter
 {
 	appParameter(MiniMapImageParameter);
-
-#ifdef APP_PARAM_HOT_RELOAD
-	void Load(const nlohmann::json& j) override
-	{
-		load(j, *this);
-	}
-#endif // APP_PARAM_HOT_RELOAD
 
 	std::string mapImagePath;
 	float mapImageWidth;
@@ -163,7 +143,7 @@ public:
 	/// </summary>
 	/// <param name="path">解放するパラメーターのファイルパス</param>
 	template <typename T>
-	void UnloadParameter(const char* path)
+	void UnloadParameter()
 	{
 		auto it = m_parameterMap.find(T::ID());
 		if (it != m_parameterMap.end())
