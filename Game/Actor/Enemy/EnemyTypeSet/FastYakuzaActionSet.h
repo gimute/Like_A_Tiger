@@ -17,6 +17,62 @@ public:
 	~FastYakuzaFirstAttackState() = default;
 };
 
+class FastYakuzaSecondAttackState : public YakuzaGenericAttackState
+{
+	appState(FastYakuzaSecondAttackState)
+public:
+	FastYakuzaSecondAttackState(
+		AttackStateInitData initData
+	)
+		: YakuzaGenericAttackState(initData)
+	{
+		m_hasAttackStateHash = FastYakuzaSecondAttackState::ID();
+	}
+	~FastYakuzaSecondAttackState() = default;
+};
+
+class FastYakuzaThirdAttackState : public YakuzaGenericAttackState
+{
+	appState(FastYakuzaThirdAttackState)
+public:
+	FastYakuzaThirdAttackState(
+		AttackStateInitData initData
+	)
+		: YakuzaGenericAttackState(initData)
+	{
+		m_hasAttackStateHash = FastYakuzaThirdAttackState::ID();
+	}
+	~FastYakuzaThirdAttackState() = default;
+};
+
+class FastYakuzaFourthAttackState : public YakuzaGenericAttackState
+{
+	appState(FastYakuzaFourthAttackState)
+public:
+	FastYakuzaFourthAttackState(
+		AttackStateInitData initData
+	)
+		: YakuzaGenericAttackState(initData)
+	{
+		m_hasAttackStateHash = FastYakuzaFourthAttackState::ID();
+	}
+	~FastYakuzaFourthAttackState() = default;
+};
+
+class FastYakuzaFirstFinalBlowState : public YakuzaGenericAttackState
+{
+	appState(FastYakuzaFirstFinalBlowState)
+public:
+	FastYakuzaFirstFinalBlowState(
+		AttackStateInitData initData
+	)
+		: YakuzaGenericAttackState(initData)
+	{
+		m_hasAttackStateHash = FastYakuzaFirstFinalBlowState::ID();
+	}
+	~FastYakuzaFirstFinalBlowState() = default;
+};
+
 class FastYakuzaActionSet : public IYakuzaTypeSet
 {
 	appState(FastYakuzaActionSet)
@@ -25,6 +81,9 @@ public:
 	enum FastYakuzaAnimation
 	{
 		en_crossPunch_1_R = YakuzaAnimation::en_num,
+		en_punch_R,
+		en_punch_L, 
+		en_Uppercut,
 	};
 
 	FastYakuzaActionSet() : IYakuzaTypeSet(en_campEnemy)
@@ -49,6 +108,9 @@ public:
 		m_animationDataList.push_back({ "Assets/modelData/Character/Nonpbr/Animation/BodyHit.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Nonpbr/Animation/BackDeath_E.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Nonpbr/Animation/Cross_Punch_1_R.tka",false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Nonpbr/Animation/Punch_R_1.tka",false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Nonpbr/Animation/Punch_L_1.tka",false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Nonpbr/Animation/Uppercut_1.tka",false });
 
 		//ÉpÉâÉÅÅ[É^èâä˙âª
 		ParameterManager::GetInstance().LoadParameter<YakuzaParamater>("Assets/Json/FastYakuzaStatus.json", [](const nlohmann::json& j, YakuzaParamater& p)
@@ -75,9 +137,25 @@ public:
 	void CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) override
 	{
 		AddAttackState<FastYakuzaFirstAttackState>(
-			{ useAttackStateMachine,m_yakuzaCamp,0,0,en_crossPunch_1_R,50.0f,1.5f},
-			{ 10.0f,150.0f,SoundId::se_hittingLightA },
+			{ useAttackStateMachine,m_yakuzaCamp,FastYakuzaSecondAttackState::ID(),0,en_punch_L,250.0f,1.5f},
+			{ 5.0f,150.0f,SoundId::se_hittingLightA },
 			{ SoundId::se_cuttingWindLigthA });
+		AddAttackState<FastYakuzaSecondAttackState>(
+			{ useAttackStateMachine,m_yakuzaCamp,FastYakuzaThirdAttackState::ID() ,0,en_punch_R,250.0f,1.5f},
+			{ 5.0f,150.0f,SoundId::se_hittingLightA },
+			{ SoundId::se_cuttingWindLigthA });
+		AddAttackState<FastYakuzaThirdAttackState>(
+			{ useAttackStateMachine,m_yakuzaCamp,FastYakuzaFourthAttackState::ID(),0,en_punch_L,250.0f,1.5f},
+			{ 5.0f,150.0f,SoundId::se_hittingLightA },
+			{ SoundId::se_cuttingWindLigthA });
+		AddAttackState<FastYakuzaFourthAttackState>(
+			{ useAttackStateMachine,m_yakuzaCamp,0,FastYakuzaFirstFinalBlowState::ID(),en_punch_R,250.0f,1.5f},
+			{ 5.0f,150.0f,SoundId::se_hittingLightA },
+			{ SoundId::se_cuttingWindLigthA });
+		AddAttackState<FastYakuzaFirstFinalBlowState>(
+			{ useAttackStateMachine,m_yakuzaCamp,0,0,en_Uppercut,250.0f,1.5f },
+			{ 60.0f,150.0f,SoundId::se_hittingHeavyB },
+			{ SoundId::se_cuttingWindHeavyA });
 	}
 
 private:
