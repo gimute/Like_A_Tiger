@@ -10,6 +10,8 @@ class EnemysHpGauge;
 
 class Inventory;
 
+class MiniMap;
+
 enum GameState
 {
     //ゲームロード中
@@ -76,5 +78,7 @@ private:
     EnemysHpGauge* m_enemysHpGauge = nullptr;
     //ゲーム内ステート
     GameState m_gameState = GameState::en_gameLoad;
+    //ミニマップ
+    MiniMap* m_miniMap = nullptr;
 };
 

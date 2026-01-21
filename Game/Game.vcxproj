@@ -249,6 +249,7 @@
     <ClCompile Include="GameScene\GameOverScene.cpp" />
     <ClCompile Include="GameScene\GameResultScene.cpp" />
     <ClCompile Include="InvisibleWall.cpp" />
+    <ClCompile Include="UI\MiniMap.cpp" />
     <ClCompile Include="Sound\SoundManager.cpp" />
     <ClCompile Include="Load\LoadScreenSprite.cpp" />
     <ClCompile Include="Load\LoadManager.cpp" />
@@ -323,6 +324,7 @@
     <ClInclude Include="GameScene\GameOverScene.h" />
     <ClInclude Include="GameScene\GameResultScene.h" />
     <ClInclude Include="InvisibleWall.h" />
+    <ClInclude Include="UI\MiniMap.h" />
     <ClInclude Include="Sound\SoundId.h" />
     <ClInclude Include="Sound\SoundManager.h" />
     <ClInclude Include="Load\LoadScreenSprite.h" />
