@@ -29,7 +29,7 @@ MiniMap::MiniMap()
 	m_enemyIconData.imageFilePath = parameter->enemyIconImagePath;
 	m_enemyIconData.iconSize = parameter->iconSize;
 
-	ParameterManager::GetInstance().UnloadParameter<MiniMapImageParameter>("Assets/Json/MiniMap.json");
+	ParameterManager::GetInstance().UnloadParameter<MiniMapImageParameter>();
 }
 
 MiniMap::~MiniMap()
