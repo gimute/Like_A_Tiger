@@ -4,6 +4,9 @@
 #include "YakuzaStates.h"
 #include "Actor\Character.h"
 
+#include "Sound\SoundManager.h"
+#include "Sound\SoundId.h"
+
 IStateBase* YakuzaStateMachine::GetNextState()
 {
 	//死亡したなら死亡ステートを更新する
@@ -245,6 +248,10 @@ void YakuzaStateMachine::OnAnimationEvent(const wchar_t* clipName, const wchar_t
 	if (wcscmp(eventName, L"HitBoxOff") == 0)
 	{
 		m_hasCharactar->DeleteAttackCollision();
+	}
+	if (wcscmp(eventName, L"footsteps") == 0)
+	{
+		SoundManager::Get().PlaySE(SoundId::se_FootstepsA,false,false,0.3f);
 	}
 }
 

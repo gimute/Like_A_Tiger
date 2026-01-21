@@ -81,7 +81,8 @@ void NormalYakuzaAiAttackState::PerformAttack()
 	m_hasStateMachine->ResetAttackFlagsMachine();
 	//攻撃用のステートマシン
 	auto attackState = m_hasStateMachine->GetAttackStateMachine();
-
+	//コンボ用
+	int index = 0;
 
 	//攻撃が終了したら終了処理
 	if (!m_attackEndFlag &&
@@ -100,9 +101,24 @@ void NormalYakuzaAiAttackState::PerformAttack()
 	if (!m_hasStateMachine->GetAttackFlag() &&
 		m_attackEndFlag)
 	{
-		m_hasStateMachine->SetAttackFlag(true);
+		ComboChoice();
+
+		if (!GetCombo(index))
+		{
+			return;
+		}
+
+		if (index == AttackCommand::en_normalAttack)
+		{
+			m_hasStateMachine->SetAttackFlag(true);
+		}
+		else if (index == AttackCommand::en_finishBrow)
+		{
+			m_hasStateMachine->SetFinishBrowFlag(true);
+		}
 
 		m_attackEndFlag = false;
+
 		return;
 	}
 
@@ -110,20 +126,20 @@ void NormalYakuzaAiAttackState::PerformAttack()
 	if (!attackState->GetIsNextCombo() &&
 		!m_attackEndFlag)
 	{
-		if (Random::Range(0.9))
+		if (!GetCombo(index))
+		{
+			return;
+		}
+
+		if (index == AttackCommand::en_normalAttack)
 		{
 			m_hasStateMachine->SetAttackFlag(true);
 		}
-		else
+		else if (index == AttackCommand::en_finishBrow)
 		{
 			m_hasStateMachine->SetFinishBrowFlag(true);
 		}
 	}
-}
-
-bool NormalYakuzaAiAttackState::ShouldPerformChaseAttack()
-{
-	return Random::Range(0.5f);
 }
 
 void NormalYakuzaAiAttackState::OnExit()

@@ -25,6 +25,26 @@ public:
 	void OnExit() override;
 };
 
+class ResetState : public IStateBase
+{
+	appState(ResetState)
+protected:
+	YakuzaAttackComboStateMachine* m_owner = nullptr;
+public:
+	ResetState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
+
+	~ResetState() = default;
+
+	uint32_t m_nextComboHash = 0;
+
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+};
+
 class YakuzaAttackComboStateMachine : public IStateMachine
 {
 public:
@@ -32,6 +52,7 @@ public:
 	YakuzaAttackComboStateMachine(YakuzaStateMachine* hasStateMachine) : m_hasStateMachine(hasStateMachine)
 	{
 		AddState<AttackEndState>(this);
+		AddState<ResetState>(this);
 	}
 	//デストラクタ
 	~YakuzaAttackComboStateMachine() = default;
@@ -89,6 +110,9 @@ public:
 	void StartFirstAttack();
 
 	void StartFirstFinishBrow();
+
+	//攻撃終了時に初期化する処理
+	void ResetAttackStateMachine();
 
 	YakuzaStateMachine* GetYakuzaStateMachine();
 };

@@ -56,6 +56,7 @@ void GameInScene::EnterScene()
 	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ -1000.0f,0.0f,0.0f });
 	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ 1000.0f,0.0f,0.0f });
 	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ -3000.0f,0.0f,0.0f });
+	//EnemyManager::GetInstance()->RequestSpawnEnemyGroup(1,Vector3{ 1000.0f,0.0f,0.0f });
 	//エネミーのターゲットを設定
 	EnemyManager::GetInstance()->SetEnemyTargetCharacter(m_player);
 

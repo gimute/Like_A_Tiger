@@ -292,6 +292,7 @@
     <ClCompile Include="Actor\YakuzaComponents\YakuzaCharacter.cpp" />
     <ClCompile Include="Actor\YakuzaComponents\YakuzaCharacterDamageManager.cpp" />
     <ClCompile Include="Actor\YakuzaComponents\YakuzaAttackAssistSystem.cpp" />
+    <ClCompile Include="Actor\YakuzaComponents\YakuzaGenericAttackState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorStatus.h" />
@@ -324,6 +325,7 @@
     <ClInclude Include="GameScene\GameResultScene.h" />
     <ClInclude Include="InvisibleWall.h" />
     <ClInclude Include="UI\MiniMap.h" />
+    <ClInclude Include="Sound\SoundId.h" />
     <ClInclude Include="Sound\SoundManager.h" />
     <ClInclude Include="Load\LoadScreenSprite.h" />
     <ClInclude Include="Load\LoadManager.h" />
@@ -373,6 +375,7 @@
     <ClInclude Include="Actor\YakuzaComponents\YakuzaCharacter.h" />
     <ClInclude Include="Actor\YakuzaComponents\YakuzaCharacterDamageManager.h" />
     <ClInclude Include="Actor\YakuzaComponents\YakuzaAttackAssistSystem.h" />
+    <ClInclude Include="Actor\YakuzaComponents\YakuzaGenericAttackState.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -10,7 +10,51 @@
 
 #include "Actor\Character.h"
 
-class YakuzaTypeSetFactory;
+#include "Sound\SoundId.h"
+
+class YakuzaTypeSetFactory; 
+
+enum YakuzaCamp
+{
+	en_campNone,
+	en_campEnemy,
+	en_campPlayer
+};
+
+struct AttackStateInitData
+{
+	//この攻撃ステートを扱うステートマシン
+	YakuzaAttackComboStateMachine* hasOwner = nullptr;
+	//次の通常攻撃コンボハッシュ値
+	uint32_t nextAttackHash = 0;
+	//次のファイナルブロウ攻撃コンボハッシュ値
+	uint32_t nextFinalBrowHash = 0;
+	//再生するアニメーションナンバー
+	int playAnimationNo = -1;
+	//この攻撃ステートをどちらの陣営が使っているか
+	YakuzaCamp yakuzaCamp = YakuzaCamp::en_campNone;
+	//攻撃スピード
+	float attackSpeed = 0.0f;
+	
+	AttackStateInitData() = default;
+
+	AttackStateInitData(
+		YakuzaAttackComboStateMachine* hasStateMachine,
+		YakuzaCamp yakuzaCamp,
+		uint32_t nextAttackHash,
+		uint32_t nextFinalBrowHash,
+		int playAnimationNo,
+		float attackSpeed
+	)
+		: hasOwner(hasStateMachine)
+		, yakuzaCamp(yakuzaCamp)
+		, nextAttackHash(nextAttackHash)
+		, nextFinalBrowHash(nextFinalBrowHash)
+		, playAnimationNo(playAnimationNo)
+		, attackSpeed(attackSpeed)
+	{
+	}
+};
 
 template<class ClassType>
 class TypeSetAutoRegister
@@ -32,9 +76,47 @@ public:
 	}
 };
 
+struct YakuzaDamageDatas
+{
+	//攻撃力
+	float m_attackPow = 0.0f;
+	//ノックバック力
+	float m_knockBackPow = 0.0f;
+	//この攻撃で流す音声ID
+	int m_seId = -1;
+
+	YakuzaDamageDatas() = default;
+
+	YakuzaDamageDatas(
+		float attackPow,
+		float knockBackPow,
+		int seId
+	) 
+		: m_attackPow(attackPow)
+		, m_knockBackPow(knockBackPow)
+		, m_seId(seId)
+	{ }
+};
+
+struct YakuzaAttackSEDatas
+{
+	//風切り音
+	int m_cuttingWindId = -1;
+
+	YakuzaAttackSEDatas() = default;
+
+	YakuzaAttackSEDatas(
+		int cuttingWindId
+	)
+		: m_cuttingWindId(cuttingWindId)
+	{ }
+};
+
 class IYakuzaTypeSet
 {
 public:
+	//コンストラクタ
+	IYakuzaTypeSet(YakuzaCamp camp) : m_yakuzaCamp(camp){ }
 	//デストラクタ
 	virtual ~IYakuzaTypeSet() = default;
 	//ステート生成
@@ -50,11 +132,43 @@ protected:
 
 	std::vector<Character::AnimationData> m_animationDataList;
 
-	//攻撃ステートを追加＋通常攻撃かフィニッシュブロウかを選択しカウント、trueが通常攻撃、falseがフィニッシュブロウ
+	std::unordered_map<uint32_t,YakuzaDamageDatas> m_yakuzaDamageDataList;
+
+	std::unordered_map<uint32_t, YakuzaAttackSEDatas> m_yakuzaAttackSEList;
+	//陣営
+	YakuzaCamp m_yakuzaCamp = en_campNone;
+
+	//攻撃ステートを追加＋攻撃時データを追加
 	template<typename ClassName>
-	inline void AddAttackState(YakuzaAttackComboStateMachine* useAttackStateMachine)
+	inline void AddAttackState(YakuzaAttackComboStateMachine* useAttackStateMachine, YakuzaDamageDatas damageData,YakuzaAttackSEDatas seData)
 	{
 		useAttackStateMachine->AddState<ClassName>(useAttackStateMachine);
+
+		m_yakuzaDamageDataList.emplace(
+			ClassName::ID(),
+			damageData
+		);
+
+		m_yakuzaAttackSEList.emplace(
+			ClassName::ID(),
+			seData
+		);
+	}
+
+	template<typename ClassName>
+	inline void AddAttackState(AttackStateInitData initData, YakuzaDamageDatas damageData, YakuzaAttackSEDatas seData)
+	{
+		initData.hasOwner->AddState<ClassName>(initData);
+
+		m_yakuzaDamageDataList.emplace(
+			ClassName::ID(),
+			damageData
+		);
+
+		m_yakuzaAttackSEList.emplace(
+			ClassName::ID(),
+			seData
+		);
 	}
 
 public:
@@ -67,6 +181,19 @@ public:
 	inline std::vector<Character::AnimationData>& GetAnimationDataList() { return m_animationDataList; }
 
 	//攻撃力取得関数
-	virtual float GetAttackPower(YakuzaAttackComboStateMachine* useAttackStateMachine) = 0;
+	inline YakuzaDamageDatas GetAttackPower(YakuzaAttackComboStateMachine* useAttackStateMachine)
+	{
+		uint32_t nowStateId = useAttackStateMachine->GetNowCombo();
+
+		YakuzaDamageDatas damageData = m_yakuzaDamageDataList.find(nowStateId)->second;
+
+		return damageData;
+	}
+
+	//SEデータ取得関数
+	inline YakuzaAttackSEDatas GetAttackSEDatas(uint32_t findAttackStateID)
+	{
+		return m_yakuzaAttackSEList.find(findAttackStateID)->second;
+	}
 };
 

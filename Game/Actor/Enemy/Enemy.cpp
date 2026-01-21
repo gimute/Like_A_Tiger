@@ -50,49 +50,11 @@ void Enemy::OnHit(const char* hitCollisionName, CollisionObject* pairCollision)
 	if (hitCollisionName == "PlayerAttack" &&
 		pairCollision == m_bodyCollision)
 	{
-		bool isKnockBack = false;
-
-		KnockBackParam param;
-
 		//ダメージ取得
-		float damage = YakuzaCharacterDamageManager::GetInstance()->GetPlayerYakuzaDamage();
+		YakuzaDamageDatas damage = YakuzaCharacterDamageManager::GetInstance()->GetPlayerYakuzaDamage();
 
-		if (damage >= 10.0f)
-		{
-			isKnockBack = true;
-
-			Vector3 distNomal = GetPosition() - EnemyManager::GetInstance()->GetTargetView().m_targetPosition;
-			distNomal.Normalize();
-
-			param = KnockBackParam(
-				distNomal,
-				300.0f,
-				0.3f
-			);
-		}
-
-		//ダメージ受ける
-		TakeDamage(damage);
-
-		//死亡しているなら
-		if (IsCharacterHpDead())
-		{
-			GetYakuzaStateMachine().ResetIsKnockBack(param);
-
-			GetYakuzaStateMachine().SetIsDead(true);
-		}
-		else
-		{
-			//怯み処理
-			if (GetYakuzaStateMachine().GetIsDamage())
-			{
-				GetYakuzaStateMachine().ResetIsKnockBack(param);
-			}
-			else
-			{
-				GetYakuzaStateMachine().SetIsDamage(true, isKnockBack, param);
-			}
-		}
+		//ダメージを受ける
+		YakuzaCharacterDamageManager::GetInstance()->SendEnemyYakuzaDamage(this, damage);
 	}
 
 	if (hitCollisionName == "playerBodyCollision" &&
@@ -101,7 +63,7 @@ void Enemy::OnHit(const char* hitCollisionName, CollisionObject* pairCollision)
 		//攻撃コリジョン削除
 		DeleteAttackCollision();
 		//ダメージ取得
-		float toPlayerDamage = GetYakuzaStateMachine().GetTypeSetAttackPower();
+		YakuzaDamageDatas toPlayerDamage = GetYakuzaStateMachine().GetTypeSetAttackPower();
 		//ダメージ送る
 		YakuzaCharacterDamageManager::GetInstance()->SendPlayerYakuzaDamage(toPlayerDamage,GetPosition());
 	}

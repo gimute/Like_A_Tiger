@@ -1,7 +1,6 @@
 #pragma once
-#include "StateMachineComponents\IState.h"
 #include "Actor\YakuzaComponents\IYakuzaTypeSet.h"
-#include "Actor\YakuzaComponents\YakuzaAttackComboStateMachine.h"
+#include "Actor\YakuzaComponents\YakuzaGenericAttackState.h"
 
 #include "CRC32.h"
 
@@ -9,64 +8,52 @@
 public:\
 	static constexpr uint32_t ID() { return Hash32(#name); }
 
-class PlayerFirstAttackState : public IStateBase
+class PlayerFirstAttackState : public YakuzaGenericAttackState
 {
 	appState(PlayerFirstAttackState)
-protected:
-	YakuzaAttackComboStateMachine* m_owner = nullptr;
 public:
-	PlayerFirstAttackState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
+	PlayerFirstAttackState(
+		AttackStateInitData initData
+	)
+		: YakuzaGenericAttackState(initData)
+	{
+		m_hasAttackStateHash = PlayerFirstAttackState::ID();
+	}
 
 	~PlayerFirstAttackState() = default;
-
-	uint32_t m_nextComboHash = 0;
-
-	//ステートイン
-	void OnEnter() override;
-	//ステートアップデート
-	void OnUpdate() override;
-	//ステートアウト
-	void OnExit() override;
 };
 
-class PlayerSecondAttackState : public IStateBase
+class PlayerSecondAttackState : public YakuzaGenericAttackState
 {
 	appState(PlayerSecondAttackState)
 protected:
 	YakuzaAttackComboStateMachine* m_owner = nullptr;
 public:
-	PlayerSecondAttackState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
+	PlayerSecondAttackState(
+		AttackStateInitData initData
+	)
+		: YakuzaGenericAttackState(initData)
+	{
+		m_hasAttackStateHash = PlayerSecondAttackState::ID();
+	}
+
 
 	~PlayerSecondAttackState() = default;
-
-	uint32_t m_nextComboHash = 0;
-
-	//ステートイン
-	void OnEnter() override;
-	//ステートアップデート
-	void OnUpdate() override;
-	//ステートアウト
-	void OnExit() override;
 };
 
-class PlayerThirdAttackState : public IStateBase
+class PlayerThirdAttackState : public YakuzaGenericAttackState
 {
 	appState(PlayerThirdAttackState)
-protected:
-	YakuzaAttackComboStateMachine* m_owner = nullptr;
 public:
-	PlayerThirdAttackState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
+	PlayerThirdAttackState(
+		AttackStateInitData initData
+	)
+		: YakuzaGenericAttackState(initData)
+	{
+		m_hasAttackStateHash = PlayerThirdAttackState::ID();
+	}
 
 	~PlayerThirdAttackState() = default;
-
-	uint32_t m_nextComboHash = 0;
-
-	//ステートイン
-	void OnEnter() override;
-	//ステートアップデート
-	void OnUpdate() override;
-	//ステートアウト
-	void OnExit() override;
 };
 
 class PlayerFourthAttackState : public IStateBase
@@ -177,7 +164,7 @@ public:
 		num
 	};
 
-	PlayerYakuzaTypeSet()
+	PlayerYakuzaTypeSet() : IYakuzaTypeSet(en_campPlayer)
 	{
 		m_firstAttackID = PlayerFirstAttackState::ID();
 
@@ -209,17 +196,34 @@ public:
 
 	void CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) override
 	{
-		AddAttackState<PlayerFirstAttackState>(useAttackStateMachine);
-		AddAttackState<PlayerSecondAttackState>(useAttackStateMachine);
-		AddAttackState<PlayerThirdAttackState>(useAttackStateMachine);
-		AddAttackState<PlayerFourthAttackState>(useAttackStateMachine);
-		AddAttackState<PlayerFirstFinalBlowState>(useAttackStateMachine);
-		AddAttackState<PlayerSecondFinalBlowState>(useAttackStateMachine);
-		AddAttackState<PlayerThirdFinalBlowState>(useAttackStateMachine);
-		AddAttackState<PlayerFourthFinalBlowState>(useAttackStateMachine);
+		AddAttackState<PlayerFirstAttackState>(
+			{ useAttackStateMachine,m_yakuzaCamp,PlayerSecondAttackState::ID(),PlayerFirstFinalBlowState::ID(),en_punching_1_L,300.0f},
+			{ 10.0f,150.0f,SoundId::se_hittingLightA },
+			{ SoundId::se_cuttingWindLigthA });
+		AddAttackState<PlayerSecondAttackState>(
+			{ useAttackStateMachine,m_yakuzaCamp,PlayerThirdAttackState::ID(),PlayerSecondFinalBlowState::ID(),en_punching_1_R,300.0f},
+			{ 10.0f,150.0f,SoundId::se_hittingLightB },
+			{ SoundId::se_cuttingWindLigthA});
+		AddAttackState<PlayerThirdAttackState>(
+			{ useAttackStateMachine,m_yakuzaCamp,PlayerFourthAttackState::ID(),PlayerThirdFinalBlowState::ID(),en_punching_3_L,300.0f},
+			{ 10.0f,150.0f,SoundId::se_hittingLightA },
+			{ SoundId::se_cuttingWindLigthA});
+		AddAttackState<PlayerFourthAttackState>(useAttackStateMachine,
+			{ 10.0f,150.0f,SoundId::se_hittingLightB },
+			{ SoundId::se_cuttingWindLigthA});
+		AddAttackState<PlayerFirstFinalBlowState>(useAttackStateMachine,
+			{ 15.0f,300.0f,SoundId::se_hittingHeavyB },
+			{ SoundId::se_cuttingWindHeavyA});
+		AddAttackState<PlayerSecondFinalBlowState>(useAttackStateMachine,
+			{ 30.0f,300.0f,SoundId::se_hittingHeavyB },
+			{ SoundId::se_cuttingWindHeavyA });
+		AddAttackState<PlayerThirdFinalBlowState>(useAttackStateMachine,
+			{ 30.0f,300.0f,SoundId::se_hittingHeavyB },
+			{ SoundId::se_cuttingWindHeavyA });
+		AddAttackState<PlayerFourthFinalBlowState>(useAttackStateMachine,
+			{ 40.0f,300.0f,SoundId::se_hittingHeavyB },
+			{ SoundId::se_cuttingWindHeavyA });
 	}
-
-	float GetAttackPower(YakuzaAttackComboStateMachine* useAttackStateMachine) override;
 private:
 	static TypeSetAutoRegister<PlayerYakuzaTypeSet> typeSet;
 };
