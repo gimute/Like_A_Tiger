@@ -116,6 +116,8 @@ struct YakuzaAttackSEDatas
 	{ }
 };
 
+class YakuzaCharacter;
+
 class IYakuzaTypeSet
 {
 public:
@@ -123,8 +125,11 @@ public:
 	IYakuzaTypeSet(YakuzaCamp camp) : m_yakuzaCamp(camp){ }
 	//デストラクタ
 	virtual ~IYakuzaTypeSet() = default;
+	//パラメーター設定
+	virtual void InitStateMachineParam(YakuzaCharacter& useCharacter,YakuzaStateMachine& useStateMachine) = 0;
 	//ステート生成
 	virtual void CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) = 0;
+
 
 protected:
 

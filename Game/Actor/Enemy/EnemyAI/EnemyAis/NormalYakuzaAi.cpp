@@ -18,7 +18,7 @@ void NormalYakuzaAiAttackState::OnEnter()
 {
 	m_hasStateMachine->SetIsAimMove(true);
 	//AIステートを攻撃中に設定
-	m_owner->SetAiState(YakuzaAiState::en_YakuzaAiState_Attacking);
+	m_owner->SetAiState(YakuzaAiState::en_YakuzaAiState_AttackReady);
 	//集団制御用の役割を攻撃中役割に変更
 	m_owner->SetYakuzaRole(YakuzaGroupeRole::en_YakuzaRole_Attacking);
 }
@@ -30,6 +30,8 @@ void NormalYakuzaAiAttackState::OnUpdate()
 	if (m_isInAttackDis || 
 		ShouldApproachForAttack())
 	{
+
+		m_owner->SetAiState(YakuzaAiState::en_YakuzaAiState_Attacking);
 		//攻撃範囲に入っているのでフラグを立てて、攻撃終了までは処理を続行させる
 		m_isInAttackDis = true;
 
@@ -208,7 +210,7 @@ bool NormalYakuzaAi::CanChangeAttack()
 		return false;
 	}
 
-	if (m_aiState == YakuzaAiState::en_YakuzaAiState_Attacking ||
+	if (IsYakuzaAiStateAttack() ||
 		m_yakuzaRole == YakuzaGroupeRole::en_YakuzaRole_AttackReady)
 	{
 		return true;

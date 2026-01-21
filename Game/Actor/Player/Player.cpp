@@ -21,6 +21,8 @@ bool Player::Start()
 	typeSet.get()->CreateActions(GetYakuzaStateMachine().GetAttackStateMachine());
 	//タイプセットをステートマシンに登録
 	GetYakuzaStateMachine().SetTypeSet(std::move(typeSet));
+	//ステートマシンのパラメータを初期化
+	GetYakuzaStateMachine().InitStateMachineParam();
 
 	//モデルレンダー初期化
 	InitModelRender(m_modelFilePath);

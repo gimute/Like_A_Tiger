@@ -77,6 +77,23 @@ struct EnemyStatusParamater : public IParameter
 	float maxHP;	//最大HP
 };
 
+struct YakuzaParamater : public IParameter
+{
+	appParameter(YakuzaParamater);
+
+#ifdef APP_PARAM_HOT_RELOAD
+	void Load(const nlohmann::json& j) override
+	{
+		load(j, *this);
+	}
+#endif // APP_PARAM_HOT_RELOAD
+
+	float maxHP;	//最大HP
+	float moveSpeed; //移動速度
+	float dadgeSpeed; //回避速度
+	float dadgeAnimSpeed; //回避アニメーション速度
+};
+
 #undef appParameter
 
 /// <summary>

@@ -42,10 +42,10 @@ class FastYakuzaDodgeState : public IEnemyAiState
 {
 	appState(FastYakuzaDodgeState)
 protected:
-	IEnemyAi* m_owner = nullptr;
+	FastYakuzaAi* m_owner = nullptr;
 public:
 	//コンストラクタ
-	FastYakuzaDodgeState(YakuzaStateMachine* stateMachine, IEnemyAi* hasEnemyAi)
+	FastYakuzaDodgeState(YakuzaStateMachine* stateMachine, FastYakuzaAi* hasEnemyAi)
 		: IEnemyAiState(stateMachine)
 		, m_owner(hasEnemyAi)
 	{
@@ -86,7 +86,14 @@ public:
 	}
 	//次のステートを取得
 	IStateBase* GetNextState() override;
+
+	inline void SetDodgeCoolTime(float time)
+	{
+		m_dodgeCoolTime = time;
+	}
 private:
+	//回避クールタイム
+	float m_dodgeCoolTime = 0.0f;
 	//攻撃待機状態に移行できるかどうか
 	bool CanChangeWaitingAttack();
 	//攻撃に移行できるかどうか

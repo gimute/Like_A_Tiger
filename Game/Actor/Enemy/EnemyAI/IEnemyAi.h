@@ -40,6 +40,18 @@ public:
 
 	inline int GetAiState() { return m_aiState; }
 
+	//現在のAIステートが攻撃中かどうか
+	inline bool IsYakuzaAiStateAttack()
+	{
+		if (m_aiState == YakuzaAiState::en_YakuzaAiState_AttackReady ||
+			m_aiState == YakuzaAiState::en_YakuzaAiState_Attacking )
+		{
+			return true;
+		}
+
+		return false;
+	}
+
 	inline void SetYakuzaRole(YakuzaGroupeRole role) { m_yakuzaRole = role; }
 
 	inline YakuzaGroupeRole GetYakuzaRole() { return m_yakuzaRole; }

@@ -8,9 +8,11 @@
 #include "Actor\Enemy\EnemyManager.h"
 
 
-namespace NormalYakuzaAiAttackConstant
+namespace FastYakuzaAiAttackConstant
 {
 	const float ATTACK_START_RADIUS = 50.0f;
+
+	const float DODGE_COOL_TIME = 2.0f;
 }
 
 //AttackState
@@ -18,8 +20,8 @@ namespace NormalYakuzaAiAttackConstant
 void FastYakuzaAiAttackState::OnEnter()
 {
 	m_hasStateMachine->SetIsAimMove(true);
-	//AIステートを攻撃中に設定
-	m_owner->SetAiState(YakuzaAiState::en_YakuzaAiState_Attacking);
+	//AIステートを攻撃移動中に設定
+	m_owner->SetAiState(YakuzaAiState::en_YakuzaAiState_AttackReady);
 	//集団制御用の役割を攻撃中役割に変更
 	m_owner->SetYakuzaRole(YakuzaGroupeRole::en_YakuzaRole_Attacking);
 }
@@ -31,9 +33,10 @@ void FastYakuzaAiAttackState::OnUpdate()
 	if (m_isInAttackDis ||
 		ShouldApproachForAttack())
 	{
+		//攻撃中に設定
+		m_owner->SetAiState(YakuzaAiState::en_YakuzaAiState_Attacking);
 		//攻撃範囲に入っているのでフラグを立てて、攻撃終了までは処理を続行させる
 		m_isInAttackDis = true;
-
 		//攻撃処理
 		PerformAttack();
 	}
@@ -61,7 +64,7 @@ bool FastYakuzaAiAttackState::ShouldApproachForAttack()
 
 
 	//攻撃可能範囲に入ったら
-	if (toTargetDist < NormalYakuzaAiAttackConstant::ATTACK_START_RADIUS)
+	if (toTargetDist < ::FastYakuzaAiAttackConstant::ATTACK_START_RADIUS)
 	{
 		//攻撃範囲に入っているので移動処理はせず、trueを返す
 		return true;
@@ -153,6 +156,8 @@ void FastYakuzaAiAttackState::OnExit()
 	m_hasStateMachine->SetIsAimMove(false);
 	//集団制御用の役割を攻撃終了役割に変更
 	m_owner->SetYakuzaRole(YakuzaGroupeRole::en_YakuzaRole_AttackEnd);
+	
+	m_owner->SetDodgeCoolTime(FastYakuzaAiAttackConstant::DODGE_COOL_TIME);
 	//ステート側に攻撃終了を伝える
 	m_hasStateMachine->ResetAttackFlagsMachine();
 }
@@ -177,17 +182,21 @@ void FastYakuzaDodgeState::OnEnter()
 
 void FastYakuzaDodgeState::OnUpdate()
 {
+	m_hasStateMachine->SetSwayFlag(false);
+
 	if (!m_hasStateMachine->GetIsSway())
 	{
 		m_owner->SetAiState(YakuzaAiState::en_YakuzaAiState_WaitMove);
-
-		m_hasStateMachine->SetSwayFlag(false);
 	}
 }
 
 void FastYakuzaDodgeState::OnExit()
 {
-	m_owner->SetYakuzaRole(YakuzaGroupeRole::en_YakuzaRole_Free);
+	m_owner->SetAiState(YakuzaAiState::en_YakuzaAiState_WaitMove);
+
+	m_owner->SetYakuzaRole(YakuzaGroupeRole::en_yakuzaRole_AttackWait);
+
+	m_owner->SetDodgeCoolTime(FastYakuzaAiAttackConstant::DODGE_COOL_TIME);
 }
 
 AiAutoRegister<FastYakuzaAi> FastYakuzaAi::aiSet{ EnemyYakuzaType::en_fastYakuza };
@@ -201,20 +210,24 @@ IStateBase* FastYakuzaAi::GetNextState()
 		m_yakuzaRole = YakuzaGroupeRole::en_YakuzaRoleHitDamage;
 		//AIステートを待ち移動に設定
 		m_aiState = YakuzaAiState::en_YakuzaAiState_WaitMove;
+
+		SetDodgeCoolTime(FastYakuzaAiAttackConstant::DODGE_COOL_TIME);
 		//とりあえずダメージ終了まで待機
 		return FindClassNameState<EnemyAiIdleState>();
+	}
+
+	m_dodgeCoolTime -= g_gameTime->GetFrameDeltaTime();
+
+	//回避
+	if (CanChangeDodge())
+	{
+		return FindClassNameState<FastYakuzaDodgeState>();
 	}
 	//攻撃
 	if (CanChangeAttack())
 	{
 		return FindClassNameState<FastYakuzaAiAttackState>();
 	}
-	////回避
-	//if (CanChangeDodge())
-	//{
-	//	return FindClassNameState<FastYakuzaDodgeState>();
-	//}
-
 	if (CanChangeWaitingAttack())
 	{
 		return FindClassNameState<EnemyAiWaitingAttackState>();
@@ -248,7 +261,7 @@ bool FastYakuzaAi::CanChangeAttack()
 		return false;
 	}
 
-	if (m_aiState == YakuzaAiState::en_YakuzaAiState_Attacking ||
+	if (IsYakuzaAiStateAttack() ||
 		m_yakuzaRole == YakuzaGroupeRole::en_YakuzaRole_AttackReady)
 	{
 		return true;
@@ -259,7 +272,8 @@ bool FastYakuzaAi::CanChangeAttack()
 
 bool FastYakuzaAi::CanChangeDodge()
 {
-	if (!m_isInBattle)
+	if (!m_isInBattle || 
+		m_aiState == YakuzaAiState::en_YakuzaAiState_Attacking)
 	{
 		return false;
 	}
@@ -269,15 +283,20 @@ bool FastYakuzaAi::CanChangeDodge()
 		return true;
 	}
 
+	if (m_dodgeCoolTime > 0.0f)
+	{
+		return false;
+	}
+
 	//条件計算
 	//現在のエネミーターゲットビューを取得
 	auto targetView = EnemyManager::GetInstance()->GetTargetView();
 	//自身からターゲットに伸びるベクトルを作成
-	Vector3 toTargetVec = targetView.m_selfPosition - m_hasStateMachine->GetHasCharactarPos();
+	Vector3 toTargetVec = targetView.m_targetPosition - m_hasStateMachine->GetHasCharactarPos();
 	//距離
 	float len = toTargetVec.Length();
 
-	if (len >= 50.0f)
+	if (len >= 80.0f)
 	{
 		return false;
 	}

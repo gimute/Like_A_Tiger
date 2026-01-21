@@ -1,5 +1,6 @@
 #pragma once
 #include "Actor\YakuzaComponents\IYakuzaTypeSet.h"
+#include "Actor\YakuzaComponents\YakuzaStateMachine.h"
 #include "Actor\YakuzaComponents\YakuzaGenericAttackState.h"
 
 class FastYakuzaFirstAttackState : public YakuzaGenericAttackState
@@ -49,6 +50,26 @@ public:
 		m_animationDataList.push_back({ "Assets/modelData/Character/Nonpbr/Animation/BackDeath_E.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Nonpbr/Animation/Cross_Punch_1_R.tka",false });
 
+		//ÉpÉâÉÅÅ[É^èâä˙âª
+		ParameterManager::GetInstance().LoadParameter<YakuzaParamater>("Assets/Json/FastYakuzaStatus.json", [](const nlohmann::json& j, YakuzaParamater& p)
+			{
+				p.maxHP = j["hp"].get<int>();
+				p.moveSpeed = j["moveSpeed"].get<float>();
+				p.dadgeSpeed = j["dodgeSpeed"].get<float>();
+				p.dadgeAnimSpeed = j["dodgeAnimSpeed"].get<float>();
+			}
+		);
+	}
+
+	void InitStateMachineParam(YakuzaCharacter& useCharacter,YakuzaStateMachine& useStateMachine)
+	{
+		auto param = ParameterManager::GetInstance().GetParameter<YakuzaParamater>();
+
+		useCharacter.SetHP(param->maxHP);
+
+		useStateMachine.SetSwaySpeed(param->dadgeSpeed, param->dadgeAnimSpeed);
+
+		useStateMachine.SetMoveSpeed(param->moveSpeed);
 	}
 
 	void CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) override

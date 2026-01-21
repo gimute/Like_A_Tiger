@@ -15,6 +15,7 @@ enum YakuzaAiState
 {
 	en_YakuzaAiState_Idle,
 	en_YakuzaAiState_WaitMove,
+	en_YakuzaAiState_AttackReady,
 	en_YakuzaAiState_Attacking,
 	en_YakuzaAIState_UniqueStateNum
 };

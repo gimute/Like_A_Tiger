@@ -19,6 +19,8 @@ Enemy* EnemyFactory::CreateEnemy(EnemyYakuzaType type)
 	newEnemy->InitYakuzaModel(typeSet.get()->GetModelFilePath(), typeSet.get()->GetAnimationDataList());
 	//攻撃力取得関数登録
 	newEnemy->GetYakuzaStateMachine().SetTypeSet(std::move(typeSet));
+	//ステートマシンのパラメータを初期化
+	newEnemy->GetYakuzaStateMachine().InitStateMachineParam();
 
 	return newEnemy;
 }
