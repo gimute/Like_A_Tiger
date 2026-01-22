@@ -112,6 +112,22 @@ public:
 	//ステートアウト
 	void OnExit() override;
 private:
+	void MoveProcess();
+
+	enum GrabState
+	{
+		//処理前
+		en_grabReady,
+		//掴みに行く動き
+		en_goGrabMove,
+		//掴み中の動き
+		en_grabingMove
+	};
+
+	GrabState m_state = en_grabReady;
+
+	Vector3 m_grabMoveVec = Vector3::Zero;
+
 };
 
 class YakuzaSwayState : public IStateBase

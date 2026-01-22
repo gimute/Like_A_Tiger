@@ -2,6 +2,7 @@
 #include "YakuzaStates.h"
 #include "Actor\YakuzaComponents\YakuzaStateMachine.h"
 #include "Actor\YakuzaComponents\YakuzaAnimationState.h"
+#include "Actor\YakuzaComponents\YakuzaAttackAssistSystem.h"
 
 #include "Sound\SoundManager.h"
 #include "Sound\SoundId.h"
@@ -199,12 +200,57 @@ void YakuzaAttackState::OnExit()
 
 void YakuzaGrabState::OnEnter()
 {
+	//処理前準備
+	m_owner->SetIsGrab(true);
+	//近くの敵に向かって行くアシスト処理
+	Vector3 foward = m_owner->GetHasCharactarForward();
+	Vector3 pos = m_owner->GetHasCharactarPos();
+	//ターゲット設定
+	TargetingParam param(400.0f, 0.5, 0.8f, 0.2f, pos, foward, m_owner->GetTypeSet().m_yakuzaCamp);
+	//ターゲット取得
+	YakuzaCharacter* getYakuza = YakuzaAttackAssistSystem::GetIstance()->GetNearYakuza(param);
+	//方向決定
+	if (getYakuza)
+	{
+		m_grabMoveVec = getYakuza->GetPosition() - pos;
+		m_grabMoveVec.Normalize();
+	}
+	else
+	{
+		m_grabMoveVec = foward;
+	}
 
+	m_state = en_grabingMove;
 }
 
 void YakuzaGrabState::OnUpdate()
 {
+	switch (m_state)
+	{
+	case YakuzaGrabState::en_goGrabMove:
 
+		MoveProcess();
+
+		break;
+	case YakuzaGrabState::en_grabingMove:
+		break;
+	}
+}
+
+void YakuzaGrabState::MoveProcess()
+{
+	Vector3 moveVec = m_grabMoveVec * 300.0f;
+
+	Vector3 newPos = m_owner->GetHasCharactarCharaCon()->Execute(moveVec, g_gameTime->GetFrameDeltaTime());
+
+	m_owner->SetHasCharactarPosition(newPos);
+
+	m_owner->GetHasCharactarRot().SetRotationYFromDirectionXZ(moveVec);
+
+	m_owner->SetHasCharactarForward(Vector3::AxisZ);
+	m_owner->GetHasCharactarRot().Apply(m_owner->GetHasCharactarForward());
+
+	m_owner->SetMoveVec(Vector3::Zero);
 }
 
 void YakuzaGrabState::OnExit()

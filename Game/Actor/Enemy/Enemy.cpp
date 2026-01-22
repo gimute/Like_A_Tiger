@@ -17,6 +17,8 @@ bool Enemy::Start()
 
 	SetAttackCollisionName("EnemyAttack");
 
+	SetGrabCollisionName("EnemyGrab");
+
 	return true;
 }
 
@@ -66,6 +68,12 @@ void Enemy::OnHit(const char* hitCollisionName, CollisionObject* pairCollision)
 		YakuzaDamageDatas toPlayerDamage = GetYakuzaStateMachine().GetTypeSetAttackPower();
 		//ƒ_ƒ[ƒW‘—‚é
 		YakuzaCharacterDamageManager::GetInstance()->SendPlayerYakuzaDamage(toPlayerDamage,GetPosition());
+	}
+
+	if (hitCollisionName == "GrabPlayer" &&
+		pairCollision == m_bodyCollision)
+	{
+		//’Í‚Ü‚ê‚½
 	}
 }
 

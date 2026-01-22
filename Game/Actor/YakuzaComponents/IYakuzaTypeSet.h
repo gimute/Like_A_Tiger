@@ -144,8 +144,6 @@ protected:
 	std::unordered_map<uint32_t,YakuzaDamageDatas> m_yakuzaDamageDataList;
 
 	std::unordered_map<uint32_t, YakuzaAttackSEDatas> m_yakuzaAttackSEList;
-	//w‰c
-	YakuzaCamp m_yakuzaCamp = en_campNone;
 
 	//UŒ‚ƒXƒe[ƒg‚ğ’Ç‰Á{UŒ‚ƒf[ƒ^‚ğ’Ç‰Á
 	template<typename ClassName>
@@ -181,6 +179,9 @@ protected:
 	}
 
 public:
+	//w‰c
+	YakuzaCamp m_yakuzaCamp = en_campNone;
+
 	inline uint32_t GetFirstAttackID() { return m_firstAttackID; }
 
 	inline uint32_t GetFirstFinishBrowID() { return m_firstFinishBrowID; }

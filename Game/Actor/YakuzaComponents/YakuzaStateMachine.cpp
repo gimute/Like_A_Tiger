@@ -126,7 +126,8 @@ bool YakuzaStateMachine::CanChangeDead()
 
 bool YakuzaStateMachine::CanChangeGrab()
 {
-	if (m_isGrab &&
+	if (m_grabFlag &&
+		m_isGrab &&
 		!m_isGrabbed &&
 		!m_isAttack &&
 		!m_defenseFlag &&
@@ -302,14 +303,31 @@ void YakuzaStateMachine::OnAnimationEvent(const wchar_t* clipName, const wchar_t
 	}
 	if (wcscmp(eventName, L"HitBoxOn") == 0)
 	{
-		m_hasCharactar->SpwanAttackCollision(
-			m_hasCharactar,
-			20.0f
-		);
+		if (IsGetYakuzaStateMachineNowState<YakuzaAttackState>())
+		{
+			m_hasCharactar->SpwanAttackCollision(
+				m_hasCharactar,
+				20.0f
+			);
+		}
+		else if(IsGetYakuzaStateMachineNowState<YakuzaGrabState>())
+		{
+			m_hasCharactar->SpawnGrabCollision(
+				m_hasCharactar,
+				20.0f
+			);
+		}
 	}
 	if (wcscmp(eventName, L"HitBoxOff") == 0)
 	{
-		m_hasCharactar->DeleteAttackCollision();
+		if (IsGetYakuzaStateMachineNowState<YakuzaAttackState>())
+		{
+			m_hasCharactar->DeleteAttackCollision();
+		}
+		else if (IsGetYakuzaStateMachineNowState<YakuzaGrabState>())
+		{
+			m_hasCharactar->DeleteGrabCollision();
+		}
 	}
 	if (wcscmp(eventName, L"footsteps") == 0)
 	{

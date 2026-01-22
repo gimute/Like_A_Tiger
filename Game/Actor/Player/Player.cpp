@@ -38,6 +38,8 @@ bool Player::Start()
 
 	SetAttackCollisionName("PlayerAttack");
 
+	SetGrabCollisionName("GrabPlayer");
+
 	//HPÉQÅ[ÉW
 	m_hpGauge = NewGO<HPGauge>(UpdateOrder::UI, "UI");
 
@@ -89,26 +91,12 @@ void Player::OnHit(const char* hitCollisionName, CollisionObject* pairCollision)
 	{
 		DeleteAttackCollision();
 	}
-
-	//if (!m_attackCollision)
-	//{
-	//	SetIsAttackCollisionHit(false);
-	//}
-
-	//if (hitCollisionName == "enemyBodyCollision" &&
-	//	pairCollision == m_attackCollision)
-	//{
-	//	if (GetIsAttackCollisionHit())
-	//	{
-	//		return;
-	//	}
-
-	//	float damage = GetYakuzaStateMachine().GetTypeSetAttackPower();
-
-	//	//YakuzaCharacterDamageManager().GetInstance()->SendEnemyDamage()
-
-	//	SetIsAttackCollisionHit(true);
-	//}
+	
+	if (hitCollisionName == "enemyBodyCollision" &&
+		pairCollision == m_grabCollision)
+	{
+		DeleteGrabCollision();
+	}
 }
 
 void Player::YakuzaCharacterDeadProcces()

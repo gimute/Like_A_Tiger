@@ -97,6 +97,8 @@ private:
 	bool m_isDamageKnockBack = false;
 	//ノックバックのパラメーター
 	KnockBackParam m_knockBackParam;
+	//掴み処理中か
+	bool m_grabFlag = false;
 	//掴み中か
 	bool m_isGrab = false;
 	//掴まれているか
@@ -146,6 +148,14 @@ public:
 	inline void SetDefenseFlag(bool setIs) { m_defenseFlag = setIs; }
 
 	inline bool GetDefenseFlag() { return m_defenseFlag; }
+
+	inline void SetGrabFlag(bool setIs) { m_grabFlag = setIs; }
+
+	inline bool GetGrabFlag() { return m_grabFlag; }
+
+	inline void SetIsGrab(bool setIs) { m_isGrab = setIs; }
+
+	inline bool GetIsGrab() { return m_isGrab; }
 
 	inline void SetIsAttack(bool setIs) { m_isAttack = setIs; }
 
