@@ -72,6 +72,7 @@
     <ClCompile Include="GameScene\Result\Result.cpp" />
     <ClCompile Include="GameScene\GameOverScene.cpp" />
     <ClCompile Include="GameScene\GameOver\GameOver.cpp" />
+    <ClCompile Include="UI\MiniMap.cpp" />
     <ClCompile Include="Actor\YakuzaComponents\YakuzaGenericAttackState.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyTypeSet\FastYakuzaActionSet.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAis\FastYakuzaAi.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="GameScene\Result\Result.h" />
     <ClInclude Include="GameScene\GameOverScene.h" />
     <ClInclude Include="GameScene\GameOver\GameOver.h" />
+    <ClInclude Include="UI\MiniMap.h" />
     <ClInclude Include="Sound\SoundId.h" />
     <ClInclude Include="Actor\YakuzaComponents\YakuzaGenericAttackState.h" />
     <ClInclude Include="Actor\Enemy\EnemyTypeSet\FastYakuzaActionSet.h" />

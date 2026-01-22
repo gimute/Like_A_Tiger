@@ -1,0 +1,12 @@
+[
+    {
+        "comment": "MiniMapに使う画像のサイズなどの情報",
+        "MapImagePath": "Assets/spriteData/MiniMap/MapImage.DDS",
+        "MapImageWidth": 256,
+        "PlayerIconImagePath": "Assets/spriteData/MiniMap/PlayerIcon.DDS",
+        "EnemyIconImagePath": "Assets/spriteData/MiniMap/EnemyIcon.DDS",
+        "MapImageHeight": 256,
+        
+        "IconSize": 10
+    }
+]
