@@ -15,7 +15,7 @@ public:
 		, m_owner(hasAi)
 	{
 		m_attackCombos.push_back({ en_normalAttack,en_normalAttack,en_normalAttack,en_normalAttack,en_finishBrow });
-		m_attackCombos.push_back({ en_normalAttack,en_normalAttack});
+		m_attackCombos.push_back({ en_normalAttack,en_normalAttack,en_finishBrow});
 	}
 
 	//デストラクタ

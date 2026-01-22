@@ -73,6 +73,20 @@ public:
 	~FastYakuzaFirstFinalBlowState() = default;
 };
 
+class FastYakuzaSecondFinalBlowState : public YakuzaGenericAttackState
+{
+	appState(FastYakuzaSecondFinalBlowState)
+public:
+	FastYakuzaSecondFinalBlowState(
+		AttackStateInitData initData
+	)
+		: YakuzaGenericAttackState(initData)
+	{
+		m_hasAttackStateHash = FastYakuzaSecondFinalBlowState::ID();
+	}
+	~FastYakuzaSecondFinalBlowState() = default;
+};
+
 class FastYakuzaActionSet : public IYakuzaTypeSet
 {
 	appState(FastYakuzaActionSet)
@@ -84,6 +98,7 @@ public:
 		en_punch_R,
 		en_punch_L, 
 		en_Uppercut,
+		en_kick_R
 	};
 
 	FastYakuzaActionSet() : IYakuzaTypeSet(en_campEnemy)
@@ -111,6 +126,7 @@ public:
 		m_animationDataList.push_back({ "Assets/modelData/Character/Nonpbr/Animation/Punch_R_1.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Nonpbr/Animation/Punch_L_1.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Nonpbr/Animation/Uppercut_1.tka",false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Nonpbr/Animation/kick_R.tka",false });
 
 		//ÉpÉâÉÅÅ[É^èâä˙âª
 		ParameterManager::GetInstance().LoadParameter<YakuzaParamater>("Assets/Json/FastYakuzaStatus.json", [](const nlohmann::json& j, YakuzaParamater& p)
@@ -141,7 +157,7 @@ public:
 			{ 5.0f,150.0f,SoundId::se_hittingLightA },
 			{ SoundId::se_cuttingWindLigthA });
 		AddAttackState<FastYakuzaSecondAttackState>(
-			{ useAttackStateMachine,m_yakuzaCamp,FastYakuzaThirdAttackState::ID() ,0,en_punch_R,250.0f,1.5f},
+			{ useAttackStateMachine,m_yakuzaCamp,FastYakuzaThirdAttackState::ID() ,FastYakuzaSecondFinalBlowState::ID(),en_punch_R,250.0f,1.5f},
 			{ 5.0f,150.0f,SoundId::se_hittingLightA },
 			{ SoundId::se_cuttingWindLigthA });
 		AddAttackState<FastYakuzaThirdAttackState>(
@@ -155,6 +171,10 @@ public:
 		AddAttackState<FastYakuzaFirstFinalBlowState>(
 			{ useAttackStateMachine,m_yakuzaCamp,0,0,en_Uppercut,250.0f,1.5f },
 			{ 60.0f,150.0f,SoundId::se_hittingHeavyB },
+			{ SoundId::se_cuttingWindHeavyA });
+		AddAttackState<FastYakuzaSecondFinalBlowState>(
+			{ useAttackStateMachine,m_yakuzaCamp,0,0,en_kick_R,250.0f,1.5f },
+			{ 25.0f,150.0f,SoundId::se_hittingHeavyB },
 			{ SoundId::se_cuttingWindHeavyA });
 	}
 
