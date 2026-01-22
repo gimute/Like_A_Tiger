@@ -127,7 +127,6 @@ private:
 	GrabState m_state = en_grabReady;
 
 	Vector3 m_grabMoveVec = Vector3::Zero;
-
 };
 
 class YakuzaSwayState : public IStateBase

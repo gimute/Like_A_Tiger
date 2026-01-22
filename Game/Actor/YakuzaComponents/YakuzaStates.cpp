@@ -231,6 +231,14 @@ void YakuzaGrabState::OnUpdate()
 
 		MoveProcess();
 
+
+
+		if (m_owner->GetGrabingYakuzaCharacter() && 
+			!m_owner->IsHasCharactarPlayAnimation())
+		{
+			m_state = en_grabingMove;
+		}
+
 		break;
 	case YakuzaGrabState::en_grabingMove:
 		break;

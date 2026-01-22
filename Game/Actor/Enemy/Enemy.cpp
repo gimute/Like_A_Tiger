@@ -74,6 +74,7 @@ void Enemy::OnHit(const char* hitCollisionName, CollisionObject* pairCollision)
 		pairCollision == m_bodyCollision)
 	{
 		//�͂܂ꂽ
+
 	}
 }
 

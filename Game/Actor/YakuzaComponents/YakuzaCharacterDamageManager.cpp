@@ -166,6 +166,11 @@ void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(YakuzaDamageDatas send
 	SoundManager::Get().PlaySE(sendDamage.m_seId);
 }
 
+void YakuzaCharacterDamageManager::SendPlayerGrabEnemyYakuza(YakuzaCharacter* grabYakuza)
+{
+
+}
+
 bool YakuzaCharacterDamageManager::IsDefenseSuccessful(
 	const Vector3& defenderPos,
 	const Vector3& defenderForward,

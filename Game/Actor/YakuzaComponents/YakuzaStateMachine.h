@@ -157,6 +157,8 @@ public:
 
 	inline bool GetIsGrab() { return m_isGrab; }
 
+	inline YakuzaCharacter* GetGrabingYakuzaCharacter() { return m_grabbingYakuza; }
+
 	inline void SetIsAttack(bool setIs) { m_isAttack = setIs; }
 
 	inline bool GetIsAttack() { return m_isAttack; }
@@ -190,8 +192,6 @@ public:
 	inline void GrabStart(YakuzaCharacter* grabYakuza = nullptr);
 
 	inline void GrabEnd();
-
-	inline YakuzaCharacter* GetGrabbingYakuzaCharacter() { return m_grabbingYakuza; }
 
 	inline void SetIsDead(bool setIs) { m_isDead = setIs; }
 
@@ -240,6 +240,8 @@ public:
 	bool HasCharacterCanGrabableProcces();
 
 	void HasCharacterDeadProcces();
+
+	void HasCharacterGrabProcess(YakuzaCharacter* grabCharacter);
 
 	void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);
 

@@ -295,6 +295,11 @@ void YakuzaStateMachine::HasCharacterDeadProcces()
 	m_hasCharactar->YakuzaCharacterDeadProcces();
 }
 
+void YakuzaStateMachine::HasCharacterGrabProcess(YakuzaCharacter* grabYakuza)
+{
+	m_grabbingYakuza = grabYakuza;
+}
+
 void YakuzaStateMachine::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName)
 {
 	if (wcscmp(eventName, L"CanTransition") == 0)
