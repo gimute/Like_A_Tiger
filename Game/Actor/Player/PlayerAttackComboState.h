@@ -194,6 +194,11 @@ public:
 		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Kick_2_L_EV.tka", false });
 	}
 
+	void InitStateMachineParam(YakuzaCharacter& useCharacter,YakuzaStateMachine& useStateMachine)
+	{
+
+	}
+
 	void CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) override
 	{
 		AddAttackState<PlayerFirstAttackState>(

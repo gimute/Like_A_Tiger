@@ -23,8 +23,8 @@ public:
 		, m_nextFinalBrowHash(initData.nextFinalBrowHash)
 		, m_playAnimationNo(initData.playAnimationNo)
 		, m_attackSpeed(initData.attackSpeed)
+		, m_attackAnimSpeed(initData.attackAnimSpeed)
 	{
-
 	}
 	//次の通常攻撃コンボハッシュ値
 	uint32_t m_nextAttackHash = 0;
@@ -38,6 +38,8 @@ public:
 	YakuzaCamp m_yakuzaCamp = YakuzaCamp::en_campNone;
 	//攻撃速度
 	float m_attackSpeed = 0.0f;
+	//攻撃モーション速度
+	float m_attackAnimSpeed = 0.0f;
 
 	//ステートイン
 	void OnEnter() override;

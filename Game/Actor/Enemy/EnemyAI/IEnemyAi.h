@@ -36,9 +36,21 @@ public:
 
 	inline TargetCharacterView GetTargetView() { return m_targetView; }
 
-	inline void SetAiState(YakuzaAiState state) { m_aiState = state; }
+	inline void SetAiState(int state) {m_aiState = state; }
 
-	inline YakuzaAiState GetAiState() { return m_aiState; }
+	inline int GetAiState() { return m_aiState; }
+
+	//現在のAIステートが攻撃中かどうか
+	inline bool IsYakuzaAiStateAttack()
+	{
+		if (m_aiState == YakuzaAiState::en_YakuzaAiState_AttackReady ||
+			m_aiState == YakuzaAiState::en_YakuzaAiState_Attacking )
+		{
+			return true;
+		}
+
+		return false;
+	}
 
 	inline void SetYakuzaRole(YakuzaGroupeRole role) { m_yakuzaRole = role; }
 
@@ -70,8 +82,8 @@ protected:
 	YakuzaStateMachine* m_hasStateMachine = nullptr;
 	//ターゲットビュー
 	TargetCharacterView m_targetView;
-	//このAI自身のステート
-	YakuzaAiState m_aiState = en_YakuzaAiState_Idle;
+	//このAI自身のステート(int型なのは汎用行動と特殊行動を合わせて扱いたいため)
+	int m_aiState = en_YakuzaAiState_Idle;
 	//集団制御内の役割
 	YakuzaGroupeRole m_yakuzaRole = en_YakuzaRole_Free;
 };

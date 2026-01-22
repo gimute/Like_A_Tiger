@@ -19,4 +19,6 @@ public:
 	Vector3 m_targetForward = Vector3::Zero;
 	//©g‚ÌÀ•W
 	Vector3 m_selfPosition = Vector3::Zero;
+	//‘ÎÛ‚ªUŒ‚’†‚Å‚ ‚é‚©
+	bool m_isTargetAttacking = false;
 };

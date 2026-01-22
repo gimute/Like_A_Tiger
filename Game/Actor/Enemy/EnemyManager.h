@@ -132,7 +132,7 @@ public:
 	//スポーン依頼
 	void RequestSpawnEnemy(EnemyYakuzaType type,const Vector3& spawnPoint);
 	//グループスポーン依頼
-	void RequestSpawnEnemyGroup(int spawnNum,const Vector3& spawnPoint);
+	void RequestSpawnEnemyGroup(int spawnNum,const Vector3& spawnPoint,bool inSpYakuza);
 	//死亡処理依頼
 	void RequestDeadEnemyProcces(const Enemy& deadEnemyAddress);
 	//全体リセット依頼
@@ -149,7 +149,7 @@ private:
 	//エネミーのグループリスト
 	std::vector<EnemyGroup> m_enemyGroupList;
 	//敵のターゲットのCharactar
-	Character* m_targetCharacter = nullptr;
+	YakuzaCharacter* m_targetCharacter = nullptr;
 	//ターゲットのビュー情報
 	TargetCharacterView m_targetView;
 	//メタAI
@@ -187,7 +187,7 @@ public:
 		return m_enemyInfoList;
 	}
 	//敵のターゲットを設定
-	inline void SetEnemyTargetCharacter(Character* target)
+	inline void SetEnemyTargetCharacter(YakuzaCharacter* target)
 	{
 		m_targetCharacter = target;
 	}
