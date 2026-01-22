@@ -73,6 +73,8 @@ private:
 	float m_moveSpeed = 400.0f;
 	//回避速度
 	float m_swaySpeed = 600.0f;
+	//回避アニメーション速度
+	float m_swayAnimSpeed = 3.0f;
 	//Aボタンが押されたか
 	bool m_attackFlag = false;
 	//Yボタンが押されたか
@@ -123,9 +125,11 @@ public:
 
 	inline float GetMoveSpeed() { return m_moveSpeed; }
 
-	inline float SetSwaySpeed(float speed) { m_swaySpeed = speed; }
+	inline void SetSwaySpeed(float speed, float animSpeed) { m_swaySpeed = speed; m_swayAnimSpeed = animSpeed; }
 
 	inline float GetSwaySpeed() { return m_swaySpeed; }
+
+	inline float GetSwayAnimSpeed() { return m_swayAnimSpeed; }
 
 	inline void SetAttackFlag(bool setIs) { m_attackFlag = setIs; }
 
@@ -135,7 +139,7 @@ public:
 
 	inline bool GetFinishBrowFlag() { return m_finishBrowFlag; }
 
-	inline void SetSwayFlag(bool setIs) { m_swayFlag = setIs; }
+	inline void SetSwayFlag(bool setIs) { m_swayFlag = setIs; if (setIs) { m_isSway = true; } }
 
 	inline bool GetSwayFlag() { return m_swayFlag; }
 
@@ -188,6 +192,8 @@ public:
 	inline const Vector3& GetAimMoveTargetPos() { return m_aimMoveTargetPos; }
 	
 	inline void SetTypeSet(std::unique_ptr<IYakuzaTypeSet> setType) { m_typeSet = std::move(setType); }
+
+	inline void InitStateMachineParam() { m_typeSet.get()->InitStateMachineParam(*m_hasCharactar,*this); };
 
 	inline IYakuzaTypeSet& GetTypeSet() { return *m_typeSet.get(); }
 

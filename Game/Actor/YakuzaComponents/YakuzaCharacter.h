@@ -195,7 +195,7 @@ public:
 	inline void SetHP(float max)
 	{
 		m_yakuzaMaxHp = max;
-		m_yakuzaCurrentHp;
+		m_yakuzaCurrentHp = max;
 	}
 
 	inline void TakeDamage(float amount)

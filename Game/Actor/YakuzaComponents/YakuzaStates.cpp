@@ -267,19 +267,21 @@ void YakuzaSwayState::OnEnter()
 
 void YakuzaSwayState::OnUpdate()
 {
+	float swayAnimSpeed = m_owner->GetSwayAnimSpeed();
+
 	switch (m_swayDir)
 	{
 	case YakuzaSwayState::en_forwardDir:
-		m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_swayForward,0.1f,3.0f);
+		m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_swayForward,0.1f, swayAnimSpeed);
 		break;
 	case YakuzaSwayState::en_backwardDir:
-		m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_swayBack, 0.1f, 3.0f);
+		m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_swayBack, 0.1f, swayAnimSpeed);
 		break;
 	case YakuzaSwayState::en_rightDir:
-		m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_swayRight, 0.1f, 3.0f);
+		m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_swayRight, 0.1f, swayAnimSpeed);
 		break;
 	case YakuzaSwayState::en_leftDir:
-		m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_swayLeft, 0.1f, 3.0f);
+		m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_swayLeft, 0.1f, swayAnimSpeed);
 		break;
 	default:
 		break;
@@ -303,6 +305,7 @@ void YakuzaSwayState::OnExit()
 {
 	m_swayVec = Vector3::Zero;
 	m_owner->SetIsSway(false);
+	m_owner->SetSwayFlag(false);
 }
 
 //DefenseState

@@ -245,10 +245,13 @@
     <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiWaitingAttackState.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyMetaAi\EnemyMetaAi.cpp" />
     <ClCompile Include="Core\Curve.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyTypeSet\FastYakuzaActionSet.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAis\FastYakuzaAi.cpp" />
     <ClCompile Include="GameScene\GameOver\GameOver.cpp" />
     <ClCompile Include="GameScene\GameOverScene.cpp" />
     <ClCompile Include="GameScene\GameResultScene.cpp" />
     <ClCompile Include="InvisibleWall.cpp" />
+    <ClCompile Include="UI\MiniMap.cpp" />
     <ClCompile Include="Sound\SoundManager.cpp" />
     <ClCompile Include="Load\LoadScreenSprite.cpp" />
     <ClCompile Include="Load\LoadManager.cpp" />
@@ -278,7 +281,7 @@
     <ClCompile Include="Actor\BackGround\ProtoStage.cpp" />
     <ClCompile Include="Actor\Player\PlayerAttackComboState.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyTypeSet\NormalYakuzaActionSet.cpp" />
-    <ClCompile Include="Actor\Enemy\EnemyAI\NormalYakuzaAi\NormalYakuzaAi.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAis\NormalYakuzaAi.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -291,6 +294,7 @@
     <ClCompile Include="Actor\YakuzaComponents\YakuzaCharacter.cpp" />
     <ClCompile Include="Actor\YakuzaComponents\YakuzaCharacterDamageManager.cpp" />
     <ClCompile Include="Actor\YakuzaComponents\YakuzaAttackAssistSystem.cpp" />
+    <ClCompile Include="Actor\YakuzaComponents\YakuzaGenericAttackState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorStatus.h" />
@@ -318,10 +322,13 @@
     <ClInclude Include="Actor\Enemy\EnemyMetaAi\EnemyMetaAi.h" />
     <ClInclude Include="Actor\Enemy\EnemyMetaAi\EnemyMetaAiStruct.h" />
     <ClInclude Include="Core\Curve.h" />
+    <ClInclude Include="Actor\Enemy\EnemyTypeSet\FastYakuzaActionSet.h" />
+    <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAis\FastYakuzaAi.h" />
     <ClInclude Include="GameScene\GameOver\GameOver.h" />
     <ClInclude Include="GameScene\GameOverScene.h" />
     <ClInclude Include="GameScene\GameResultScene.h" />
     <ClInclude Include="InvisibleWall.h" />
+    <ClInclude Include="UI\MiniMap.h" />
     <ClInclude Include="Sound\SoundId.h" />
     <ClInclude Include="Sound\SoundManager.h" />
     <ClInclude Include="Load\LoadScreenSprite.h" />
@@ -356,7 +363,7 @@
     <ClInclude Include="Actor\YakuzaComponents\IYakuzaTypeSet.h" />
     <ClInclude Include="Actor\Enemy\EnemyTypeSet\NormalYakuzaActionSet.h" />
     <ClInclude Include="Actor\Enemy\EnemyAI\IEnemyAi.h" />
-    <ClInclude Include="Actor\Enemy\EnemyAI\NormalYakuzaAi\NormalYakuzaAi.h" />
+    <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAis\NormalYakuzaAi.h" />
     <ClInclude Include="Actor\Enemy\EnemyAI\IEnemyAiState.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="StateMachineComponents\IState.h" />
@@ -372,6 +379,7 @@
     <ClInclude Include="Actor\YakuzaComponents\YakuzaCharacter.h" />
     <ClInclude Include="Actor\YakuzaComponents\YakuzaCharacterDamageManager.h" />
     <ClInclude Include="Actor\YakuzaComponents\YakuzaAttackAssistSystem.h" />
+    <ClInclude Include="Actor\YakuzaComponents\YakuzaGenericAttackState.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

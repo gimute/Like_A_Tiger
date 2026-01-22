@@ -2,11 +2,11 @@
 
 /*
 * ParameterManager.h
-* ƒpƒ‰ƒ[ƒ^[ŠÇ—
-* ‚±‚¢‚Â‚ÉƒLƒƒƒ‰ƒNƒ^[‚ÌƒXƒe[ƒ^ƒX‚È‚ÇŠO•”ƒtƒ@ƒCƒ‹‚©‚ç“Ç‚İ‚Ü‚¹‚Ä•Û‚³‚¹A‚»‚ê‚ğó‚¯æ‚Á‚Äg‚¤B
-* ƒpƒ‰ƒ[ƒ^[‚Ì¯•Ê‚ğƒtƒ@ƒCƒ‹ƒpƒX‚Ås‚Á‚Ä‚¢‚é‚Ì‚ÅAƒpƒ‰ƒ[ƒ^[æ“¾A‰ğ•ú‚È‚Ç‚Å–‚ ‚é‚²‚Æ‚ÉƒpƒX‚ğ—v‹‚·‚é‚ªA
-* LoadParameterŠÖ”ˆÈŠO‚Å“Ç‚İ‚İ‚ğs‚Á‚½‚è‚Í‚µ‚È‚¢B
-* ƒVƒ“ƒOƒ‹ƒgƒ“ƒNƒ‰ƒXB
+* ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ç®¡ç†
+* ã“ã„ã¤ã«ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãªã©å¤–éƒ¨ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­ã¿è¾¼ã¾ã›ã¦ä¿æŒã•ã›ã€ãã‚Œã‚’å—ã‘å–ã£ã¦ä½¿ã†ã€‚
+* ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ã®è­˜åˆ¥ã‚’ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã§è¡Œã£ã¦ã„ã‚‹ã®ã§ã€ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼å–å¾—ã€è§£æ”¾ãªã©ã§äº‹ã‚ã‚‹ã”ã¨ã«ãƒ‘ã‚¹ã‚’è¦æ±‚ã™ã‚‹ãŒã€
+* LoadParameteré–¢æ•°ä»¥å¤–ã§èª­ã¿è¾¼ã¿ã‚’è¡Œã£ãŸã‚Šã¯ã—ãªã„ã€‚
+* ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ã‚¯ãƒ©ã‚¹ã€‚
 */
 
 #include <iostream>
@@ -18,7 +18,7 @@
 #endif
 
 /////////////////////////////////////////////
-// ƒpƒ‰ƒ[ƒ^[
+// ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼
 /////////////////////////////////////////////
 
 #ifdef APP_PARAM_HOT_RELOAD
@@ -26,7 +26,8 @@
 #define appParameter(name)\
 public:\
 static constexpr uint32_t ID() {return Hash32(#name);}\
-std::function<void(const nlohmann::json& j, name& p)> load;
+std::function<void(const nlohmann::json& j, name& p)> load;\
+void Load(const nlohmann::json& j){ load(j, *this); }
 
 #else //APP_PARAM_HOT_RELOAD
 #define appParameter(name)\
@@ -37,50 +38,59 @@ static constexpr uint32_t ID() {return Hash32(#name);}
 
 
 
-//ƒpƒ‰ƒ[ƒ^[Šî’ê\‘¢‘Ì
+//ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼åŸºåº•æ§‹é€ ä½“
 struct IParameter 
 {
 #ifdef APP_PARAM_HOT_RELOAD
-	std::string m_path;		//ƒpƒ‰ƒ[ƒ^[‚Ìƒtƒ@ƒCƒ‹ƒpƒX
-	time_t m_lastWriteTime;	//ÅIXV
+	std::string m_path;		//ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹
+	time_t m_lastWriteTime;	//æœ€çµ‚æ›´æ–°æ™‚åˆ»
 	virtual void Load(const nlohmann::json& j) {};
 #endif // APP_PARAM_HOT_RELOAD
 };
 
-//ƒvƒŒƒCƒ„[‚ÌƒXƒe[ƒ^ƒX
-struct PlayerStatusParamater : public IParameter
+//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹
+struct PlayerStatusParameter : public IParameter
 {
-	appParameter(PlayerStatusParamater);
+	appParameter(PlayerStatusParameter);
 
-#ifdef APP_PARAM_HOT_RELOAD
-	void Load(const nlohmann::json& j) override
-	{
-		load(j, *this);
-	}
-#endif // APP_PARAM_HOT_RELOAD
-
-	float maxHP;	//Å‘åHP
+	float maxHP;	//æœ€å¤§HP
 };
 
-//ƒGƒlƒ~[‚ÌƒXƒe[ƒ^ƒX
-struct EnemyStatusParamater : public IParameter
+//ã‚¨ãƒãƒŸãƒ¼ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹
+struct EnemyStatusParameter : public IParameter
 {
-	appParameter(EnemyStatusParamater);
+	appParameter(EnemyStatusParameter);
 
-#ifdef APP_PARAM_HOT_RELOAD
-	void Load(const nlohmann::json& j) override
-	{
-		load(j, *this);
-	}
-#endif // APP_PARAM_HOT_RELOAD
+	float maxHP;	//æœ€å¤§HP
+};
 
-	float maxHP;	//Å‘åHP
+struct YakuzaParamater : public IParameter
+{
+	appParameter(YakuzaParamater);
+
+	float maxHP;	//æœ€å¤§HP
+	float moveSpeed; //ç§»å‹•é€Ÿåº¦
+	float dadgeSpeed; //å›é¿é€Ÿåº¦
+	float dadgeAnimSpeed; //å›é¿ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³é€Ÿåº¦
+};
+
+//ãƒŸãƒ‹ãƒãƒƒãƒ—ã«ä½¿ç”¨ã™ã‚‹ç”»åƒæƒ…å ±
+struct MiniMapImageParameter : public IParameter
+{
+	appParameter(MiniMapImageParameter);
+
+	std::string mapImagePath;
+	float mapImageWidth;
+	float mapImageHeight;
+	std::string playerIconImagePath;
+	std::string enemyIconImagePath;
+	float iconSize;
 };
 
 #undef appParameter
 
 /// <summary>
-/// ƒpƒ‰ƒ[ƒ^[ŠÇ—ƒNƒ‰ƒX
+/// ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ç®¡ç†ã‚¯ãƒ©ã‚¹
 /// </summary>
 class ParameterManager
 {
@@ -89,7 +99,7 @@ private:
 	using ParameterMap = std::map<uint32_t, ParameterVector>;
 
 private:
-	ParameterMap m_parameterMap;	//ƒpƒ‰ƒ[ƒ^‚ÆID‚ÌƒŠƒXƒg
+	ParameterMap m_parameterMap;	//ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã¨IDã®ãƒªã‚¹ãƒˆ
 
 private:
 	ParameterManager();
@@ -97,27 +107,27 @@ private:
 
 public:
 	/// <summary>
-	/// ƒpƒ‰ƒ[ƒ^[ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚Ş
-	/// ŠÖ”ƒ|ƒCƒ“ƒ^‚Å“Ç‚İ‚İˆ—‚ğó‚¯æ‚é
+	/// ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã‚€
+	/// é–¢æ•°ãƒã‚¤ãƒ³ã‚¿ã§èª­ã¿è¾¼ã¿å‡¦ç†ã‚’å—ã‘å–ã‚‹
 	/// </summary>
-	/// <typeparam name="T">ƒpƒ‰ƒ[ƒ^[‚Ìí—Ş</typeparam>
-	/// <param name="path">ƒtƒ@ƒCƒ‹ƒpƒX</param>
-	/// <param name="func">“Ç‚İ‚İˆ—</param>
+	/// <typeparam name="T">ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ã®ç¨®é¡</typeparam>
+	/// <param name="path">ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹</param>
+	/// <param name="func">èª­ã¿è¾¼ã¿å‡¦ç†</param>
 	template<typename T>
 	void LoadParameter(const char* path, const std::function<void(const nlohmann::json& json, T& p)>& func)
 	{
-		//ƒtƒ@ƒCƒ‹‚ğŠJ‚­
+		//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã
 		std::ifstream file(path);
 		if (!file.is_open())
 		{
 			return;
 		}
 
-		//jsonƒtƒ@ƒCƒ‹‚Æ‚µ‚Ä“Ç‚İ‚ŞH
+		//jsonãƒ•ã‚¡ã‚¤ãƒ«ã¨ã—ã¦èª­ã¿è¾¼ã‚€ï¼Ÿ
 		nlohmann::json jsonRoot;
 		file >> jsonRoot;
 
-		//“Ç‚İ‚ñ‚¾ƒpƒ‰ƒ[ƒ^[‚ğˆê“I‚É‚Âó‚¯M
+		//èª­ã¿è¾¼ã‚“ã ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ã‚’ä¸€æ™‚çš„ã«æŒã¤å—ã‘çš¿
 		ParameterVector parameters;
 
 		for (const auto& j : jsonRoot)
@@ -129,23 +139,23 @@ public:
 			parameter->load = func;
 #endif // APP_PARAM_HOT_RELOAD
 
-			//ƒpƒ‰ƒ[ƒ^“Ç‚İ‚İˆ—
+			//ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿èª­ã¿è¾¼ã¿å‡¦ç†
 			func(j, *parameter);
 			parameters.push_back(static_cast<IParameter*>(parameter));
 		}
 
-		//ƒpƒ‰ƒ[ƒ^[‚ğ“o˜^
+		//ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ã‚’ç™»éŒ²
 		m_parameterMap.emplace(T::ID(), parameters);
 	}
 
 	/// <summary>
-	/// ƒpƒ‰ƒ[ƒ^[‰ğ•ú
+	/// ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼è§£æ”¾
 	/// </summary>
-	/// <param name="path">‰ğ•ú‚·‚éƒpƒ‰ƒ[ƒ^[‚Ìƒtƒ@ƒCƒ‹ƒpƒX</param>
+	/// <param name="path">è§£æ”¾ã™ã‚‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹</param>
 	template <typename T>
-	void UnloadParameter(const char* path)
+	void UnloadParameter()
 	{
-		auto it = m_parameterMap.find(T::ID);
+		auto it = m_parameterMap.find(T::ID());
 		if (it != m_parameterMap.end())
 		{
 			auto& parameters = it->second;
@@ -158,11 +168,11 @@ public:
 	}
 
 	/// <summary>
-	/// ƒpƒ‰ƒ[ƒ^[‚Ìæ“¾
+	/// ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ã®å–å¾—
 	/// </summary>
-	/// <typeparam name="T">æ“¾‚·‚éƒpƒ‰ƒ[ƒ^[‚Ì\‘¢‘Ì</typeparam>
-	/// <param name="path">æ“¾‚·‚éƒpƒ‰ƒ[ƒ^[‚Ìƒtƒ@ƒCƒ‹ƒpƒX</param>
-	/// <param name="index">ˆê‚Â‚Ìƒtƒ@ƒCƒ‹‚É•¡”‚Ìƒpƒ‰ƒ[ƒ^[‚ğ“ü‚ê‚½ê‡‚Í‰½”Ô–Ú‚©‚±‚ê‚Åw’è‚·‚é</param>
+	/// <typeparam name="T">å–å¾—ã™ã‚‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ã®æ§‹é€ ä½“</typeparam>
+	/// <param name="path">å–å¾—ã™ã‚‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹</param>
+	/// <param name="index">ä¸€ã¤ã®ãƒ•ã‚¡ã‚¤ãƒ«ã«è¤‡æ•°ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ã‚’å…¥ã‚ŒãŸå ´åˆã¯ä½•ç•ªç›®ã‹ã“ã‚Œã§æŒ‡å®šã™ã‚‹</param>
 	/// <returns></returns>
 	template <typename T>
 	const T* GetParameter(const int index = 0) const
@@ -181,10 +191,10 @@ public:
 	}
 
 	/// <summary>
-	/// •¡”‚Ìƒpƒ‰ƒ[ƒ^[‚ğæ“¾‚·‚é
+	/// è¤‡æ•°ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ã‚’å–å¾—ã™ã‚‹
 	/// </summary>
-	/// <typeparam name="T">æ“¾‚·‚éƒpƒ‰ƒ[ƒ^[‚Ì\‘¢‘Ì</typeparam>
-	/// <param name="path">æ“¾‚·‚éƒpƒ‰ƒ[ƒ^[‚Ìƒtƒ@ƒCƒ‹ƒpƒX</param>
+	/// <typeparam name="T">å–å¾—ã™ã‚‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ã®æ§‹é€ ä½“</typeparam>
+	/// <param name="path">å–å¾—ã™ã‚‹ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹</param>
 	/// <returns></returns>
 	template <typename T>
 	const std::vector<T*> GetParameters() const
@@ -203,7 +213,7 @@ public:
 	}
 
 	/// <summary>
-	/// ƒpƒ‰ƒ[ƒ^[‚ğƒ‰ƒ€ƒ_®‚Å‰ñ‚·
+	/// ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ã‚’ãƒ©ãƒ ãƒ€å¼ã§å›ã™
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	/// <param name="path"></param>
@@ -249,11 +259,11 @@ public:
 		}
 	}
 
-	//ƒtƒ@ƒCƒ‹XV“úæ“¾
+	//ãƒ•ã‚¡ã‚¤ãƒ«æ›´æ–°æ—¥æ™‚å–å¾—
 	static time_t GetFileLastWriteTime(const char* path)
 	{
 		struct stat result;
-		//statŠÖ”‚Åƒtƒ@ƒCƒ‹î•ñ‚ğæ“¾(0‚È‚ç¬Œ÷)
+		//staté–¢æ•°ã§ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã‚’å–å¾—(0ãªã‚‰æˆåŠŸ)
 		if (stat(path, &result) == 0)
 		{
 			return result.st_mtime;
@@ -262,10 +272,10 @@ public:
 		return 0;
 	}
 
-	//ƒtƒ@ƒCƒ‹XVƒ`ƒFƒbƒN
+	//ãƒ•ã‚¡ã‚¤ãƒ«æ›´æ–°ãƒã‚§ãƒƒã‚¯
 	static bool CheckFileModified(const IParameter* param)
 	{
-		//ƒtƒ@ƒCƒ‹‚ÌXV“ú‚©‚ç•ÏX‚ª‚ ‚Á‚½‚©Šm”F
+		//ãƒ•ã‚¡ã‚¤ãƒ«ã®æ›´æ–°æ—¥æ™‚ã‹ã‚‰å¤‰æ›´ãŒã‚ã£ãŸã‹ç¢ºèª
 		if (GetFileLastWriteTime(param->m_path.c_str()) > param->m_lastWriteTime)
 		{
 			return true;
@@ -276,14 +286,14 @@ public:
 
 
 	/*
-	* ƒVƒ“ƒOƒ‹ƒgƒ“—pƒR[ƒh
+	* ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ç”¨ã‚³ãƒ¼ãƒ‰
 	*/
 private:
 	static ParameterManager* m_instance;
 public:
 
 	/// <summary>
-	/// ƒCƒ“ƒXƒ^ƒ“ƒX¶¬
+	/// ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ç”Ÿæˆ
 	/// </summary>
 	static void CreateInstance()
 	{
@@ -294,7 +304,7 @@ public:
 	}
 
 	/// <summary>
-	/// ƒCƒ“ƒXƒ^ƒ“ƒX‚ğæ“¾
+	/// ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’å–å¾—
 	/// </summary>
 	/// <returns></returns>
 	static ParameterManager& GetInstance()
