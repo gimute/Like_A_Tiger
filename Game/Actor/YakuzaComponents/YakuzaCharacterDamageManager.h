@@ -35,7 +35,7 @@ public:
 	void SendPlayerYakuzaDamage(YakuzaDamageDatas sendDamage,const Vector3& attackerPos);
 
 	//プレイヤーに敵を掴んだ事を伝える
-	void SendPlayerGrabEnemyYakuza(YakuzaCharacter* grabYakuza);
+	YakuzaCharacter* SendPlayerGrabEnemyYakuza(YakuzaCharacter* grabYakuza);
 
 	//プレイヤーからダメージを受け取る
 	YakuzaDamageDatas GetPlayerYakuzaDamage();

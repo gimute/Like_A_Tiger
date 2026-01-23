@@ -166,9 +166,11 @@ void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(YakuzaDamageDatas send
 	SoundManager::Get().PlaySE(sendDamage.m_seId);
 }
 
-void YakuzaCharacterDamageManager::SendPlayerGrabEnemyYakuza(YakuzaCharacter* grabYakuza)
+YakuzaCharacter* YakuzaCharacterDamageManager::SendPlayerGrabEnemyYakuza(YakuzaCharacter* grabYakuza)
 {
+	m_playerPtr->GetYakuzaStateMachine().GrabStart(grabYakuza);
 
+	return m_playerPtr;
 }
 
 bool YakuzaCharacterDamageManager::IsDefenseSuccessful(

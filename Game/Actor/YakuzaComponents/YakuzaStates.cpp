@@ -220,7 +220,7 @@ void YakuzaGrabState::OnEnter()
 		m_grabMoveVec = foward;
 	}
 
-	m_state = en_grabingMove;
+	m_state = en_goGrabMove;
 }
 
 void YakuzaGrabState::OnUpdate()
@@ -231,22 +231,39 @@ void YakuzaGrabState::OnUpdate()
 
 		MoveProcess();
 
+		//アニメーション再生
+		m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_grabStart, 0.1f);
 
-
-		if (m_owner->GetGrabingYakuzaCharacter() && 
-			!m_owner->IsHasCharactarPlayAnimation())
+		if (m_owner->GetGrabingYakuzaCharacter())
 		{
 			m_state = en_grabingMove;
+
+			return;
+		}
+
+		if (!m_owner->IsHasCharactarPlayAnimation())
+		{
+			m_owner->SetIsGrab(false);
 		}
 
 		break;
 	case YakuzaGrabState::en_grabingMove:
+
+
+
 		break;
 	}
 }
 
 void YakuzaGrabState::MoveProcess()
 {
+	if (m_owner->IsHasCharacterGrabCollisionActive() || !m_isGoGrabMoveing)
+	{
+		m_isGoGrabMoveing = false;
+
+		return;
+	}
+
 	Vector3 moveVec = m_grabMoveVec * 300.0f;
 
 	Vector3 newPos = m_owner->GetHasCharactarCharaCon()->Execute(moveVec, g_gameTime->GetFrameDeltaTime());
@@ -263,7 +280,9 @@ void YakuzaGrabState::MoveProcess()
 
 void YakuzaGrabState::OnExit()
 {
-
+	m_grabMoveVec = Vector3::Zero;
+	m_state = en_grabReady;
+	m_isGoGrabMoveing = true;
 }
 
 //SwayState
@@ -424,6 +443,25 @@ void YakuzaDamageState::OnUpdate()
 }
 
 void YakuzaDamageState::OnExit()
+{
+
+}
+
+//GrabBedState
+
+void YakuzaGrabBedState::OnEnter()
+{
+
+}
+
+void YakuzaGrabBedState::OnUpdate()
+{
+
+	m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_idle, 0.1f);
+
+}
+
+void YakuzaGrabBedState::OnExit()
 {
 
 }

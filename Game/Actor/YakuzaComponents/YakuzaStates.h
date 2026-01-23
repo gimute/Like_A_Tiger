@@ -127,6 +127,8 @@ private:
 	GrabState m_state = en_grabReady;
 
 	Vector3 m_grabMoveVec = Vector3::Zero;
+
+	bool m_isGoGrabMoveing = true;
 };
 
 class YakuzaSwayState : public IStateBase
@@ -190,6 +192,25 @@ public:
 	YakuzaDamageState(YakuzaStateMachine* stateMachine) : m_owner(stateMachine) {}
 	//デストラクタ
 	~YakuzaDamageState() = default;
+
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+};
+
+class YakuzaGrabBedState : public IStateBase
+{
+	appState(YakuzaGrabBedState)
+protected:
+	YakuzaStateMachine* m_owner = nullptr;
+public:
+	//コンストラクタ
+	YakuzaGrabBedState(YakuzaStateMachine* stateMachine) : m_owner(stateMachine) {}
+	//デストラクタ
+	~YakuzaGrabBedState() = default;
 
 	//ステートイン
 	void OnEnter() override;

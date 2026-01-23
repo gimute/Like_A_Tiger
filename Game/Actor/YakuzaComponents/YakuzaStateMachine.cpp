@@ -15,6 +15,11 @@ IStateBase* YakuzaStateMachine::GetNextState()
 		return FindClassNameState<YakuzaDeadState>();
 	}
 
+	if (false)
+	{
+		return FindClassNameState<YakuzaGrabBedState>();
+	}
+
 	//ダメージを受けたならダメージステートを更新する
 	if (CanChangeDamage())
 	{
@@ -126,7 +131,7 @@ bool YakuzaStateMachine::CanChangeDead()
 
 bool YakuzaStateMachine::CanChangeGrab()
 {
-	if (m_grabFlag &&
+	if (m_grabFlag ||
 		m_isGrab &&
 		!m_isGrabbed &&
 		!m_isAttack &&
@@ -185,8 +190,6 @@ void YakuzaStateMachine::ResetIsKnockBack(const KnockBackParam& param)
 
 void YakuzaStateMachine::GrabStart(YakuzaCharacter* grabYakuza)
 {
-	//グラブフラグを立てる
-	m_isGrab = true;
 	//掴むヤツを決定
 	m_grabbingYakuza = grabYakuza;
 }
@@ -195,6 +198,14 @@ void YakuzaStateMachine::GrabEnd()
 {
 	//掴み終了
 	m_isGrab = false;
+}
+
+void YakuzaStateMachine::GrabBedStart(YakuzaCharacter* grabedYakuza)
+{
+	//掴まれてるフラグを立てる
+	m_isGrabbed = true;
+	//掴んでるヤツを設定
+	m_grabedYakuza = grabedYakuza;
 }
 
 void YakuzaStateMachine::SetHasCharactarPosition(const Vector3& pos) { m_hasCharactar->SetPosition(pos); }
@@ -228,6 +239,11 @@ bool YakuzaStateMachine::IsHasCharacterDead()
 bool YakuzaStateMachine::IsHasCharacterAttackCollisionActive()
 {
 	return m_hasCharactar->IsAttackCollisionActive();
+}
+
+bool YakuzaStateMachine::IsHasCharacterGrabCollisionActive()
+{
+	return m_hasCharactar->IsGrabCollisionActive();
 }
 
 void YakuzaStateMachine::HasCharacterKnockBackProcces(KnockBackParam& param)
@@ -293,11 +309,6 @@ bool YakuzaStateMachine::HasCharacterCanGrabableProcces()
 void YakuzaStateMachine::HasCharacterDeadProcces()
 {
 	m_hasCharactar->YakuzaCharacterDeadProcces();
-}
-
-void YakuzaStateMachine::HasCharacterGrabProcess(YakuzaCharacter* grabYakuza)
-{
-	m_grabbingYakuza = grabYakuza;
 }
 
 void YakuzaStateMachine::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName)

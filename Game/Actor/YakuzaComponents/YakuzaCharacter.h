@@ -158,6 +158,15 @@ public:
 		m_grabCollision = nullptr;
 	}
 
+	inline bool IsGrabCollisionActive()
+	{
+		if (m_grabCollision)
+		{
+			return true;
+		}
+		return false;
+	}
+
 protected:
 	//–{‘Ì‚Ì“–‚½‚è”»’è
 	CollisionObject* m_bodyCollision = nullptr;
