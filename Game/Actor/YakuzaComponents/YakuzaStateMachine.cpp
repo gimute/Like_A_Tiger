@@ -4,6 +4,8 @@
 #include "YakuzaStates.h"
 #include "Actor\Character.h"
 
+#include "Actor\YakuzaComponents\YakuzaCharacterDamageManager.h"
+
 #include "Sound\SoundManager.h"
 #include "Sound\SoundId.h"
 
@@ -15,7 +17,7 @@ IStateBase* YakuzaStateMachine::GetNextState()
 		return FindClassNameState<YakuzaDeadState>();
 	}
 
-	if (false)
+	if (CanChangeGrabBed())
 	{
 		return FindClassNameState<YakuzaGrabBedState>();
 	}
@@ -145,6 +147,16 @@ bool YakuzaStateMachine::CanChangeGrab()
 	return false;
 }
 
+bool YakuzaStateMachine::CanChangeGrabBed()
+{
+	if (m_isGrabbed)
+	{
+		return true;
+	}
+
+	return false;
+}
+
 void YakuzaStateMachine::InitAttackStateMachine(uint32_t firstAttackStateHash, uint32_t firstFinishBrowStateHash)
 {
 	m_attackStateMachine = std::make_unique<YakuzaAttackComboStateMachine>(this);
@@ -188,24 +200,28 @@ void YakuzaStateMachine::ResetIsKnockBack(const KnockBackParam& param)
 	HasCharactarPlayAnimation(YakuzaAnimation::en_fightingIdle, 0.1f);
 }
 
-void YakuzaStateMachine::GrabStart(YakuzaCharacter* grabYakuza)
+void YakuzaStateMachine::GrabStart(YakuzaCharacter* grabingYakuza)
 {
 	//掴むヤツを決定
-	m_grabbingYakuza = grabYakuza;
+	m_isGrabing = true;
+	//掴むヤツを設定
+	m_grabingYakuza = grabingYakuza;
 }
 
 void YakuzaStateMachine::GrabEnd()
 {
 	//掴み終了
 	m_isGrab = false;
+	//掴むヤツをNULLに
+	m_grabingYakuza = nullptr;
 }
 
 void YakuzaStateMachine::GrabBedStart(YakuzaCharacter* grabedYakuza)
 {
 	//掴まれてるフラグを立てる
 	m_isGrabbed = true;
-	//掴んでるヤツを設定
-	m_grabedYakuza = grabedYakuza;
+	//掴まれているヤクザを設定
+	m_grabBedYakuza = grabedYakuza;
 }
 
 void YakuzaStateMachine::SetHasCharactarPosition(const Vector3& pos) { m_hasCharactar->SetPosition(pos); }
@@ -278,37 +294,17 @@ void YakuzaStateMachine::HasCharacterKnockBackProcces(KnockBackParam& param)
 	}
 }
 
-bool YakuzaStateMachine::HasCharacterCanGrabableProcces()
-{
-	Vector3 iPos = GetHasCharactarPos();
-	Vector3 iFoward = GetHasCharactarForward();
-	Vector3 grabYakuzaPos = m_grabbingYakuza->GetPosition();
-
-	//まず自身から掴み対象へのベクトルを求める
-	Vector3 toGrabYakuzaVec = grabYakuzaPos - iPos;
-	//正規化
-	toGrabYakuzaVec.Normalize();
-
-	//正面値も正規化
-	iFoward.Normalize();
-
-	//内積をもとめる
-	float dot = iFoward.Dot(toGrabYakuzaVec);
-
-	//正面側なら
-	if (dot >= 0.3f)
-	{
-		//掴める
-		return true;
-	}
-
-	//掴めない
-	return false;
-}
-
 void YakuzaStateMachine::HasCharacterDeadProcces()
 {
 	m_hasCharactar->YakuzaCharacterDeadProcces();
+}
+
+void YakuzaStateMachine::HasCharacterGrabingProcces()
+{
+	YakuzaCharacterDamageManager::GetInstance()->UpdateBothYakuzaGrabProcess(
+		m_hasCharactar,
+		m_grabingYakuza
+	);
 }
 
 void YakuzaStateMachine::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName)

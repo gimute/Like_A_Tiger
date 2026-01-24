@@ -78,6 +78,15 @@ void Enemy::OnHit(const char* hitCollisionName, CollisionObject* pairCollision)
 			YakuzaCharacterDamageManager::GetInstance()->SendPlayerGrabEnemyYakuza(this)
 		);
 	}
+
+	if (hitCollisionName == "playerBodyCollision" &&
+		pairCollision == m_grabCollision)
+	{
+		//’Í‚ñ‚¾
+		GetYakuzaStateMachine().GrabStart(
+			YakuzaCharacterDamageManager::GetInstance()->SendEnemyGrabPlayerYakuza(this)
+		);
+	}
 }
 
 void Enemy::YakuzaCharacterDeadProcces()

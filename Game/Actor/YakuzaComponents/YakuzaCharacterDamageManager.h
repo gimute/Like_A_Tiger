@@ -37,6 +37,13 @@ public:
 	//プレイヤーに敵を掴んだ事を伝える
 	YakuzaCharacter* SendPlayerGrabEnemyYakuza(YakuzaCharacter* grabYakuza);
 
+	//敵にプレイヤーを掴んだ事を伝える
+	YakuzaCharacter* SendEnemyGrabPlayerYakuza(YakuzaCharacter* grabYakuza);
+
+	//掴み時に互いの位置を更新する処理
+	bool UpdateBothYakuzaGrabProcess(YakuzaCharacter* grabingYakuza, YakuzaCharacter* grabBedYakuza);
+
+
 	//プレイヤーからダメージを受け取る
 	YakuzaDamageDatas GetPlayerYakuzaDamage();
 

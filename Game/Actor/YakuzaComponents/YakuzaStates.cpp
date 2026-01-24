@@ -228,13 +228,13 @@ void YakuzaGrabState::OnUpdate()
 	switch (m_state)
 	{
 	case YakuzaGrabState::en_goGrabMove:
-
+		//位置更新
 		MoveProcess();
 
 		//アニメーション再生
 		m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_grabStart, 0.1f);
 
-		if (m_owner->GetGrabingYakuzaCharacter())
+		if (m_owner->GetIsGrabing())
 		{
 			m_state = en_grabingMove;
 
@@ -248,7 +248,10 @@ void YakuzaGrabState::OnUpdate()
 
 		break;
 	case YakuzaGrabState::en_grabingMove:
-
+		//位置更新
+		m_owner->HasCharacterGrabingProcces();
+		
+		m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_grabing, 0.1f);
 
 
 		break;
@@ -457,7 +460,7 @@ void YakuzaGrabBedState::OnEnter()
 void YakuzaGrabBedState::OnUpdate()
 {
 
-	m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_idle, 0.1f);
+	m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_grabed, 0.1f);
 
 }
 
