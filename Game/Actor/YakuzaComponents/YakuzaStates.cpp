@@ -202,6 +202,8 @@ void YakuzaGrabState::OnEnter()
 {
 	//処理前準備
 	m_owner->SetIsGrab(true);
+	m_owner->SetGrabFlag(false);
+
 	//近くの敵に向かって行くアシスト処理
 	Vector3 foward = m_owner->GetHasCharactarForward();
 	Vector3 pos = m_owner->GetHasCharactarPos();
@@ -253,6 +255,47 @@ void YakuzaGrabState::OnUpdate()
 		
 		m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_grabing, 0.1f);
 
+		if (m_owner->GetAttackFlag())
+		{
+			m_state = en_grabingAttackMove;
+		}
+		else if (m_owner->GetFinishBrowFlag())
+		{
+			m_state = en_grabingFinshMove;
+		}
+		else if (m_owner->GetGrabFlag())
+		{
+			m_owner->SetIsGrab(false);
+		}
+
+		break;
+	case YakuzaGrabState::en_grabingAttackMove:
+
+		m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_grabAttack, 0.1f);
+
+		if (!m_owner->IsHasCharactarPlayAnimation())
+		{
+			m_owner->HasCharacterToGrabingSendDamageProcess(
+				en_grabAttack
+			);
+
+			m_state = en_grabingMove;
+		}
+
+		break;
+	case YakuzaGrabState::en_grabingFinshMove:
+
+		m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_grabThrow, 0.1f);
+
+		if (!m_owner->IsHasCharactarPlayAnimation())
+		{
+			m_state = en_grabingMove;
+		}
+
+		break;
+	case YakuzaGrabState::en_grabingEndProcess:
+
+
 
 		break;
 	}
@@ -283,6 +326,8 @@ void YakuzaGrabState::MoveProcess()
 
 void YakuzaGrabState::OnExit()
 {
+	m_owner->GrabEnd();
+	
 	m_grabMoveVec = Vector3::Zero;
 	m_state = en_grabReady;
 	m_isGoGrabMoveing = true;
@@ -454,13 +499,54 @@ void YakuzaDamageState::OnExit()
 
 void YakuzaGrabBedState::OnEnter()
 {
-
+	m_state = en_grabBed;
+	m_owner->SetGrabBedToAttackType(0);
 }
 
 void YakuzaGrabBedState::OnUpdate()
 {
+	int entest = m_owner->GetGrabBedToAttackType();
 
-	m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_grabed, 0.1f);
+	switch (m_state)
+	{
+	case YakuzaGrabBedState::en_grabBed:
+
+		m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_grabed, 0.1f);
+
+		if (!m_owner->GetIsDamage())
+		{
+			return;
+		}
+
+		if (m_owner->GetGrabBedToAttackType() == en_grabAttack)
+		{
+			m_state = en_grabBedAttack;
+		}
+		else if (m_owner->GetGrabBedToAttackType() == en_grabThrow)
+		{
+			m_state = en_grabBedFinish;
+		}
+
+		break;
+	case YakuzaGrabBedState::en_grabBedAttack:
+
+		m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_grabDamage, 0.1f);
+
+		if (!m_owner->IsHasCharactarPlayAnimation())
+		{
+			m_owner->SetGrabBedToAttackType(0);
+			m_owner->SetIsDamage(false, false);
+			m_state = en_grabBed;
+		}		
+
+		break;
+	case YakuzaGrabBedState::en_grabBedFinish:
+
+
+
+		break;
+	}
+
 
 }
 

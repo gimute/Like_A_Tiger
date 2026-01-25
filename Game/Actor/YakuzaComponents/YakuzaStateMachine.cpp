@@ -210,18 +210,36 @@ void YakuzaStateMachine::GrabStart(YakuzaCharacter* grabingYakuza)
 
 void YakuzaStateMachine::GrabEnd()
 {
+	//掴んでいる
+	YakuzaCharacterDamageManager::GetInstance()->SendGrabingYakuzaGrabEnd(m_grabingYakuza);
+
 	//掴み終了
 	m_isGrab = false;
+	//掴んでいない
+	m_isGrabing = false;
 	//掴むヤツをNULLに
 	m_grabingYakuza = nullptr;
 }
 
 void YakuzaStateMachine::GrabBedStart(YakuzaCharacter* grabedYakuza)
 {
+	if (!grabedYakuza)
+	{
+		return;
+	}
+
 	//掴まれてるフラグを立てる
 	m_isGrabbed = true;
 	//掴まれているヤクザを設定
 	m_grabBedYakuza = grabedYakuza;
+}
+
+void YakuzaStateMachine::GrabBedEnd()
+{
+	//掴まれ終了 
+	m_isGrabbed = false;
+	//掴まれているヤクザをnullに
+	m_grabBedYakuza = nullptr;
 }
 
 void YakuzaStateMachine::SetHasCharactarPosition(const Vector3& pos) { m_hasCharactar->SetPosition(pos); }
@@ -304,6 +322,14 @@ void YakuzaStateMachine::HasCharacterGrabingProcces()
 	YakuzaCharacterDamageManager::GetInstance()->UpdateBothYakuzaGrabProcess(
 		m_hasCharactar,
 		m_grabingYakuza
+	);
+}
+
+void YakuzaStateMachine::HasCharacterToGrabingSendDamageProcess(int sendDamageType)
+{
+	YakuzaCharacterDamageManager::GetInstance()->SendGrabingYakuzaDamage(
+		m_grabingYakuza,
+		sendDamageType
 	);
 }
 

@@ -173,6 +173,11 @@ void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(YakuzaDamageDatas send
 
 YakuzaCharacter* YakuzaCharacterDamageManager::SendPlayerGrabEnemyYakuza(YakuzaCharacter* grabYakuza)
 {
+	if (m_playerPtr->GetYakuzaStateMachine().GetIsGrabing())
+	{
+		return nullptr;
+	}
+
 	m_playerPtr->GetYakuzaStateMachine().GrabStart(grabYakuza);
 
 	return m_playerPtr;
@@ -232,6 +237,22 @@ bool YakuzaCharacterDamageManager::IsDefenseSuccessful(
 	}
 
 	return false;
+}
+
+void YakuzaCharacterDamageManager::SendGrabingYakuzaDamage(YakuzaCharacter* grabingYakuza, int isAttackType)
+{
+	if (isAttackType)
+	{
+		grabingYakuza->TakeDamage(10.0f);
+
+		grabingYakuza->GetYakuzaStateMachine().SetGrabBedToAttackType(isAttackType);
+		grabingYakuza->GetYakuzaStateMachine().SetIsDamage(true, false);
+	}
+}
+
+void YakuzaCharacterDamageManager::SendGrabingYakuzaGrabEnd(YakuzaCharacter* grabingYakuza)
+{
+	grabingYakuza->GetYakuzaStateMachine().GrabBedEnd();
 }
 
 YakuzaDamageDatas YakuzaCharacterDamageManager::GetPlayerYakuzaDamage()

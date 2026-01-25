@@ -106,9 +106,8 @@ private:
 	bool m_isGrabing = false;
 	//掴まれているか
 	bool m_isGrabbed = false;
-	//掴み中に攻撃が入力されたかどうか
-	bool m_grabAttackFlag = false;
-	bool m_grabFinishFlag = false;
+	//掴み最中に攻撃を受けた際の攻撃種類
+	int m_grabBedToAttackType = 0;
 	//掴み有効範囲
 	float m_graspableRange = 100.0f;
 	//掴んでいるキャラクターポインタ
@@ -141,37 +140,13 @@ public:
 
 	inline float GetSwayAnimSpeed() { return m_swayAnimSpeed; }
 
-	inline void SetAttackFlag(bool setIs) 
-	{ 
-		if (IsNowStateClassName<YakuzaAttackState>())
-		{
-			m_attackFlag = setIs;
-		}
-		else if (IsNowStateClassName<YakuzaGrabState>())
-		{
-			m_grabAttackFlag = setIs;
-		}
-	}
+	inline void SetAttackFlag(bool setIs) { m_attackFlag = setIs; }
 
 	inline bool GetAttackFlag() { return m_attackFlag; }
 
-	inline bool GetGrabAttackFlag() { return m_grabAttackFlag; }
-
-	inline void SetFinishBrowFlag(bool setIs) 
-	{ 
-		if (IsNowStateClassName<YakuzaAttackState>())
-		{
-			m_finishBrowFlag = setIs;
-		}
-		else if (IsNowStateClassName<YakuzaGrabState>())
-		{
-			m_grabFinishFlag = setIs;
-		}
-	}
+	inline void SetFinishBrowFlag(bool setIs) { m_finishBrowFlag = setIs; }
 
 	inline bool GetFinishBrowFlag() { return m_finishBrowFlag; }
-
-	inline bool GetGrabFinishFlag() { return m_grabFinishFlag; }
 
 	inline void SetSwayFlag(bool setIs) { m_swayFlag = setIs; if (setIs) { m_isSway = true; } }
 
@@ -190,6 +165,12 @@ public:
 	inline bool GetIsGrab() { return m_isGrab; }
 
 	inline bool GetIsGrabing() { return m_isGrabing; }
+
+	inline bool GetIsGrabBed() { return m_isGrabbed; }
+
+	inline void SetGrabBedToAttackType(int setType) { m_grabBedToAttackType = setType; }
+	
+	inline int GetGrabBedToAttackType() { return m_grabBedToAttackType; }
 
 	inline void SetIsAttack(bool setIs) { m_isAttack = setIs; }
 
@@ -226,6 +207,8 @@ public:
 	void GrabEnd();
 
 	void GrabBedStart(YakuzaCharacter* grabedYakuza);
+
+	void GrabBedEnd();
 
 	inline void SetIsDead(bool setIs) { m_isDead = setIs; }
 
@@ -276,6 +259,8 @@ public:
 	void HasCharacterDeadProcces();
 
 	void HasCharacterGrabingProcces();
+
+	void HasCharacterToGrabingSendDamageProcess(int sendDamageType);
 
 	void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);
 

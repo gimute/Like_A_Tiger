@@ -121,7 +121,13 @@ private:
 		//掴みに行く動き
 		en_goGrabMove,
 		//掴み中の動き
-		en_grabingMove
+		en_grabingMove,
+		//掴み通称攻撃の動き
+		en_grabingAttackMove,
+		//掴みフィニッシュブロウの動き
+		en_grabingFinshMove,
+		//掴み終了処理
+		en_grabingEndProcess
 	};
 
 	GrabState m_state = en_grabReady;
@@ -218,6 +224,16 @@ public:
 	void OnUpdate() override;
 	//ステートアウト
 	void OnExit() override;
+private:
+	enum GrabBedState
+	{
+		en_grabBed,
+		en_grabBedAttack,
+		en_grabBedFinish
+	};
+
+	GrabBedState m_state = en_grabBed;
+
 };
 
 class YakuzaDeadState : public IStateBase

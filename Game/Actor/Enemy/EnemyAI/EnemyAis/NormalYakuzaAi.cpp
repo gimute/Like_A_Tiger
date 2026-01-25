@@ -164,8 +164,8 @@ AiAutoRegister<NormalYakuzaAi> NormalYakuzaAi::aiSet{ EnemyYakuzaType::en_normal
 
 IStateBase* NormalYakuzaAi::GetNextState()
 {
-	//ダメージを受けている最中は操作不可
-	if (m_hasStateMachine->GetIsDamage())
+	//ダメージを受けている、掴まれている最中は操作不可
+	if (m_hasStateMachine->GetIsDamage() || m_hasStateMachine->GetIsGrabBed())
 	{
 		//集団制御用の役割をダメージを受けている役割に変更
 		m_yakuzaRole = YakuzaGroupeRole::en_YakuzaRoleHitDamage;
