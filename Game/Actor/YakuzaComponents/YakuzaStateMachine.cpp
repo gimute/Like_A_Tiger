@@ -11,15 +11,15 @@
 
 IStateBase* YakuzaStateMachine::GetNextState()
 {
+	if (CanChangeGrabBed())
+	{
+		return FindClassNameState<YakuzaGrabBedState>();
+	}
+
 	//死亡したなら死亡ステートを更新する
 	if (CanChangeDead())
 	{
 		return FindClassNameState<YakuzaDeadState>();
-	}
-
-	if (CanChangeGrabBed())
-	{
-		return FindClassNameState<YakuzaGrabBedState>();
 	}
 
 	//ダメージを受けたならダメージステートを更新する
@@ -210,9 +210,6 @@ void YakuzaStateMachine::GrabStart(YakuzaCharacter* grabingYakuza)
 
 void YakuzaStateMachine::GrabEnd()
 {
-	//掴んでいる
-	YakuzaCharacterDamageManager::GetInstance()->SendGrabingYakuzaGrabEnd(m_grabingYakuza);
-
 	//掴み終了
 	m_isGrab = false;
 	//掴んでいない
@@ -331,6 +328,15 @@ void YakuzaStateMachine::HasCharacterToGrabingSendDamageProcess(int sendDamageTy
 		m_grabingYakuza,
 		sendDamageType
 	);
+}
+
+void YakuzaStateMachine::HasCharacterToGrabBedThrownPositionUpdate()
+{
+	Vector3 grabBedyakuzaPos = m_grabBedYakuza->GetForward() * -1.0f;
+	grabBedyakuzaPos *= 100.0f;
+	grabBedyakuzaPos += m_grabBedYakuza->GetPosition();
+
+	m_hasCharactar->SetPosition(grabBedyakuzaPos);
 }
 
 void YakuzaStateMachine::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName)

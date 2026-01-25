@@ -210,6 +210,14 @@ bool YakuzaCharacterDamageManager::UpdateBothYakuzaGrabProcess(YakuzaCharacter* 
 	Vector3 grabBedPos = GBIYakuzaPos + (GBIYakuzaFor * YCDM_Constant::GRABBED_CHARACTER_POS_ADD);
 
 	grabBedYakuza->SetPosition(grabBedPos);
+
+	Vector3 toGrabBedVec = GBIYakuzaPos - GBBYakuzaPos;
+	toGrabBedVec.Normalize();
+
+	grabBedYakuza->GetRotation().SetRotationYFromDirectionXZ(toGrabBedVec);
+
+	grabBedYakuza->SetForward(Vector3::AxisZ);
+	grabBedYakuza->GetRotation().Apply(grabBedYakuza->GetForward());
 }
 
 bool YakuzaCharacterDamageManager::IsDefenseSuccessful(
@@ -241,18 +249,34 @@ bool YakuzaCharacterDamageManager::IsDefenseSuccessful(
 
 void YakuzaCharacterDamageManager::SendGrabingYakuzaDamage(YakuzaCharacter* grabingYakuza, int isAttackType)
 {
-	if (isAttackType)
+	if (isAttackType == YakuzaAnimation::en_grabAttack)
 	{
 		grabingYakuza->TakeDamage(10.0f);
 
 		grabingYakuza->GetYakuzaStateMachine().SetGrabBedToAttackType(isAttackType);
 		grabingYakuza->GetYakuzaStateMachine().SetIsDamage(true, false);
 	}
-}
+	else if (isAttackType == YakuzaAnimation::en_grabThrow)
+	{
+		grabingYakuza->TakeDamage(50.0f);
 
-void YakuzaCharacterDamageManager::SendGrabingYakuzaGrabEnd(YakuzaCharacter* grabingYakuza)
-{
-	grabingYakuza->GetYakuzaStateMachine().GrabBedEnd();
+		if (grabingYakuza->IsCharacterHpDead())
+		{
+			grabingYakuza->GetYakuzaStateMachine().SetIsDead(true);
+		}
+
+		grabingYakuza->GetYakuzaStateMachine().SetGrabBedToAttackType(isAttackType);
+		grabingYakuza->GetYakuzaStateMachine().SetIsDamage(true, false);
+	}
+	else if (isAttackType == YakuzaAnimation::en_grabBeCanceled || isAttackType == YakuzaAnimation::en_hitBody)
+	{
+		if (grabingYakuza->IsCharacterHpDead())
+		{
+			grabingYakuza->GetYakuzaStateMachine().SetIsDead(true);
+		}
+
+		grabingYakuza->GetYakuzaStateMachine().SetGrabBedToAttackType(isAttackType);		
+	}
 }
 
 YakuzaDamageDatas YakuzaCharacterDamageManager::GetPlayerYakuzaDamage()

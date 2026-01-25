@@ -262,6 +262,8 @@ public:
 
 	void HasCharacterToGrabingSendDamageProcess(int sendDamageType);
 
+	void HasCharacterToGrabBedThrownPositionUpdate();
+
 	void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);
 
 	CharacterController* GetHasCharactarCharaCon();

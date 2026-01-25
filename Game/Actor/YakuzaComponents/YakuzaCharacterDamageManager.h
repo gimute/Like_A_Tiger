@@ -46,9 +46,6 @@ public:
 	//掴み時に相手に与えるダメージ等の処理(falseで通常攻撃、trueでフィニッシュ)
 	void SendGrabingYakuzaDamage(YakuzaCharacter* grabingYakuza, int isAttackType);
 
-	//掴み時に相手に掴み終了を伝える
-	void SendGrabingYakuzaGrabEnd(YakuzaCharacter* grabingYakuza);
-
 	//プレイヤーからダメージを受け取る
 	YakuzaDamageDatas GetPlayerYakuzaDamage();
 

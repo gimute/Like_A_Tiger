@@ -245,7 +245,7 @@ void YakuzaGrabState::OnUpdate()
 
 		if (!m_owner->IsHasCharactarPlayAnimation())
 		{
-			m_owner->SetIsGrab(false);
+			m_owner->GrabEnd();
 		}
 
 		break;
@@ -257,15 +257,27 @@ void YakuzaGrabState::OnUpdate()
 
 		if (m_owner->GetAttackFlag())
 		{
+			m_owner->HasCharacterToGrabingSendDamageProcess(
+				YakuzaAnimation::en_grabAttack
+			);
+
 			m_state = en_grabingAttackMove;
 		}
 		else if (m_owner->GetFinishBrowFlag())
 		{
+			m_owner->HasCharacterToGrabingSendDamageProcess(
+				YakuzaAnimation::en_grabThrow
+			);
+
 			m_state = en_grabingFinshMove;
 		}
 		else if (m_owner->GetGrabFlag())
 		{
-			m_owner->SetIsGrab(false);
+			m_owner->HasCharacterToGrabingSendDamageProcess(
+				YakuzaAnimation::en_grabBeCanceled
+			);
+
+			m_state = en_grabingEndProcess;
 		}
 
 		break;
@@ -275,10 +287,6 @@ void YakuzaGrabState::OnUpdate()
 
 		if (!m_owner->IsHasCharactarPlayAnimation())
 		{
-			m_owner->HasCharacterToGrabingSendDamageProcess(
-				en_grabAttack
-			);
-
 			m_state = en_grabingMove;
 		}
 
@@ -289,13 +297,18 @@ void YakuzaGrabState::OnUpdate()
 
 		if (!m_owner->IsHasCharactarPlayAnimation())
 		{
-			m_state = en_grabingMove;
+			m_owner->GrabEnd();
 		}
 
 		break;
 	case YakuzaGrabState::en_grabingEndProcess:
 
+		m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_grabBeCanceled, 0.1f);
 
+		if (!m_owner->IsHasCharactarPlayAnimation())
+		{
+			m_owner->GrabEnd();
+		}
 
 		break;
 	}
@@ -326,6 +339,13 @@ void YakuzaGrabState::MoveProcess()
 
 void YakuzaGrabState::OnExit()
 {
+	if (m_owner->GetIsDamage())
+	{
+		m_owner->HasCharacterToGrabingSendDamageProcess(
+			YakuzaAnimation::en_hitBody
+		);
+	}
+
 	m_owner->GrabEnd();
 	
 	m_grabMoveVec = Vector3::Zero;
@@ -507,11 +527,26 @@ void YakuzaGrabBedState::OnUpdate()
 {
 	int entest = m_owner->GetGrabBedToAttackType();
 
+	if (m_state == en_grabBed ||
+		m_state == en_grabBedAttack ||
+		m_state == en_grabBedFinish)
+	{
+		if (m_owner->GetGrabBedToAttackType() == en_hitBody)
+		{
+			m_state = en_grabBedBreak;
+		}
+	}
+
 	switch (m_state)
 	{
 	case YakuzaGrabBedState::en_grabBed:
 
 		m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_grabed, 0.1f);
+
+		if (m_owner->GetGrabBedToAttackType() == en_grabBeCanceled)
+		{
+			m_state = en_grabBedBreak;
+		}
 
 		if (!m_owner->GetIsDamage())
 		{
@@ -542,17 +577,33 @@ void YakuzaGrabBedState::OnUpdate()
 		break;
 	case YakuzaGrabBedState::en_grabBedFinish:
 
+		m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_grabThrown, 0.1f);
 
+		if (!m_owner->IsHasCharactarPlayAnimation())
+		{
+			m_owner->HasCharacterToGrabBedThrownPositionUpdate();
+
+			m_owner->GrabBedEnd();
+		}
+
+		break;
+	case YakuzaGrabBedState::en_grabBedBreak:
+
+		m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_grabSelfRelease, 0.1f);
+
+		if (!m_owner->IsHasCharactarPlayAnimation())
+		{
+			m_owner->GrabBedEnd();
+		}
 
 		break;
 	}
-
-
 }
 
 void YakuzaGrabBedState::OnExit()
 {
-
+	m_owner->SetGrabBedToAttackType(0);
+	m_owner->SetIsDamage(false, false);
 }
 
 //DeadState
@@ -576,8 +627,16 @@ void YakuzaDeadState::OnUpdate()
 		m_owner->HasCharacterKnockBackProcces(*param);
 	}
 
-	if (!m_owner->IsHasCharactarPlayAnimation() && param->m_isEndKnockBack)
+	if (!m_owner->IsHasCharactarPlayAnimation())
 	{
+		if (m_owner->GetIsDamageKnockBack())
+		{
+			if (!param->m_isEndKnockBack)
+			{
+				return;
+			}
+		}
+
 		m_owner->HasCharacterDeadProcces();
 	}
 }

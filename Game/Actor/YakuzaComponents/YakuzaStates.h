@@ -229,7 +229,8 @@ private:
 	{
 		en_grabBed,
 		en_grabBedAttack,
-		en_grabBedFinish
+		en_grabBedFinish,
+		en_grabBedBreak
 	};
 
 	GrabBedState m_state = en_grabBed;
