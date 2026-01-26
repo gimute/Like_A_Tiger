@@ -183,7 +183,7 @@ protected:
 	//Ý’è‚³‚ê‚½ŽžŠÔ
 	float m_invincibleDuration = 0.0f;
 	//–³“Gƒtƒ‰ƒO
-	bool m_isInvincible = 0.0f;
+	bool m_isInvincible = false;
 
 	const char* m_modelFilePath = nullptr;
 
@@ -198,6 +198,8 @@ public:
 	inline YakuzaStateMachine& GetYakuzaStateMachine() { return *m_yakuzaStateMachine; }
 
 	inline void SetBodyCollision() { m_bodyCollision->SetIsEnable(false); }
+
+	inline void SetIsInvicible(bool isInvincible) { m_isInvincible = isInvincible; }
 
 	inline bool GetIsInvicible() { return m_isInvincible; }
 
@@ -226,28 +228,6 @@ public:
 	inline float GetYakuzaCurrentHp() { return m_yakuzaCurrentHp; }
 
 	inline float GetYakuzaMaxHp() { return m_yakuzaMaxHp; }
-
-	inline void StartInvincible(float sec) 
-	{
-		m_invincibleTimeLeft = sec;
-		m_isInvincible = true;
-	}
-
-	inline void UpdateInvincibleTime()
-	{
-		if (!m_isInvincible)
-		{
-			return;
-		}
-
-		m_invincibleTimeLeft -= g_gameTime->GetFrameDeltaTime();
-
-		if (m_invincibleTimeLeft <= 0.0f)
-		{
-			m_isInvincible = false;
-			m_invincibleTimeLeft = 0.0f;
-		}
-	}
 
 	//ƒ‚ƒfƒ‹‰ŠúÝ’è
 	inline void InitYakuzaModel(const char* filePath, std::vector<Character::AnimationData>& ptr)

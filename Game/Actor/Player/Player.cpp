@@ -73,9 +73,6 @@ void Player::Update()
 	positionCorrection.y += 60.0f;
 
 	m_bodyCollision->SetPosition(positionCorrection);
-
-	//無敵時間のタイマー
-	UpdateInvincibleTime();
 }
 
 //描画関数

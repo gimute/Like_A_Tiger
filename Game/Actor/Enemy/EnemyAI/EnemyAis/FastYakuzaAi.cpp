@@ -203,6 +203,15 @@ AiAutoRegister<FastYakuzaAi> FastYakuzaAi::aiSet{ EnemyYakuzaType::en_fastYakuza
 
 IStateBase* FastYakuzaAi::GetNextState()
 {
+	if (m_hasStateMachine->GetIsGrabBed())
+	{
+		m_yakuzaRole = YakuzaGroupeRole::en_YakuzaRoleGrabBed;
+		//AIステートを待ち移動に設定
+		m_aiState = YakuzaAiState::en_YakuzaAiState_WaitMove;
+		//とりあえず掴み終了まで待機
+		return FindClassNameState<EnemyAiIdleState>();
+	}
+
 	//ダメージを受けている最中は操作不可
 	if (m_hasStateMachine->GetIsDamage())
 	{

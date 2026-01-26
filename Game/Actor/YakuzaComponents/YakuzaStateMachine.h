@@ -106,6 +106,8 @@ private:
 	bool m_isGrabing = false;
 	//’Í‚Ü‚ê‚Ä‚¢‚é‚©
 	bool m_isGrabbed = false;
+	//’Í‚İÅ’†‚Ì’Í‚ñ‚Å‚¢‚é‘Šè‚Ìs“®í—Ş
+	int m_grabingToAttackType = 0;
 	//’Í‚İÅ’†‚ÉUŒ‚‚ğó‚¯‚½Û‚ÌUŒ‚í—Ş
 	int m_grabBedToAttackType = 0;
 	//’Í‚İ—LŒø”ÍˆÍ
@@ -169,6 +171,10 @@ public:
 	inline bool GetIsGrabing() { return m_isGrabing; }
 
 	inline bool GetIsGrabBed() { return m_isGrabbed; }
+
+	inline void SetGrabingToAttackType(int setType) { m_grabingToAttackType = setType; }
+
+	inline int GetGrabingToAttackType() { return m_grabingToAttackType; }
 
 	inline void SetGrabBedToAttackType(int setType) { m_grabBedToAttackType = setType; }
 	
@@ -260,17 +266,21 @@ public:
 
 	bool IsHasCharacterGrabCollisionActive();
 
+	bool IsHasCharacterGrabBedEscape(bool isResistance);
+
 	void HasCharacterKnockBackProcces(KnockBackParam& param);
 
 	void HasCharacterDeadProcces();
 
 	void HasCharacterGrabingProcces();
 
-	void HasCharacterToGrabingSendDamageProcess(int sendDamageType);
-
 	void HasCharacterToGrabBedThrownPositionUpdate();
 
-	void HasCharacterToGrabBedTakenDamageProcess(int takeDamageType);
+	void HasCharacterSendToGrabingOrGrabBedYakuzaData(int takeDamageType);
+
+	void HasCharacterGrabBedTakeDamage(int damageType);
+
+	void HasCharacterSetIsInvincible(bool setIs);
 
 	void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);
 

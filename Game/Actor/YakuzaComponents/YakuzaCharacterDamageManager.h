@@ -43,10 +43,13 @@ public:
 	//掴み時に互いの位置を更新する処理
 	bool UpdateBothYakuzaGrabProcess(YakuzaCharacter* grabingYakuza, YakuzaCharacter* grabBedYakuza);
 
-	//掴み時に相手に与えた事を伝える処理(falseで通常攻撃、trueでフィニッシュ)
-	void SendGrabingYakuzaDamageAction(YakuzaCharacter* grabingYakuza, int isAttackType);
+	//掴んでいる側が掴まれている側にデータを送る処理
+	void SendGrabingToGrabBedYakuzaData(YakuzaCharacter* grabingYakuza, int isAttackType);
 	//掴まれている側がダメージを受け取る処理
-	void TakeGrabBedYakuzaDamage(YakuzaCharacter* self,YakuzaCharacter* grabBedYakuza,int isAttackType);
+	void TakeGrabBedYakuzaDamage(YakuzaCharacter* self,int isAttackType);
+	//掴まれている側が掴んでいる側にデータを送る処理
+	void SendGrabBedToGrabingYakuzaData(YakuzaCharacter* grabBedYakuza,int isAttackType);
+
 	//掴まれている側が掴みから脱出するまでの時間の処理
 	bool UpdateGrabBedYakuzaEscapeTime(YakuzaCharacter* grabBedYakuza,bool isResistance);
 

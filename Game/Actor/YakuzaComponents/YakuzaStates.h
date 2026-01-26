@@ -230,11 +230,13 @@ private:
 		en_grabBed,
 		en_grabBedAttack,
 		en_grabBedFinish,
-		en_grabBedBreak
+		en_grabBedBreak,
+		en_grabBedSelfRelease
 	};
 
 	GrabBedState m_state = en_grabBed;
 
+	bool m_isGrabBedSelfRelease = false;
 };
 
 class YakuzaDeadState : public IStateBase

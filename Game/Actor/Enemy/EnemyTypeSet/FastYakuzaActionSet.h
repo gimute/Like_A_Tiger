@@ -125,10 +125,10 @@ public:
 		m_animationDataList.push_back({ "Assets/modelData/Character/Nonpbr/Animation/BodyHit.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Nonpbr/Animation/BodyHit.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Nonpbr/Animation/BodyHit.tka",false });//掴みも行わないためここも仮
-		m_animationDataList.push_back({ "Assets/modelData/Character/Nonpbr/Animation/BodyHit.tka",false });//掴まれモーションはまだ
-		m_animationDataList.push_back({ "Assets/modelData/Character/Nonpbr/Animation/BodyHit.tka",false });
-		m_animationDataList.push_back({ "Assets/modelData/Character/Nonpbr/Animation/BodyHit.tka",false });
-		m_animationDataList.push_back({ "Assets/modelData/Character/Nonpbr/Animation/BodyHit.tka",false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Nonpbr/Animation/Grab_Idle_B.tka",true });//掴まれモーションはまだ
+		m_animationDataList.push_back({ "Assets/modelData/Character/Nonpbr/Animation/Grab_Throw_B.tka",false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Nonpbr/Animation/Grab_Break_B.tka",false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Nonpbr/Animation/Grab_Atk_B.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Nonpbr/Animation/BodyHit.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Nonpbr/Animation/BackDeath_E.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Nonpbr/Animation/Cross_Punch_1_R.tka",false });

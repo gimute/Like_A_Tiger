@@ -276,6 +276,14 @@ bool YakuzaStateMachine::IsHasCharacterGrabCollisionActive()
 	return m_hasCharactar->IsGrabCollisionActive();
 }
 
+bool YakuzaStateMachine::IsHasCharacterGrabBedEscape(bool isResistance)
+{
+	return YakuzaCharacterDamageManager::GetInstance()->UpdateGrabBedYakuzaEscapeTime(
+		m_hasCharactar,
+		isResistance
+	);
+}
+
 void YakuzaStateMachine::HasCharacterKnockBackProcces(KnockBackParam& param)
 {
 	//yŽ²‚Í–³Ž‹‚·‚é
@@ -321,30 +329,44 @@ void YakuzaStateMachine::HasCharacterGrabingProcces()
 	);
 }
 
-void YakuzaStateMachine::HasCharacterToGrabingSendDamageProcess(int sendDamageType)
+void YakuzaStateMachine::HasCharacterSendToGrabingOrGrabBedYakuzaData(int sendDamageType)
 {
-	YakuzaCharacterDamageManager::GetInstance()->SendGrabingYakuzaDamageAction(
-		m_grabingYakuza,
-		sendDamageType
-	);
+	if (IsNowStateClassName<YakuzaGrabState>())
+	{
+		YakuzaCharacterDamageManager::GetInstance()->SendGrabingToGrabBedYakuzaData(
+			m_grabingYakuza,
+			sendDamageType
+		);
+	}
+	else if (IsNowStateClassName<YakuzaGrabBedState>())
+	{
+		YakuzaCharacterDamageManager::GetInstance()->SendGrabBedToGrabingYakuzaData(
+			m_grabBedYakuza,
+			sendDamageType
+		);
+	}
 }
 
-void YakuzaStateMachine::HasCharacterToGrabBedTakenDamageProcess(int sendDamageType)
+void YakuzaStateMachine::HasCharacterGrabBedTakeDamage(int damageType)
 {
-	YakuzaCharacterDamageManager::GetInstance()->TakeGrabBedYakuzaDamage(
-		m_hasCharactar,
-		m_grabBedYakuza,
-		sendDamageType
-	);
+	YakuzaCharacterDamageManager::GetInstance()->TakeGrabBedYakuzaDamage(m_hasCharactar,damageType);
 }
 
 void YakuzaStateMachine::HasCharacterToGrabBedThrownPositionUpdate()
 {
-	Vector3 grabBedyakuzaPos = m_grabBedYakuza->GetForward() * -1.0f;
-	grabBedyakuzaPos *= 100.0f;
-	grabBedyakuzaPos += m_grabBedYakuza->GetPosition();
+	Vector3 toGrabBedYakuzaVec = m_grabBedYakuza->GetPosition() - GetHasCharactarPos();
+	toGrabBedYakuzaVec.Normalize();
+	toGrabBedYakuzaVec *= 100.0f;
+	Vector3 movePos = m_grabBedYakuza->GetPosition() + toGrabBedYakuzaVec;
 
-	m_hasCharactar->SetPosition(grabBedyakuzaPos);
+	Vector3 newPos = GetHasCharactarCharaCon()->Execute(movePos,0.0f);
+
+	SetHasCharactarPosition(movePos);
+}
+
+void YakuzaStateMachine::HasCharacterSetIsInvincible(bool setIsInvincible)
+{
+	m_hasCharactar->SetIsInvicible(setIsInvincible);
 }
 
 void YakuzaStateMachine::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName)

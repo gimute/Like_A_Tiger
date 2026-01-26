@@ -246,7 +246,7 @@ bool YakuzaCharacterDamageManager::IsDefenseSuccessful(
 	return false;
 }
 
-void YakuzaCharacterDamageManager::SendGrabingYakuzaDamageAction(YakuzaCharacter* grabingYakuza, int isAttackType)
+void YakuzaCharacterDamageManager::SendGrabingToGrabBedYakuzaData(YakuzaCharacter* grabingYakuza, int isAttackType)
 {
 	if (isAttackType == YakuzaAnimation::en_grabAttack)
 	{
@@ -264,7 +264,7 @@ void YakuzaCharacterDamageManager::SendGrabingYakuzaDamageAction(YakuzaCharacter
 	}
 }
 
-void YakuzaCharacterDamageManager::TakeGrabBedYakuzaDamage(YakuzaCharacter* self, YakuzaCharacter* grabBedYakuza, int isAttackType)
+void YakuzaCharacterDamageManager::TakeGrabBedYakuzaDamage(YakuzaCharacter* self,int isAttackType)
 {
 	if (isAttackType == YakuzaAnimation::en_grabDamage)
 	{
@@ -273,18 +273,21 @@ void YakuzaCharacterDamageManager::TakeGrabBedYakuzaDamage(YakuzaCharacter* self
 	else if (isAttackType == YakuzaAnimation::en_grabThrown)
 	{
 		self->TakeDamage(30.0f);
-
-		if (self->IsCharacterHpDead())
-		{
-			self->GetYakuzaStateMachine().SetIsDead(true);
-		}
 	}
-	else if (isAttackType == YakuzaAnimation::en_grabSelfRelease)
+
+	if (self->IsCharacterHpDead())
 	{
-		if (self->IsCharacterHpDead())
-		{
-			self->GetYakuzaStateMachine().SetIsDead(true);
-		}
+		self->GetYakuzaStateMachine().SetIsDead(true);
+	}
+}
+
+void YakuzaCharacterDamageManager::SendGrabBedToGrabingYakuzaData(YakuzaCharacter* grabBedYakuza, int isAttackType)
+{
+	if (isAttackType == YakuzaAnimation::en_grabed ||
+		isAttackType == YakuzaAnimation::en_grabDamage ||
+		isAttackType == YakuzaAnimation::en_grabSelfRelease)
+	{
+		grabBedYakuza->GetYakuzaStateMachine().SetGrabingToAttackType(isAttackType);
 	}
 }
 
