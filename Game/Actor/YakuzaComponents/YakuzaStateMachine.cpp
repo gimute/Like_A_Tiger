@@ -205,6 +205,8 @@ void YakuzaStateMachine::GrabStart(YakuzaCharacter* grabingYakuza)
 	m_isGrabing = true;
 	//掴むヤツを設定
 	m_grabingYakuza = grabingYakuza;
+	//掴み用のコリジョンを削除
+	m_hasCharactar->DeleteGrabCollision();
 }
 
 void YakuzaStateMachine::GrabEnd()
@@ -214,7 +216,9 @@ void YakuzaStateMachine::GrabEnd()
 	//掴んでいない
 	m_isGrabing = false;
 	//掴むヤツをNULLに
-	m_grabingYakuza = nullptr;
+	m_grabingYakuza = nullptr;	
+	//掴み用のコリジョンを削除
+	m_hasCharactar->DeleteGrabCollision();
 }
 
 void YakuzaStateMachine::GrabBedStart(YakuzaCharacter* grabedYakuza)
@@ -407,10 +411,6 @@ void YakuzaStateMachine::OnAnimationEvent(const wchar_t* clipName, const wchar_t
 		if (IsGetYakuzaStateMachineNowState<YakuzaAttackState>())
 		{
 			m_hasCharactar->DeleteAttackCollision();
-		}
-		else if (IsGetYakuzaStateMachineNowState<YakuzaGrabState>())
-		{
-			m_hasCharactar->DeleteGrabCollision();
 		}
 	}
 	if (wcscmp(eventName, L"footsteps") == 0)
