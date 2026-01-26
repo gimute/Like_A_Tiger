@@ -110,6 +110,8 @@ private:
 	int m_grabBedToAttackType = 0;
 	//掴み有効範囲
 	float m_graspableRange = 100.0f;
+	//掴み有効時間
+	float m_grabBetWeenTime = 0.0f;
 	//掴んでいるキャラクターポインタ
 	YakuzaCharacter* m_grabingYakuza = nullptr;
 	//掴まれてるキャラクターポインタ
@@ -171,6 +173,10 @@ public:
 	inline void SetGrabBedToAttackType(int setType) { m_grabBedToAttackType = setType; }
 	
 	inline int GetGrabBedToAttackType() { return m_grabBedToAttackType; }
+
+	inline void SetGrabBedWeenTime(float setTime) { m_grabBetWeenTime = setTime; }
+
+	inline float GetGrabBedWeenTime() { return m_grabBetWeenTime; }
 
 	inline void SetIsAttack(bool setIs) { m_isAttack = setIs; }
 
@@ -263,6 +269,8 @@ public:
 	void HasCharacterToGrabingSendDamageProcess(int sendDamageType);
 
 	void HasCharacterToGrabBedThrownPositionUpdate();
+
+	void HasCharacterToGrabBedTakenDamageProcess(int takeDamageType);
 
 	void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);
 

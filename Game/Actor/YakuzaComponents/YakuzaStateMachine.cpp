@@ -90,7 +90,8 @@ bool YakuzaStateMachine::CanChangeAttack()
 bool YakuzaStateMachine::CanChangeSway()
 {
 	if (GetSwayFlag() ||
-		GetIsSway())
+		GetIsSway() &&
+		!GetIsGrab())
 	{
 		return true;
 	}
@@ -137,8 +138,6 @@ bool YakuzaStateMachine::CanChangeGrab()
 		m_isGrab &&
 		!m_isGrabbed &&
 		!m_isAttack &&
-		!m_defenseFlag &&
-		!m_swayFlag &&
 		!m_isDamage)
 	{
 		return true;
@@ -324,8 +323,17 @@ void YakuzaStateMachine::HasCharacterGrabingProcces()
 
 void YakuzaStateMachine::HasCharacterToGrabingSendDamageProcess(int sendDamageType)
 {
-	YakuzaCharacterDamageManager::GetInstance()->SendGrabingYakuzaDamage(
+	YakuzaCharacterDamageManager::GetInstance()->SendGrabingYakuzaDamageAction(
 		m_grabingYakuza,
+		sendDamageType
+	);
+}
+
+void YakuzaStateMachine::HasCharacterToGrabBedTakenDamageProcess(int sendDamageType)
+{
+	YakuzaCharacterDamageManager::GetInstance()->TakeGrabBedYakuzaDamage(
+		m_hasCharactar,
+		m_grabBedYakuza,
 		sendDamageType
 	);
 }

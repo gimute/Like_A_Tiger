@@ -287,6 +287,8 @@ void YakuzaGrabState::OnUpdate()
 
 		if (!m_owner->IsHasCharactarPlayAnimation())
 		{
+			SoundManager::Get().PlaySE(SoundId::se_hittingLightA, false, false, 0.5f);
+
 			m_state = en_grabingMove;
 		}
 
@@ -569,6 +571,8 @@ void YakuzaGrabBedState::OnUpdate()
 
 		if (!m_owner->IsHasCharactarPlayAnimation())
 		{
+			m_owner->HasCharacterToGrabBedTakenDamageProcess(en_grabDamage);
+
 			m_owner->SetGrabBedToAttackType(0);
 			m_owner->SetIsDamage(false, false);
 			m_state = en_grabBed;
@@ -581,6 +585,10 @@ void YakuzaGrabBedState::OnUpdate()
 
 		if (!m_owner->IsHasCharactarPlayAnimation())
 		{
+			SoundManager::Get().PlaySE(SoundId::se_hittingHeavyA, false, false, 0.5f);
+
+			m_owner->HasCharacterToGrabBedTakenDamageProcess(en_grabThrown);
+
 			m_owner->HasCharacterToGrabBedThrownPositionUpdate();
 
 			m_owner->GrabBedEnd();
@@ -593,6 +601,8 @@ void YakuzaGrabBedState::OnUpdate()
 
 		if (!m_owner->IsHasCharactarPlayAnimation())
 		{
+			m_owner->HasCharacterToGrabBedTakenDamageProcess(en_grabSelfRelease);
+
 			m_owner->GrabBedEnd();
 		}
 
