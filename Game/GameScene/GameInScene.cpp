@@ -225,6 +225,8 @@ void GameInScene::DeleteGameObjects()
 	CameraManager::GetCameraManagerInstance()->DeleteCamera();
 	//インベントリ
 	Inventory::Delete();
+	//マップ削除
+	DeleteGO(m_miniMap);
 }
 
 //ステート変更要求関数
