@@ -263,6 +263,9 @@
     <ClCompile Include="GameScene\GameTitleScene.cpp" />
     <ClCompile Include="Inventory\Inventory.cpp" />
     <ClCompile Include="Inventory\Types.cpp" />
+    <ClCompile Include="Inventory\Item.cpp" />
+    <ClCompile Include="UI\PouseMenuManager.cpp" />
+    <ClCompile Include="SaveManager.cpp" />
     <ClCompile Include="UI\PoseMenu.cpp" />
     <ClCompile Include="Core\ParameterManager.cpp" />
     <ClCompile Include="GameScene\Title\Title.cpp" />
@@ -348,6 +351,9 @@
     <ClInclude Include="Actor\Player\PlayerCameraController.h" />
     <ClInclude Include="Inventory\Inventory.h" />
     <ClInclude Include="Inventory\Types.h" />
+    <ClInclude Include="Inventory\Item.h" />
+    <ClInclude Include="UI\PouseMenuManager.h" />
+    <ClInclude Include="SaveManager.h" />
     <ClInclude Include="UI\PoseMenu.h" />
     <ClInclude Include="json\json.hpp" />
     <ClInclude Include="Core\ParameterManager.h" />

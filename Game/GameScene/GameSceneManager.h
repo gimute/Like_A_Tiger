@@ -1,7 +1,7 @@
 #pragma once
 #include "CRC32.h"
 
-class IGameSceneState;
+class	IGameSceneState;
 
 #define appState(name)  \
 public:\
