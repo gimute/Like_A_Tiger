@@ -74,6 +74,7 @@
     <ClCompile Include="GameScene\GameOver\GameOver.cpp" />
     <ClCompile Include="UI\MiniMap.cpp" />
     <ClCompile Include="Actor\YakuzaComponents\YakuzaGenericAttackState.cpp" />
+    <ClCompile Include="Effect\EffectManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -159,5 +160,6 @@
     <ClInclude Include="UI\MiniMap.h" />
     <ClInclude Include="Sound\SoundId.h" />
     <ClInclude Include="Actor\YakuzaComponents\YakuzaGenericAttackState.h" />
+    <ClInclude Include="Effect\EffectManager.h" />
   </ItemGroup>
 </Project>

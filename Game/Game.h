@@ -17,5 +17,12 @@ private:
 	/// Žå‚ÉSoundEngine‚Ö‚Ì“o˜^
 	/// </summary>
 	void InitSound();
+
+	ModelRender m_testmodel;
+	AnimationClip m_anim[2];
+
+	std::shared_ptr<Effect> testeffect;
+
+	Bone* m_effectBone = nullptr;
 };
 

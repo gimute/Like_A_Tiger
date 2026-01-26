@@ -119,6 +119,11 @@ bool YakuzaStateMachine::CanChangeDead()
 	return false;
 }
 
+Bone* YakuzaStateMachine::GetCharacterBone(const wchar_t* boneName)
+{
+	return m_hasCharactar->GetBone(boneName);
+}
+
 void YakuzaStateMachine::InitAttackStateMachine(uint32_t firstAttackStateHash, uint32_t firstFinishBrowStateHash)
 {
 	m_attackStateMachine = std::make_unique<YakuzaAttackComboStateMachine>(this);

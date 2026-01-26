@@ -37,6 +37,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//サウンドマネージャー生成
 	SoundManager::CreateInstance();
 
+	//エフェクトマネージャー生成
+	EffectManager::CreateInstance();
+
 	CollisionObjectManager m_collisionObjectManager;
 	g_collisionObjectManager = &m_collisionObjectManager;
 
@@ -62,6 +65,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 		// ゲームオブジェクトマネージャーの更新処理を呼び出す。
 		g_k2EngineLow->ExecuteUpdate();
+
+		//エフェクトマネージャーの更新
+		EffectManager::Get().Update();
 
 		//コリジョンのヒット確認
 		m_collisionObjectManager.Update();

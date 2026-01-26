@@ -72,7 +72,7 @@ void SoundManager::SetBGMVolume(float volume)
 	}
 }
 
-SoundHandle SoundManager::PlaySE(const int kind, const bool isLood, const bool is3D, float volume)
+SoundHandle SoundManager::PlaySE(const int kind, const bool isLoop, const bool is3D, float volume)
 {
 	// ƒnƒ“ƒhƒ‹‚ªÅ‘å”‚É‚È‚Á‚½‚çg‚¦‚È‚¢
 	if (m_soundHandleCount == INVALID_SOUND_HANDLE)
@@ -83,11 +83,11 @@ SoundHandle SoundManager::PlaySE(const int kind, const bool isLood, const bool i
 	auto* se = NewGO<SoundSource>(0, "se");
 	se->Init(kind, is3D);
 	se->SetVolume(volume);
-	se->Play(isLood);
+	se->Play(isLoop);
 
-	m_seList.emplace(m_soundHandleCount++, se);
+	m_seList.emplace(m_soundHandleCount, se);
 
-	return m_soundHandleCount;
+	return m_soundHandleCount++;
 }
 
 void SoundManager::StopSE(const SoundHandle handle)

@@ -243,7 +243,8 @@ void YakuzaSwayState::OnEnter()
 	}
 
 	//Œø‰Ê‰¹‚ðo‚·
-	SoundManager::Get().PlaySE(SoundId::se_kickingGroundA,false,false,0.5f);
+	auto handle = SoundManager::Get().PlaySE(SoundId::se_kickingGroundA,false,false,0.5f);
+	SoundManager::Get().FindSE(handle);
 
 	m_owner->SetIsSway(true);
 }
@@ -325,7 +326,7 @@ void YakuzaDefenseState::OnExit()
 
 void YakuzaDamageState::OnEnter()
 {
-
+	
 }
 
 void YakuzaDamageState::OnUpdate()
