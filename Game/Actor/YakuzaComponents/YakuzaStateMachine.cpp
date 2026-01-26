@@ -364,6 +364,16 @@ void YakuzaStateMachine::HasCharacterToGrabBedThrownPositionUpdate()
 	SetHasCharactarPosition(movePos);
 }
 
+void YakuzaStateMachine::HasCharacterGrabingYakuzaThrowPositionAdjustment(const Vector3& sweepDir, const Vector3& adjustDir)
+{
+	YakuzaCharacterDamageManager::GetInstance()->AdjustGrabBedYakuzaPositionOnThrow(
+		m_grabingYakuza,
+		m_hasCharactar,
+		sweepDir,
+		adjustDir
+	);
+}
+
 void YakuzaStateMachine::HasCharacterSetIsInvincible(bool setIsInvincible)
 {
 	m_hasCharactar->SetIsInvicible(setIsInvincible);

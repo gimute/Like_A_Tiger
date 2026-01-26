@@ -276,6 +276,8 @@ public:
 
 	void HasCharacterToGrabBedThrownPositionUpdate();
 
+	void HasCharacterGrabingYakuzaThrowPositionAdjustment(const Vector3& sweepDir,const Vector3& adjustDir);
+
 	void HasCharacterSendToGrabingOrGrabBedYakuzaData(int takeDamageType);
 
 	void HasCharacterGrabBedTakeDamage(int damageType);
