@@ -9,8 +9,6 @@ void GameTitleScene::EnterScene()
 {
 	m_titleSprite = NewGO<Title>(0, "titleSprite");
 
-	m_titleSprite->Init();
-
 	m_titleState = TitleState::en_TitleStandby;
 }
 
