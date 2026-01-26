@@ -3,6 +3,7 @@
 
 #include "GameScene\UpdateOrder.h"
 #include "GameScene\GameOver\GameOver.h"
+#include "GameScene/GameInScene.h"
 #include "GameScene\GameTitleScene.h"
 #include "Load\LoadManager.h"
 
@@ -10,7 +11,7 @@ void GameOverScene::EnterScene()
 {
 	m_gameOverSprite = NewGO<GameOver>(UpdateOrder::UI, "sprite");
 
-	m_gameOverSprite->Init();
+	//m_gameOverSprite->Init();
 
 	m_gameOverState = GameOverState::en_GameOverStandby;
 }
@@ -56,6 +57,12 @@ void GameOverScene::UpdateScene()
 			{
 				//ƒ[ƒhˆÃ“]‘Ò‹@‚É
 				m_gameOverState = GameOverState::en_GameOverProceesEnd;
+				if (m_gameOverSprite->IsRetry()) {
+					m_requestNextSceneId = GameInScene::ID();
+				}
+				else if (m_gameOverSprite->IsTitle()) {
+					m_requestNextSceneId = GameTitleScene::ID();
+				}
 			}
 
 			break;
@@ -80,7 +87,7 @@ bool GameOverScene::ReqestSceneState(uint32_t& nextState)
 	if (m_gameOverState == GameOverState::en_GameOverProceesEnd &&
 		LoadManager::GetInstance()->LoadFadeOutEnd())
 	{
-		nextState = GameTitleScene::ID();
+		nextState = m_requestNextSceneId;
 
 		return true;
 	}

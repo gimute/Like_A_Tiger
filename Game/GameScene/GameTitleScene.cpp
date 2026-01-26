@@ -8,6 +8,7 @@
 void GameTitleScene::EnterScene()
 {
 	m_titleSprite = NewGO<Title>(0, "titleSprite");
+	m_titleSprite->Deactivate();
 
 	m_titleState = TitleState::en_TitleStandby;
 }
@@ -30,6 +31,8 @@ void GameTitleScene::UpdateScene()
 			//もしロードにそもそも入って無ければ
 			else if (LoadManager::GetInstance()->LoadFadeInEnd())
 			{
+				m_titleSprite->Activate();
+
 				//そのままボタン押し待機
 				m_titleState = TitleState::en_TitleWaitButtonTrigger;
 			}
@@ -42,6 +45,8 @@ void GameTitleScene::UpdateScene()
 			{
 				//ボタン押し待機
 				m_titleState = TitleState::en_TitleWaitButtonTrigger;
+				
+				m_titleSprite->Activate();
 			}
 
 			break;

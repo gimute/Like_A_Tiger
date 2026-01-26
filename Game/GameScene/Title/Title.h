@@ -5,7 +5,6 @@ private:
 	std::shared_ptr<UICanvas> m_canvas;
 	std::shared_ptr<UIImage> m_iconButtonUI = nullptr;
 
-
 	std::unique_ptr<ScaleUIAnimation> m_circleAnimation = nullptr;
 	std::unique_ptr<ScaleUIAnimation> m_iconAAnimation = nullptr;
 	std::unique_ptr<ScaleUIAnimation> m_logoAnimation = nullptr;

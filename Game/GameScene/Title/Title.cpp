@@ -88,7 +88,7 @@ bool Title::Start() {
 		m_buttonAnimation = std::make_unique<ColorUIAnimation>(m_iconButtonUI, true, EasingType::EaseInOut, timeList, colorList);
 		m_buttonAnimation->Play();
 	}
-	
+
 	return true;
 }
 
