@@ -182,12 +182,18 @@ void FastYakuzaDodgeState::OnEnter()
 
 void FastYakuzaDodgeState::OnUpdate()
 {
-	m_hasStateMachine->SetSwayFlag(false);
+	if (m_hasStateMachine->GetIsSway())
+	{
+		m_hasStateMachine->SetSwayFlag(false);
 
-	if (!m_hasStateMachine->GetIsSway())
+		m_isSwayStart = true;
+	}
+
+	if (!m_hasStateMachine->GetIsSway() && m_isSwayStart)
 	{
 		m_owner->SetAiState(YakuzaAiState::en_YakuzaAiState_WaitMove);
 	}
+
 }
 
 void FastYakuzaDodgeState::OnExit()
@@ -197,6 +203,8 @@ void FastYakuzaDodgeState::OnExit()
 	m_owner->SetYakuzaRole(YakuzaGroupeRole::en_yakuzaRole_AttackWait);
 
 	m_owner->SetDodgeCoolTime(FastYakuzaAiAttackConstant::DODGE_COOL_TIME);
+
+	m_isSwayStart = false;
 }
 
 AiAutoRegister<FastYakuzaAi> FastYakuzaAi::aiSet{ EnemyYakuzaType::en_fastYakuza };
