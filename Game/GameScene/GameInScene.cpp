@@ -80,13 +80,12 @@ void GameInScene::EnterScene()
 
 	m_inventory = Inventory::Create();
 
-	//m_poseMenu = NewGO<PoseMenu>(0, "posemenu");
-
+	//ポーズメニューマネージャーにステートを登録
+	PouseMenuSceneManager::GetSceneManagerInstance()->InitPouseMenuSceneManager();
 
 	//セーブマネージャー生成
 	SaveManager::GetInstance().Load();
-	//m_poseMenu->Init();
-
+	
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 
    m_gameState = GameState::en_gameLoad;
@@ -109,21 +108,17 @@ void GameInScene::UpdateScene()
 	//戦闘マネージャー更新
 	BattleManager::GetInstance()->Update();
 
-	/** ポーズメニューの制御ロジック */
-
+	/** ポーズメニューマネージャー更新 */
+	PouseMenuSceneManager::GetSceneManagerInstance()->UpdatePouseMenuSceneManager();
 	if (m_poseMenu)
 	{
-		//マネージャー更新
-		bool isMenuActive = PouseMenuSceneManager::GetSceneManagerInstance()->UpdatePouseMenuSceneManager();
-
-		if (!isMenuActive)
+		if (!PouseMenuSceneManager::GetSceneManagerInstance()->IsPoseMenuActive())
 		{
 			DeleteGO(m_poseMenu);
 			m_poseMenu = nullptr;
 		}
 	}
-	else
-	{
+	else{
 		/** スタートボタンでメニュー起動 */
 		if (g_pad[0]->IsTrigger(enButtonStart))
 		{
@@ -141,10 +136,8 @@ void GameInScene::UpdateScene()
 
 			/** マネージャーの起動セットアップ */
 			auto* manager = PouseMenuSceneManager::GetSceneManagerInstance();
-
 			/** 操作対象のUIをマネージャーに登録 */
 			manager->SetMenuOwner(m_poseMenu);
-
 			/** 最初のステートを開く演出に設定 */
 			manager->RequestInitSceneState<PouseMenuInSideScene>();
 		}
@@ -227,6 +220,12 @@ void GameInScene::DeleteGameObjects()
 	Inventory::Delete();
 	//マップ削除
 	DeleteGO(m_miniMap);
+	//ポーズメニュー削除
+	PouseMenuSceneManager::GetSceneManagerInstance()->RequestInitSceneState<PouseMenuOutSideScene>();
+	if (m_poseMenu) {
+		DeleteGO(m_poseMenu);
+		m_poseMenu = nullptr;
+	}
 }
 
 //ステート変更要求関数

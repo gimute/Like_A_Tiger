@@ -226,6 +226,9 @@ private:
 	/** メニュー本体を保持しておく変数 */
 	PoseMenu* m_menuOwner = nullptr;
 
+	/** デバッグテスト */
+	bool m_isActive = false;
+
 private:
 	/** コンストラクタ */
 	PouseMenuSceneManager() : m_currentState(nullptr)
@@ -291,6 +294,12 @@ public:
 	/** GameInSceneからメニュー本体を受け取るための関数 */
 	void SetMenuOwner(PoseMenu* owner) {
 		m_menuOwner = owner;
+	}
+
+	/** ポーズメニューがアクティブか */
+	bool IsPoseMenuActive()
+	{
+		return m_isActive;
 	}
 
 private:

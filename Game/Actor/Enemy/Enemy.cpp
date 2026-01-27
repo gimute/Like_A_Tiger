@@ -2,6 +2,7 @@
 #include "Enemy.h"
 #include "Actor\YakuzaComponents\YakuzaCharacterDamageManager.h"
 #include "Actor\Enemy\EnemyManager.h"
+#include "UI/PouseMenuManager.h"
 
 bool Enemy::Start()
 {
@@ -22,6 +23,11 @@ bool Enemy::Start()
 
 void Enemy::Update()
 {
+	if (PouseMenuSceneManager::GetSceneManagerInstance()->IsPoseMenuActive())
+	{
+		return;
+	}
+
 	GetYakuzaStateMachine().UpdateStateMachine();
 
 	m_characterController.SetPosition(m_position);;
