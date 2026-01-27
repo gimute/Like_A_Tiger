@@ -102,11 +102,11 @@ void Game::Render(RenderContext& rc)
 
 void Game::InitEffect()
 {
-	EffectEngine::GetInstance()->ResistEffect(1, u"Assets/Effect/InvisibleWall/Circle.efk");
-	EffectEngine::GetInstance()->ResistEffect(2, u"Assets/Effect/InvisibleWall/Ring.efk");
-	EffectEngine::GetInstance()->ResistEffect(3, u"Assets/Effect/InvisibleWall/Wall.efk");
-	EffectEngine::GetInstance()->ResistEffect(4, u"Assets/Effect/InvisibleWall/WallLine.efk");
-	EffectEngine::GetInstance()->ResistEffect(5, u"Assets/Effect/efk/test/test_1.efk");
+	EffectEngine::GetInstance()->ResistEffect(InvisibleWall_Circle, u"Assets/Effect/InvisibleWall/Circle.efk");
+	EffectEngine::GetInstance()->ResistEffect(InvisibleWall_Ring, u"Assets/Effect/InvisibleWall/Ring.efk");
+	EffectEngine::GetInstance()->ResistEffect(InvisibleWall_Wall, u"Assets/Effect/InvisibleWall/Wall.efk");
+	EffectEngine::GetInstance()->ResistEffect(InvisibleWall_WallLine, u"Assets/Effect/InvisibleWall/WallLine.efk");
+	EffectEngine::GetInstance()->ResistEffect(Attack_Hit, u"Assets/Effect/efk/AttackHit/AttackHit.efk");
 }
 
 void Game::InitSound()
