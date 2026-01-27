@@ -154,7 +154,7 @@ public:
 
 	inline bool GetFinishBrowFlag() { return m_finishBrowFlag; }
 
-	inline void SetSwayFlag(bool setIs) { m_swayFlag = setIs; if (setIs) { m_isSway = true; } }
+	inline void SetSwayFlag(bool setIs) { m_swayFlag = setIs; }
 
 	inline bool GetSwayFlag() { return m_swayFlag; }
 

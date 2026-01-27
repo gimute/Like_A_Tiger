@@ -76,10 +76,14 @@ bool YakuzaStateMachine::CanChangeWalk()
 
 bool YakuzaStateMachine::CanChangeAttack()
 {
-	if (GetFinishBrowFlag() || 
-		GetAttackFlag() ||
-		GetIsAttack() && 
-		!GetIsSway())
+	if (m_isAttack)
+	{
+		return true;
+	}
+
+	if ((m_attackFlag || m_finishBrowFlag) 
+		&& !m_isSway
+		&& !m_defenseFlag)
 	{
 		return true;
 	}
@@ -89,9 +93,15 @@ bool YakuzaStateMachine::CanChangeAttack()
 
 bool YakuzaStateMachine::CanChangeSway()
 {
-	if (GetSwayFlag() ||
-		GetIsSway() &&
-		!GetIsGrab())
+	if (m_isSway)
+	{
+		return true;
+	}
+
+	if (m_swayFlag &&
+		!m_isGrab && 
+		!m_isGrabing
+	)
 	{
 		return true;
 	}
@@ -101,10 +111,14 @@ bool YakuzaStateMachine::CanChangeSway()
 
 bool YakuzaStateMachine::CanChangeDefense()
 {
-	if (GetIsDamageKnockBack() ||
-		GetDefenseFlag() &&
-		!GetIsSway() &&
-		!GetIsAttack())
+	if (m_isDamageKnockBack)
+	{
+		return true;
+	}
+
+	if ((m_defenseFlag) &&
+		!m_isSway &&
+		!m_isAttack)
 	{
 		return true;
 	}
@@ -139,12 +153,16 @@ Bone* YakuzaStateMachine::GetCharacterBone(const wchar_t* boneName)
 
 bool YakuzaStateMachine::CanChangeGrab()
 {
-	if ((m_grabFlag || m_isGrab) &&
-		!m_isAttack &&
-		!m_isSway &&
-		!m_defenseFlag && 
-		!m_isGrabbed &&
-		!m_isDamage)
+	//掴み継続は掴まれておらずダメージを受けていない場合
+	if (m_isGrab && 
+		!m_isGrabbed && !m_isDamage)
+	{
+		return true;
+	}
+
+	//掴み中開始は回避していない場合かつ防御していないかつ攻撃していない場合
+	if (m_grabFlag &&
+		!m_isSway && !m_defenseFlag && !m_isAttack)
 	{
 		return true;
 	}
