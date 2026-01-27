@@ -204,6 +204,7 @@ void YakuzaGrabState::OnEnter()
 	m_owner->SetIsGrab(true);
 	m_owner->SetGrabFlag(false);
 	m_owner->SetGrabingToAttackType(-1);
+	m_owner->SetGrabThrowPos(Vector3::Zero);
 
 	//近くの敵に向かって行くアシスト処理
 	Vector3 foward = m_owner->GetHasCharactarForward();
@@ -241,7 +242,8 @@ void YakuzaGrabState::OnUpdate()
 		{
 			m_owner->HasCharacterGrabingYakuzaThrowPositionAdjustment(
 				m_owner->GetHasCharactarForward(),
-				m_owner->GetHasCharactarForward() * -1.0f
+				m_owner->GetHasCharactarForward() * -1.0f,
+				50.0f
 			);
 
 			m_state = en_grabingMove;
@@ -278,17 +280,22 @@ void YakuzaGrabState::OnUpdate()
 			m_state = en_grabingAttackMove;
 		}
 		//掴み中にフィニッシュブロウの入力があった場合
-		else if (m_owner->GetFinishBrowFlag())
+		else if (m_owner->GetFinishBrowFlag() &&			
+				//現在掴んでいるヤクザがもがき状態である事を確認
+				m_owner->GetGrabingToAttackType() == YakuzaAnimation::en_grabed)
 		{
 			//現在掴んでいるヤクザにフィニッシュブロウをした事を伝える
 			m_owner->HasCharacterSendToGrabingOrGrabBedYakuzaData(
 				YakuzaAnimation::en_grabThrow
 			);
 
+			m_owner->SetGrabThrowPos(m_owner->GetHasCharactarPos());
+
 			//投げの位置調整を行う
 			m_owner->HasCharacterGrabingYakuzaThrowPositionAdjustment(
 				m_owner->GetHasCharactarForward() * -1.0f,
-				m_owner->GetHasCharactarForward() * -1.0f
+				m_owner->GetHasCharactarForward() * -1.0f,
+				150.0f
  			);
 
 			//掴み中は攻撃を受け付けないように
@@ -298,9 +305,11 @@ void YakuzaGrabState::OnUpdate()
 			m_state = en_grabingFinshMove;
 		}
 		//掴み中にもう一度掴みの入力があった場合
-		else if (m_owner->GetGrabFlag() ||
-			//または掴まれているヤクザが自力での解放を試みた場合
-			m_owner->GetGrabingToAttackType() == YakuzaAnimation::en_grabSelfRelease)
+		else if (m_owner->GetGrabFlag() &&
+				//現在掴んでいるヤクザがもがき状態である事を確認
+				m_owner->GetGrabingToAttackType() == YakuzaAnimation::en_grabed ||
+				//または掴まれているヤクザが自力での解放を試みた場合
+				m_owner->GetGrabingToAttackType() == YakuzaAnimation::en_grabSelfRelease)
 		{
 			//現在掴んでいるヤクザに掴み解除をした事を伝える
 			m_owner->HasCharacterSendToGrabingOrGrabBedYakuzaData(

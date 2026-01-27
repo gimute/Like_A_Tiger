@@ -47,7 +47,15 @@ public:
 	bool UpdateBothYakuzaGrabProcess(YakuzaCharacter* grabingYakuza, YakuzaCharacter* grabBedYakuza);
 
 	//投げの際に壁にめり込まないように位置調整を行う処理
-	void AdjustGrabBedYakuzaPositionOnThrow(YakuzaCharacter* grabingYakuza,YakuzaCharacter* grabBedYakuza,const Vector3& sweepDir,const Vector3& adjustDir);
+	void AdjustGrabBedYakuzaPositionOnThrow(
+		YakuzaCharacter* grabingYakuza,
+		YakuzaCharacter* grabBedYakuza,
+		const Vector3& sweepDir,
+		const Vector3& adjustDir,
+		float sweepDistance
+	);
+
+	void UpdateGrabBedYakuzaThrownPosition(YakuzaCharacter* thrownYakuza,const Vector3& grabBedYakuzaPos);
 
 	//掴んでいる側が掴まれている側にデータを送る処理
 	void SendGrabingToGrabBedYakuzaData(YakuzaCharacter* grabingYakuza, int isAttackType);

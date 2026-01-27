@@ -118,6 +118,8 @@ private:
 	YakuzaCharacter* m_grabingYakuza = nullptr;
 	//掴まれてるキャラクターポインタ
 	YakuzaCharacter* m_grabBedYakuza = nullptr;
+	//掴み投げをした際の位置
+	Vector3 m_grabThrowPos = Vector3::Zero;
 	//死んでしまったかどうか
 	bool m_isDead = false;
 	//狙い移動のキャラクターの位置
@@ -183,6 +185,10 @@ public:
 	inline void SetGrabBedWeenTime(float setTime) { m_grabBetWeenTime = setTime; }
 
 	inline float GetGrabBedWeenTime() { return m_grabBetWeenTime; }
+
+	inline void SetGrabThrowPos(const Vector3& setPos) { m_grabThrowPos = setPos; }
+
+	inline const Vector3& GetGrabThrowPos() { return m_grabThrowPos; }
 
 	inline void SetIsAttack(bool setIs) { m_isAttack = setIs; }
 
@@ -276,7 +282,7 @@ public:
 
 	void HasCharacterToGrabBedThrownPositionUpdate();
 
-	void HasCharacterGrabingYakuzaThrowPositionAdjustment(const Vector3& sweepDir,const Vector3& adjustDir);
+	void HasCharacterGrabingYakuzaThrowPositionAdjustment(const Vector3& sweepDir,const Vector3& adjustDir,float sweepDis);
 
 	void HasCharacterSendToGrabingOrGrabBedYakuzaData(int takeDamageType);
 

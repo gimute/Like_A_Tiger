@@ -173,7 +173,8 @@ void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(YakuzaDamageDatas send
 
 YakuzaCharacter* YakuzaCharacterDamageManager::SendPlayerGrabEnemyYakuza(YakuzaCharacter* grabYakuza)
 {
-	if (m_playerPtr->GetYakuzaStateMachine().GetIsGrabing())
+	if (grabYakuza->IsCharacterHpDead() ||
+		m_playerPtr->GetYakuzaStateMachine().GetIsGrabing())
 	{
 		return nullptr;
 	}
@@ -185,6 +186,12 @@ YakuzaCharacter* YakuzaCharacterDamageManager::SendPlayerGrabEnemyYakuza(YakuzaC
 
 YakuzaCharacter* YakuzaCharacterDamageManager::SendEnemyGrabPlayerYakuza(YakuzaCharacter* grabYakuza)
 {
+	if (m_playerPtr->IsCharacterHpDead() ||
+		grabYakuza->GetYakuzaStateMachine().GetIsGrabing())
+	{
+		return nullptr;
+	}
+
 	m_playerPtr->GetYakuzaStateMachine().GrabBedStart(grabYakuza);
 
 	return m_playerPtr;
@@ -221,7 +228,8 @@ void YakuzaCharacterDamageManager::AdjustGrabBedYakuzaPositionOnThrow(
 	YakuzaCharacter* grabingYakuza,
 	YakuzaCharacter* grabBedYakuza,
 	const Vector3& sweepDir,
-	const Vector3& adjustDir
+	const Vector3& adjustDir,
+	float sweepDistances
 )
 {
 	Vector3 GBIYakuzaPos = grabingYakuza->GetPosition();
@@ -230,7 +238,7 @@ void YakuzaCharacterDamageManager::AdjustGrabBedYakuzaPositionOnThrow(
 	Vector3 GBBYakuzaBack = sweepDir;
 
 	//自身の後方約150fの位置を作成
-	Vector3 targetDis = GBBYakuzaBack * 100.0f;
+	Vector3 targetDis = GBBYakuzaBack * sweepDistances;
 	Vector3 targetPos = GBBYakuzaPos + targetDis;
 
 	//後方に壁があるかどうかをレイキャストで確認
@@ -275,6 +283,18 @@ void YakuzaCharacterDamageManager::AdjustGrabBedYakuzaPositionOnThrow(
 	grabingYakuza->GetYakuzaStateMachine().GetHasCharactarRot().Apply(
 		grabingYakuza->GetYakuzaStateMachine().GetHasCharactarForward()
 	);
+}
+
+void YakuzaCharacterDamageManager::UpdateGrabBedYakuzaThrownPosition(YakuzaCharacter* thrownYakuza, const Vector3& grabBedYakuzaPos)
+{
+	Vector3 toGrabBedYakuzaVec = grabBedYakuzaPos - thrownYakuza->GetPosition();
+	toGrabBedYakuzaVec.Normalize();
+	toGrabBedYakuzaVec *= 100.0f;
+	Vector3 movePos = grabBedYakuzaPos + toGrabBedYakuzaVec;
+
+	Vector3 newPos = thrownYakuza->GetYakuzaStateMachine().GetHasCharactarCharaCon()->Execute(movePos, 0.0f);
+	
+	thrownYakuza->SetPosition(movePos);
 }
 
 bool YakuzaCharacterDamageManager::IsDefenseSuccessful(

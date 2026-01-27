@@ -134,10 +134,11 @@ bool YakuzaStateMachine::CanChangeDead()
 
 bool YakuzaStateMachine::CanChangeGrab()
 {
-	if (m_grabFlag ||
-		m_isGrab &&
-		!m_isGrabbed &&
+	if ((m_grabFlag || m_isGrab) &&
 		!m_isAttack &&
+		!m_isSway &&
+		!m_defenseFlag && 
+		!m_isGrabbed &&
 		!m_isDamage)
 	{
 		return true;
@@ -201,6 +202,11 @@ void YakuzaStateMachine::ResetIsKnockBack(const KnockBackParam& param)
 
 void YakuzaStateMachine::GrabStart(YakuzaCharacter* grabingYakuza)
 {
+	if (grabingYakuza->IsCharacterHpDead())
+	{
+		return;
+	}
+
 	//’Í‚Þƒ„ƒc‚ðŒˆ’è
 	m_isGrabing = true;
 	//’Í‚Þƒ„ƒc‚ðÝ’è
@@ -358,23 +364,20 @@ void YakuzaStateMachine::HasCharacterGrabBedTakeDamage(int damageType)
 
 void YakuzaStateMachine::HasCharacterToGrabBedThrownPositionUpdate()
 {
-	Vector3 toGrabBedYakuzaVec = m_grabBedYakuza->GetPosition() - GetHasCharactarPos();
-	toGrabBedYakuzaVec.Normalize();
-	toGrabBedYakuzaVec *= 100.0f;
-	Vector3 movePos = m_grabBedYakuza->GetPosition() + toGrabBedYakuzaVec;
-
-	Vector3 newPos = GetHasCharactarCharaCon()->Execute(movePos,0.0f);
-
-	SetHasCharactarPosition(movePos);
+	YakuzaCharacterDamageManager::GetInstance()->UpdateGrabBedYakuzaThrownPosition(
+		m_hasCharactar,
+		m_grabBedYakuza->GetYakuzaStateMachine().GetGrabThrowPos()
+	);
 }
 
-void YakuzaStateMachine::HasCharacterGrabingYakuzaThrowPositionAdjustment(const Vector3& sweepDir, const Vector3& adjustDir)
+void YakuzaStateMachine::HasCharacterGrabingYakuzaThrowPositionAdjustment(const Vector3& sweepDir, const Vector3& adjustDir,float sweepDis)
 {
 	YakuzaCharacterDamageManager::GetInstance()->AdjustGrabBedYakuzaPositionOnThrow(
 		m_grabingYakuza,
 		m_hasCharactar,
 		sweepDir,
-		adjustDir
+		adjustDir,
+		sweepDis
 	);
 }
 
