@@ -94,6 +94,49 @@ public:
 	void OnExit() override;
 };
 
+class YakuzaGrabState : public IStateBase
+{
+	appState(YakuzaGrabState)
+protected:
+	YakuzaStateMachine* m_owner = nullptr;
+public:
+	//コンストラクタ
+	YakuzaGrabState(YakuzaStateMachine* stateMachine) : m_owner(stateMachine) {}
+	//デストラクタ
+	~YakuzaGrabState() = default;
+
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+private:
+	void MoveProcess();
+
+	enum GrabState
+	{
+		//処理前
+		en_grabReady,
+		//掴みに行く動き
+		en_goGrabMove,
+		//掴み中の動き
+		en_grabingMove,
+		//掴み通称攻撃の動き
+		en_grabingAttackMove,
+		//掴みフィニッシュブロウの動き
+		en_grabingFinshMove,
+		//掴み終了処理
+		en_grabingEndProcess
+	};
+
+	GrabState m_state = en_grabReady;
+
+	Vector3 m_grabMoveVec = Vector3::Zero;
+
+	bool m_isGoGrabMoveing = true;
+};
+
 class YakuzaSwayState : public IStateBase
 {
 	appState(YakuzaSwayState)
@@ -162,6 +205,38 @@ public:
 	void OnUpdate() override;
 	//ステートアウト
 	void OnExit() override;
+};
+
+class YakuzaGrabBedState : public IStateBase
+{
+	appState(YakuzaGrabBedState)
+protected:
+	YakuzaStateMachine* m_owner = nullptr;
+public:
+	//コンストラクタ
+	YakuzaGrabBedState(YakuzaStateMachine* stateMachine) : m_owner(stateMachine) {}
+	//デストラクタ
+	~YakuzaGrabBedState() = default;
+
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+private:
+	enum GrabBedState
+	{
+		en_grabBed,
+		en_grabBedAttack,
+		en_grabBedFinish,
+		en_grabBedBreak,
+		en_grabBedSelfRelease
+	};
+
+	GrabBedState m_state = en_grabBed;
+
+	bool m_isGrabBedSelfRelease = false;
 };
 
 class YakuzaDeadState : public IStateBase

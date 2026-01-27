@@ -11,6 +11,7 @@ bool ProtoStage::Start()
 	//静的物理オブジェクトを作成
 	physicsStaticObject.CreateFromModel(m_modelRender.GetModel(), m_modelRender.GetModel().GetWorldMatrix());
 
+	physicsStaticObject.GetbtCollisionObject()->setUserIndex(enCollisionAttr_Wall);
 	return true;
 }
 

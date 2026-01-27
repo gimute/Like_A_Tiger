@@ -11,6 +11,11 @@
 //インスタンス初期化
 YakuzaCharacterDamageManager* YakuzaCharacterDamageManager::m_instance = nullptr;
 
+namespace YCDM_Constant
+{
+	const float GRABBED_CHARACTER_POS_ADD = 30.0f;
+}
+
 void YakuzaCharacterDamageManager::SendEnemyYakuzaDamage(Enemy* sendEnemy, YakuzaDamageDatas sendDamage)
 {
 	if (!sendEnemy ||
@@ -166,6 +171,132 @@ void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(YakuzaDamageDatas send
 	SoundManager::Get().PlaySE(sendDamage.m_seId);
 }
 
+YakuzaCharacter* YakuzaCharacterDamageManager::SendPlayerGrabEnemyYakuza(YakuzaCharacter* grabYakuza)
+{
+	if (grabYakuza->IsCharacterHpDead() ||
+		m_playerPtr->GetYakuzaStateMachine().GetIsGrabing())
+	{
+		return nullptr;
+	}
+
+	m_playerPtr->GetYakuzaStateMachine().GrabStart(grabYakuza);
+
+	return m_playerPtr;
+}
+
+YakuzaCharacter* YakuzaCharacterDamageManager::SendEnemyGrabPlayerYakuza(YakuzaCharacter* grabYakuza)
+{
+	if (m_playerPtr->IsCharacterHpDead() ||
+		grabYakuza->GetYakuzaStateMachine().GetIsGrabing())
+	{
+		return nullptr;
+	}
+
+	m_playerPtr->GetYakuzaStateMachine().GrabBedStart(grabYakuza);
+
+	return m_playerPtr;
+}
+
+
+
+bool YakuzaCharacterDamageManager::UpdateBothYakuzaGrabProcess(YakuzaCharacter* grabingYakuza, YakuzaCharacter* grabBedYakuza)
+{
+	//掴まれている側が死亡してしまったら処理を継続できないためflase
+	if (grabBedYakuza->IsCharacterHpDead())
+	{
+		return false;
+	}
+	Vector3 GBIYakuzaPos = grabingYakuza->GetPosition(); //掴んでいる側の位置
+	Vector3 GBIYakuzaFor = grabingYakuza->GetForward(); //掴んでいる側の正面ベクトル
+	Vector3 GBBYakuzaPos = grabBedYakuza->GetPosition(); //掴まれている側の位置
+	
+	//掴まれている側の更新位置
+	Vector3 grabBedPos = GBIYakuzaPos + (GBIYakuzaFor * YCDM_Constant::GRABBED_CHARACTER_POS_ADD);
+
+	grabBedYakuza->SetPosition(grabBedPos);
+
+	Vector3 toGrabBedVec = GBIYakuzaPos - GBBYakuzaPos;
+	toGrabBedVec.Normalize();
+
+	grabBedYakuza->GetRotation().SetRotationYFromDirectionXZ(toGrabBedVec);
+
+	grabBedYakuza->SetForward(Vector3::AxisZ);
+	grabBedYakuza->GetRotation().Apply(grabBedYakuza->GetForward());
+}
+
+void YakuzaCharacterDamageManager::AdjustGrabBedYakuzaPositionOnThrow(
+	YakuzaCharacter* grabingYakuza,
+	YakuzaCharacter* grabBedYakuza,
+	const Vector3& sweepDir,
+	const Vector3& adjustDir,
+	float sweepDistances
+)
+{
+	Vector3 GBIYakuzaPos = grabingYakuza->GetPosition();
+	Vector3 GBIYakuzaFor = grabingYakuza->GetForward();
+	Vector3 GBBYakuzaPos = grabBedYakuza->GetPosition();
+	Vector3 GBBYakuzaBack = sweepDir;
+
+	//自身の後方約150fの位置を作成
+	Vector3 targetDis = GBBYakuzaBack * sweepDistances;
+	Vector3 targetPos = GBBYakuzaPos + targetDis;
+
+	//後方に壁があるかどうかをレイキャストで確認
+	btTransform start, end;
+	start.setIdentity();
+	end.setIdentity();
+	//開始地点は自身の座標、Y座標は地面にこすらないように少し上げる
+	start.setOrigin(btVector3(GBBYakuzaPos.x, GBBYakuzaPos.y + 25.0f, GBBYakuzaPos.z));
+	//終点は後方150fの位置
+	end.setOrigin(btVector3(targetPos.x, targetPos.y + 25.0f, targetPos.z));
+
+	SweepResultWall callback;
+	//制作したコライダーを視点から終点まで動かして壁に接触したかどうかを確認
+	PhysicsWorld::GetInstance()->ConvexSweepTest((const btConvexShape*)m_sweepTestCollider.GetBody(), start, end, callback);
+
+	//壁に接触していなかったらこのままの位置で投げて良いためreturn
+	if (!callback.m_isHit)
+	{
+		return;
+	}
+
+	//壁に接触していた場合このまま投げると壁にめり込むため、2者共に反対方向に向け投げさせる
+	//まずはプレイヤーの向きを反対方向に変える
+	grabBedYakuza->GetYakuzaStateMachine().GetHasCharactarRot().SetRotationYFromDirectionXZ(adjustDir);
+
+	grabBedYakuza->GetYakuzaStateMachine().SetHasCharactarForward(Vector3::AxisZ);
+	grabBedYakuza->GetYakuzaStateMachine().GetHasCharactarRot().Apply(
+		grabBedYakuza->GetYakuzaStateMachine().GetHasCharactarForward()
+	);
+
+	//次に掴んでいる側も反対方向に向ける
+	//掴まれている側の更新位置
+	Vector3 grabingPos = grabBedYakuza->GetPosition() + (grabBedYakuza->GetForward() * YCDM_Constant::GRABBED_CHARACTER_POS_ADD);
+
+	grabingYakuza->SetPosition(grabingPos);
+
+	Vector3 toGrabingDir = grabBedYakuza->GetForward() * -1.0f;
+
+	grabingYakuza->GetYakuzaStateMachine().GetHasCharactarRot().SetRotationYFromDirectionXZ(toGrabingDir);
+
+	grabingYakuza->GetYakuzaStateMachine().SetHasCharactarForward(Vector3::AxisZ);
+	grabingYakuza->GetYakuzaStateMachine().GetHasCharactarRot().Apply(
+		grabingYakuza->GetYakuzaStateMachine().GetHasCharactarForward()
+	);
+}
+
+void YakuzaCharacterDamageManager::UpdateGrabBedYakuzaThrownPosition(YakuzaCharacter* thrownYakuza, const Vector3& grabBedYakuzaPos)
+{
+	Vector3 toGrabBedYakuzaVec = grabBedYakuzaPos - thrownYakuza->GetPosition();
+	toGrabBedYakuzaVec.Normalize();
+	toGrabBedYakuzaVec *= 100.0f;
+	Vector3 movePos = grabBedYakuzaPos + toGrabBedYakuzaVec;
+
+	Vector3 newPos = thrownYakuza->GetYakuzaStateMachine().GetHasCharactarCharaCon()->Execute(movePos, 0.0f);
+	
+	thrownYakuza->SetPosition(movePos);
+}
+
 bool YakuzaCharacterDamageManager::IsDefenseSuccessful(
 	const Vector3& defenderPos,
 	const Vector3& defenderForward,
@@ -191,6 +322,78 @@ bool YakuzaCharacterDamageManager::IsDefenseSuccessful(
 	}
 
 	return false;
+}
+
+void YakuzaCharacterDamageManager::SendGrabingToGrabBedYakuzaData(YakuzaCharacter* grabingYakuza, int isAttackType)
+{
+	if (isAttackType == YakuzaAnimation::en_grabAttack)
+	{
+		grabingYakuza->GetYakuzaStateMachine().SetGrabBedToAttackType(isAttackType);
+		grabingYakuza->GetYakuzaStateMachine().SetIsDamage(true, false);
+	}
+	else if (isAttackType == YakuzaAnimation::en_grabThrow)
+	{
+		grabingYakuza->GetYakuzaStateMachine().SetGrabBedToAttackType(isAttackType);
+		grabingYakuza->GetYakuzaStateMachine().SetIsDamage(true, false);
+	}
+	else if (isAttackType == YakuzaAnimation::en_grabBeCanceled || isAttackType == YakuzaAnimation::en_hitBody)
+	{
+		grabingYakuza->GetYakuzaStateMachine().SetGrabBedToAttackType(isAttackType);		
+	}
+}
+
+void YakuzaCharacterDamageManager::TakeGrabBedYakuzaDamage(YakuzaCharacter* self,int isAttackType)
+{
+	if (isAttackType == YakuzaAnimation::en_grabDamage)
+	{
+		self->TakeDamage(10.0f);
+	}
+	else if (isAttackType == YakuzaAnimation::en_grabThrown)
+	{
+		self->TakeDamage(30.0f);
+	}
+
+	if (self->IsCharacterHpDead())
+	{
+		self->GetYakuzaStateMachine().SetIsDead(true);
+	}
+}
+
+void YakuzaCharacterDamageManager::SendGrabBedToGrabingYakuzaData(YakuzaCharacter* grabBedYakuza, int isAttackType)
+{
+	if (isAttackType == YakuzaAnimation::en_grabed ||
+		isAttackType == YakuzaAnimation::en_grabDamage ||
+		isAttackType == YakuzaAnimation::en_grabSelfRelease)
+	{
+		grabBedYakuza->GetYakuzaStateMachine().SetGrabingToAttackType(isAttackType);
+	}
+}
+
+bool YakuzaCharacterDamageManager::UpdateGrabBedYakuzaEscapeTime(YakuzaCharacter* grabBedYakuza, bool isResistance)
+{
+	if (grabBedYakuza->GetYakuzaStateMachine().GetGrabBedWeenTime() <= 0.0f)
+	{
+		grabBedYakuza->GetYakuzaStateMachine().SetGrabBedWeenTime(5.0f);
+
+		return false;
+	}
+	else
+	{
+		float time = grabBedYakuza->GetYakuzaStateMachine().GetGrabBedWeenTime();
+
+		time -= g_gameTime->GetFrameDeltaTime();
+
+		grabBedYakuza->GetYakuzaStateMachine().SetGrabBedWeenTime(time);
+
+		if (time <= 0.0f)
+		{
+			grabBedYakuza->GetYakuzaStateMachine().SetGrabBedWeenTime(0.0f);
+			return true;
+		}
+
+		return false;
+	}
+	
 }
 
 YakuzaDamageDatas YakuzaCharacterDamageManager::GetPlayerYakuzaDamage()

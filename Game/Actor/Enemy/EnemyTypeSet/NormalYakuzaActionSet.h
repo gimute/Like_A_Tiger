@@ -185,6 +185,15 @@ public:
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Dodge_Left.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Dodge_Left.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Guard.tka",true });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Guard.tka",true });//掴み開始
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Guard.tka",true });//掴み中
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Guard.tka",true });//掴み攻撃
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Guard.tka",true });//掴み投げ
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Guard.tka",true });//掴みキャンセル //ノーマルのヤクザには掴み攻撃はないため、掴まれたときのアニメーションのみ実装
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Grab_Idle_B.tka",true });//掴まれている
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Grab_Throw_B.tka",false });//掴み投げられ
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Grab_Break_B.tka",false});//掴み自己解除
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Grab_Atk_B.tka",false });//掴みダメージ
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/BodyHit.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/BackDeath_E.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/CrossPunch_R_Ev.tka",false });

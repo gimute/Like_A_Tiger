@@ -57,6 +57,9 @@ void PlayerController::Update()
 	//スウェイの条件文付けるならここ
 	playerStateMachine->SetSwayFlag(g_pad[0]->IsTrigger(enButtonA));
 
+	//掴みの条件文
+	playerStateMachine->SetGrabFlag(g_pad[0]->IsTrigger(enButtonX));	
+
 	//ガードの条件文付けるならここ
 	playerStateMachine->SetDefenseFlag(
 		g_pad[0]->IsPress(enButtonLB1) ||

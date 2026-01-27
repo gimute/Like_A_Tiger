@@ -8,7 +8,8 @@ enum YakuzaGroupeRole
 	en_YakuzaRole_Attacking,
 	en_YakuzaRole_AttackEnd,
 	en_YakuzaRoleHitDamage,
-	en_YakuzaRoleUniqueMoveing
+	en_YakuzaRoleUniqueMoveing,
+	en_YakuzaRoleGrabBed,
 };
 
 enum YakuzaAiState

@@ -17,6 +17,8 @@ bool Enemy::Start()
 
 	SetAttackCollisionName("EnemyAttack");
 
+	SetGrabCollisionName("EnemyGrab");
+
 	return true;
 }
 
@@ -35,9 +37,6 @@ void Enemy::Update()
 	positionCorrection.y += 60.0f;
 
 	m_bodyCollision->SetPosition(positionCorrection);
-
-	//無敵時間のタイマー
-	UpdateInvincibleTime();
 }
 
 void Enemy::Render(RenderContext& rc)
@@ -66,6 +65,24 @@ void Enemy::OnHit(const char* hitCollisionName, CollisionObject* pairCollision)
 		YakuzaDamageDatas toPlayerDamage = GetYakuzaStateMachine().GetTypeSetAttackPower();
 		//ダメージ送る
 		YakuzaCharacterDamageManager::GetInstance()->SendPlayerYakuzaDamage(toPlayerDamage,GetPosition());
+	}
+
+	if (hitCollisionName == "GrabPlayer" &&
+		pairCollision == m_bodyCollision)
+	{
+		//掴まれた
+		GetYakuzaStateMachine().GrabBedStart(
+			YakuzaCharacterDamageManager::GetInstance()->SendPlayerGrabEnemyYakuza(this)
+		);
+	}
+
+	if (hitCollisionName == "playerBodyCollision" &&
+		pairCollision == m_grabCollision)
+	{
+		//掴んだ
+		GetYakuzaStateMachine().GrabStart(
+			YakuzaCharacterDamageManager::GetInstance()->SendEnemyGrabPlayerYakuza(this)
+		);
 	}
 }
 
