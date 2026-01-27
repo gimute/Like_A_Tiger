@@ -43,7 +43,7 @@ public:
 	void SetBGMVolume(float volume);
 
 	//SEçƒê∂
-	SoundHandle PlaySE(const int kind, const bool isLood = false, const bool is3D = false, float volume = 1.0f);
+	SoundHandle PlaySE(const int kind, const bool isLoop = false, const bool is3D = false, float volume = 1.0f);
 	//SEí‚é~
 	void StopSE(const SoundHandle handle);
 

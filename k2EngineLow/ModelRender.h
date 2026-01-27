@@ -264,6 +264,27 @@ namespace nsK2EngineLow
 		{
 			m_doCulling = false;
 		}
+
+		/// <summary>
+		/// ボーンIDからボーンを取得
+		/// </summary>
+		/// <param name="boneId"></param>
+		/// <returns></returns>
+		Bone* GetBone(int boneId) const
+		{
+			return m_skeleton.GetBone(boneId);
+		}
+
+		/// <summary>
+		/// ボーンの名前からボーンを取得
+		/// </summary>
+		/// <param name="boneName">ボーンの名前</param>
+		/// <returns></returns>
+		Bone* GetBone(const wchar_t* boneName) const
+		{
+			return GetBone(m_skeleton.FindBoneID(boneName));
+		}
+
 	private:
 		Model m_model;					//モデル
 		//Model m_bgModel;

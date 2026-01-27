@@ -2,6 +2,13 @@
 #include "Actor\Player\Player.h"
 #include "Actor\Enemy\Enemy.h"
 
+namespace
+{
+	constexpr float HIT_EFFECT_SCALE = 5.0f;		//攻撃ヒット時のエフェクトスケール
+	constexpr float GUARD_EFFECT_SCALE = 10.0f;		//攻撃ガード時のエフェクトスケール
+	constexpr float HIT_EFFECT_PLAY_POS_Y = 50.0f;	//エフェクト再生する高さ
+}
+
 class YakuzaCharacterDamageManager
 {
 private:

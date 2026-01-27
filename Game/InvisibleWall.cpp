@@ -21,8 +21,8 @@ InvisibleWallShape::InvisibleWallShape()
 
 InvisibleWall::InvisibleWall()
 {
-	m_wallEffect.Init(3);
-	m_lineEffect.Init(4);
+	m_wallEffect.Init(InvisibleWall_Wall);
+	m_lineEffect.Init(InvisibleWall_WallLine);
 }
 
 InvisibleWall::~InvisibleWall()
@@ -108,8 +108,8 @@ void InvisibleWall::Delete()
 
 CircleInvisibleWall::CircleInvisibleWall()
 {
-	m_wallEffect.Init(1);
-	m_lineEffect.Init(2);
+	m_wallEffect.Init(InvisibleWall_Circle);
+	m_lineEffect.Init(InvisibleWall_Ring);
 }
 
 CircleInvisibleWall::~CircleInvisibleWall()

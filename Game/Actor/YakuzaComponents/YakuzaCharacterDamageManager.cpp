@@ -44,7 +44,19 @@ void YakuzaCharacterDamageManager::SendEnemyYakuzaDamage(Enemy* sendEnemy, Yakuz
 		))
 		{
 			isDefense = true;
+			//ガード時エフェクト、ヒット時と同じだがスケールだけ変える
+			EffectManager::Get().PlayEffect(Attack_Hit, sendEnemy->GetPosition() + Vector3::AxisY * HIT_EFFECT_PLAY_POS_Y, Vector3::One * GUARD_EFFECT_SCALE);
 		}
+		else
+		{
+			//ヒット時エフェクト
+			EffectManager::Get().PlayEffect(Attack_Hit, sendEnemy->GetPosition() + Vector3::AxisY * HIT_EFFECT_PLAY_POS_Y, Vector3::One * HIT_EFFECT_SCALE);
+		}
+	}
+	else
+	{
+		//ヒット時エフェクト
+		EffectManager::Get().PlayEffect(Attack_Hit, sendEnemy->GetPosition() + Vector3::AxisY * HIT_EFFECT_PLAY_POS_Y, Vector3::One * HIT_EFFECT_SCALE);
 	}
 
 	Vector3 distNomal = sendEnemyPos - m_playerPtr->GetPosition();
@@ -104,6 +116,8 @@ void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(YakuzaDamageDatas send
 	////無敵時間開始
 	//m_playerPtr->StartInvincible(3.0f);
 
+	
+
 	bool isDefense = false;
 
 	KnockBackParam param;
@@ -121,7 +135,20 @@ void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(YakuzaDamageDatas send
 		))
 		{
 			isDefense = true;
+
+			//ガード時エフェクト、ヒット時と同じだがスケールだけ変える
+			EffectManager::Get().PlayEffect(Attack_Hit, m_playerPtr->GetPosition() + Vector3::AxisY * HIT_EFFECT_PLAY_POS_Y, Vector3::One * GUARD_EFFECT_SCALE);
 		}
+		else
+		{
+			//ヒット時エフェクト
+			EffectManager::Get().PlayEffect(Attack_Hit, m_playerPtr->GetPosition() + Vector3::AxisY * HIT_EFFECT_PLAY_POS_Y, Vector3::One * HIT_EFFECT_SCALE);
+		}
+	}
+	else
+	{
+		//ヒット時エフェクト
+		EffectManager::Get().PlayEffect(Attack_Hit, m_playerPtr->GetPosition() + Vector3::AxisY * HIT_EFFECT_PLAY_POS_Y, Vector3::One * HIT_EFFECT_SCALE);
 	}
 
 	Vector3 distNomal = m_playerPtr->GetPosition() - attackerPos;

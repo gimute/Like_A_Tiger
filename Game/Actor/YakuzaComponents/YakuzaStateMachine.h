@@ -246,6 +246,13 @@ public:
 
 	inline YakuzaAttackSEDatas GetAttackSEDatas(uint32_t stateID) { return m_typeSet.get()->GetAttackSEDatas(stateID); }
 
+	/// <summary>
+	/// キャラクターのボーンを取得
+	/// </summary>
+	/// <param name="boneName">ボーンの名前</param>
+	/// <returns></returns>
+	Bone* GetCharacterBone(const wchar_t* boneName);
+
 	void InitAttackStateMachine(uint32_t firstAttackStateHash,uint32_t firstFinishBrowStateHash);
 
 	void ResetAttackFlagsMachine();

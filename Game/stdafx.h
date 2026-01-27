@@ -10,6 +10,8 @@ extern K2EngineLow* g_k2EngineLow;
 
 #include "Core\ParameterManager.h"
 #include "Sound/SoundManager.h"
+#include "Effect/EffectManager.h"
+#include "Effect/EffectId.h"
 
 #include "Core\Curve.h"
 #include "UI\UIBase\UIBase.h"
