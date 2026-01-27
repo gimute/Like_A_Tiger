@@ -247,5 +247,15 @@ public:
 		}
 		m_attackCollision->SetIsEnable(setIs); 
 	}
+
+	/// <summary>
+	/// ボーンを取得
+	/// </summary>
+	/// <param name="boneName">ボーンの名前</param>
+	/// <returns></returns>
+	Bone* GetBone(const wchar_t* boneName)
+	{
+		return m_modelRender.GetBone(boneName);
+	}
 };
 

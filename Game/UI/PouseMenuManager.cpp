@@ -10,26 +10,6 @@ bool PouseMenuSceneBase::CheckCommonTransition(uint32_t& nextState)
 		nextState = PouseMenuOutSideScene::ID();
 		return true;
 	}
-
-	///   /** 下ボタンで次のタブへ */
-	///   if (g_pad[0]->IsTrigger(enButtonDown)) {
-	///   	uint32_t next = GetNextTabID();
-	///   	if (next != 0) {
-	///   		nextState = next;
-	///   		return true;
-	///   	}
-	///   }
-	///   
-	///   /** 上ボタンで次のタブへ */
-	///   if (g_pad[0]->IsTrigger(enButtonUp)) {
-	///   	uint32_t prev = GetPrevTabID();
-	///   	if (prev != 0) {
-	///   		nextState = prev;
-	///   		return true;
-	///   	}
-	///   }
-	
-
 	return false;
 }
 
@@ -350,6 +330,8 @@ PouseMenuSceneManager* PouseMenuSceneManager::m_sceneManagerInstance = nullptr;
 
 void PouseMenuSceneManager::InitPouseMenuSceneManager()
 {
+	m_currentState = nullptr;
+	m_menuOwner = nullptr;
 	/** 念のため、既存のステートがあれば削除してクリア */
 	for (auto statePtr : m_stateMap)
 	{
@@ -377,6 +359,12 @@ bool PouseMenuSceneManager::UpdatePouseMenuSceneManager()
 		{
 			/** 9999ならメニュー終了合図 */
 			if (requestState == 9999) {
+				//ステートの終了を実行
+				m_currentState->ExitScene();
+				m_currentState = nullptr;
+				m_menuOwner = nullptr;
+				m_isActive = false;
+
 				return false;
 			}
 
@@ -393,8 +381,9 @@ bool PouseMenuSceneManager::UpdatePouseMenuSceneManager()
 		}
 		//ステートを更新
 		m_currentState->UpdateScene();
+		m_isActive = true;
+		return true;
 	}
-	return true;
+	m_isActive = false;
+	return false;
 }
-
-

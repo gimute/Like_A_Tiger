@@ -154,7 +154,7 @@ public:
 
 	inline bool GetFinishBrowFlag() { return m_finishBrowFlag; }
 
-	inline void SetSwayFlag(bool setIs) { m_swayFlag = setIs; if (setIs) { m_isSway = true; } }
+	inline void SetSwayFlag(bool setIs) { m_swayFlag = setIs; }
 
 	inline bool GetSwayFlag() { return m_swayFlag; }
 
@@ -245,6 +245,13 @@ public:
 	inline YakuzaDamageDatas GetTypeSetAttackPower() { return m_typeSet.get()->GetAttackPower(m_attackStateMachine.get()); }
 
 	inline YakuzaAttackSEDatas GetAttackSEDatas(uint32_t stateID) { return m_typeSet.get()->GetAttackSEDatas(stateID); }
+
+	/// <summary>
+	/// キャラクターのボーンを取得
+	/// </summary>
+	/// <param name="boneName">ボーンの名前</param>
+	/// <returns></returns>
+	Bone* GetCharacterBone(const wchar_t* boneName);
 
 	void InitAttackStateMachine(uint32_t firstAttackStateHash,uint32_t firstFinishBrowStateHash);
 

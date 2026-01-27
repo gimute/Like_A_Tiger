@@ -60,6 +60,9 @@ public:
 	void OnUpdate() override;
 	//ステートアウト
 	void OnExit() override;
+private:
+
+	bool m_isSwayStart = false;
 };
 
 class EnemyAiIdleState;
