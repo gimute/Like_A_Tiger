@@ -10,6 +10,7 @@
 #include "Actor\Enemy\Enemy.h"
 
 #include "Actor\Enemy\EnemyAI\IEnemyAi.h"
+#include "UI/PouseMenuManager.h"
 
 //スタート関数
 bool EnemyMetaAi::Start()
@@ -19,6 +20,11 @@ bool EnemyMetaAi::Start()
 
 void EnemyMetaAi::Update()
 {
+	if (PouseMenuSceneManager::GetSceneManagerInstance()->IsPoseMenuActive())
+	{
+		return;
+	}
+
 	//1.情報収集
 	EnemyAiDataCollect();
 	//2.状況評価
