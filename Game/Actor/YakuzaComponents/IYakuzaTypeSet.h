@@ -33,9 +33,11 @@ struct AttackStateInitData
 	int playAnimationNo = -1;
 	//この攻撃ステートをどちらの陣営が使っているか
 	YakuzaCamp yakuzaCamp = YakuzaCamp::en_campNone;
-	//攻撃スピード
+	//攻撃移動スピード
 	float attackSpeed = 0.0f;
-	
+	//攻撃モーションスピード
+	float attackAnimSpeed = 0.0f;
+
 	AttackStateInitData() = default;
 
 	AttackStateInitData(
@@ -44,7 +46,8 @@ struct AttackStateInitData
 		uint32_t nextAttackHash,
 		uint32_t nextFinalBrowHash,
 		int playAnimationNo,
-		float attackSpeed
+		float attackSpeed = 50.0f,
+		float attackAnimSpeed = 1.0f
 	)
 		: hasOwner(hasStateMachine)
 		, yakuzaCamp(yakuzaCamp)
@@ -52,6 +55,7 @@ struct AttackStateInitData
 		, nextFinalBrowHash(nextFinalBrowHash)
 		, playAnimationNo(playAnimationNo)
 		, attackSpeed(attackSpeed)
+		, attackAnimSpeed(attackAnimSpeed)
 	{
 	}
 };
@@ -112,6 +116,8 @@ struct YakuzaAttackSEDatas
 	{ }
 };
 
+class YakuzaCharacter;
+
 class IYakuzaTypeSet
 {
 public:
@@ -119,8 +125,11 @@ public:
 	IYakuzaTypeSet(YakuzaCamp camp) : m_yakuzaCamp(camp){ }
 	//デストラクタ
 	virtual ~IYakuzaTypeSet() = default;
+	//パラメーター設定
+	virtual void InitStateMachineParam(YakuzaCharacter& useCharacter,YakuzaStateMachine& useStateMachine) = 0;
 	//ステート生成
 	virtual void CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) = 0;
+
 
 protected:
 
@@ -135,8 +144,6 @@ protected:
 	std::unordered_map<uint32_t,YakuzaDamageDatas> m_yakuzaDamageDataList;
 
 	std::unordered_map<uint32_t, YakuzaAttackSEDatas> m_yakuzaAttackSEList;
-	//陣営
-	YakuzaCamp m_yakuzaCamp = en_campNone;
 
 	//攻撃ステートを追加＋攻撃時データを追加
 	template<typename ClassName>
@@ -172,6 +179,9 @@ protected:
 	}
 
 public:
+	//陣営
+	YakuzaCamp m_yakuzaCamp = en_campNone;
+
 	inline uint32_t GetFirstAttackID() { return m_firstAttackID; }
 
 	inline uint32_t GetFirstFinishBrowID() { return m_firstFinishBrowID; }

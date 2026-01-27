@@ -4,24 +4,36 @@
 #include "YakuzaStates.h"
 #include "Actor\Character.h"
 
+#include "Actor\YakuzaComponents\YakuzaCharacterDamageManager.h"
+
 #include "Sound\SoundManager.h"
 #include "Sound\SoundId.h"
 
 IStateBase* YakuzaStateMachine::GetNextState()
 {
-	//€–S‚µ‚½‚È‚ç€–SƒXƒe[ƒg‚ğXV‚·‚é
+	if (CanChangeGrabBed())
+	{
+		return FindClassNameState<YakuzaGrabBedState>();
+	}
+
+	//æ­»äº¡ã—ãŸãªã‚‰æ­»äº¡ã‚¹ãƒ†ãƒ¼ãƒˆã‚’æ›´æ–°ã™ã‚‹
 	if (CanChangeDead())
 	{
 		return FindClassNameState<YakuzaDeadState>();
 	}
 
-	//ƒ_ƒ[ƒW‚ğó‚¯‚½‚È‚çƒ_ƒ[ƒWƒXƒe[ƒg‚ğXV‚·‚é
+	//ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ãŸãªã‚‰ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚¹ãƒ†ãƒ¼ãƒˆã‚’æ›´æ–°ã™ã‚‹
 	if (CanChangeDamage())
 	{
 		return FindClassNameState<YakuzaDamageState>();
 	}
 
-	//UŒ‚’†‚È‚çŒ»İXV’†‚ÌƒAƒ^ƒbƒNƒXƒe[ƒg‚ğXV‚·‚é
+	if (CanChangeGrab())
+	{
+		return FindClassNameState<YakuzaGrabState>();
+	}
+
+	//æ”»æ’ƒä¸­ãªã‚‰ç¾åœ¨æ›´æ–°ä¸­ã®ã‚¢ã‚¿ãƒƒã‚¯ã‚¹ãƒ†ãƒ¼ãƒˆã‚’æ›´æ–°ã™ã‚‹
 	if (CanChangeAttack())
 	{
 		return FindClassNameState<YakuzaAttackState>();
@@ -32,7 +44,7 @@ IStateBase* YakuzaStateMachine::GetNextState()
 		return FindClassNameState<YakuzaDefenseState>();
 	}
 
-	//‰ñ”ğ’†‚È‚çA‰ñ”ğƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚ç
+	//å›é¿ä¸­ãªã‚‰ã€å›é¿ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸã‚‰
 	if (CanChangeSway())
 	{
 		return FindClassNameState<YakuzaSwayState>();
@@ -78,7 +90,8 @@ bool YakuzaStateMachine::CanChangeAttack()
 bool YakuzaStateMachine::CanChangeSway()
 {
 	if (GetSwayFlag() ||
-		GetIsSway())
+		GetIsSway() &&
+		!GetIsGrab())
 	{
 		return true;
 	}
@@ -124,6 +137,31 @@ Bone* YakuzaStateMachine::GetCharacterBone(const wchar_t* boneName)
 	return m_hasCharactar->GetBone(boneName);
 }
 
+bool YakuzaStateMachine::CanChangeGrab()
+{
+	if ((m_grabFlag || m_isGrab) &&
+		!m_isAttack &&
+		!m_isSway &&
+		!m_defenseFlag && 
+		!m_isGrabbed &&
+		!m_isDamage)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool YakuzaStateMachine::CanChangeGrabBed()
+{
+	if (m_isGrabbed)
+	{
+		return true;
+	}
+
+	return false;
+}
+
 void YakuzaStateMachine::InitAttackStateMachine(uint32_t firstAttackStateHash, uint32_t firstFinishBrowStateHash)
 {
 	m_attackStateMachine = std::make_unique<YakuzaAttackComboStateMachine>(this);
@@ -140,31 +178,79 @@ void YakuzaStateMachine::ResetAttackFlagsMachine()
 
 void YakuzaStateMachine::SetIsDefense(bool setIsKnockBack, KnockBackParam param)
 {
-	//ƒmƒbƒNƒoƒbƒNƒtƒ‰ƒO
+	//ãƒãƒƒã‚¯ãƒãƒƒã‚¯ãƒ•ãƒ©ã‚°
 	m_isDamageKnockBack = setIsKnockBack;
-	//ƒmƒbƒNƒoƒbƒN“àƒpƒ‰ƒ[ƒ^[
+	//ãƒãƒƒã‚¯ãƒãƒƒã‚¯å†…ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼
 	m_knockBackParam = param;
 }
 
 void YakuzaStateMachine::SetIsDamage(bool setIsDamage, bool setIsKnockBack, KnockBackParam param)
 {
-	//ƒ_ƒ[ƒWƒtƒ‰ƒO
+	//ãƒ€ãƒ¡ãƒ¼ã‚¸ãƒ•ãƒ©ã‚°
 	m_isDamage = setIsDamage;
-	//ƒmƒbƒNƒoƒbƒNƒtƒ‰ƒO
+	//ãƒãƒƒã‚¯ãƒãƒƒã‚¯ãƒ•ãƒ©ã‚°
 	m_isDamageKnockBack = setIsKnockBack;
-	//ƒmƒbƒNƒoƒbƒN“àƒpƒ‰ƒ[ƒ^[
+	//ãƒãƒƒã‚¯ãƒãƒƒã‚¯å†…ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼
 	m_knockBackParam = param;
 }
 
 void YakuzaStateMachine::ResetIsKnockBack(const KnockBackParam& param)
 {
-	//ƒmƒbƒNƒoƒbƒNƒtƒ‰ƒO‚ğ—§‚Ä’¼‚·
+	//ãƒãƒƒã‚¯ãƒãƒƒã‚¯ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ç›´ã™
 	m_isDamageKnockBack = true;
-	//ƒmƒbƒNƒoƒbƒN“àƒpƒ‰ƒ[ƒ^[‚ğ—§‚Ä’¼‚·
+	//ãƒãƒƒã‚¯ãƒãƒƒã‚¯å†…ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ã‚’ç«‹ã¦ç›´ã™
 	m_knockBackParam = param;
 
-	//ƒAƒjƒ[ƒVƒ‡ƒ“‚ğˆêu‚¾‚¯Ø‚è‘Ö‚¦‚é
+	//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’ä¸€ç¬ã ã‘åˆ‡ã‚Šæ›¿ãˆã‚‹
 	HasCharactarPlayAnimation(YakuzaAnimation::en_fightingIdle, 0.1f);
+}
+
+void YakuzaStateMachine::GrabStart(YakuzaCharacter* grabingYakuza)
+{
+	if (grabingYakuza->IsCharacterHpDead())
+	{
+		return;
+	}
+
+	//æ´ã‚€ãƒ¤ãƒ„ã‚’æ±ºå®š
+	m_isGrabing = true;
+	//æ´ã‚€ãƒ¤ãƒ„ã‚’è¨­å®š
+	m_grabingYakuza = grabingYakuza;
+	//æ´ã¿ç”¨ã®ã‚³ãƒªã‚¸ãƒ§ãƒ³ã‚’å‰Šé™¤
+	m_hasCharactar->DeleteGrabCollision();
+}
+
+void YakuzaStateMachine::GrabEnd()
+{
+	//æ´ã¿çµ‚äº†
+	m_isGrab = false;
+	//æ´ã‚“ã§ã„ãªã„
+	m_isGrabing = false;
+	//æ´ã‚€ãƒ¤ãƒ„ã‚’NULLã«
+	m_grabingYakuza = nullptr;	
+	//æ´ã¿ç”¨ã®ã‚³ãƒªã‚¸ãƒ§ãƒ³ã‚’å‰Šé™¤
+	m_hasCharactar->DeleteGrabCollision();
+}
+
+void YakuzaStateMachine::GrabBedStart(YakuzaCharacter* grabedYakuza)
+{
+	if (!grabedYakuza)
+	{
+		return;
+	}
+
+	//æ´ã¾ã‚Œã¦ã‚‹ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹
+	m_isGrabbed = true;
+	//æ´ã¾ã‚Œã¦ã„ã‚‹ãƒ¤ã‚¯ã‚¶ã‚’è¨­å®š
+	m_grabBedYakuza = grabedYakuza;
+}
+
+void YakuzaStateMachine::GrabBedEnd()
+{
+	//æ´ã¾ã‚Œçµ‚äº† 
+	m_isGrabbed = false;
+	//æ´ã¾ã‚Œã¦ã„ã‚‹ãƒ¤ã‚¯ã‚¶ã‚’nullã«
+	m_grabBedYakuza = nullptr;
 }
 
 void YakuzaStateMachine::SetHasCharactarPosition(const Vector3& pos) { m_hasCharactar->SetPosition(pos); }
@@ -200,14 +286,27 @@ bool YakuzaStateMachine::IsHasCharacterAttackCollisionActive()
 	return m_hasCharactar->IsAttackCollisionActive();
 }
 
+bool YakuzaStateMachine::IsHasCharacterGrabCollisionActive()
+{
+	return m_hasCharactar->IsGrabCollisionActive();
+}
+
+bool YakuzaStateMachine::IsHasCharacterGrabBedEscape(bool isResistance)
+{
+	return YakuzaCharacterDamageManager::GetInstance()->UpdateGrabBedYakuzaEscapeTime(
+		m_hasCharactar,
+		isResistance
+	);
+}
+
 void YakuzaStateMachine::HasCharacterKnockBackProcces(KnockBackParam& param)
 {
-	//y²‚Í–³‹‚·‚é
+	//yè»¸ã¯ç„¡è¦–ã™ã‚‹
 	param.m_direction.y = 0.0f;
 
-	//ƒmƒbƒNƒoƒbƒN•ûŒü
+	//ãƒãƒƒã‚¯ãƒãƒƒã‚¯æ–¹å‘
 	Vector3 knockDir = param.m_direction;
-	//ƒmƒbƒNƒoƒbƒN—Í
+	//ãƒãƒƒã‚¯ãƒãƒƒã‚¯åŠ›
 	float knockPower = param.m_power;
 
 
@@ -216,14 +315,14 @@ void YakuzaStateMachine::HasCharacterKnockBackProcces(KnockBackParam& param)
 	float t = param.m_knockElapsed / param.m_duration;
 	t = btClamped(t, 0.0f, 1.0f);
 
-	//ƒC[ƒWƒ“ƒOˆ—(ŠÈˆÕ)
+	//ã‚¤ãƒ¼ã‚¸ãƒ³ã‚°å‡¦ç†(ç°¡æ˜“)
 	float ease = 1.0f - t;
 
 	Vector3 moveVec = knockDir * knockPower * ease * g_gameTime->GetFrameDeltaTime();
 
 	Vector3 newPos = GetHasCharactarCharaCon()->Execute(moveVec, 1.0f);
 
-	//À•W‚ğİ’è
+	//åº§æ¨™ã‚’è¨­å®š
 	SetHasCharactarPosition(newPos);
 
 	if (t >= 1.0f)
@@ -237,6 +336,61 @@ void YakuzaStateMachine::HasCharacterDeadProcces()
 	m_hasCharactar->YakuzaCharacterDeadProcces();
 }
 
+void YakuzaStateMachine::HasCharacterGrabingProcces()
+{
+	YakuzaCharacterDamageManager::GetInstance()->UpdateBothYakuzaGrabProcess(
+		m_hasCharactar,
+		m_grabingYakuza
+	);
+}
+
+void YakuzaStateMachine::HasCharacterSendToGrabingOrGrabBedYakuzaData(int sendDamageType)
+{
+	if (IsNowStateClassName<YakuzaGrabState>())
+	{
+		YakuzaCharacterDamageManager::GetInstance()->SendGrabingToGrabBedYakuzaData(
+			m_grabingYakuza,
+			sendDamageType
+		);
+	}
+	else if (IsNowStateClassName<YakuzaGrabBedState>())
+	{
+		YakuzaCharacterDamageManager::GetInstance()->SendGrabBedToGrabingYakuzaData(
+			m_grabBedYakuza,
+			sendDamageType
+		);
+	}
+}
+
+void YakuzaStateMachine::HasCharacterGrabBedTakeDamage(int damageType)
+{
+	YakuzaCharacterDamageManager::GetInstance()->TakeGrabBedYakuzaDamage(m_hasCharactar,damageType);
+}
+
+void YakuzaStateMachine::HasCharacterToGrabBedThrownPositionUpdate()
+{
+	YakuzaCharacterDamageManager::GetInstance()->UpdateGrabBedYakuzaThrownPosition(
+		m_hasCharactar,
+		m_grabBedYakuza->GetYakuzaStateMachine().GetGrabThrowPos()
+	);
+}
+
+void YakuzaStateMachine::HasCharacterGrabingYakuzaThrowPositionAdjustment(const Vector3& sweepDir, const Vector3& adjustDir,float sweepDis)
+{
+	YakuzaCharacterDamageManager::GetInstance()->AdjustGrabBedYakuzaPositionOnThrow(
+		m_grabingYakuza,
+		m_hasCharactar,
+		sweepDir,
+		adjustDir,
+		sweepDis
+	);
+}
+
+void YakuzaStateMachine::HasCharacterSetIsInvincible(bool setIsInvincible)
+{
+	m_hasCharactar->SetIsInvicible(setIsInvincible);
+}
+
 void YakuzaStateMachine::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName)
 {
 	if (wcscmp(eventName, L"CanTransition") == 0)
@@ -245,14 +399,27 @@ void YakuzaStateMachine::OnAnimationEvent(const wchar_t* clipName, const wchar_t
 	}
 	if (wcscmp(eventName, L"HitBoxOn") == 0)
 	{
-		m_hasCharactar->SpwanAttackCollision(
-			m_hasCharactar,
-			20.0f
-		);
+		if (IsGetYakuzaStateMachineNowState<YakuzaAttackState>())
+		{
+			m_hasCharactar->SpwanAttackCollision(
+				m_hasCharactar,
+				20.0f
+			);
+		}
+		else if(IsGetYakuzaStateMachineNowState<YakuzaGrabState>())
+		{
+			m_hasCharactar->SpawnGrabCollision(
+				m_hasCharactar,
+				20.0f
+			);
+		}
 	}
 	if (wcscmp(eventName, L"HitBoxOff") == 0)
 	{
-		m_hasCharactar->DeleteAttackCollision();
+		if (IsGetYakuzaStateMachineNowState<YakuzaAttackState>())
+		{
+			m_hasCharactar->DeleteAttackCollision();
+		}
 	}
 	if (wcscmp(eventName, L"footsteps") == 0)
 	{

@@ -1,5 +1,6 @@
 #pragma once
 #include "Actor\YakuzaComponents\IYakuzaTypeSet.h"
+#include "Actor\YakuzaComponents\YakuzaStateMachine.h"
 #include "Actor\YakuzaComponents\YakuzaGenericAttackState.h"
 
 #include "CRC32.h"
@@ -184,26 +185,56 @@ public:
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Dodge_Left.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Dodge_Left.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Guard.tka",true });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Guard.tka",true });//掴み開始
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Guard.tka",true });//掴み中
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Guard.tka",true });//掴み攻撃
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Guard.tka",true });//掴み投げ
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Guard.tka",true });//掴みキャンセル //ノーマルのヤクザには掴み攻撃はないため、掴まれたときのアニメーションのみ実装
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Grab_Idle_B.tka",true });//掴まれている
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Grab_Throw_B.tka",false });//掴み投げられ
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Grab_Break_B.tka",false});//掴み自己解除
+		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Grab_Atk_B.tka",false });//掴みダメージ
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/BodyHit.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/BackDeath_E.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/CrossPunch_R_Ev.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Punching_1_L_Ev.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Punching_2_R_Ev.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Punching_3_L_Ev.tka",false });
+
+		//パラメータ初期化
+		ParameterManager::GetInstance().LoadParameter<YakuzaParamater>("Assets/Json/NormalYakuzaStatus.json", [](const nlohmann::json& j, YakuzaParamater& p)
+			{
+				p.maxHP = j["hp"].get<int>();
+				p.moveSpeed = j["moveSpeed"].get<float>();
+				p.dadgeSpeed = j["dodgeSpeed"].get<float>();
+				p.dadgeAnimSpeed = j["dodgeAnimSpeed"].get<float>();
+			}
+		);
+	}
+
+	void InitStateMachineParam(YakuzaCharacter& useCharacter,YakuzaStateMachine& useStateMachine)
+	{
+		auto param = ParameterManager::GetInstance().GetParameter<YakuzaParamater>();
+
+		useCharacter.SetHP(param->maxHP);
+
+		useStateMachine.SetSwaySpeed(param->dadgeSpeed, param->dadgeAnimSpeed);
+
+		useStateMachine.SetMoveSpeed(param->moveSpeed);
 	}
 
 	void CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) override
 	{
 		AddAttackState<NormalYakuzaFirstAttackState>(
-			{ useAttackStateMachine,m_yakuzaCamp,NormalYakuzaSecondAttackState::ID(),NormalYakuzaFirstFinalBlowState::ID(),en_punching_1_L,50.0f},
+			{ useAttackStateMachine,m_yakuzaCamp,NormalYakuzaSecondAttackState::ID(),NormalYakuzaFirstFinalBlowState::ID(),en_punching_1_L},
 			{10.0f,150.0f,SoundId::se_hittingLightA},
 			{SoundId::se_cuttingWindLigthA});
 		AddAttackState<NormalYakuzaSecondAttackState>(
-			{ useAttackStateMachine,m_yakuzaCamp,NormalYakuzaThirdAttackState::ID(),NormalYakuzaSecondFinalBlowState::ID(),en_punching_3_L,50.0f },
+			{ useAttackStateMachine,m_yakuzaCamp,NormalYakuzaThirdAttackState::ID(),NormalYakuzaSecondFinalBlowState::ID(),en_punching_3_L},
 			{ 10.0f,150.0f,SoundId::se_hittingLightB },
 			{ SoundId::se_cuttingWindLigthA});
 		AddAttackState<NormalYakuzaThirdAttackState>(
-			{ useAttackStateMachine,m_yakuzaCamp,NormalYakuzaFourthAttackState::ID(),NormalYakuzaThirdFinalBlowState::ID(),en_punching_1_L,50.0f },
+			{ useAttackStateMachine,m_yakuzaCamp,NormalYakuzaFourthAttackState::ID(),NormalYakuzaThirdFinalBlowState::ID(),en_punching_1_L},
 			{ 10.0f,150.0f,SoundId::se_hittingLightA},
 			{ SoundId::se_cuttingWindLigthA});
 		AddAttackState<NormalYakuzaFourthAttackState>(useAttackStateMachine,

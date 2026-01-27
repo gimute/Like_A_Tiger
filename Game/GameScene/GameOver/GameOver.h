@@ -2,26 +2,26 @@
 
 class GameOver : public IGameObject
 {
-public:
-	//設定する画像データ
-	struct GameOverInitData
+private:
+	enum EnNextType
 	{
-		const char* gameOverFilePath;
-		float frameSize_x;
-		float frameSize_y;
+		enNextType_Title,
+		enNextType_Retry,
 	};
 
-private:
-	//GameOverUI用のデータ
-	const GameOverInitData defaultGameOver = {
-		"Assets/spriteData/GameOver/TestGameOver.DDS",
-		1600.0f,
-		900.0f
-	};
+public:
+    struct CursolPositionYData {
+        float positionY;
+    };
 
 private:
 	std::shared_ptr<UICanvas> m_canvas;
-	std::shared_ptr<UIImage> m_gameOverUI;
+	std::shared_ptr<UIImage> m_cursolUI;
+
+	std::unique_ptr<PositionUIAnimation> m_cursolPositionAnimation = nullptr;
+	std::unique_ptr<ColorUIAnimation> m_cursolColorAnimation = nullptr;
+
+	int m_currentCursolIndex = 0;
 
 public:
 	GameOver();
@@ -29,6 +29,9 @@ public:
 	bool Start() override;
 	void Update() override;
 	void Render(RenderContext& rc) override;
-	void Init(const GameOverInitData* initData = nullptr);
+
+
+	bool IsRetry() const { return m_currentCursolIndex == enNextType_Retry; }
+	bool IsTitle() const { return m_currentCursolIndex == enNextType_Title; }
 };
 

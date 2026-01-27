@@ -36,7 +36,7 @@
     <ClCompile Include="Actor\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAiFactory.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\IEnemyAi.cpp" />
-    <ClCompile Include="Actor\Enemy\EnemyAI\NormalYakuzaAi\NormalYakuzaAi.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAis\NormalYakuzaAi.cpp" />
     <ClCompile Include="Actor\Enemy\EnemySystem.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiIdleState.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiTrackingState.cpp" />
@@ -75,6 +75,8 @@
     <ClCompile Include="UI\MiniMap.cpp" />
     <ClCompile Include="Actor\YakuzaComponents\YakuzaGenericAttackState.cpp" />
     <ClCompile Include="Effect\EffectManager.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyTypeSet\FastYakuzaActionSet.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAis\FastYakuzaAi.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -115,7 +117,7 @@
     <ClInclude Include="Actor\Enemy\EnemyManager.h" />
     <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAiFactory.h" />
     <ClInclude Include="Actor\Enemy\EnemyAI\IEnemyAi.h" />
-    <ClInclude Include="Actor\Enemy\EnemyAI\NormalYakuzaAi\NormalYakuzaAi.h" />
+    <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAis\NormalYakuzaAi.h" />
     <ClInclude Include="GameScene\UpdateOrder.h" />
     <ClInclude Include="Actor\Enemy\EnemySystem.h" />
     <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiIdleState.h" />
@@ -162,5 +164,7 @@
     <ClInclude Include="Actor\YakuzaComponents\YakuzaGenericAttackState.h" />
     <ClInclude Include="Effect\EffectManager.h" />
     <ClInclude Include="Effect\EffectId.h" />
+    <ClInclude Include="Actor\Enemy\EnemyTypeSet\FastYakuzaActionSet.h" />
+    <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAis\FastYakuzaAi.h" />
   </ItemGroup>
 </Project>

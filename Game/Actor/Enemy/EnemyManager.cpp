@@ -45,7 +45,7 @@ void EnemyManager::RequestSpawnEnemy(EnemyYakuzaType type, const Vector3& spawnP
 	m_enemyPairList.push_back(std::move(pair));
 }
 
-void EnemyManager::RequestSpawnEnemyGroup(int spawnNum, const Vector3& spawnPoint)
+void EnemyManager::RequestSpawnEnemyGroup(int spawnNum, const Vector3& spawnPoint,bool inSpYakuza)
 {
 	EnemyGroup newGroup;
 
@@ -53,10 +53,24 @@ void EnemyManager::RequestSpawnEnemyGroup(int spawnNum, const Vector3& spawnPoin
 	{
 		EnemyPair pair;
 
-		//タイプをランダム選定
-		int randomType = 0;
-		//Random::Range(EnemyYakuzaType::en_normalYakuza)
-		EnemyYakuzaType type = static_cast<EnemyYakuzaType>(randomType);
+		EnemyYakuzaType type;
+		int  randomType = -1;
+
+		if (inSpYakuza &&
+			i >= spawnNum - 1)
+		{
+			//タイプをランダム選定
+			randomType = EnemyYakuzaType::en_fastYakuza;
+			//Random::Range(EnemyYakuzaType::en_normalYakuza)
+			type = static_cast<EnemyYakuzaType>(randomType);
+		}
+		else
+		{
+			//タイプをランダム選定
+			randomType = EnemyYakuzaType::en_normalYakuza;
+			//Random::Range(EnemyYakuzaType::en_normalYakuza)
+			type = static_cast<EnemyYakuzaType>(randomType);
+		}
 
 		auto newEnemy = m_enemyFactory.CreateEnemy(type);
 
@@ -335,6 +349,8 @@ void EnemyManager::UpdateTargetView()
 	m_targetView.m_targetPosition = m_targetCharacter->GetPosition();
 
 	m_targetView.m_targetForward = m_targetCharacter->GetForward();
+
+	m_targetView.m_isTargetAttacking = m_targetCharacter->GetYakuzaStateMachine().GetIsAttack();
 
 	for (auto it = m_enemyPairList.begin();it != m_enemyPairList.end();)
 	{

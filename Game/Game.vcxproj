@@ -246,6 +246,8 @@
     <ClCompile Include="Actor\Enemy\EnemyMetaAi\EnemyMetaAi.cpp" />
     <ClCompile Include="Core\Curve.cpp" />
     <ClCompile Include="Effect\EffectManager.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyTypeSet\FastYakuzaActionSet.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAis\FastYakuzaAi.cpp" />
     <ClCompile Include="GameScene\GameOver\GameOver.cpp" />
     <ClCompile Include="GameScene\GameOverScene.cpp" />
     <ClCompile Include="GameScene\GameResultScene.cpp" />
@@ -262,6 +264,9 @@
     <ClCompile Include="GameScene\GameTitleScene.cpp" />
     <ClCompile Include="Inventory\Inventory.cpp" />
     <ClCompile Include="Inventory\Types.cpp" />
+    <ClCompile Include="Inventory\Item.cpp" />
+    <ClCompile Include="UI\PouseMenuManager.cpp" />
+    <ClCompile Include="SaveManager.cpp" />
     <ClCompile Include="UI\PoseMenu.cpp" />
     <ClCompile Include="Core\ParameterManager.cpp" />
     <ClCompile Include="GameScene\Title\Title.cpp" />
@@ -280,7 +285,7 @@
     <ClCompile Include="Actor\BackGround\ProtoStage.cpp" />
     <ClCompile Include="Actor\Player\PlayerAttackComboState.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyTypeSet\NormalYakuzaActionSet.cpp" />
-    <ClCompile Include="Actor\Enemy\EnemyAI\NormalYakuzaAi\NormalYakuzaAi.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAis\NormalYakuzaAi.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -323,6 +328,8 @@
     <ClInclude Include="Core\Curve.h" />
     <ClInclude Include="Effect\EffectId.h" />
     <ClInclude Include="Effect\EffectManager.h" />
+    <ClInclude Include="Actor\Enemy\EnemyTypeSet\FastYakuzaActionSet.h" />
+    <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAis\FastYakuzaAi.h" />
     <ClInclude Include="GameScene\GameOver\GameOver.h" />
     <ClInclude Include="GameScene\GameOverScene.h" />
     <ClInclude Include="GameScene\GameResultScene.h" />
@@ -347,6 +354,9 @@
     <ClInclude Include="Actor\Player\PlayerCameraController.h" />
     <ClInclude Include="Inventory\Inventory.h" />
     <ClInclude Include="Inventory\Types.h" />
+    <ClInclude Include="Inventory\Item.h" />
+    <ClInclude Include="UI\PouseMenuManager.h" />
+    <ClInclude Include="SaveManager.h" />
     <ClInclude Include="UI\PoseMenu.h" />
     <ClInclude Include="json\json.hpp" />
     <ClInclude Include="Core\ParameterManager.h" />
@@ -362,7 +372,7 @@
     <ClInclude Include="Actor\YakuzaComponents\IYakuzaTypeSet.h" />
     <ClInclude Include="Actor\Enemy\EnemyTypeSet\NormalYakuzaActionSet.h" />
     <ClInclude Include="Actor\Enemy\EnemyAI\IEnemyAi.h" />
-    <ClInclude Include="Actor\Enemy\EnemyAI\NormalYakuzaAi\NormalYakuzaAi.h" />
+    <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAis\NormalYakuzaAi.h" />
     <ClInclude Include="Actor\Enemy\EnemyAI\IEnemyAiState.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="StateMachineComponents\IState.h" />

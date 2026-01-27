@@ -2,6 +2,8 @@
 #include "Actor\Character.h"
 #include "Actor\YakuzaComponents\YakuzaStateMachine.h"
 
+#include "GameScene\UpdateOrder.h"
+
 class YakuzaCharacter : public Character
 {
 private:
@@ -74,7 +76,7 @@ public:
 			return;
 		}
 
-		m_attackCollision = NewGO<CollisionObject>(0, "collision");
+		m_attackCollision = NewGO<CollisionObject>(UpdateOrder::Charactar, "collision");
 
 		Vector3 iPos = GetPosition();
 		Vector3 collisionPos = iPos + GetForward() * 20.0f;
@@ -113,19 +115,75 @@ public:
 		return false;
 	}
 
+	inline void SetGrabCollisionName(const char* name)
+	{
+		m_grabCollisionName = name;
+	}
+
+	void SpawnGrabCollision(
+		YakuzaCharacter* useCharacter,
+		float size
+	)
+	{
+		if (m_grabCollision)
+		{
+			return;
+		}
+
+		m_grabCollision = NewGO<CollisionObject>(UpdateOrder::Charactar, "collision");
+
+		Vector3 iPos = GetPosition();
+		Vector3 collisionPos = iPos + GetForward() * 20.0f;
+		collisionPos.y = 60.0f;
+
+		m_grabCollision->CreateSphere(
+			collisionPos,
+			GetRotation(),
+			size,
+			useCharacter
+		);
+
+		m_grabCollision->SetName(m_grabCollisionName);
+
+		m_grabCollision->SetIsEnableAutoDelete(false);
+	}
+
+	inline void DeleteGrabCollision()
+	{
+		if (!m_grabCollision)
+		{
+			return;
+		}
+		DeleteGO(m_grabCollision);
+		m_grabCollision = nullptr;
+	}
+
+	inline bool IsGrabCollisionActive()
+	{
+		if (m_grabCollision)
+		{
+			return true;
+		}
+		return false;
+	}
+
 protected:
 	//本体の当たり判定
 	CollisionObject* m_bodyCollision = nullptr;
 	//攻撃の当たり判定
 	CollisionObject* m_attackCollision = nullptr;
+	//掴みの当たり判定
+	CollisionObject* m_grabCollision = nullptr;
 	//攻撃のコリジョンネーム
 	const char* m_attackCollisionName = "";
+	//掴みのコリジョンネーム
+	const char* m_grabCollisionName = "";
 	//無敵時間
 	float m_invincibleTimeLeft = 0.0f;
 	//設定された時間
 	float m_invincibleDuration = 0.0f;
 	//無敵フラグ
-	bool m_isInvincible = 0.0f;
+	bool m_isInvincible = false;
 
 	const char* m_modelFilePath = nullptr;
 
@@ -141,12 +199,14 @@ public:
 
 	inline void SetBodyCollision() { m_bodyCollision->SetIsEnable(false); }
 
+	inline void SetIsInvicible(bool isInvincible) { m_isInvincible = isInvincible; }
+
 	inline bool GetIsInvicible() { return m_isInvincible; }
 
 	inline void SetHP(float max)
 	{
 		m_yakuzaMaxHp = max;
-		m_yakuzaCurrentHp;
+		m_yakuzaCurrentHp = max;
 	}
 
 	inline void TakeDamage(float amount)
@@ -168,28 +228,6 @@ public:
 	inline float GetYakuzaCurrentHp() { return m_yakuzaCurrentHp; }
 
 	inline float GetYakuzaMaxHp() { return m_yakuzaMaxHp; }
-
-	inline void StartInvincible(float sec) 
-	{
-		m_invincibleTimeLeft = sec;
-		m_isInvincible = true;
-	}
-
-	inline void UpdateInvincibleTime()
-	{
-		if (!m_isInvincible)
-		{
-			return;
-		}
-
-		m_invincibleTimeLeft -= g_gameTime->GetFrameDeltaTime();
-
-		if (m_invincibleTimeLeft <= 0.0f)
-		{
-			m_isInvincible = false;
-			m_invincibleTimeLeft = 0.0f;
-		}
-	}
 
 	//モデル初期設定
 	inline void InitYakuzaModel(const char* filePath, std::vector<Character::AnimationData>& ptr)

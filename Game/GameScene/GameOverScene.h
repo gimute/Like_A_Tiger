@@ -47,5 +47,7 @@ private:
 	GameOverState m_gameOverState = GameOverState::en_GameOverStandby;
 	//リザルトのスプライト
 	GameOver* m_gameOverSprite = nullptr;
+
+	uint32_t m_requestNextSceneId = 0;
 };
 

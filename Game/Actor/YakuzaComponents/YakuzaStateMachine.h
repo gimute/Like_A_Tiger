@@ -54,9 +54,11 @@ public:
 		AddState<YakuzaWalkState>(this);
 		AddState<YakuzaAimMoveState>(this);
 		AddState<YakuzaAttackState>(this);
+		AddState<YakuzaGrabState>(this);
 		AddState<YakuzaSwayState>(this);
 		AddState<YakuzaDefenseState>(this);
 		AddState<YakuzaDamageState>(this);
+		AddState<YakuzaGrabBedState>(this);
 		AddState<YakuzaDeadState>(this);
 
 		InitStateMachineClassName<YakuzaIdleState>();
@@ -72,6 +74,8 @@ private:
 	float m_moveSpeed = 400.0f;
 	//回避速度
 	float m_swaySpeed = 600.0f;
+	//回避アニメーション速度
+	float m_swayAnimSpeed = 3.0f;
 	//Aボタンが押されたか
 	bool m_attackFlag = false;
 	//Yボタンが押されたか
@@ -94,6 +98,28 @@ private:
 	bool m_isDamageKnockBack = false;
 	//ノックバックのパラメーター
 	KnockBackParam m_knockBackParam;
+	//掴み処理中か
+	bool m_grabFlag = false;
+	//掴み中か
+	bool m_isGrab = false;
+	//掴んだか
+	bool m_isGrabing = false;
+	//掴まれているか
+	bool m_isGrabbed = false;
+	//掴み最中の掴んでいる相手の行動種類
+	int m_grabingToAttackType = 0;
+	//掴み最中に攻撃を受けた際の攻撃種類
+	int m_grabBedToAttackType = 0;
+	//掴み有効範囲
+	float m_graspableRange = 100.0f;
+	//掴み有効時間
+	float m_grabBetWeenTime = 0.0f;
+	//掴んでいるキャラクターポインタ
+	YakuzaCharacter* m_grabingYakuza = nullptr;
+	//掴まれてるキャラクターポインタ
+	YakuzaCharacter* m_grabBedYakuza = nullptr;
+	//掴み投げをした際の位置
+	Vector3 m_grabThrowPos = Vector3::Zero;
 	//死んでしまったかどうか
 	bool m_isDead = false;
 	//狙い移動のキャラクターの位置
@@ -114,9 +140,11 @@ public:
 
 	inline float GetMoveSpeed() { return m_moveSpeed; }
 
-	inline float SetSwaySpeed(float speed) { m_swaySpeed = speed; }
+	inline void SetSwaySpeed(float speed, float animSpeed) { m_swaySpeed = speed; m_swayAnimSpeed = animSpeed; }
 
 	inline float GetSwaySpeed() { return m_swaySpeed; }
+
+	inline float GetSwayAnimSpeed() { return m_swayAnimSpeed; }
 
 	inline void SetAttackFlag(bool setIs) { m_attackFlag = setIs; }
 
@@ -126,13 +154,41 @@ public:
 
 	inline bool GetFinishBrowFlag() { return m_finishBrowFlag; }
 
-	inline void SetSwayFlag(bool setIs) { m_swayFlag = setIs; }
+	inline void SetSwayFlag(bool setIs) { m_swayFlag = setIs; if (setIs) { m_isSway = true; } }
 
 	inline bool GetSwayFlag() { return m_swayFlag; }
 
 	inline void SetDefenseFlag(bool setIs) { m_defenseFlag = setIs; }
 
 	inline bool GetDefenseFlag() { return m_defenseFlag; }
+
+	inline void SetGrabFlag(bool setIs) { m_grabFlag = setIs; }
+
+	inline bool GetGrabFlag() { return m_grabFlag; }
+
+	inline void SetIsGrab(bool setIs) { m_isGrab = setIs; }
+
+	inline bool GetIsGrab() { return m_isGrab; }
+
+	inline bool GetIsGrabing() { return m_isGrabing; }
+
+	inline bool GetIsGrabBed() { return m_isGrabbed; }
+
+	inline void SetGrabingToAttackType(int setType) { m_grabingToAttackType = setType; }
+
+	inline int GetGrabingToAttackType() { return m_grabingToAttackType; }
+
+	inline void SetGrabBedToAttackType(int setType) { m_grabBedToAttackType = setType; }
+	
+	inline int GetGrabBedToAttackType() { return m_grabBedToAttackType; }
+
+	inline void SetGrabBedWeenTime(float setTime) { m_grabBetWeenTime = setTime; }
+
+	inline float GetGrabBedWeenTime() { return m_grabBetWeenTime; }
+
+	inline void SetGrabThrowPos(const Vector3& setPos) { m_grabThrowPos = setPos; }
+
+	inline const Vector3& GetGrabThrowPos() { return m_grabThrowPos; }
 
 	inline void SetIsAttack(bool setIs) { m_isAttack = setIs; }
 
@@ -164,6 +220,14 @@ public:
 
 	inline KnockBackParam* GetKnockBackParam() { return &m_knockBackParam; }
 
+	void GrabStart(YakuzaCharacter* grabingYakuza);
+
+	void GrabEnd();
+
+	void GrabBedStart(YakuzaCharacter* grabedYakuza);
+
+	void GrabBedEnd();
+
 	inline void SetIsDead(bool setIs) { m_isDead = setIs; }
 
 	inline bool GetIsDead() { return m_isDead; }
@@ -173,6 +237,8 @@ public:
 	inline const Vector3& GetAimMoveTargetPos() { return m_aimMoveTargetPos; }
 	
 	inline void SetTypeSet(std::unique_ptr<IYakuzaTypeSet> setType) { m_typeSet = std::move(setType); }
+
+	inline void InitStateMachineParam() { m_typeSet.get()->InitStateMachineParam(*m_hasCharactar,*this); };
 
 	inline IYakuzaTypeSet& GetTypeSet() { return *m_typeSet.get(); }
 
@@ -211,9 +277,25 @@ public:
 
 	bool IsHasCharacterAttackCollisionActive();
 
+	bool IsHasCharacterGrabCollisionActive();
+
+	bool IsHasCharacterGrabBedEscape(bool isResistance);
+
 	void HasCharacterKnockBackProcces(KnockBackParam& param);
 
 	void HasCharacterDeadProcces();
+
+	void HasCharacterGrabingProcces();
+
+	void HasCharacterToGrabBedThrownPositionUpdate();
+
+	void HasCharacterGrabingYakuzaThrowPositionAdjustment(const Vector3& sweepDir,const Vector3& adjustDir,float sweepDis);
+
+	void HasCharacterSendToGrabingOrGrabBedYakuzaData(int takeDamageType);
+
+	void HasCharacterGrabBedTakeDamage(int damageType);
+
+	void HasCharacterSetIsInvincible(bool setIs);
 
 	void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);
 
@@ -240,4 +322,8 @@ private:
 	bool CanChangeDamage();
 	//死亡したかどうか
 	bool CanChangeDead();
+	//掴めるかどうか
+	bool CanChangeGrab();
+	//掴まれているかどうか
+	bool CanChangeGrabBed();
 };

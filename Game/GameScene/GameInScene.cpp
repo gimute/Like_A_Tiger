@@ -15,9 +15,12 @@
 
 #include "GameScene\UpdateOrder.h"
 
-#include "UI\PoseMenu.h"
+#include "UI/PoseMenu.h"
+#include "UI/PouseMenuManager.h"
 
 #include "Inventory/Inventory.h"
+#include "Inventory/Item.h"
+#include "SaveManager.h"
 
 #include "Actor\YakuzaComponents\YakuzaAttackAssistSystem.h"
 
@@ -53,10 +56,10 @@ void GameInScene::EnterScene()
 	m_enemysHpGauge = NewGO<EnemysHpGauge>(UpdateOrder::UI, "enemy");
 
 	//敵生成テスト
-	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ -1000.0f,0.0f,0.0f });
-	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ 1000.0f,0.0f,0.0f });
-	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ -3000.0f,0.0f,0.0f });
-	//EnemyManager::GetInstance()->RequestSpawnEnemyGroup(1,Vector3{ 1000.0f,0.0f,0.0f });
+	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ -1000.0f,0.0f,0.0f },true);
+	//EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ 1000.0f,0.0f,0.0f });
+	//EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ -3000.0f,0.0f,0.0f },true);
+	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ 1000.0f,0.0f,0.0f },false);
 	//エネミーのターゲットを設定
 	EnemyManager::GetInstance()->SetEnemyTargetCharacter(m_player);
 
@@ -77,19 +80,11 @@ void GameInScene::EnterScene()
 
 	m_inventory = Inventory::Create();
 
-	m_poseMenu = NewGO<PoseMenu>(0, "posemenu");
+	//m_poseMenu = NewGO<PoseMenu>(0, "posemenu");
 
 
-   // UIへ情報を渡す
-   {
-   	m_inventory->ForEach([&](const ItemInfo* itemInfo)
-   		{
-   			ItemIconInformation* info = new ItemIconInformation();
-   			info->m_num = itemInfo->m_num;
-   			info->m_type = itemInfo->m_type;
-   			m_poseMenu->AddItemInfo(info);
-   		});
-   }
+	//セーブマネージャー生成
+	SaveManager::GetInstance().Load();
 	//m_poseMenu->Init();
 
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
@@ -114,17 +109,46 @@ void GameInScene::UpdateScene()
 	//戦闘マネージャー更新
 	BattleManager::GetInstance()->Update();
 
-	///   // UIへ情報を渡す
-	///   {
-	///   	m_inventory->ForEach([&](const ItemInfo* itemInfo)
-	///   		{
-	///   			ItemIconInformation* info = new ItemIconInformation();
-	///   			info->m_num = itemInfo->m_num;
-	///   			info->m_type = itemInfo->m_type;
-	///   			m_poseMenu->AddItemInfo(info);
-	///   		});
-	///   }
+	/** ポーズメニューの制御ロジック */
 
+	if (m_poseMenu)
+	{
+		//マネージャー更新
+		bool isMenuActive = PouseMenuSceneManager::GetSceneManagerInstance()->UpdatePouseMenuSceneManager();
+
+		if (!isMenuActive)
+		{
+			DeleteGO(m_poseMenu);
+			m_poseMenu = nullptr;
+		}
+	}
+	else
+	{
+		/** スタートボタンでメニュー起動 */
+		if (g_pad[0]->IsTrigger(enButtonStart))
+		{
+			m_poseMenu = NewGO<PoseMenu>(0, "posemenu");
+
+			if (m_inventory)
+			{
+				m_inventory->ForEach([&](int index, ItemInfo* itemInfo) {
+					ItemIconInformation* info = new ItemIconInformation();
+					info->m_type = itemInfo->m_type;
+					m_poseMenu->AddItemInfo(info);
+					});
+			}
+			m_poseMenu->Init();
+
+			/** マネージャーの起動セットアップ */
+			auto* manager = PouseMenuSceneManager::GetSceneManagerInstance();
+
+			/** 操作対象のUIをマネージャーに登録 */
+			manager->SetMenuOwner(m_poseMenu);
+
+			/** 最初のステートを開く演出に設定 */
+			manager->RequestInitSceneState<PouseMenuInSideScene>();
+		}
+	}
 }
 
 void GameInScene::GameStateUpdate()
@@ -201,6 +225,8 @@ void GameInScene::DeleteGameObjects()
 	CameraManager::GetCameraManagerInstance()->DeleteCamera();
 	//インベントリ
 	Inventory::Delete();
+	//マップ削除
+	DeleteGO(m_miniMap);
 }
 
 //ステート変更要求関数

@@ -5,9 +5,10 @@
 // ƒAƒCƒeƒ€‚ÌŽí—Þ
 enum EnItemType
 {
-	enItemType_Onigiri,
-	enItemType_Bento,
-	enItemType_Sushi,
+	enItemType_Empty,		//‹ó‚Á‚Û
+	enItemType_Onigiri,		//‚¨‚É‚¬‚è
+	enItemType_Bento,		//‚¨•Ù“–
+	enItemType_Sushi,		//‚¨ŽõŽi
 	enItemType_Max,
 };
 
@@ -16,11 +17,9 @@ enum EnItemType
 struct ItemIconInformation
 {
 	EnItemType m_type;
-	int m_num;
 	//
 	ItemIconInformation()
 		: m_type(EnItemType::enItemType_Max)
-		, m_num(3)
 	{
 	}
 };
@@ -30,7 +29,6 @@ struct ItemIconInformation
 struct ItemInfo
 {
 	EnItemType m_type;
-	int m_num;
 
 	// HP‰ñ•œ—Ê
 	// AP‰ñ•œ—Ê

@@ -53,7 +53,15 @@ void AttackRoleProcess::AssignRoles(MetaAiProccesInfo* groupePtr)
 			infoPtr.m_enemy->GetYakuzaStateMachine()
 			.IsGetYakuzaStateMachineNowState<YakuzaDamageState>() ||
 			infoPtr.m_enemy->GetYakuzaStateMachine()
+			.IsGetYakuzaStateMachineNowState<YakuzaGrabBedState>() ||
+			infoPtr.m_enemy->GetYakuzaStateMachine()
 			.IsHasCharacterDead())
+		{
+			continue;
+		}
+
+		//ŒÅ—Ls“®’†‚Å‚ ‚ê‚Î”ò‚Î‚·
+		if (infoPtr.m_enemyAi->GetYakuzaRole() == YakuzaGroupeRole::en_YakuzaRoleUniqueMoveing)
 		{
 			continue;
 		}
@@ -165,7 +173,12 @@ bool AttackRoleProcess::IsReady(MetaAiProccesInfo* groupePtr)
 	if (groupePtr->m_grouoeState.m_nowAttackAi &&
 		groupePtr->m_grouoeState.m_nowAttackAi->GetYakuzaRole() == YakuzaGroupeRole::en_YakuzaRole_AttackEnd ||
 		groupePtr->m_grouoeState.m_nowAttackAi &&
-		groupePtr->m_grouoeState.m_nowAttackAi->GetYakuzaRole() == YakuzaGroupeRole::en_YakuzaRoleHitDamage)
+		groupePtr->m_grouoeState.m_nowAttackAi->GetYakuzaRole() == YakuzaGroupeRole::en_YakuzaRoleHitDamage ||
+		groupePtr->m_grouoeState.m_nowAttackAi &&
+		groupePtr->m_grouoeState.m_nowAttackAi->GetYakuzaRole() == YakuzaGroupeRole::en_YakuzaRoleUniqueMoveing ||
+		groupePtr->m_grouoeState.m_nowAttackAi &&
+		groupePtr->m_grouoeState.m_nowAttackAi->GetYakuzaRole() == YakuzaGroupeRole::en_YakuzaRoleGrabBed
+	)
 	{
 		groupePtr->m_grouoeState.m_attackStartTime = AttackRoleProcessConstant::ATTACK_START_TIME;
 

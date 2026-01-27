@@ -183,6 +183,15 @@ public:
 		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Dodge_Left.tka", false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Dodge_Back.tka", false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Guard.tka", true });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Grab_Start.tka", false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Grab_Idle_A.tka", true });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Grab_Atk_A.tka", false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Grab_Throw_A.tka", false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Grab_Break_A.tka", false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Guard.tka", true });//ç°ÇÃÇ∆Ç±ÇÎíÕÇ‹ÇÍÇÈÇ±Ç∆ÇÕÇ»Ç¢ÇΩÇﬂé¿ëïÇÕÇ»Çµ
+		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Guard.tka", true });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Guard.tka", true });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Guard.tka", true });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/BodyHit.tka", false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/BackDeath_P.tka", false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/CrossPunch_R_Ev.tka", false });
@@ -192,6 +201,11 @@ public:
 		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Punching_3_L_Ev.tka", false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Kick_1_R_EV.tka", false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Kick_2_L_EV.tka", false });
+	}
+
+	void InitStateMachineParam(YakuzaCharacter& useCharacter,YakuzaStateMachine& useStateMachine)
+	{
+
 	}
 
 	void CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) override

@@ -17,3 +17,8 @@ extern K2EngineLow* g_k2EngineLow;
 #include "UI\UIBase\UIBase.h"
 #include "UI\UIAnimation\UIAnimation.h"
 #include "UI\UILayout.h"
+
+
+/** âÊñ ÉTÉCÉY */
+static constexpr float SCREEN_WIDHT = 1920.0f;
+static constexpr float SCREEN_HEIGHT = 1080.0f;

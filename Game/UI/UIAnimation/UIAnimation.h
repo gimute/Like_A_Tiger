@@ -26,7 +26,7 @@ protected:
 	/// 更新処理をしてもいいかどうか
 	/// </summary>
 	/// <returns></returns>
-	bool CanUpdate();
+	virtual bool CanUpdate();
 
 public:
 
@@ -60,6 +60,12 @@ public:
 	void Stop()
 	{
 		m_isPlay = false;
+	}
+
+	//全てのアニメーションを再生完了したか
+	bool IsCompleted()
+	{
+		return m_isCompleted;
 	}
 };
 

@@ -156,6 +156,9 @@ void CircleInvisibleWall::Create(Vector3 pos, float radius)
 	//モデルから透明壁を生成
 	m_collision.CreateFromModel(*circleModel, circleModel->GetWorldMatrix());
 
+	//コリジョンのユーザー属性を壁に設定
+	m_collision.GetbtCollisionObject()->setUserIndex(enCollisionAttr_Wall);
+
 	//透明壁に沿う形のエフェクトを準備
 	m_wallEffect.SetPosition(pos);
 	m_wallEffect.SetScale(Vector3(scale,1.0f, scale));
