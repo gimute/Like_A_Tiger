@@ -1,6 +1,21 @@
 #pragma once
 #include "Actor\YakuzaComponents\IYakuzaTypeSet.h"
 #include "Actor\YakuzaComponents\YakuzaStateMachine.h"
+#include "Actor\YakuzaComponents\YakuzaGenericAttackState.h"
+
+class ToughYakuzaFirstFinalBlowState : public YakuzaGenericAttackState
+{
+	appState(ToughYakuzaFirstFinalBlowState)
+public:
+	ToughYakuzaFirstFinalBlowState(
+		AttackStateInitData initData
+	)
+		: YakuzaGenericAttackState(initData)
+	{
+		m_hasAttackStateHash = ToughYakuzaFirstFinalBlowState::ID();
+	}
+	~ToughYakuzaFirstFinalBlowState() = default;
+};
 
 class ToughYakuzaActionSet : public IYakuzaTypeSet
 {
@@ -14,7 +29,7 @@ public:
 
 	ToughYakuzaActionSet() : IYakuzaTypeSet(en_campEnemy)
 	{
-		
+		m_firstFinishBrowID = ToughYakuzaFirstFinalBlowState::ID();
 
 		m_modelFilePath = "Assets/modelData/Character/Adam/Adam.tkm";
 
@@ -44,18 +59,35 @@ public:
 		m_animationDataList.push_back({ "Assets/modelData/Character/Adam/Animation/BackDeath_E.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Adam/Animation/HookPunch_R.tka",false });//ここから戦闘モーション
 
+		//パラメータ初期化
+		ParameterManager::GetInstance().LoadParameter<YakuzaParamater>("Assets/Json/ToughYakuzaStatus.json", [](const nlohmann::json& j, YakuzaParamater& p)
+			{
+				p.maxHP = j["hp"].get<int>();
+				p.moveSpeed = j["moveSpeed"].get<float>();
+				p.dadgeSpeed = j["dodgeSpeed"].get<float>();
+				p.dadgeAnimSpeed = j["dodgeAnimSpeed"].get<float>();
+			}
+		);
 	}
 
 	void InitStateMachineParam(YakuzaCharacter& useCharacter, YakuzaStateMachine& useStateMachine) override
 	{
-		
+		auto param = ParameterManager::GetInstance().GetParameter<YakuzaParamater>();
 
+		useCharacter.SetHP(param->maxHP);
 
+		useStateMachine.SetSwaySpeed(param->dadgeSpeed, param->dadgeAnimSpeed);
+
+		useStateMachine.SetMoveSpeed(param->moveSpeed);
 	}
 
 	void CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) override
 	{
 		//ここに攻撃ステート追加処理を記述
+		AddAttackState<ToughYakuzaFirstFinalBlowState>(
+			{ useAttackStateMachine,m_yakuzaCamp,0,0,en_hookPunch_1_R,60.0f,1.0f },
+			{ 60.0f,150.0f,SoundId::se_hittingHeavyB },
+			{ SoundId::se_cuttingWindHeavyA });
 	}
 private:
 	static TypeSetAutoRegister<ToughYakuzaActionSet> typeSet;

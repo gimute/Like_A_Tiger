@@ -60,7 +60,7 @@ void EnemyManager::RequestSpawnEnemyGroup(int spawnNum, const Vector3& spawnPoin
 			i >= spawnNum - 1)
 		{
 			//タイプをランダム選定
-			randomType = EnemyYakuzaType::en_fastYakuza;
+			randomType = EnemyYakuzaType::en_toughYakuza;
 			//Random::Range(EnemyYakuzaType::en_normalYakuza)
 			type = static_cast<EnemyYakuzaType>(randomType);
 		}

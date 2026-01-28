@@ -1,23 +1,20 @@
 #include "stdafx.h"
-#include "FastYakuzaAi.h"
+#include "ToughYakuzaAi.h"
 
 #include "Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiIdleState.h"
 #include "Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiTrackingState.h"
 #include "Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiWaitingAttackState.h"
 
-#include "Actor\Enemy\EnemyManager.h"
-
-
-namespace FastYakuzaAiAttackConstant
+namespace ToughYakuzaAiAttackConstant
 {
 	const float ATTACK_START_RADIUS = 50.0f;
 
-	const float DODGE_COOL_TIME = 2.0f;
+	const float GUARD_COOL_TIME = 2.0f;
 }
 
 //AttackState
 
-void FastYakuzaAiAttackState::OnEnter()
+void ToughYakuzaAiAttackState::OnEnter()
 {
 	m_hasStateMachine->SetIsAimMove(true);
 	//AIステートを攻撃移動中に設定
@@ -26,7 +23,7 @@ void FastYakuzaAiAttackState::OnEnter()
 	m_owner->SetYakuzaRole(YakuzaGroupeRole::en_YakuzaRole_Attacking);
 }
 
-void FastYakuzaAiAttackState::OnUpdate()
+void ToughYakuzaAiAttackState::OnUpdate()
 {
 	//もうすでに攻撃範囲に入っていたらそのまま処理
 	//入っていなければ接近処理を行う
@@ -42,7 +39,7 @@ void FastYakuzaAiAttackState::OnUpdate()
 	}
 }
 
-bool FastYakuzaAiAttackState::ShouldApproachForAttack()
+bool ToughYakuzaAiAttackState::ShouldApproachForAttack()
 {
 	//ターゲットビュー
 	auto targetView = m_owner->GetTargetView();
@@ -64,7 +61,7 @@ bool FastYakuzaAiAttackState::ShouldApproachForAttack()
 
 
 	//攻撃可能範囲に入ったら
-	if (toTargetDist < ::FastYakuzaAiAttackConstant::ATTACK_START_RADIUS)
+	if (toTargetDist < ToughYakuzaAiAttackConstant::ATTACK_START_RADIUS)
 	{
 		//攻撃範囲に入っているので移動処理はせず、trueを返す
 		return true;
@@ -79,7 +76,7 @@ bool FastYakuzaAiAttackState::ShouldApproachForAttack()
 	}
 }
 
-void FastYakuzaAiAttackState::PerformAttack()
+void ToughYakuzaAiAttackState::PerformAttack()
 {
 	//アタックステート初期化
 	m_hasStateMachine->ResetAttackFlagsMachine();
@@ -146,7 +143,7 @@ void FastYakuzaAiAttackState::PerformAttack()
 	}
 }
 
-void FastYakuzaAiAttackState::OnExit()
+void ToughYakuzaAiAttackState::OnExit()
 {
 	//アタックステート内で攻撃終了を伝える
 	m_attackEndFlag = true;
@@ -156,67 +153,24 @@ void FastYakuzaAiAttackState::OnExit()
 	m_hasStateMachine->SetIsAimMove(false);
 	//集団制御用の役割を攻撃終了役割に変更
 	m_owner->SetYakuzaRole(YakuzaGroupeRole::en_YakuzaRole_AttackEnd);
-	
-	m_owner->SetDodgeCoolTime(FastYakuzaAiAttackConstant::DODGE_COOL_TIME);
+	//ガードクールタイムをリセット
+	m_owner->SetGaurdCoolTime(ToughYakuzaAiAttackConstant::GUARD_COOL_TIME);
 	//ステート側に攻撃終了を伝える
 	m_hasStateMachine->ResetAttackFlagsMachine();
 }
 
-//dodgeState
+AiAutoRegister<ToughYakuzaAi> ToughYakuzaAi::aiSet{ EnemyYakuzaType::en_toughYakuza };
 
-void FastYakuzaDodgeState::OnEnter()
+IStateBase* ToughYakuzaAi::GetNextState()
 {
-	//AIステートを攻撃中に設定
-	m_owner->SetAiState(FastYakuzaUniqueState::en_dodgeing);
-	//集団制御用の役割を攻撃中役割に変更
-	m_owner->SetYakuzaRole(YakuzaGroupeRole::en_YakuzaRoleUniqueMoveing);
-
-	//Targetのいる方向と反対側に回避させる
-	Vector3 targetPos = m_owner->GetTargetView().m_targetPosition;
-	Vector3 toIPos = m_hasStateMachine->GetHasCharactarPos() - targetPos;
-	toIPos.Normalize();
-	//回避行動
-	m_hasStateMachine->SetMoveVec(toIPos);
-	m_hasStateMachine->SetSwayFlag(true);
-}
-
-void FastYakuzaDodgeState::OnUpdate()
-{
-	if (m_hasStateMachine->GetIsSway())
-	{
-		m_hasStateMachine->SetSwayFlag(false);
-
-		m_isSwayStart = true;
-	}
-
-	if (!m_hasStateMachine->GetIsSway() && m_isSwayStart)
-	{
-		m_owner->SetAiState(YakuzaAiState::en_YakuzaAiState_WaitMove);
-	}
-
-}
-
-void FastYakuzaDodgeState::OnExit()
-{
-	m_owner->SetAiState(YakuzaAiState::en_YakuzaAiState_WaitMove);
-
-	m_owner->SetYakuzaRole(YakuzaGroupeRole::en_yakuzaRole_AttackWait);
-
-	m_owner->SetDodgeCoolTime(FastYakuzaAiAttackConstant::DODGE_COOL_TIME);
-
-	m_isSwayStart = false;
-}
-
-AiAutoRegister<FastYakuzaAi> FastYakuzaAi::aiSet{ EnemyYakuzaType::en_fastYakuza };
-
-IStateBase* FastYakuzaAi::GetNextState()
-{
+	//掴まれている最中は操作不可
 	if (m_hasStateMachine->GetIsGrabBed())
 	{
 		m_yakuzaRole = YakuzaGroupeRole::en_YakuzaRoleGrabBed;
 		//AIステートを待ち移動に設定
 		m_aiState = YakuzaAiState::en_YakuzaAiState_WaitMove;
-
+		//ガードクールタイムをリセット
+		SetGaurdCoolTime(ToughYakuzaAiAttackConstant::GUARD_COOL_TIME);
 		//とりあえず掴み終了まで待機
 		return FindClassNameState<EnemyAiIdleState>();
 	}
@@ -228,35 +182,36 @@ IStateBase* FastYakuzaAi::GetNextState()
 		m_yakuzaRole = YakuzaGroupeRole::en_YakuzaRoleHitDamage;
 		//AIステートを待ち移動に設定
 		m_aiState = YakuzaAiState::en_YakuzaAiState_WaitMove;
-
-		SetDodgeCoolTime(FastYakuzaAiAttackConstant::DODGE_COOL_TIME);
+		//ガードクールタイムをリセット
+		SetGaurdCoolTime(ToughYakuzaAiAttackConstant::GUARD_COOL_TIME);
 		//とりあえずダメージ終了まで待機
 		return FindClassNameState<EnemyAiIdleState>();
 	}
 
-	m_dodgeCoolTime -= g_gameTime->GetFrameDeltaTime();
+	m_guardCoolTime -= g_gameTime->GetFrameDeltaTime();
 
-	//回避
-	if (CanChangeDodge())
+	//ガード
+	if (CanChangeGuard())
 	{
-		return FindClassNameState<FastYakuzaDodgeState>();
+		
 	}
+
 	//攻撃
 	if (CanChangeAttack())
 	{
-		return FindClassNameState<FastYakuzaAiAttackState>();
+		return FindClassNameState<ToughYakuzaAiAttackState>();
 	}
+
+	//攻撃待機状態
 	if (CanChangeWaitingAttack())
 	{
 		return FindClassNameState<EnemyAiWaitingAttackState>();
 	}
 
 	return FindClassNameState<EnemyAiIdleState>();
-
-	return nullptr;
 }
 
-bool FastYakuzaAi::CanChangeWaitingAttack()
+bool ToughYakuzaAi::CanChangeWaitingAttack()
 {
 	if (!m_isInBattle)
 	{
@@ -271,16 +226,22 @@ bool FastYakuzaAi::CanChangeWaitingAttack()
 	return false;
 }
 
-bool FastYakuzaAi::CanChangeAttack()
+bool ToughYakuzaAi::CanChangeAttack()
 {
-	if (!m_isInBattle ||
-		m_aiState == FastYakuzaUniqueState::en_dodgeing)
+	if (!m_isInBattle)
 	{
 		return false;
 	}
 
-	if (IsYakuzaAiStateAttack() ||
-		m_yakuzaRole == YakuzaGroupeRole::en_YakuzaRole_AttackReady)
+	//攻撃継続条件
+	if (IsYakuzaAiStateAttack())
+	{
+		return true;
+	}
+
+	//攻撃開始条件
+	if (m_yakuzaRole == YakuzaGroupeRole::en_YakuzaRole_AttackReady &&
+		m_aiState != ToughYakuzaUniqueState::en_guard)
 	{
 		return true;
 	}
@@ -288,28 +249,28 @@ bool FastYakuzaAi::CanChangeAttack()
 	return false;
 }
 
-bool FastYakuzaAi::CanChangeDodge()
+bool ToughYakuzaAi::CanChangeGuard()
 {
-	if (!m_isInBattle || 
+	if (!m_isInBattle ||
 		m_aiState == YakuzaAiState::en_YakuzaAiState_Attacking)
 	{
 		return false;
 	}
 
-	if (m_aiState == FastYakuzaUniqueState::en_dodgeing)
+	if (m_aiState == ToughYakuzaUniqueState::en_guard)
 	{
 		return true;
 	}
 
-	if (m_dodgeCoolTime > 0.0f)
+	if (m_guardCoolTime > 0.0f)
 	{
 		return false;
 	}
 
 	//条件計算
 	//現在のエネミーターゲットビューを取得
-	auto targetView = EnemyManager::GetInstance()->GetTargetView();
-	//自身からターゲットに伸びるベクトルを作成
+	auto targetView = GetTargetView();
+	//自身からターゲットに伸びるベクトルを作る
 	Vector3 toTargetVec = targetView.m_targetPosition - m_hasStateMachine->GetHasCharactarPos();
 	//距離
 	float len = toTargetVec.Length();
