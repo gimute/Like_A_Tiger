@@ -80,5 +80,7 @@ private:
     GameState m_gameState = GameState::en_gameLoad;
     //ミニマップ
     MiniMap* m_miniMap = nullptr;
+    //スカイキューブ
+    SkyCube* m_skyCube = nullptr;
 };
 
