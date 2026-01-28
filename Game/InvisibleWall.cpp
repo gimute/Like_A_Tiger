@@ -36,7 +36,12 @@ bool InvisibleWall::Start()
 
 void InvisibleWall::Update()
 {
-	if (m_active)
+	if (!m_active)
+	{
+		return;
+	}
+
+	if (m_playEffect)
 	{
 		m_wallEffect.Update();
 		m_lineEffect.Update();
@@ -46,8 +51,8 @@ void InvisibleWall::Update()
 			m_lineEffect.Play();
 			m_lineEffect.Update();
 		}
-
 	}
+	
 }
 
 void InvisibleWall::Create(Vector3 pos, float width, float hight, float angle)
@@ -62,8 +67,8 @@ void InvisibleWall::Create(Vector3 pos, float width, float hight, float angle)
 	float hightScale = hight / BOX_SIZE;
 
 	//Y軸の回転
-	Quaternion YAngle;
-	YAngle.SetRotation(g_vec3AxisY, angle);
+	Quaternion YAngle = Quaternion::Identity;
+	YAngle.AddRotationDegY(angle);
 
 	Model* boxModel = InvisibleWallShape::GetInstance().GetShapeModel(InvisibleWallShape::Box);
 
@@ -73,6 +78,7 @@ void InvisibleWall::Create(Vector3 pos, float width, float hight, float angle)
 
 	//モデルから透明壁を生成
 	m_collision.CreateFromModel(*boxModel, boxModel->GetWorldMatrix());
+	m_collision.GetbtCollisionObject()->setUserIndex(enCollisionAttr_Wall);
 
 	//透明壁に沿う形のエフェクトを準備
 	m_wallEffect.SetPosition(pos);
@@ -101,6 +107,13 @@ void InvisibleWall::Delete()
 	m_lineEffect.Stop();
 
 	m_active = false;
+}
+
+void InvisibleWall::SetPlayEffectFlag(bool flag)
+{
+	m_playEffect = flag;
+	m_wallEffect.Stop();
+	m_lineEffect.Stop();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
