@@ -65,12 +65,7 @@ void GameInScene::EnterScene()
 
 	//ミニマップ用意
 	m_miniMap = NewGO<MiniMap>(0);
-
 	m_miniMap->SetPlayer(m_player);
-	m_miniMap->AddBattlePoint(Vector3{ -1000.0f,0.0f,0.0f });
-	m_miniMap->AddBattlePoint(Vector3{ 1000.0f,0.0f,0.0f });
-	m_miniMap->AddBattlePoint(Vector3{ -3000.0f,0.0f,0.0f });
-
 	m_miniMap->SetPosition(Vector3(-600.0f, -300.0f, 0.0f));
 
 	//戦闘マネージャー初期化
@@ -141,6 +136,12 @@ void GameInScene::UpdateScene()
 			/** 最初のステートを開く演出に設定 */
 			manager->RequestInitSceneState<PouseMenuInSideScene>();
 		}
+	}
+
+	//バトルエリアの数とミニマップに表示されているバトルエリアの数に変化があれば
+	if (EnemyManager::GetInstance()->GetCurrentEnemyGroupeNum() != m_miniMap->GetBattleAreaNum())
+	{
+		m_miniMap->ButtleAreaDataUpdate();
 	}
 }
 

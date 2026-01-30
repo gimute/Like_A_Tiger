@@ -53,6 +53,18 @@ void BattleAreaManager::Update(const Vector3& playerPos)
 	}
 }
 
+std::vector<Vector3> BattleAreaManager::GetBattleAreaPositions()
+{
+	std::vector<Vector3> posList;
+
+	for (auto area : m_areas)
+	{
+		posList.push_back(area.m_battleArea.m_areaCenter);
+	}
+
+	return posList;
+}
+
 void BattleAreaManager::RemoveArea(int id)
 {
 	for (auto areaIt = m_areas.begin();areaIt != m_areas.end();)
