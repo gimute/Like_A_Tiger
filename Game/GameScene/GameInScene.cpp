@@ -69,7 +69,7 @@ void GameInScene::EnterScene()
 	m_miniMap->SetPlayer(m_player);
 	m_miniMap->AddBattlePoint(Vector3{ -1000.0f,0.0f,0.0f });
 	m_miniMap->AddBattlePoint(Vector3{ 1000.0f,0.0f,0.0f });
-	m_miniMap->AddBattlePoint(Vector3{ -3000.0f,0.0f,0.0f });
+	//m_miniMap->AddBattlePoint(Vector3{ -3000.0f,0.0f,0.0f });
 
 	m_miniMap->SetPosition(Vector3(-600.0f, -300.0f, 0.0f));
 
@@ -89,6 +89,10 @@ void GameInScene::EnterScene()
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 
    m_gameState = GameState::en_gameLoad;
+
+   m_skyCube = NewGO<SkyCube>(0, "skycube");
+
+   m_skyCube->SetLuminance(0.9f);
 }
 
 //ステート更新関数
@@ -220,6 +224,8 @@ void GameInScene::DeleteGameObjects()
 	Inventory::Delete();
 	//マップ削除
 	DeleteGO(m_miniMap);
+	//スカイキューブ
+	DeleteGO(m_skyCube);
 	//ポーズメニュー削除
 	PouseMenuSceneManager::GetSceneManagerInstance()->RequestInitSceneState<PouseMenuOutSideScene>();
 	if (m_poseMenu) {
