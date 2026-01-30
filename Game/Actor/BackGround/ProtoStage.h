@@ -1,6 +1,8 @@
 #pragma once
 #include "Actor\Actor.h"
 
+class InvisibleWall;
+
 class ProtoStage : 
 	public Actor {
 public:
@@ -17,5 +19,7 @@ public:
 	//静的オブジェクトを付与
 	PhysicsStaticObject		physicsStaticObject;	
 
+	//場外に行かせないための透明壁、東西南北で4つ
+	InvisibleWall* m_invisibleWall[4];
 };
 
