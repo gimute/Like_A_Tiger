@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "MiniMap.h"
 
+#include "Battle\BattleAreaManager.h"
 #include "Actor/Player/Player.h"
 
 MiniMap::MiniMap()
@@ -39,7 +40,7 @@ MiniMap::~MiniMap()
 
 void MiniMap::Update()
 {
-	CalcBattlePointUIPos();
+	CalcBattleAreaUIPos();
 
 	m_canvas->Update();
 
@@ -55,19 +56,54 @@ void MiniMap::SetPlayer(Player* player)
 	m_player = player;
 }
 
-void MiniMap::AddBattlePoint(Vector3 pos)
+void MiniMap::ButtleAreaDataUpdate()
 {
-	BattlePointUIData battlePointUI;
+	//バトルエリアの座標を取得
+	auto battleAreaPosList = BattleAreaManager::GetInstance()->GetBattleAreaPositions();
 
-	battlePointUI.battlePointIcon = m_canvas->CreateUI<UIImage>();
-	battlePointUI.battlePointIcon->Init(m_enemyIconData.imageFilePath.c_str(), m_enemyIconData.iconSize, m_enemyIconData.iconSize);
+	
+	//バトルエリアの座標をUIに設定していく
 
-	battlePointUI.battleAreaPos = pos;
+	//更新し終わったUIのカウント
+	int count = 0;
 
-	m_battlePointUIDataList.push_back(battlePointUI);
+	//すでにある分のバトルエリアアイコンの情報を更新
+	for (auto& battlePointData : m_battleAreaUIDataList)
+	{
+		if (battleAreaPosList.size() > count)
+		{
+			battlePointData.battleAreaPos = battleAreaPosList[count];
+			count++;
+		}
+		else
+		{
+			//余ったバトルエリアアイコンを消す
+			for (count; m_battleAreaUIDataList.size() > count;)
+			{
+				//キャンバスからUIを削除
+				m_canvas->DeleteUI(m_battleAreaUIDataList.back().battleAreaIcon);
+				//配列の要素数を減らす
+				m_battleAreaUIDataList.pop_back();
+			}
+			break;
+		}
+	}
+
+	//バトルエリアアイコンの数が足りていなければ追加
+	for (count; count < battleAreaPosList.size(); count++)
+	{
+		BattleAreaUIData battleAreaUI;
+
+		battleAreaUI.battleAreaIcon = m_canvas->CreateUI<UIImage>();
+		battleAreaUI.battleAreaIcon->Init(m_enemyIconData.imageFilePath.c_str(), m_enemyIconData.iconSize, m_enemyIconData.iconSize);
+
+		battleAreaUI.battleAreaPos = battleAreaPosList[count];
+
+		m_battleAreaUIDataList.push_back(battleAreaUI);
+	}
 }
 
-void MiniMap::CalcBattlePointUIPos()
+void MiniMap::CalcBattleAreaUIPos()
 {
 	//プレイヤーアイコンの向き設定
 	//UIに適応する回転のためプレイヤーのY軸回転をZ軸の回転として求める
@@ -81,23 +117,23 @@ void MiniMap::CalcBattlePointUIPos()
 	m_playerIcon->m_transform.m_localRotation = playerIconRot;
 
 	//バトルポイントアイコンのの位置を設定
-	for (auto& battlePointUIData : m_battlePointUIDataList)
+	for (auto& battlePointUIData : m_battleAreaUIDataList)
 	{
 		//プレイヤーからバトルポイントへのベクトルを計算
-		Vector3 playerToBattlePoint = battlePointUIData.battleAreaPos - m_player->GetPosition();
+		Vector3 playerToBattleArea = battlePointUIData.battleAreaPos - m_player->GetPosition();
 
-		playerToBattlePoint.y = 0.0f;
-		playerToBattlePoint = playerToBattlePoint / 30.0f;
+		playerToBattleArea.y = 0.0f;
+		playerToBattleArea = playerToBattleArea / 30.0f;
 
-		if (playerToBattlePoint.LengthSq() > 128 * 128)
+		if (playerToBattleArea.LengthSq() > 128 * 128)
 		{
-			playerToBattlePoint.Normalize();
-			playerToBattlePoint = playerToBattlePoint * 128;
+			playerToBattleArea.Normalize();
+			playerToBattleArea = playerToBattleArea * 128;
 		}
 		
 
 		//UIの座標を設定
-		battlePointUIData.battlePointIcon->m_transform.m_localPosition = Vector3(playerToBattlePoint.x, playerToBattlePoint.z, 0.0f);
+		battlePointUIData.battleAreaIcon->m_transform.m_localPosition = Vector3(playerToBattleArea.x, playerToBattleArea.z, 0.0f);
 	}
 
 }

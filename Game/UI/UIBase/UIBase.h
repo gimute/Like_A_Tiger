@@ -55,9 +55,6 @@ public:
 	*/
 	using RefUIBasePtr = std::shared_ptr<UIBase>;
 
-public:
-	//Transform m_transform;
-
 private:
 	std::vector<RefUIBasePtr> m_uiList;
 
@@ -90,12 +87,6 @@ public:
 	template <typename T>
 	std::shared_ptr<T> CreateUI()
 	{
-		//UIBase‚ğŒp³‚µ‚Ä‚¢‚é‚©Šm”F
-		if constexpr (!(std::is_base_of_v<UIBase, T>))
-		{
-			return nullptr;
-		}
-
 		//UI¶¬
 		auto ui = std::make_shared<T>();
 
@@ -107,6 +98,14 @@ public:
 		ui->Start();
 
 		return ui;
+	}
+
+	template <typename T>
+	void DeleteUI(std::shared_ptr<T> ui)
+	{
+		//“o˜^‚³‚ê‚Ä‚¢‚éUI‚Ì’†‚©‚ç’T‚µ‚Äíœ
+		auto newEnd = remove(m_uiList.begin(), m_uiList.end(), ui);
+		m_uiList.erase(newEnd, m_uiList.end());
 	}
 
 	/// <summary>

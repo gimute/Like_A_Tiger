@@ -85,6 +85,9 @@ public:
 		m_onEnterListeners.push_back(listener);
 	}
 
+	//バトルエリアの座標リストの取得
+	std::vector<Vector3> GetBattleAreaPositions();
+
 private:
 	//エリア状態構造体
 	struct AreaState

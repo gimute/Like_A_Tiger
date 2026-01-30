@@ -5,9 +5,9 @@ class Player;
 class MiniMap : public IGameObject
 {
 	//戦闘エリアの座標とマップ上に表示するUIのセット
-	struct BattlePointUIData
+	struct BattleAreaUIData
 	{
-		std::shared_ptr<UIImage> battlePointIcon;
+		std::shared_ptr<UIImage> battleAreaIcon;
 		Vector3 battleAreaPos;
 	};
 
@@ -43,9 +43,14 @@ public:
 	//プレイヤー登録
 	void SetPlayer(Player* player);
 
-	//戦闘ポイント追加
-	//とりあえず座標だけ受け取る
-	void AddBattlePoint(Vector3 pos);
+	//登録されているバトルポイントの数を取得
+	int GetBattleAreaNum()
+	{
+		return m_battleAreaUIDataList.size();
+	}
+
+	//バトルエリアの座標や数の更新
+	void ButtleAreaDataUpdate();
 
 private:
 	std::shared_ptr<UICanvas> m_canvas;
@@ -54,12 +59,12 @@ private:
 	std::shared_ptr<UIImage> m_playerIcon;
 	Player* m_player = nullptr;
 
-	std::vector<BattlePointUIData> m_battlePointUIDataList;
+	std::vector<BattleAreaUIData> m_battleAreaUIDataList;
 
 	EnemyIconData m_enemyIconData;
 
 private:
-	void CalcBattlePointUIPos();
+	void CalcBattleAreaUIPos();
 
 };
 
