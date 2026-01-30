@@ -79,6 +79,12 @@ public:
     /// <param name="angle">Y軸回転角度</param>
     void Create(Vector3 pos, float width, float hight, float angle);
     void Delete();
+
+    //エフェクトを再生するか
+    void SetPlayEffectFlag(bool flag);
+
+private:
+    bool m_playEffect = true;
 };
 
 class CircleInvisibleWall : public InvisibleWallBase

@@ -41,53 +41,11 @@ bool Game::Start()
 	//ロードマネージャーを初期化
 	LoadManager::GetInstance()->InitLoadManager();
 
-	//m_anim[0].Load("Assets/modelData/Character/Survivalist/Animation/Idle.tka");
-	//m_anim[0].SetLoopFlag(true);
-	//m_anim[1].Load("Assets/modelData/Character/Survivalist/Animation/CrossPunch_R_Ev.tka");
-	//m_anim[1].SetLoopFlag(false);
-	//
-	//m_testmodel.Init("Assets/modelData/Character/Survivalist/Survivalist.tkm", m_anim, 2);
-
-	//m_effectBone = m_testmodel.GetBone(L"middle_01_r");
-
-	//Vector3 m_effectPos;
-
-	//m_effectBone->GetWorldMatrix().Apply(m_effectPos);
-
 	return true;
 }
 
 void Game::Update()
 {
-
-	//if (g_pad[0]->IsTrigger(enButtonA))
-	//{
-	//	if (testeffect != nullptr)
-	//	{
-	//		testeffect->Stop();
-	//	}
-
-	//	m_testmodel.PlayAnimation(1);
-	//	auto handle = EffectManager::Get().PlayEffect(5, Vector3::Zero, Vector3::One * 10.0f);
-	//	testeffect = EffectManager::Get().FindEffect(handle);
-	//}
-
-	//if (testeffect != nullptr)
-	//{
-	//	Vector3 m_effectPos = Vector3::Zero;
-
-	//	m_effectBone->GetWorldMatrix().Apply(m_effectPos);
-
-	//	testeffect->SetPosition(m_effectPos);
-	//}
-	//
-	//if (!m_testmodel.IsPlayingAnimation())
-	//{
-	//	m_testmodel.PlayAnimation(0);
-	//}
-
-	//m_testmodel.Update();
-
 	//ゲームシーンマネージャーの更新
 	GameSceneManager::GetSceneManagerInstance()->UpdateGameSceneState();
 	//ロードマネージャーの更新
@@ -97,7 +55,7 @@ void Game::Update()
 
 void Game::Render(RenderContext& rc)
 {
-	//m_testmodel.Draw(rc);
+
 }
 
 void Game::InitEffect()
