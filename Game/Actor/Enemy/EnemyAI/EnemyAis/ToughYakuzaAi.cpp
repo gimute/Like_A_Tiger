@@ -10,6 +10,8 @@ namespace ToughYakuzaAiAttackConstant
 	const float ATTACK_START_RADIUS = 50.0f;
 
 	const float GUARD_COOL_TIME = 2.0f;
+
+	const float GUARD_CONTINUE_TIME = 3.0f;
 }
 
 //AttackState
@@ -159,6 +161,51 @@ void ToughYakuzaAiAttackState::OnExit()
 	m_hasStateMachine->ResetAttackFlagsMachine();
 }
 
+//GuardState
+
+void ToughYakuzaAiGuardState::OnEnter()
+{
+	//AIステートをガードに設定
+	m_owner->SetAiState(ToughYakuzaUniqueState::en_guard);
+	//集団制御用の役割を特殊行動中役割に変更
+	m_owner->SetYakuzaRole(YakuzaGroupeRole::en_YakuzaRoleUniqueMoveing);
+
+	//ターゲット方向に防御させる
+	Vector3 targetPos = m_owner->GetTargetView().m_targetPosition;
+	Vector3 toTargetVec = targetPos - m_hasStateMachine->GetHasCharactarPos();
+	toTargetVec.Normalize();
+
+	//防御行動
+	//ガード継続時間を設定
+	m_guardContinueTime = ToughYakuzaAiAttackConstant::GUARD_CONTINUE_TIME;
+	//移動ベクトルを設定
+	m_hasStateMachine->SetMoveVec(toTargetVec);
+	//防御フラグを立てる
+	m_hasStateMachine->SetDefenseFlag(true);
+}
+
+void ToughYakuzaAiGuardState::OnUpdate()
+{
+	//ガード継続時間が終了したらガード解除
+	m_guardContinueTime -= g_gameTime->GetFrameDeltaTime();
+
+	if (m_guardContinueTime <= 0.0f)
+	{
+		m_owner->SetAiState(YakuzaAiState::en_YakuzaAiState_WaitMove);
+	}
+}
+
+void ToughYakuzaAiGuardState::OnExit()
+{
+	m_hasStateMachine->SetDefenseFlag(false);
+
+	m_owner->SetAiState(YakuzaAiState::en_YakuzaAiState_WaitMove);
+
+	m_owner->SetYakuzaRole(YakuzaGroupeRole::en_yakuzaRole_AttackWait);
+
+	m_owner->SetGaurdCoolTime(ToughYakuzaAiAttackConstant::GUARD_COOL_TIME);
+}
+
 AiAutoRegister<ToughYakuzaAi> ToughYakuzaAi::aiSet{ EnemyYakuzaType::en_toughYakuza };
 
 IStateBase* ToughYakuzaAi::GetNextState()
@@ -193,7 +240,7 @@ IStateBase* ToughYakuzaAi::GetNextState()
 	//ガード
 	if (CanChangeGuard())
 	{
-		
+		return FindClassNameState<ToughYakuzaAiGuardState>();
 	}
 
 	//攻撃

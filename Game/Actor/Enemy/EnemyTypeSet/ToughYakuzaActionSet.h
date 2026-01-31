@@ -3,6 +3,35 @@
 #include "Actor\YakuzaComponents\YakuzaStateMachine.h"
 #include "Actor\YakuzaComponents\YakuzaGenericAttackState.h"
 
+class ToughYakuzaFirstAttackState : public YakuzaGenericAttackState
+{
+	appState(ToughYakuzaFirstAttackState)
+public:
+	ToughYakuzaFirstAttackState(
+		AttackStateInitData initData
+	)
+		: YakuzaGenericAttackState(initData)
+	{
+		m_hasAttackStateHash = ToughYakuzaFirstAttackState::ID();
+	}
+	~ToughYakuzaFirstAttackState() = default;
+
+};
+
+class ToughYakuzaSecondAttackState : public YakuzaGenericAttackState
+{
+	appState(ToughYakuzaSecondAttackState)
+public:
+	ToughYakuzaSecondAttackState(
+		AttackStateInitData initData
+	)
+		: YakuzaGenericAttackState(initData)
+	{
+		m_hasAttackStateHash = ToughYakuzaSecondAttackState::ID();
+	}
+	~ToughYakuzaSecondAttackState() = default;
+};
+
 class ToughYakuzaFirstFinalBlowState : public YakuzaGenericAttackState
 {
 	appState(ToughYakuzaFirstFinalBlowState)
@@ -17,6 +46,20 @@ public:
 	~ToughYakuzaFirstFinalBlowState() = default;
 };
 
+class ToughYakuzaSecondFinalBlowState : public YakuzaGenericAttackState
+{
+	appState(ToughYakuzaSecondFinalBlowState)
+public:
+	ToughYakuzaSecondFinalBlowState(
+		AttackStateInitData initData
+	)
+		: YakuzaGenericAttackState(initData)
+	{
+		m_hasAttackStateHash = ToughYakuzaSecondFinalBlowState::ID();
+	}
+	~ToughYakuzaSecondFinalBlowState() = default;
+};
+
 class ToughYakuzaActionSet : public IYakuzaTypeSet
 {
 	appState(ToughYakuzaActionSet)
@@ -25,10 +68,15 @@ public:
 	enum ToughYakuzaAnimation
 	{
 		en_hookPunch_1_R = YakuzaAnimation::en_num,
+		en_punching_1_L,
+		en_fowardHookPunch_1_R,
+		en_heavyPunch_1_L,
 	};
 
 	ToughYakuzaActionSet() : IYakuzaTypeSet(en_campEnemy)
 	{
+		m_firstAttackID = ToughYakuzaFirstAttackState::ID();
+
 		m_firstFinishBrowID = ToughYakuzaFirstFinalBlowState::ID();
 
 		m_modelFilePath = "Assets/modelData/Character/Adam/Adam.tkm";
@@ -58,9 +106,13 @@ public:
 		m_animationDataList.push_back({ "Assets/modelData/Character/Adam/Animation/BodyHit.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Adam/Animation/BackDeath_E.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Adam/Animation/HookPunch_R.tka",false });//ここから戦闘モーション
+		m_animationDataList.push_back({ "Assets/modelData/Character/Adam/Animation/Punching_L.tka",false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Adam/Animation/FowardHookPunch_R.tka",false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Adam/Animation/HeavyPunch_L.tka",false });
+		
 
 		//パラメータ初期化
-		ParameterManager::GetInstance().LoadParameter<YakuzaParamater>("Assets/Json/ToughYakuzaStatus.json", [](const nlohmann::json& j, YakuzaParamater& p)
+		ParameterManager::GetInstance().LoadParameter<ToughYakuzaParamater>("Assets/Json/ToughYakuzaStatus.json", [](const nlohmann::json& j, ToughYakuzaParamater& p)
 			{
 				p.maxHP = j["hp"].get<int>();
 				p.moveSpeed = j["moveSpeed"].get<float>();
@@ -72,7 +124,7 @@ public:
 
 	void InitStateMachineParam(YakuzaCharacter& useCharacter, YakuzaStateMachine& useStateMachine) override
 	{
-		auto param = ParameterManager::GetInstance().GetParameter<YakuzaParamater>();
+		auto param = ParameterManager::GetInstance().GetParameter<ToughYakuzaParamater>();
 
 		useCharacter.SetHP(param->maxHP);
 
@@ -84,9 +136,21 @@ public:
 	void CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) override
 	{
 		//ここに攻撃ステート追加処理を記述
+		AddAttackState<ToughYakuzaFirstAttackState>(
+			{ useAttackStateMachine,m_yakuzaCamp,ToughYakuzaSecondAttackState::ID(),0,en_punching_1_L,60.0f,1.0f},
+			{ 10.0f,150.0f,SoundId::se_hittingLightA },
+			{ SoundId::se_cuttingWindLigthA });
+		AddAttackState<ToughYakuzaSecondAttackState>(
+			{ useAttackStateMachine,m_yakuzaCamp,0,ToughYakuzaSecondFinalBlowState::ID(),en_fowardHookPunch_1_R,100.0f,1.0f},
+			{ 20.0f,150.0f,SoundId::se_hittingLightA },
+			{ SoundId::se_cuttingWindLigthA });
 		AddAttackState<ToughYakuzaFirstFinalBlowState>(
 			{ useAttackStateMachine,m_yakuzaCamp,0,0,en_hookPunch_1_R,60.0f,1.0f },
-			{ 60.0f,150.0f,SoundId::se_hittingHeavyB },
+			{ 30.0f,300.0f,SoundId::se_hittingHeavyB },
+			{ SoundId::se_cuttingWindHeavyA });
+		AddAttackState<ToughYakuzaSecondFinalBlowState>(
+			{ useAttackStateMachine,m_yakuzaCamp,0,0,en_heavyPunch_1_L,20.0f,1.0f },
+			{ 50.0f,150.0f,SoundId::se_hittingHeavyB },
 			{ SoundId::se_cuttingWindHeavyA });
 	}
 private:

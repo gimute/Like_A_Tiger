@@ -14,6 +14,7 @@ public:
 		: IEnemyAttackAiState(stateMachine)
 		, m_owner(hasAi)
 	{
+		m_attackCombos.push_back({ en_normalAttack,en_normalAttack,en_finishBrow });
 		m_attackCombos.push_back({ en_finishBrow });
 	}
 
@@ -38,6 +39,32 @@ public:
 	void OnExit() override;
 };
 
+class ToughYakuzaAiGuardState : public IEnemyAiState
+{
+	appState(ToughYakuzaAiGuardState)
+protected:
+	ToughYakuzaAi* m_owner = nullptr;
+public:
+	//コンストラクタ
+	ToughYakuzaAiGuardState(YakuzaStateMachine* stateMachine, ToughYakuzaAi* hasEnemyAi)
+		: IEnemyAiState(stateMachine)
+		, m_owner(hasEnemyAi)
+	{
+	}
+	//デストラクタ
+	~ToughYakuzaAiGuardState() = default;
+
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+private:
+	//ガード継続時間
+	float m_guardContinueTime = 0.0f;
+};
+
 class EnemyAiIdleState;
 class EnemyAiTrackingState;
 class EnemyAiWaitingAttackState;
@@ -57,7 +84,8 @@ public:
 		AddState<EnemyAiTrackingState>(controllStateMachine, this);
 		AddState<EnemyAiWaitingAttackState>(controllStateMachine, this);
 		AddState<ToughYakuzaAiAttackState>(controllStateMachine, this);
-	
+		AddState<ToughYakuzaAiGuardState>(controllStateMachine, this);
+
 		InitStateMachineClassName<EnemyAiIdleState>();
 	}
 	//次のステートを取得
