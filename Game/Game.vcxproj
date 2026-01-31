@@ -232,6 +232,7 @@
     <ClCompile Include="Battle\BattleManager.cpp" />
     <ClCompile Include="Battle\BattleAreaManager.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyMetaAi\Process\BattleStartNotifyProcess.cpp" />
+    <ClCompile Include="Bgm\BgmManager.cpp" />
     <ClCompile Include="Camera\CameraEntity.cpp" />
     <ClCompile Include="Camera\CameraManager.cpp" />
     <ClCompile Include="Actor\Enemy\Enemy.cpp" />
@@ -309,6 +310,7 @@
     <ClInclude Include="Battle\BattleManager.h" />
     <ClInclude Include="Battle\BattleAreaManager.h" />
     <ClInclude Include="Actor\Enemy\EnemyMetaAi\Process\BattleStartNotifyProcess.h" />
+    <ClInclude Include="Bgm\BgmManager.h" />
     <ClInclude Include="Camera\CameraUpdateData.h" />
     <ClInclude Include="Camera\CameraEntity.h" />
     <ClInclude Include="Camera\CameraManager.h" />

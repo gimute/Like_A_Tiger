@@ -79,4 +79,7 @@ void Game::InitSound()
 	g_soundEngine->ResistWaveFileBank(se_FootstepsA, "Assets/Sound/YakuzaMoveingSound/Footsteps_A.wav");	//‘«‰¹
 	g_soundEngine->ResistWaveFileBank(se_kickingGroundA, "Assets/Sound/YakuzaMoveingSound/KickingGround_A.wav");	//’n–Ê‚ðR‚é‰¹
 	g_soundEngine->ResistWaveFileBank(se_GroundFrictionA, "Assets/Sound/YakuzaMoveingSound/GroundFriction_A.wav");	//’n–Ê‚ð‚±‚·‚é‰¹
+	//‚±‚±‚©‚çBGM
+	
+
 }

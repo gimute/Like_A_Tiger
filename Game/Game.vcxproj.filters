@@ -77,6 +77,10 @@
     <ClCompile Include="Effect\EffectManager.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyTypeSet\FastYakuzaActionSet.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAis\FastYakuzaAi.cpp" />
+    <ClCompile Include="Inventory\Item.cpp" />
+    <ClCompile Include="UI\PouseMenuManager.cpp" />
+    <ClCompile Include="SaveManager.cpp" />
+    <ClCompile Include="Bgm\BgmManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -166,5 +170,9 @@
     <ClInclude Include="Effect\EffectId.h" />
     <ClInclude Include="Actor\Enemy\EnemyTypeSet\FastYakuzaActionSet.h" />
     <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAis\FastYakuzaAi.h" />
+    <ClInclude Include="Inventory\Item.h" />
+    <ClInclude Include="UI\PouseMenuManager.h" />
+    <ClInclude Include="SaveManager.h" />
+    <ClInclude Include="Bgm\BgmManager.h" />
   </ItemGroup>
 </Project>
