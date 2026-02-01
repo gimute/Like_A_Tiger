@@ -439,6 +439,13 @@ void YakuzaStateMachine::OnAnimationEvent(const wchar_t* clipName, const wchar_t
 			m_hasCharactar->DeleteAttackCollision();
 		}
 	}
+	//掴み時の攻撃判定イベント
+	if (wcscmp(eventName, L"Attack") == 0)
+	{
+		SoundManager::Get().PlaySE(SoundId::se_hittingLightA, false, false, 0.5f);
+
+		YakuzaCharacterDamageManager::GetInstance()->TakeGrabBedYakuzaDamage(m_grabingYakuza, en_grabDamage);
+	}
 	if (wcscmp(eventName, L"footsteps") == 0)
 	{
 		SoundManager::Get().PlaySE(SoundId::se_FootstepsA,false,false,0.3f);
