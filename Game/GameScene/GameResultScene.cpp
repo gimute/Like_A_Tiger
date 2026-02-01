@@ -5,6 +5,8 @@
 #include "Load\LoadManager.h"
 #include "GameScene\GameTitleScene.h"
 
+#include "Bgm\BgmManager.h"
+
 void GameResultScene::EnterScene()
 {
 	m_resultSprite = NewGO<Result>(UpdateOrder::UI,"resultSprite");
@@ -24,6 +26,8 @@ void GameResultScene::UpdateScene()
 			//もし処理に入ってきた時にロード画面が暗転しきっていたら
 			if (LoadManager::GetInstance()->LoadFadeOutEnd())
 			{
+				BgmManager::GetInstance()->RequestStopBgm();
+
 				//ロードを明けさせる
 				LoadManager::GetInstance()->LoadEnd();
 				//ステートをロード明け待機

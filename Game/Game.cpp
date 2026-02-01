@@ -80,6 +80,7 @@ void Game::InitSound()
 	g_soundEngine->ResistWaveFileBank(se_kickingGroundA, "Assets/Sound/YakuzaMoveingSound/KickingGround_A.wav");	//地面を蹴る音
 	g_soundEngine->ResistWaveFileBank(se_GroundFrictionA, "Assets/Sound/YakuzaMoveingSound/GroundFriction_A.wav");	//地面をこする音
 	//ここからBGM
-	
+	g_soundEngine->ResistWaveFileBank(bgm_inGame_battle, "Assets/Sound/Bgm/battle_bgm.wav");	//戦闘用BGM
+	g_soundEngine->ResistWaveFileBank(bgm_inGame_Explore, "Assets/Sound/Bgm/explore_bgm.wav");	//探索用BGM
 
 }

@@ -20,11 +20,7 @@ enum SoundId
 
 enum BGMid
 {
-	bgm_Title = SoundId::register_number,
-	bgm_InGame_normal,
-	bgm_inGame_Explore,
+	bgm_inGame_Explore = SoundId::register_number,
 	bgm_inGame_battle,
-	bgm_Result,
-	bgm_GameOver,
 };
 

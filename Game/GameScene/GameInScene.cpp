@@ -35,6 +35,23 @@
 //ステート侵入関数
 void GameInScene::EnterScene()
 {
+	//戦闘開始でBGMを変えるコールバック登録
+	BattleManager::GetInstance()->RegisterBattleStartCallBack(
+		[&](const BattleStartEventInfo& eventInfo)
+		{
+			BgmManager::GetInstance()->RequestPlayBgm(bgm_inGame_battle, 0.5f);
+		}
+	);
+
+	BattleManager::GetInstance()->RegisterBattleEndCallBack(
+		[&](const BattleEndEventInfo& eventInfo)
+		{
+			BgmManager::GetInstance()->RequestStopBgm();
+
+			BgmManager::GetInstance()->RequestPlayBgm(bgm_inGame_Explore, 0.5f);
+		}
+	);
+
 	//プレイヤーコントローラー生成
 	m_playerController = NewGO<PlayerController>(UpdateOrder::Input, "playercontroller");
 	//プレイヤー生成
@@ -56,10 +73,10 @@ void GameInScene::EnterScene()
 	m_enemysHpGauge = NewGO<EnemysHpGauge>(UpdateOrder::UI, "enemy");
 
 	//敵生成テスト
-	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ -1000.0f,0.0f,0.0f },true);
+	//EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ -1000.0f,0.0f,0.0f },true);
 	//EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ 1000.0f,0.0f,0.0f });
 	//EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ -3000.0f,0.0f,0.0f },true);
-	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ 1000.0f,0.0f,0.0f },false);
+	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(1,Vector3{ 1000.0f,0.0f,0.0f },false);
 	//エネミーのターゲットを設定
 	EnemyManager::GetInstance()->SetEnemyTargetCharacter(m_player);
 
@@ -88,6 +105,8 @@ void GameInScene::EnterScene()
    m_skyCube = NewGO<SkyCube>(0, "skycube");
 
    m_skyCube->SetLuminance(0.9f);
+
+   BgmManager::GetInstance()->RequestPlayBgm(bgm_inGame_Explore, 0.5f);
 }
 
 //ステート更新関数

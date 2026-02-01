@@ -10,35 +10,6 @@ enum BgmFadeState
 	en_ready
 };
 
-struct BgmFadeFormat
-{
-	//BGM切り替え時にフェードアウトするかのフラグ
-	bool m_bgmFadeOutFlag = false;
-	//BGM切り替え時にフェードインするかのフラグ
-	bool m_bgmFadeInFlag = false;
-
-	float m_bgmFadeOutSpeed = 1.0f;
-
-	float m_bgmFadeInSpeed = 1.0f;
-
-	int m_preNextBgmNo = -1;
-
-	BgmFadeFormat() = default;
-
-	BgmFadeFormat(
-		const bool bgmFadeOutFlag,
-		const bool bgmFadeInFlag,
-		const float bgmFadeOutSpeed,
-		const float bgmFadeInSpeed
-	)
-		: m_bgmFadeOutFlag(bgmFadeOutFlag)
-		, m_bgmFadeInFlag(bgmFadeInFlag)
-		, m_bgmFadeOutSpeed(bgmFadeOutSpeed)
-		, m_bgmFadeInSpeed(bgmFadeInSpeed)
-	{
-	}
-};
-
 class BgmManager
 {
 private:
@@ -46,15 +17,7 @@ private:
 	//インスタンス
 	static BgmManager* m_instance;
 	//コンストラクタ
-	BgmManager()
-	{
-		BattleManager::GetInstance()->RegisterBattleStartCallBack(
-			[&](const BattleStartEventInfo& eventInfo)
-			{
-
-			}
-		);
-	}
+	BgmManager() = default;
 	//コピー禁止
 	BgmManager(const BgmManager&) = delete;
 	//代入禁止にする
@@ -72,11 +35,9 @@ public:
 		return m_instance;
 	}
 	//BGM再生依頼
-	void RequestPlayBgm(int kindBgmNo);
+	void RequestPlayBgm(int kindBgmNo,float volume,bool isFadeIn = false);
 	//BGM停止依頼
-	void RequestStopBgm();
-	//BGM切り替え依頼
-	void RequestChangeBgm(BgmFadeFormat format);
+	void RequestStopBgm(bool isFadeOut = false);
 	//BGM更新
 	void Update();
 private:
