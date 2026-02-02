@@ -326,8 +326,6 @@ void YakuzaGrabState::OnUpdate()
 
 		if (!m_owner->IsHasCharactarPlayAnimation())
 		{
-			SoundManager::Get().PlaySE(SoundId::se_hittingLightA, false, false, 0.5f);
-
 			m_state = en_grabingMove;
 		}
 
@@ -631,8 +629,6 @@ void YakuzaGrabBedState::OnUpdate()
 		if (!m_owner->IsHasCharactarPlayAnimation())
 		{
 			m_owner->HasCharacterSendToGrabingOrGrabBedYakuzaData(en_grabDamage);
-
-			m_owner->HasCharacterGrabBedTakeDamage(en_grabDamage);
 
 			m_owner->SetGrabBedToAttackType(-1);
 			m_owner->SetIsDamage(false, false);

@@ -76,6 +76,21 @@ public:
 	void OnExit() override;
 };
 
+class PlayerZeroFinalBlowState : public YakuzaGenericAttackState
+{
+	appState(PlayerZeroFinalBlowState)
+public:
+	PlayerZeroFinalBlowState(
+		AttackStateInitData initData
+	)
+		: YakuzaGenericAttackState(initData)
+	{
+		m_hasAttackStateHash = PlayerZeroFinalBlowState::ID();
+	}
+
+	~PlayerZeroFinalBlowState() = default;
+};
+
 class PlayerFirstFinalBlowState : public IStateBase
 {
 	appState(PlayerFirstFinalBlowState)
@@ -168,6 +183,8 @@ public:
 	{
 		m_firstAttackID = PlayerFirstAttackState::ID();
 
+		m_firstFinishBrowID = PlayerZeroFinalBlowState::ID();
+
 		m_modelFilePath = "Assets/modelData/Character/Survivalist/Survivalist.tkm";
 
 		m_animationDataList.push_back({ "Assets/modelData/Character/Survivalist/Animation/Idle.tka", true });
@@ -225,6 +242,10 @@ public:
 		AddAttackState<PlayerFourthAttackState>(useAttackStateMachine,
 			{ 10.0f,150.0f,SoundId::se_hittingLightB },
 			{ SoundId::se_cuttingWindLigthA});
+		AddAttackState<PlayerZeroFinalBlowState>(
+			{ useAttackStateMachine,m_yakuzaCamp,0,0,en_kick_1,150.0f,0.8 },
+			{ 5.0f,450.0f,SoundId::se_hittingHeavyB },
+			{ SoundId::se_cuttingWindHeavyA });
 		AddAttackState<PlayerFirstFinalBlowState>(useAttackStateMachine,
 			{ 15.0f,300.0f,SoundId::se_hittingHeavyB },
 			{ SoundId::se_cuttingWindHeavyA});
