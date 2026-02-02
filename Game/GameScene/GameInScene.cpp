@@ -36,6 +36,23 @@
 //ステート侵入関数
 void GameInScene::EnterScene()
 {
+	//戦闘開始でBGMを変えるコールバック登録
+	BattleManager::GetInstance()->RegisterBattleStartCallBack(
+		[&](const BattleStartEventInfo& eventInfo)
+		{
+			BgmManager::GetInstance()->RequestPlayBgm(bgm_inGame_battle, 0.5f);
+		}
+	);
+
+	BattleManager::GetInstance()->RegisterBattleEndCallBack(
+		[&](const BattleEndEventInfo& eventInfo)
+		{
+			BgmManager::GetInstance()->RequestStopBgm();
+
+			BgmManager::GetInstance()->RequestPlayBgm(bgm_inGame_Explore, 0.5f);
+		}
+	);
+
 	//プレイヤーコントローラー生成
 	m_playerController = NewGO<PlayerController>(UpdateOrder::Input, "playercontroller");
 	//プレイヤー生成
@@ -101,6 +118,8 @@ void GameInScene::EnterScene()
    m_skyCube = NewGO<SkyCube>(0, "skycube");
 
    m_skyCube->SetLuminance(0.9f);
+
+   BgmManager::GetInstance()->RequestPlayBgm(bgm_inGame_Explore, 0.5f);
 }
 
 //ステート更新関数

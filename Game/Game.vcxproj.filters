@@ -80,6 +80,7 @@
     <ClCompile Include="Inventory\Item.cpp" />
     <ClCompile Include="UI\PouseMenuManager.cpp" />
     <ClCompile Include="SaveManager.cpp" />
+    <ClCompile Include="Bgm\BgmManager.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyTypeSet\ToughYakuzaActionSet.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAis\ToughYakuzaAi.cpp" />
   </ItemGroup>
@@ -174,6 +175,7 @@
     <ClInclude Include="Inventory\Item.h" />
     <ClInclude Include="UI\PouseMenuManager.h" />
     <ClInclude Include="SaveManager.h" />
+    <ClInclude Include="Bgm\BgmManager.h" />
     <ClInclude Include="Actor\Enemy\EnemyTypeSet\ToughYakuzaActionSet.h" />
     <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAis\ToughYakuzaAi.h" />
   </ItemGroup>

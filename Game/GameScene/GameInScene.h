@@ -1,6 +1,8 @@
 #pragma once
 #include "GameScene\IGameSceneState.h"
 
+#include "Bgm\BgmManager.h"
+
 class Player;
 class PlayerController;
 class PoseMenu;

@@ -7,6 +7,8 @@
 #include "GameScene\GameTitleScene.h"
 #include "Load\LoadManager.h"
 
+#include "Bgm\BgmManager.h"
+
 void GameOverScene::EnterScene()
 {
 	m_gameOverSprite = NewGO<GameOver>(UpdateOrder::UI, "sprite");
@@ -25,6 +27,8 @@ void GameOverScene::UpdateScene()
 			//もし処理に入ってきた時にロード画面が暗転しきっていたら
 			if (LoadManager::GetInstance()->LoadFadeOutEnd())
 			{
+				BgmManager::GetInstance()->RequestStopBgm();
+
 				//ロードを明けさせる
 				LoadManager::GetInstance()->LoadEnd();
 				//ステートをロード明け待機

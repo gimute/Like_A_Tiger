@@ -15,5 +15,12 @@ enum SoundId
 	se_FootstepsA,
 	se_kickingGroundA,
 	se_GroundFrictionA,
+	register_number,
+};
+
+enum BGMid
+{
+	bgm_inGame_Explore = SoundId::register_number,
+	bgm_inGame_battle,
 };
 
