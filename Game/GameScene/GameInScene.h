@@ -90,5 +90,7 @@ private:
     MiniMap* m_miniMap = nullptr;
     //スカイキューブ
     SkyCube* m_skyCube = nullptr;
+    ///レベル
+    LevelRender m_level;
 };
 
