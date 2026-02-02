@@ -35,6 +35,18 @@
 //ステート侵入関数
 void GameInScene::EnterScene()
 {
+	m_level.Init("Assets/Level/StageLevel.tkl",
+		[&](LevelObjectData_Render& objData)
+		{
+			if (objData.ForwardMatchName(L"BattleArea") == true)
+			{
+				EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4, objData.position, false);
+				return true;
+			}
+
+			return false;
+		});
+
 	//プレイヤーコントローラー生成
 	m_playerController = NewGO<PlayerController>(UpdateOrder::Input, "playercontroller");
 	//プレイヤー生成
@@ -56,10 +68,12 @@ void GameInScene::EnterScene()
 	m_enemysHpGauge = NewGO<EnemysHpGauge>(UpdateOrder::UI, "enemy");
 
 	//敵生成テスト
-	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ -1000.0f,0.0f,0.0f },true);
-	//EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ 1000.0f,0.0f,0.0f });
-	//EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ -3000.0f,0.0f,0.0f },true);
-	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ 1000.0f,0.0f,0.0f },false);
+	//EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ -1000.0f,0.0f,0.0f },true);
+	//EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ -1000.0f,0.0f,4000.0f },true);
+	////EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ 1000.0f,0.0f,0.0f });
+	////EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ -3000.0f,0.0f,0.0f },true);
+	//EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ 1000.0f,0.0f,0.0f },false);
+	//EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ 2000.0f,0.0f,4000.0f },false);
 	//エネミーのターゲットを設定
 	EnemyManager::GetInstance()->SetEnemyTargetCharacter(m_player);
 
