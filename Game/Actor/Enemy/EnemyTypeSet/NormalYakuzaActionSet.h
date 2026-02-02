@@ -202,7 +202,7 @@ public:
 		m_animationDataList.push_back({ "Assets/modelData/Character/Joe/Animation/Punching_3_L_Ev.tka",false });
 
 		//ƒpƒ‰ƒ[ƒ^‰Šú‰»
-		ParameterManager::GetInstance().LoadParameter<YakuzaParamater>("Assets/Json/NormalYakuzaStatus.json", [](const nlohmann::json& j, YakuzaParamater& p)
+		ParameterManager::GetInstance().LoadParameter<NormalYakuzaParamater>("Assets/Json/NormalYakuzaStatus.json", [](const nlohmann::json& j, NormalYakuzaParamater& p)
 			{
 				p.maxHP = j["hp"].get<int>();
 				p.moveSpeed = j["moveSpeed"].get<float>();
@@ -214,7 +214,7 @@ public:
 
 	void InitStateMachineParam(YakuzaCharacter& useCharacter,YakuzaStateMachine& useStateMachine)
 	{
-		auto param = ParameterManager::GetInstance().GetParameter<YakuzaParamater>();
+		auto param = ParameterManager::GetInstance().GetParameter<NormalYakuzaParamater>();
 
 		useCharacter.SetHP(param->maxHP);
 

@@ -5,8 +5,8 @@ class GameOver : public IGameObject
 private:
 	enum EnNextType
 	{
-		enNextType_Title,
 		enNextType_Retry,
+		enNextType_Title,
 	};
 
 public:

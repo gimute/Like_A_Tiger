@@ -64,9 +64,29 @@ struct EnemyStatusParameter : public IParameter
 	float maxHP;	//最大HP
 };
 
-struct YakuzaParamater : public IParameter
+struct NormalYakuzaParamater : public IParameter
 {
-	appParameter(YakuzaParamater);
+	appParameter(NormalYakuzaParamater);
+
+	float maxHP;	//最大HP
+	float moveSpeed; //移動速度
+	float dadgeSpeed; //回避速度
+	float dadgeAnimSpeed; //回避アニメーション速度
+};
+
+struct FastYakuzaParamater : public IParameter
+{
+	appParameter(FastYakuzaParamater);
+
+	float maxHP;	//最大HP
+	float moveSpeed; //移動速度
+	float dadgeSpeed; //回避速度
+	float dadgeAnimSpeed; //回避アニメーション速度
+};
+
+struct ToughYakuzaParamater : public IParameter
+{
+	appParameter(ToughYakuzaParamater);
 
 	float maxHP;	//最大HP
 	float moveSpeed; //移動速度

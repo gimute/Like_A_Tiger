@@ -1,9 +1,13 @@
 #pragma once
 #include "GameScene\IGameSceneState.h"
 
+#include "Bgm\BgmManager.h"
+
 class Player;
 class PlayerController;
 class PoseMenu;
+class InSelect;
+class Setting;
 class ProtoStage;
 
 class EnemysHpGauge;
@@ -21,7 +25,9 @@ enum GameState
     //ゲームオーバー処理に移行
     en_gameOver,
     //ゲームクリア処理に移行
-    en_gameClear
+    en_gameClear,
+    //タイトルに戻る
+    en_returnToTitle
 };
 
 class GameInScene :
@@ -70,6 +76,8 @@ private:
     PlayerController* m_playerController = nullptr;
 
     PoseMenu* m_poseMenu = nullptr;
+    //InSelect* m_inSelect = nullptr;
+    //Setting* m_setting = nullptr;
 
     Inventory* m_inventory = nullptr;
     //プロトステージ
