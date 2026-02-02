@@ -253,6 +253,8 @@
     <ClCompile Include="GameScene\GameOverScene.cpp" />
     <ClCompile Include="GameScene\GameResultScene.cpp" />
     <ClCompile Include="InvisibleWall.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyTypeSet\ToughYakuzaActionSet.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAis\ToughYakuzaAi.cpp" />
     <ClCompile Include="UI\MiniMap.cpp" />
     <ClCompile Include="Sound\SoundManager.cpp" />
     <ClCompile Include="Load\LoadScreenSprite.cpp" />
@@ -336,6 +338,8 @@
     <ClInclude Include="GameScene\GameOverScene.h" />
     <ClInclude Include="GameScene\GameResultScene.h" />
     <ClInclude Include="InvisibleWall.h" />
+    <ClInclude Include="Actor\Enemy\EnemyTypeSet\ToughYakuzaActionSet.h" />
+    <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAis\ToughYakuzaAi.h" />
     <ClInclude Include="UI\MiniMap.h" />
     <ClInclude Include="Sound\SoundId.h" />
     <ClInclude Include="Sound\SoundManager.h" />
