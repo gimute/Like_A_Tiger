@@ -302,8 +302,10 @@ public:
 		return m_isActive;
 	}
 
-private:
+	/** タイトルへの遷移リクエストを確認 */
+	bool IsRequestReturnToTitle() const;
 
+private:
 	inline IPouseMenuSceneState* FindState(uint32_t stateID)
 	{
 		const auto& it = m_stateMap.find(stateID);

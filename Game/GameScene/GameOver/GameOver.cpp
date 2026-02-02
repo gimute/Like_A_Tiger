@@ -8,16 +8,16 @@ namespace {
 	constexpr const char* GAMEOVER_TEXT_BACKTITLE_PATH = "Assets/spriteData/GameOver/gameOverTextBackTitle.DDS";
 	constexpr const char* GAMEOVER_TEXT_RETRY_PATH = "Assets/spriteData/GameOver/gameOverTextRetry.DDS";
 
-	static const Vector2 TEXT_BACKTITLE_POSITION = Vector2(0.0f, -50.0f);
 	static const Vector2 TEXT_RETRY_POSITION = Vector2(0.0f, 50.0f);
+	static const Vector2 TEXT_BACKTITLE_POSITION = Vector2(0.0f, -50.0f);
 
 	constexpr float WAIT_TIME = 0.3f;
 	constexpr float ANIMATION_TIME = 0.5f;
 }
 
 const GameOver::CursolPositionYData GameOverCursolPositionYData[] = {
-	{TEXT_BACKTITLE_POSITION.y},
 	{TEXT_RETRY_POSITION.y},
+	{TEXT_BACKTITLE_POSITION.y},
 };
 
 
@@ -67,17 +67,17 @@ void GameOver::Update()
 
 	if (g_pad[0]->IsTrigger(enButtonUp))
 	{
-		m_currentCursolIndex++;
-		if (m_currentCursolIndex > 1) {
-			m_currentCursolIndex = 1;
+		m_currentCursolIndex--;
+		if (m_currentCursolIndex < 0) {
+			m_currentCursolIndex = 0;
 		}
 	}
 	
 	if (g_pad[0]->IsTrigger(enButtonDown))
 	{
-		m_currentCursolIndex--;
-		if (m_currentCursolIndex < 0) {
-			m_currentCursolIndex = 0;
+		m_currentCursolIndex++;
+		if (m_currentCursolIndex > 1) {
+			m_currentCursolIndex = 1;
 		}
 	}
 	if (m_currentCursolIndex >= 0
