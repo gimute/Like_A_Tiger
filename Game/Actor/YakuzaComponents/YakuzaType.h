@@ -11,5 +11,6 @@ enum EnemyYakuzaType
 {
 	en_normalYakuza,
 	en_fastYakuza,
+	en_toughYakuza,
 	enemyNum
 };

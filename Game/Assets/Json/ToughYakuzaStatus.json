@@ -1,0 +1,8 @@
+[
+    {
+        "hp": 250,
+        "moveSpeed" : 400.0,
+        "dodgeSpeed" : 500.0,
+        "dodgeAnimSpeed" : 2.0
+    }
+]

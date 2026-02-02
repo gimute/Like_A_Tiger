@@ -216,6 +216,7 @@ IStateBase* FastYakuzaAi::GetNextState()
 		m_yakuzaRole = YakuzaGroupeRole::en_YakuzaRoleGrabBed;
 		//AIステートを待ち移動に設定
 		m_aiState = YakuzaAiState::en_YakuzaAiState_WaitMove;
+
 		//とりあえず掴み終了まで待機
 		return FindClassNameState<EnemyAiIdleState>();
 	}

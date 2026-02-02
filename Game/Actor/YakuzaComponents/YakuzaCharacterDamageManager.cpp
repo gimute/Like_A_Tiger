@@ -32,7 +32,7 @@ void YakuzaCharacterDamageManager::SendEnemyYakuzaDamage(Enemy* sendEnemy, Yakuz
 	KnockBackParam param;
 
 	//ガード時はダメージを0にする
-	if (m_playerPtr->GetYakuzaStateMachine().
+	if (sendEnemy->GetYakuzaStateMachine().
 		IsGetYakuzaStateMachineNowState<YakuzaDefenseState>())
 	{
 		//角度によって防御成功判定
