@@ -74,7 +74,7 @@ void PlayerController::Update()
 
 	//Rスティックの入力量を設定
 	cameraController->SetCameraMoveAmountXY(
-		g_pad[0]->GetRStickXF(), 
+		GetCameraXF(*playerStateMachine),
 		g_pad[0]->GetRStickYF()
 	);
 }
@@ -115,5 +115,103 @@ Vector3 PlayerController::GetStickR() const
 	stickR.y = g_pad[0]->GetRStickYF();
 
 	return stickR;
+}
+
+float PlayerController::GetCameraXF(YakuzaStateMachine& stateMachine)
+{
+	//攻撃中で無ければスティックの入力X値を返す
+	if (!stateMachine.GetIsAttack() || IsInputStickR())
+	{
+		return g_pad[0]->GetRStickXF();
+	}
+
+	// 方向取得
+	Vector3 camForward = g_camera3D->GetForward();
+	Vector3 moveForward = stateMachine.GetHasCharactarForward();
+
+	// Y成分カット
+	camForward.y = 0.0f;
+	moveForward.y = 0.0f;
+
+	// ゼロ対策
+	if (camForward.LengthSq() < 0.0001f ||
+		moveForward.LengthSq() < 0.0001f)
+	{
+		return 0.0f;
+	}
+
+	// 正規化（超重要）
+	camForward.Normalize();
+	moveForward.Normalize();
+
+	//-------------------------
+	// Yaw差分計算（安定版）
+	//-------------------------
+	float camYaw = atan2f(camForward.x, camForward.z);
+	float moveYaw = atan2f(moveForward.x, moveForward.z);
+
+	float delta = moveYaw - camYaw;
+
+	// -π ～ π に正規化（最短）
+	while (delta > DirectX::XM_PI)   delta -= DirectX::XM_2PI;
+	while (delta < -DirectX::XM_PI)  delta += DirectX::XM_2PI;
+
+	//-------------------------
+	// デッドゾーン
+	//-------------------------
+	const float deadZone =
+		DirectX::XM_PI / 180.0f * 1.0f; // 1度
+
+	static float current = 0.0f;
+	static float velocity = 0.0f;
+
+	if (fabs(delta) < deadZone)
+	{
+		current = 0.0f;
+		velocity = 0.0f;
+		return 0.0f;
+	}
+
+	//-------------------------
+	// 入力化
+	//-------------------------
+	const float maxAngle = DirectX::XM_PIDIV2; // 90度
+
+	float target = delta / maxAngle;
+	target = btClamped(target, -1.0f, 1.0f);
+
+	//-------------------------
+	// SmoothDamp
+	//-------------------------
+	const float smoothTime = 0.15f; // 調整用
+
+	current = SmoothDamp(
+		current,
+		target,
+		velocity,
+		smoothTime,
+		g_gameTime->GetFrameDeltaTime());
+
+	return current;
+}
+
+float PlayerController::SmoothDamp(
+	float current,
+	float target,
+	float& velocity,
+	float smoothTime,
+	float dt)
+{
+	float omega = 2.0f / smoothTime;
+
+	float x = omega * dt;
+	float exp = 1.0f / (1.0f + x + 0.48f * x * x + 0.235f * x * x * x);
+
+	float change = current - target;
+	float temp = (velocity + omega * change) * dt;
+
+	velocity = (velocity - omega * temp) * exp;
+
+	return target + (change + temp) * exp;
 }
 

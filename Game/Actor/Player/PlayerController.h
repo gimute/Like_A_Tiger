@@ -3,6 +3,7 @@
 
 class Player;
 class ICameraController;
+class YakuzaStateMachine;
 
 class PlayerController : public IGameObject
 {
@@ -30,6 +31,15 @@ private:
 	Vector3 CameraControllCalc();
 	//右スティックの入力量を取得
 	Vector3 GetStickR() const;
+	//カメラのX値取得
+	float GetCameraXF(YakuzaStateMachine& stateMachine);
 
+	float SmoothDamp(
+		float current,
+		float target,
+		float& velocity,
+		float smoothTime,
+		float dt
+	);
 };
 
