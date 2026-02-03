@@ -1,4 +1,5 @@
 #pragma once
+class EnemyIntroduction;
 
 //戦闘エリア構造体
 struct BattleArea
@@ -44,6 +45,8 @@ struct BattleArea
 class BattleAreaManager
 {
 private:
+	EnemyIntroduction* m_enemyIntroduction = nullptr;
+
 	//シングルトーンパターンを採用するため、コンストラクタをprivateにする
 	//インスタンス
 	static BattleAreaManager* m_instance;

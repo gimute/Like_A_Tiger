@@ -248,6 +248,7 @@
     <ClCompile Include="Effect\EffectManager.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyTypeSet\FastYakuzaActionSet.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAis\FastYakuzaAi.cpp" />
+    <ClCompile Include="UI\EnemyIntroduction.cpp" />
     <ClCompile Include="GameScene\GameOver\GameOver.cpp" />
     <ClCompile Include="GameScene\GameOverScene.cpp" />
     <ClCompile Include="GameScene\GameResultScene.cpp" />
@@ -330,6 +331,7 @@
     <ClInclude Include="Effect\EffectManager.h" />
     <ClInclude Include="Actor\Enemy\EnemyTypeSet\FastYakuzaActionSet.h" />
     <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAis\FastYakuzaAi.h" />
+    <ClInclude Include="UI\EnemyIntroduction.h" />
     <ClInclude Include="GameScene\GameOver\GameOver.h" />
     <ClInclude Include="GameScene\GameOverScene.h" />
     <ClInclude Include="GameScene\GameResultScene.h" />
