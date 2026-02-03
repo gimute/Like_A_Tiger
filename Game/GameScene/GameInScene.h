@@ -1,6 +1,8 @@
 #pragma once
 #include "GameScene\IGameSceneState.h"
 
+#include "Bgm\BgmManager.h"
+
 class Player;
 class PlayerController;
 class PoseMenu;
@@ -88,5 +90,7 @@ private:
     MiniMap* m_miniMap = nullptr;
     //スカイキューブ
     SkyCube* m_skyCube = nullptr;
+    ///レベル
+    LevelRender m_level;
 };
 

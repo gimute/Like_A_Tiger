@@ -232,6 +232,7 @@
     <ClCompile Include="Battle\BattleManager.cpp" />
     <ClCompile Include="Battle\BattleAreaManager.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyMetaAi\Process\BattleStartNotifyProcess.cpp" />
+    <ClCompile Include="Bgm\BgmManager.cpp" />
     <ClCompile Include="Camera\CameraEntity.cpp" />
     <ClCompile Include="Camera\CameraManager.cpp" />
     <ClCompile Include="Actor\Enemy\Enemy.cpp" />
@@ -253,6 +254,8 @@
     <ClCompile Include="GameScene\GameOverScene.cpp" />
     <ClCompile Include="GameScene\GameResultScene.cpp" />
     <ClCompile Include="InvisibleWall.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyTypeSet\ToughYakuzaActionSet.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAis\ToughYakuzaAi.cpp" />
     <ClCompile Include="UI\MiniMap.cpp" />
     <ClCompile Include="Sound\SoundManager.cpp" />
     <ClCompile Include="Load\LoadScreenSprite.cpp" />
@@ -310,6 +313,7 @@
     <ClInclude Include="Battle\BattleManager.h" />
     <ClInclude Include="Battle\BattleAreaManager.h" />
     <ClInclude Include="Actor\Enemy\EnemyMetaAi\Process\BattleStartNotifyProcess.h" />
+    <ClInclude Include="Bgm\BgmManager.h" />
     <ClInclude Include="Camera\CameraUpdateData.h" />
     <ClInclude Include="Camera\CameraEntity.h" />
     <ClInclude Include="Camera\CameraManager.h" />
@@ -336,6 +340,8 @@
     <ClInclude Include="GameScene\GameOverScene.h" />
     <ClInclude Include="GameScene\GameResultScene.h" />
     <ClInclude Include="InvisibleWall.h" />
+    <ClInclude Include="Actor\Enemy\EnemyTypeSet\ToughYakuzaActionSet.h" />
+    <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAis\ToughYakuzaAi.h" />
     <ClInclude Include="UI\MiniMap.h" />
     <ClInclude Include="Sound\SoundId.h" />
     <ClInclude Include="Sound\SoundManager.h" />
