@@ -3,6 +3,7 @@
 
 #include "Actor\Enemy\EnemyManager.h"
 #include "Battle\BattleManager.h"
+#include "UI/EnemyIntroduction.h"
 
 BattleAreaManager* BattleAreaManager::m_instance = nullptr;
 
@@ -11,6 +12,8 @@ int BattleAreaManager::CreateArea(
 	float radius
 )
 {
+	m_enemyIntroduction = NewGO<EnemyIntroduction>(0, "enemyIntroducation");
+
 	//新しい戦闘エリア
 	BattleArea newBattleArea(
 		m_areaCountNum++,
@@ -47,6 +50,10 @@ void BattleAreaManager::Update(const Vector3& playerPos)
 
 			//バトルマネージャーにも通知
 			NotifyOnBattleManagerEnter(areaPtr);
+
+			//敵の紹介演出アニメーション再生
+			m_enemyIntroduction->PlayAnimation();
+			//敵、Playerの動きを止めたい
 		}
 
 		areaPtr.m_isPlayerInside = nowInside;
