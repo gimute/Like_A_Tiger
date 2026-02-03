@@ -172,9 +172,11 @@ public:
 
 	std::shared_ptr<UIImage> GetImage() const { return m_image; }
 	/** 回復量を取得する処理 */
-	int GetHealAmout() {
-		return m_healAmount;
-	}
+	virtual float GetHealAmount() = 0;
+
+	//   int GetHealAmout() {
+	//   	return m_healAmount;
+	//   }
 
 	virtual void PlayOpenAnimation()  {
 		if (m_backGroundColorAnimation) {
@@ -212,7 +214,7 @@ public:
 	}
 protected:
 	/** 回復量を保持する変数 */
-	int m_healAmount = 0;
+	float m_healAmount = 0.0f;
 	/** 開く用カラーアニメーション */
 	std::unique_ptr<ColorUIAnimation> m_backGroundColorAnimation = nullptr;
 	std::unique_ptr<ColorUIAnimation> m_imageColorAnimation = nullptr;
@@ -254,6 +256,10 @@ public:
 	void Update() override;
 
 	void Init(const ItemIconInitData* initData = nullptr) override;
+
+	float GetHealAmount() override {
+		return m_healAmount;
+	}
 };
 
 
@@ -278,6 +284,10 @@ public:
 	void Update() override;
 
 	void Init(const ItemIconInitData* initData = nullptr) override;
+
+	float GetHealAmount() override {
+		return m_healAmount;
+	}
 };
 
 
@@ -302,6 +312,10 @@ public:
 	void Update() override;
 
 	void Init(const ItemIconInitData* initData = nullptr) override;
+
+	float GetHealAmount() override {
+		return m_healAmount;
+	}
 };
 
 
@@ -338,6 +352,10 @@ public:
 			m_closeBackGoundColorAnimation->Play();
 		}
 	}
+	float GetHealAmount() override {
+		return 0;
+	}
+
 };
 
 
@@ -439,6 +457,14 @@ public:
 	void Init(const PosePanelInitData* initData = nullptr) override;
 
 	void SetItemSlot(RefItemSlotPtr slot) { m_itemSlot = slot; }
+
+	RefItemSlotPtr GetItemSlot(int index) const {
+		if (index >= 0
+			&& index < static_cast<int>(m_itemSlotList.size())) {
+			return m_itemSlotList[index];
+		}
+		return nullptr;
+	}
 
 	void PlayOpenAnimation() override {
 		if (m_colorAnimation) {
@@ -1142,6 +1168,12 @@ public:
 
 	/** アイコンカーソルの位置変更を通知 */
 	void OnIconCursorIndexChanged(int newIndex);
+
+private:
+	/** アイテム使用確認UIの結果を処理 */
+	void ProcessInSelectResult();
+	/** 選択されたアイテムを使用してプレイヤーに反映 */
+	void UseSelectedItem();
 
 private:
 	std::shared_ptr<UICanvas> m_canvas = nullptr;

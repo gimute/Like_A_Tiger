@@ -42,4 +42,15 @@ public:
 
 		m_hpGauge->SetHP(GetYakuzaCurrentHp());
 	}
+
+	inline void HealPlayerHP(float amount)
+	{
+		ReceiveHeal(amount);
+		// Å‘åHP‚ð’´‚¦‚È‚¢‚æ‚¤‚ÉÝ’è
+		if (GetYakuzaCurrentHp() > GetYakuzaMaxHp()) {
+			m_yakuzaCurrentHp = GetYakuzaMaxHp();
+		}
+
+		m_hpGauge->SetHP(GetYakuzaCurrentHp());
+	}
 };
