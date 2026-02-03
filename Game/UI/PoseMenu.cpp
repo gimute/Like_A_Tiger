@@ -2,12 +2,13 @@
 #include "PoseMenu.h"
 #include "Inventory/Inventory.h"
 #include "SaveManager.h"
+#include "Actor/Player/Player.h"
 
 namespace
 {
+	/** アイテムスロットの数 */
 	constexpr int MAX_ITEM_SLOT_NUM = 20;
 }
-
 
 ItemPosePanel::ItemPosePanel() {
 	m_image = m_canvas.CreateUI<UIImage>();
@@ -78,10 +79,6 @@ void ItemPosePanel::Init(const PosePanelInitData* initData) {
 }
 
 void ItemPosePanel::Update() {
-	/*Vector4 color = m_canvas.GetColor();
-	color.w = m_parentAlpha;
-	m_canvas.SetColor(color);*/
-
 	m_image->Update();
 	m_canvas.Update();
 
@@ -124,7 +121,6 @@ void ItemPosePanel::Update() {
 					newItem->PlayOpenAnimation();
 				}
 				
-
 				//キャッシュを更新
 				m_cachedSlotTypes[i] = currentDataType;
 			}
@@ -133,7 +129,6 @@ void ItemPosePanel::Update() {
 
 	//各スロットの更新
 	for (auto& slot : m_itemSlotList) {
-		//slot->GetItemCanvas()->SetColor(Vector4(1.0f, 1.0f, 1.0f, m_parentAlpha));
 		slot->Update();
 	}
 }
@@ -173,9 +168,6 @@ ItemPosePanel::RefItemBasePtr ItemPosePanel::MakeSharedItem(const EnItemType typ
 	}
 	//デフォルトは空を返す
 	return std::make_shared<EmptyRecoveryItem>();
-
-	//  K2_ASSERT(false, "種類に対する処理が追加されていません");
-	//  return nullptr;
 }
 
 void ItemPosePanel::OnCursolIndexChanged(int newIndex) {
@@ -210,6 +202,7 @@ void ItemPosePanel::OnCursolIndexChanged(int newIndex) {
 	/** 前のインデックス更新 */
 	m_previousCursorIndex = newIndex;
 }
+
 
 
 
@@ -249,7 +242,6 @@ void RecoveryItem::Update() {
 }
 
 void RecoveryItem::Render(RenderContext& rc) {
-	//m_canvas->Update();
 	m_canvas->Render(rc);
 	if (m_backgroundImage) {
 		m_backgroundImage->Render(rc);
@@ -321,7 +313,7 @@ void RecoveryItem::Use(Player* p)
 
 
 SmallRecoveryItem::SmallRecoveryItem() {
-	m_healAmount = 20;
+	m_healAmount = 20.0f;
 }
 
 SmallRecoveryItem::~SmallRecoveryItem() {
@@ -360,14 +352,11 @@ void SmallRecoveryItem::Init(const ItemIconInitData* initData) {
 	RecoveryItem::Init(initData);
 }
 
-
-
-
 /**************************************************/
 
 
 StandardRecoveryItem::StandardRecoveryItem() {
-	m_healAmount = 60;
+	m_healAmount = 40.0f;
 }
 
 StandardRecoveryItem::~StandardRecoveryItem() {
@@ -413,7 +402,7 @@ void StandardRecoveryItem::Init(const ItemIconInitData* initData) {
 
 
 GreatRecoveryItem::GreatRecoveryItem() {
-	m_healAmount = 120;
+	m_healAmount = 60.0f;
 }
 
 GreatRecoveryItem::~GreatRecoveryItem() {
@@ -688,8 +677,6 @@ void CursolPosePanel::Update() {
 		}
 	}
 
-	
-
 	if (m_owner) {
 		m_owner->SetIsCursolPressed(m_isPressed);
 	}
@@ -791,7 +778,7 @@ bool IconCursol::Start() {
 }
 
 void IconCursol::Update() {
-	/** TODO:Updateメソッドに要素が多すぎる責任が複数あるので分けたい所存 */
+	/** TODO:Updateメソッドに要素が多すぎる責任が複数あるので分けたい */
 
 	/** 横移動量 */
 	int dx = 0;
@@ -837,7 +824,6 @@ void IconCursol::Update() {
 			m_owner->OnIconCursorIndexChanged(m_currentCursolIndex);
 		}
 	}
-	
 
 	/* 最新のインデックスから「現在の列と行」を再計算 */
 	int currentCol = m_currentCursolIndex % NUM_COLS;
@@ -1166,40 +1152,20 @@ bool Setting::Start() {
 		float posY = BASE_UI_START_Y - (static_cast<float>(i) * BASE_UI_SPACING);
 		baseUI->m_transform.m_localPosition = Vector3(170.0f, posY, 0.0f);
 
-
 		/** 開いた時のアニメーション */
 		std::vector<float> openTimeList = { 1.0f };
 		std::vector<Vector4> openColorList = { Vector4(1.0f,1.0f,1.0f,0.0f),Vector4::White };
 		auto openAnim = std::make_unique<ColorUIAnimation>(baseUI, false, EasingType::EaseIn, openTimeList, openColorList);
-		//m_openBaseUIColorAnimation = std::make_unique<ColorUIAnimation>(m_baseUI, false, EasingType::EaseIn, timeList, colorList);
 		
 		/** 閉じた時のアニメーション */
 		std::vector<float> closeTimeList = { 1.0f };
 		std::vector<Vector4> closeColorList = { Vector4::White,Vector4(1.0f,1.0f,1.0f,0.0f) };
 		auto closeAnim = std::make_unique<ColorUIAnimation>(baseUI, false, EasingType::EaseIn, closeTimeList, closeColorList);
-		//m_closeBaseUIColorAnimation = std::make_unique<ColorUIAnimation>(m_baseUI, false, EasingType::EaseIn, closeTimeList, closeColorList);
 
 		m_baseUIList.push_back(baseUI);
 		m_openBaseUIColorAnimationList.push_back(std::move(openAnim));
 		m_closeBaseUIColorAnimationList.push_back(std::move(closeAnim));
 	}
-
-	//  m_baseUI = m_canvas->CreateUI<UIImage>();
-	//  m_baseUI->Init(SETTING_BASE_PATH, 1000.0f, 300.0f);
-	//   /** 開いた時のアニメーション */
-	//   {
-	//   	std::vector<float> timeList = { 1.0f };
-	//   	std::vector<Vector4> colorList = { Vector4(1.0f,1.0f,1.0f,0.0f),Vector4::White };
-	//   	m_openBaseUIColorAnimation = std::make_unique<ColorUIAnimation>(m_baseUI, false, EasingType::EaseIn, timeList, colorList);
-	//   }
-	//   /** 閉じた時のアニメーション */
-	//   {
-	//   	std::vector<float> timeList = { 1.0f };
-	//   	std::vector<Vector4> colorList = { Vector4::White,Vector4(1.0f,1.0f,1.0f,0.0f) };
-	//   	m_closeBaseUIColorAnimation = std::make_unique<ColorUIAnimation>(m_baseUI, false, EasingType::EaseIn, timeList, colorList);
-	//   }
-	//  auto baseUI = m_canvas->CreateUI<UIImage>();
-	//  baseUI->Init(INSELECT_BASE_PATH, 1000.0f, 300.0f);
 
 	m_cursolUI = m_canvas->CreateUI<UIImage>();
 	m_cursolUI->Init(SETTING_CURSOL_PATH, 300.0f, 50.0f);
@@ -1270,15 +1236,7 @@ void Setting::Update() {
 			anim->Update();
 		}
 	}
-
-	//  if (m_cursolUIColorAnimation) {
-	//  	m_cursolUIColorAnimation->Update();
-	//  }
-	
-	/** 開いた時のアニメーション */
-	//  if (m_openBaseUIColorAnimation) {
-	//  	m_openBaseUIColorAnimation->Update();
-	//  }
+	/** 開く時のアニメーション更新 */
 	if (m_openCursolUIColorAnimation) {
 		m_openCursolUIColorAnimation->Update();
 	}
@@ -1289,11 +1247,7 @@ void Setting::Update() {
 		m_openTextVolumeUIColorAnimation->Update();
 	}
 	
-
 	/** 閉じる時のアニメーション更新 */
-	//  if (m_closeBaseUIColorAnimation) {
-	//  	m_closeBaseUIColorAnimation->Update();
-	//  }
 	if (m_closeCursolUIColorAnimation) {
 		m_closeCursolUIColorAnimation->Update();
 	}
@@ -1312,7 +1266,7 @@ void Setting::Update() {
 				m_currentSettingCursolIndex = 0;
 			}
 		}
-		/**  */
+
 		if (g_pad[0]->IsTrigger(enButtonRB1)) {
 			m_currentSettingCursolIndex++;
 			if (m_currentSettingCursolIndex > 1) {
@@ -1336,23 +1290,11 @@ void Setting::Update() {
 				m_result = SelectResult::ToTitle;
 				m_isVisible = true;
 			}
-			//else if (m_currentSettingCursolIndex == 2) {
-			//	m_result = SelectResult::ToTitle;
-				/** TODO: Settingのインスタンスを消したい
-				 *	フラグを上げて、PoseMenuクラス側で削除させるのもあり⇒それが最有力
-				 */
-
-				 /******************************************/
-
-				 //m_settingInSelect = NewGO<SettingInSelect>(0, "settingSelect");
-			 //}
 			else {
 				m_result = SelectResult::None;
 			}
 		}
 	}
-	
-
 	m_canvas->Update();
 }
 
@@ -1379,12 +1321,10 @@ bool SettingInSelect::Start()
 
 	auto baseUI = m_canvas->CreateUI<UIImage>();
 	baseUI->Init(INSELECT_BASE_PATH, 1000.0f, 300.0f);
-	//baseUI->m_transform.m_localPosition = Vector3(0.0f,)
 
 	m_cursolUI = m_canvas->CreateUI<UIImage>();
 	m_cursolUI->Init(INSELECT_CURSOL_PATH, 300.0f, 50.0f);
 	m_cursolUI->m_transform.m_localPosition = Vector3(0.0f, -20.0f, 0.0f);
-	//m_cursolUI->SetColor(Vector4(1.0f, 1.0f, 1.0f, 0.0f));
 	{
 		std::vector<float> timeList = { 1.0f,1.0f };
 		std::vector<Vector4> ColorList = { Vector4::White,Vector4(1.0f,1.0f,1.0f,0.0f),Vector4::White };
@@ -1408,9 +1348,7 @@ bool SettingInSelect::Start()
 }
 
 void SettingInSelect::Update() {
-	//if (m_cursolUIColorAnimation) {
-		m_cursolUIColorAnimation->Update();
-	//}
+	m_cursolUIColorAnimation->Update();
 
 	if (m_owner->IsPoseActive()) {
 		if (g_pad[0]->IsTrigger(enButtonRB1)) {
@@ -1444,14 +1382,11 @@ void SettingInSelect::Update() {
 			}
 		}
 
-
 		/** Aボタンで戻る */
 		if (g_pad[0]->IsTrigger(enButtonA)) {
 			m_result = EnNextType::enNextType_No;
 		}
 	}
-
-	
 
 	m_canvas->Update();
 }
@@ -1471,7 +1406,6 @@ PoseMenu::PoseMenu()
 	m_canvas = std::make_shared<UICanvas>();
 	m_canvas->CreateUI<UICanvas>();
 	m_canvas->m_transform.m_localPosition = Vector3(0.0f, 0.0f, 0.0f);
-	//m_canvas->SetColor(Vector4(1.0f, 1.0f, 1.0f, 0.0f));
 	
 	m_image = m_canvas->CreateUI<UIImage>();
 	m_image->SetColor(Vector4(1.0f, 1.0f, 1.0f, 0.0f));
@@ -1485,28 +1419,27 @@ PoseMenu::PoseMenu()
 	/** パネルにスロットを教える */
 	itemPanel->SetItemSlot(m_itemSlot);
 	m_posePanelList.push_back(itemPanel);
-
+	/** 操作説明パネル作成 */
 	auto manualControlPanel = std::make_shared<ManualControlPosePanel>();
 	manualControlPanel->SetOwner(this);
 	m_posePanelList.push_back(manualControlPanel);
-
+	/** 設定パネル作成 */
 	auto settingPanel = std::make_shared<SettingPosePanel>();
 	settingPanel->SetOwner(this);
 	m_posePanelList.push_back(settingPanel);
-	
+	/** 名前リストベース作成 */
 	auto nameListBase = std::make_shared<NameListBasePosePanel>();
 	nameListBase->SetOwner(this);
 	m_posePanelList.push_back(nameListBase);
-
-
+	/** カーソルパネル作成 */
 	m_cursolPanel = std::make_shared<CursolPosePanel>();
 	m_cursolPanel->SetOwner(this);
 	m_posePanelList.push_back(m_cursolPanel);
-
+	/** 名前リスト作成 */
 	auto nameListPanel = std::make_shared<NameListPosePanel>();
 	nameListPanel->SetOwner(this);
 	m_posePanelList.push_back(nameListPanel);
-
+	/** アイコンカーソル作成 */
 	m_iconCursol = std::make_shared<IconCursol>();
 	m_iconCursol->SetOwner(this);
 	m_posePanelList.push_back(m_iconCursol);
@@ -1524,7 +1457,6 @@ PoseMenu::~PoseMenu() {
 }
 
 bool PoseMenu::Start() {
-	//Init();
 	return true;
 }
 
@@ -1541,46 +1473,18 @@ void PoseMenu::Update() {
 		m_canvasColorCloseAnimation->Update();
 	}
 
-	//  /** メニューが閉じているときはスキップ */
-	//  if (!m_isActived) {
-	//  	return;
-	//  }
-
 	/** 確認UIが表示中の場合 */
 	if (m_inSelect) {
-		// 結果をチェック
-		auto result = m_inSelect->GetResult();
-
-		if (result == InSelect::Yes) {
-			// アイテムを使用
-			Inventory* inventory = Inventory::GetInstance();
-			if (inventory && m_selectedItemIndex >= 0) {
-				inventory->RemoveItem(m_selectedItemIndex);
-				//TODO:プレイヤーへの回復処理などを追加
-			}
-
-			// 確認UIを削除
-			DeleteGO(m_inSelect);
-			m_inSelect = nullptr;
-			m_selectedItemIndex = -1;
-		}
-		else if (result == InSelect::SelectResult::No) {
-			// キャンセル - 確認UIを削除
-			DeleteGO(m_inSelect);
-			m_inSelect = nullptr;
-			m_selectedItemIndex = -1;
-		}
+		ProcessInSelectResult();
 		// 確認UI表示中は他の操作を受け付けない
-		return;
+		if (m_inSelect) {
+			return;
+		}
 	}
 
 	if (IsPoseActive()) {
 		if (m_setting) {
 			auto result = m_setting->GetResult();
-
-			//if (result == Setting::SelectResult::ToMenu) {
-			//	/** メニューにもどる要らない説濃厚 */
-			//}
 
 			if (result == Setting::SelectResult::ToTitle) {
 				if (m_settingInSelect == nullptr) {
@@ -1590,9 +1494,9 @@ void PoseMenu::Update() {
 				DeleteGO(m_setting);
 				m_setting = nullptr;
 			}
+			/** TODO:音量調整に遷移 */
 		}
 	}
-	
 
 	if (IsPoseActive()) {
 		/** SettingInSelectの結果を処理 */
@@ -1631,7 +1535,6 @@ void PoseMenu::Update() {
 				m_setting->SetOwner(this);
 			}
 		}
-
 		else {
 			/** 設定リスト以外に移動したとき */
 			if (m_setting) {
@@ -1640,10 +1543,9 @@ void PoseMenu::Update() {
 			}
 		}
 	}
-	
 
 	if (IsPoseActive()) {
-		/** アイテムの使用時の処理 */
+	/** アイテムの使用時の処理 */
 	// アイテム一覧が表示されているとき(0番目と仮定)
 		if (m_currentListIndex == 0) {
 			//デバッグテスト：フラグを立てる
@@ -1718,16 +1620,10 @@ void PoseMenu::Init(const PoseMenuInitData* initData)
 	for (const auto& p : m_posePanelList) {
 		p->Init();
 	}
-
-	//  m_canvasColorOpenAnimation->Play();
-	//  for (const auto& p : m_posePanelList) {
-	//  	p->PlayOpenAnimation();
-	//  }
 }
 
 void PoseMenu::Open()
 {
-	
 	if (m_isActived) return;
 	m_currentListIndex = 0;
 	m_cursolPanel->ResetCursolIndex();
@@ -1748,12 +1644,8 @@ void PoseMenu::Close()
 {
 	if (!m_isActived) return;
 
-	//m_currentListIndex = 0;
-
 	if (m_setting) {
 		m_setting->PlayCloseAnimation();
-		//DeleteGO(m_setting);
-		//m_setting = nullptr;
 	}
 
 	if (m_settingInSelect) {
@@ -1767,26 +1659,13 @@ void PoseMenu::Close()
 		m_selectedItemIndex = -1;
 	}
 
-	
-
 	if (m_canvasColorCloseAnimation) {
 		m_canvasColorCloseAnimation->Play();
 	}
 	for (const auto& p : m_posePanelList) {
 		p->PlayCloseAnimation();
 	}
-
-	
-
 	m_isActived = false;
-
-	//   /** リストインデックスを0にリセット */
-	//   m_currentListIndex = 0;
-	//   
-	//   /** カーソル位置もリセット */
-	//   if (m_cursolPanel) {
-	//   	m_cursolPanel->ResetCursolIndex();
-	//   }
 }
 
 void PoseMenu::OnIconCursorIndexChanged(int newIndex)
@@ -1797,5 +1676,49 @@ void PoseMenu::OnIconCursorIndexChanged(int newIndex)
 		if (itemPanel) {
 			itemPanel->OnCursolIndexChanged(newIndex);
 		}
+	}
+}
+
+void PoseMenu::ProcessInSelectResult()
+{
+	if (!m_inSelect) {
+		return;
+	}
+
+	auto result = m_inSelect->GetResult();
+
+	if (result == InSelect::SelectResult::None) {
+		return;
+	}
+
+	if (result == InSelect::SelectResult::Yes) {
+		UseSelectedItem();
+		Inventory::GetInstance()->RemoveItem(m_selectedItemIndex);
+	}
+
+	/** Yes/No どちらでも確認UI削除 */
+	DeleteGO(m_inSelect);
+	m_inSelect = nullptr;
+	m_selectedItemIndex = -1;
+}
+
+void PoseMenu::UseSelectedItem()
+{
+	Player* player = FindGO<Player>("player");
+	if (!player) { return;}
+
+	auto itemPanel = std::dynamic_pointer_cast<ItemPosePanel>(m_posePanelList[0]);
+	if (!itemPanel) { return; }
+
+	auto slot = itemPanel->GetItemSlot(m_selectedItemIndex);
+	if (!slot
+		|| !slot->GetItem()) { return; }
+
+	auto recoveryItem = std::dynamic_pointer_cast<RecoveryItem>(slot->GetItem());
+	if (!recoveryItem) { return; }
+
+	float healAmount = recoveryItem->GetHealAmount();
+	if (healAmount > 0.0f) {
+		player->HealPlayerHP(healAmount);
 	}
 }
