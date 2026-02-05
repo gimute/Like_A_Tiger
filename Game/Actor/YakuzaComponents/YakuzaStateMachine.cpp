@@ -30,7 +30,7 @@ IStateBase* YakuzaStateMachine::GetNextState()
 
 	if (CanChangeGrab())
 	{
-		return FindClassNameState<YakuzaGrabState>();
+		return FindClassNameState<YakuzaGrabingState>();
 	}
 
 	//攻撃中なら現在更新中のアタックステートを更新する
@@ -364,7 +364,7 @@ void YakuzaStateMachine::HasCharacterGrabingProcces()
 
 void YakuzaStateMachine::HasCharacterSendToGrabingOrGrabBedYakuzaData(int sendDamageType)
 {
-	if (IsNowStateClassName<YakuzaGrabState>())
+	if (IsNowStateClassName<YakuzaGrabingState>())
 	{
 		YakuzaCharacterDamageManager::GetInstance()->SendGrabingToGrabBedYakuzaData(
 			m_grabingYakuza,
@@ -424,7 +424,7 @@ void YakuzaStateMachine::OnAnimationEvent(const wchar_t* clipName, const wchar_t
 				20.0f
 			);
 		}
-		else if(IsGetYakuzaStateMachineNowState<YakuzaGrabState>())
+		else if(IsGetYakuzaStateMachineNowState<YakuzaGrabingState>())
 		{
 			m_hasCharactar->SpawnGrabCollision(
 				m_hasCharactar,

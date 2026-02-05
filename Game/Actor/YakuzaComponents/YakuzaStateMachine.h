@@ -54,7 +54,7 @@ public:
 		AddState<YakuzaWalkState>(this);
 		AddState<YakuzaAimMoveState>(this);
 		AddState<YakuzaAttackState>(this);
-		AddState<YakuzaGrabState>(this);
+		AddState<YakuzaGrabingState>(this);
 		AddState<YakuzaSwayState>(this);
 		AddState<YakuzaDefenseState>(this);
 		AddState<YakuzaDamageState>(this);
@@ -71,7 +71,9 @@ private:
 	//移動方向
 	Vector3 m_moveVec = Vector3::Zero;
 	//移動速度 
-	float m_moveSpeed = 400.0f;
+	float m_moveSpeed = 0.0f;
+	//移動速度倍率
+	float m_aimMoveSpeedRate = 1.0f;
 	//回避速度
 	float m_swaySpeed = 600.0f;
 	//回避アニメーション速度
@@ -139,6 +141,10 @@ public:
 	inline void SetMoveSpeed(float speed) { m_moveSpeed = speed; }
 
 	inline float GetMoveSpeed() { return m_moveSpeed; }
+
+	inline void SetAimMoveSpeedRate(float speedRate) { m_aimMoveSpeedRate = speedRate; }
+
+	inline float GetAimMoveSpeedRate() { return m_aimMoveSpeedRate; }
 
 	inline void SetSwaySpeed(float speed, float animSpeed) { m_swaySpeed = speed; m_swayAnimSpeed = animSpeed; }
 
