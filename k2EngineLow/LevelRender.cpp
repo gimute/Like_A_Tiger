@@ -123,6 +123,8 @@ namespace nsK2EngineLow {
 
 	void LevelRender::MatrixTklToLevel()
 	{
+		m_bonelist.clear();
+
 		m_tklFile.QuaryObject([&](TklFile::SObject& tklObj) {
 			//コピー。
 			//バインドポーズ。
