@@ -6,6 +6,8 @@
 #include "Actor\Player\PlayerCameraController.h"
 #include "Actor\YakuzaComponents\YakuzaStates.h"
 
+#include "Load\LoadManager.h"
+
 namespace{
 	inline bool IsInputStickL()
 	{
@@ -28,6 +30,8 @@ namespace{
 		}
 		return false;
 	}
+
+	float KAMERA_NON_ASSIST_TIME = 0.5f;
 }
 
 bool PlayerController::Start()
@@ -41,7 +45,7 @@ void PlayerController::Update()
 
 	auto* cameraController = m_cameraController;
 
-	if (!playerStateMachine || !cameraController)
+	if (!playerStateMachine || !cameraController || !LoadManager::GetInstance()->LoadFadeInEnd())
 	{
 		return;
 	}
@@ -70,6 +74,11 @@ void PlayerController::Update()
 	if (IsInputStickL())
 	{
 		playerStateMachine->SetMoveVec(CameraControllCalc());
+	}
+
+	if (IsInputStickR())
+	{
+		m_cameraNonAssistTimer = KAMERA_NON_ASSIST_TIME;
 	}
 
 	//Rスティックの入力量を設定
@@ -119,6 +128,13 @@ Vector3 PlayerController::GetStickR() const
 
 float PlayerController::GetCameraXF(YakuzaStateMachine& stateMachine)
 {
+	if (m_cameraNonAssistTimer > 0.0f)
+	{
+		m_cameraNonAssistTimer -= g_gameTime->GetFrameDeltaTime();
+
+		return g_pad[0]->GetRStickXF();;
+	}
+
 	//攻撃中で無ければスティックの入力X値を返す
 	if (!stateMachine.GetIsAttack() || IsInputStickR())
 	{

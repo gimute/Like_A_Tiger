@@ -41,5 +41,7 @@ private:
 		float smoothTime,
 		float dt
 	);
+
+	float m_cameraNonAssistTimer = 0.0f;
 };
 
