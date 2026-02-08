@@ -28,7 +28,8 @@ void EnemyManager::InitEnemyManager()
 
 	//名前ストレージ初期化
 	m_enemyNameStorage.Initialize(
-		{ "TAKEDA", "SATAKE", "HUJIWARA", "ABE", "MIYAMOTO" }
+		{ "TAKEDA", "SATAKE", "HUJIWARA", "ABE", "MIYAMOTO", "MARUYAMA" , "IMAI", "HUJIMOTO" , "NISHIDA" , "TANAKA" , "KAWADA" , "HUKUMI",
+		  "MATSUSHITA" , "KONDOU"}
 	);
 
 	m_enemyMetaAi = NewGO<EnemyMetaAi>(UpdateOrder::AI, "enemymetaai");
