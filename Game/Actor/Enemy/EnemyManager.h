@@ -94,15 +94,6 @@ struct EnemyGroup
 	bool m_isDelete = false;
 };
 
-//エネミーの仮名
-constexpr const char* EnemyTempNames[] =
-{
-	"A",
-	"B",
-	"C",
-	"D"
-};
-
 class EnemyManager
 {
 private:
