@@ -9,6 +9,8 @@ namespace
 	constexpr const char* ICON_A_PATH = "Assets/spriteData/Title/Title_A_Icon.DDS";
 	constexpr const char* LOGO_PATH = "Assets/spriteData/Title/Title_LikeTiger.DDS";
 	constexpr const char* ICON_BUTTON_PATH = "Assets/spriteData/Title/Title_PressAnyButton.DDS";
+	constexpr const char* ICON_BUTTON_BASE_PATH = "Assets/spriteData/Title/Title_PressAnyButton_Base.DDS";
+
 
 	constexpr float WAIT_TIME = 0.2f;
 	constexpr float ANIMATION_TIME = 0.3f;
@@ -34,7 +36,7 @@ bool Title::Start() {
 
 	auto circleUI = m_canvas->CreateUI<UIImage>();
 	circleUI->Init(CIRCLE_PATH, 500.0f, 500.0f);
-	circleUI->m_transform.m_localPosition = Vector3(200.0f, 0.0f, 0.0f);
+	circleUI->m_transform.m_localPosition = Vector3(150.0f, 30.0f, 0.0f);
 	circleUI->m_transform.m_localRotation.SetRotationDegZ(-30.0f);
 	{
 		std::vector<float> timeList = { WAIT_TIME*2.0f, ANIMATION_TIME };
@@ -50,8 +52,8 @@ bool Title::Start() {
 	}
 
 	auto iconAUI = m_canvas->CreateUI<UIImage>();
-	iconAUI->Init(ICON_A_PATH, 400.0f, 400.0f);
-	iconAUI->m_transform.m_localPosition = Vector3(200.0f, 150.0f, 0.0f);
+	iconAUI->Init(ICON_A_PATH, 300.0f, 300.0f);
+	iconAUI->m_transform.m_localPosition = Vector3(150.0f, 100.0f, 0.0f);
 	// Aアイコンのアニメーション
 	{
 		std::vector<float> timeList = { WAIT_TIME, ANIMATION_TIME };
@@ -67,7 +69,7 @@ bool Title::Start() {
 	}
 
 	auto logoUI = m_canvas->CreateUI<UIImage>();
-	logoUI->Init(LOGO_PATH, 600.0f, 350.0f);
+	logoUI->Init(LOGO_PATH, 700.0f, 450.0f);
 	logoUI->m_transform.m_localPosition = Vector3(-150.0f, 0.0f, 0.0f);
 	// ロゴのアニメーション
 	{
@@ -78,7 +80,7 @@ bool Title::Start() {
 	}
 
 	m_iconButtonUI = m_canvas->CreateUI<UIImage>();
-	m_iconButtonUI->Init(ICON_BUTTON_PATH, 500.0f, 200.0f);
+	m_iconButtonUI->Init(ICON_BUTTON_BASE_PATH, 800.0f, 60.0f);
 	m_iconButtonUI->m_transform.m_localPosition = Vector3(0.0f, -350.0f, 0.0f);
 	m_iconButtonUI->SetDrawFlag(false);
 	// ボタンのアニメーション
@@ -89,6 +91,10 @@ bool Title::Start() {
 		m_buttonAnimation->Play();
 	}
 
+	auto buttonUI = m_canvas->CreateUI<UIImage>();
+	buttonUI->Init(ICON_BUTTON_PATH, 350.0f, 30.0f);
+	buttonUI->m_transform.m_localPosition = Vector3(0.0f, -350.0f, 0.0f);
+	
 	return true;
 }
 

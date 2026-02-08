@@ -214,6 +214,11 @@ public:
 		m_yakuzaCurrentHp -= amount;
 	}
 
+	inline void ReceiveHeal(float amount) 
+	{
+		m_yakuzaCurrentHp += amount;
+	}
+
 	//HP‚ðŒ©‚ÄDead‚©‚Ç‚¤‚©Šm”F
 	inline bool IsCharacterHpDead()
 	{

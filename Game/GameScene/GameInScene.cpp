@@ -36,6 +36,27 @@
 //ステート侵入関数
 void GameInScene::EnterScene()
 {
+	//レベルで色々配置
+	m_level.Init("Assets/level/StageLevel.tkl",
+		[&](LevelObjectData_Render& objData)
+		{
+			if (objData.ForwardMatchName(L"BattleArea_N") == true)
+			{
+				//SpYakuzaが出ないグループ
+				EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4, objData.position, false);
+				return true;
+			}
+			else if(objData.ForwardMatchName(L"BattleArea_Sp") == true)
+			{
+				//SpYakuzaが出るグループ
+				EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4, objData.position, true);
+				return true;
+			}
+
+			return true;
+		});
+
+
 	//戦闘開始でBGMを変えるコールバック登録
 	BattleManager::GetInstance()->RegisterBattleStartCallBack(
 		[&](const BattleStartEventInfo& eventInfo)
@@ -73,10 +94,6 @@ void GameInScene::EnterScene()
 	//敵HPを生成
 	m_enemysHpGauge = NewGO<EnemysHpGauge>(UpdateOrder::UI, "enemy");
 
-	//敵生成テスト
-	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ -1000.0f,0.0f,0.0f },true);
-	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ -3000.0f,0.0f,0.0f },true);
-	EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4,Vector3{ 1000.0f,0.0f,0.0f },true);
 	//エネミーのターゲットを設定
 	EnemyManager::GetInstance()->SetEnemyTargetCharacter(m_player);
 
