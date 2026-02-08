@@ -26,6 +26,11 @@ void EnemyManager::InitEnemyManager()
 		}
 	);
 
+	//名前ストレージ初期化
+	m_enemyNameStorage.Initialize(
+		{ "TAKEDA", "SATAKE", "HUJIWARA", "ABE", "MIYAMOTO" }
+	);
+
 	m_enemyMetaAi = NewGO<EnemyMetaAi>(UpdateOrder::AI, "enemymetaai");
 	m_enemyAiSystem = NewGO<EnemySystem>(UpdateOrder::AI, "enemy");
 }
@@ -79,7 +84,7 @@ void EnemyManager::RequestSpawnEnemyGroup(int spawnNum, const Vector3& spawnPoin
 		pair.m_enemyID = m_enemyIDCounter;
 
 		//仮名なので注意
-		pair.m_enemyName = EnemyTempNames[i];
+		pair.m_enemyName = m_enemyNameStorage.GetName();
 
 		//スポーン位置をランダム選定
 		Vector3	randomSpawnPoint = GetRandomPointInRadius(spawnPoint, 100.0f);
@@ -312,7 +317,7 @@ void EnemyManager::UpdateEnemyDataSet()
 			IEnemyAi* aiInst = pair->m_enemyAi.get();
 			EnemyYakuzaType type = pair->m_type;
 			Vector3 enemyPos = pair->m_enemy->GetPosition();
-			const char* enemyName = pair->m_enemyName;
+			const char* enemyName = pair->m_enemyName.c_str();
 			bool isActive = true;
 
 			EnemyMemberInfo info(

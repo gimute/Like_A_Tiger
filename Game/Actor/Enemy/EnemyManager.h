@@ -2,6 +2,7 @@
 #include "Actor\YakuzaComponents\YakuzaType.h"
 #include "Actor\Enemy\EnemyFactory.h"
 #include "Actor\Enemy\EnemyAI\EnemyAiFactory.h"
+#include "Actor\Enemy\EnemyNameStorage.h"
 #include "Actor\Character.h"
 
 #include "GameScene\UpdateOrder.h"
@@ -69,7 +70,7 @@ struct EnemyPair
 	//エネミーのID
 	int m_enemyID = -1;
 	//エネミーの名前
-	const char* m_enemyName;
+	std::string m_enemyName;
 	//コンストラクタ
 	EnemyPair(Enemy* enemy,IEnemyAi* enemyAi,EnemyYakuzaType type)
 		:m_enemy(enemy)
@@ -154,6 +155,8 @@ private:
 	TargetCharacterView m_targetView;
 	//メタAI
 	EnemyMetaAi* m_enemyMetaAi = nullptr;
+	//敵名ストレージ
+	EnemyNameStorage m_enemyNameStorage;
 	//AI制御
 	EnemySystem* m_enemyAiSystem = nullptr;
 	//敵のIDカウンター
