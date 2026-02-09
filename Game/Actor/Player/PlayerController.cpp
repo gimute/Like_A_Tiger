@@ -5,6 +5,7 @@
 #include "Camera\ICameraController.h"
 #include "Actor\Player\PlayerCameraController.h"
 #include "Actor\YakuzaComponents\YakuzaStates.h"
+#include "UI/PouseMenuManager.h"
 
 #include "Load\LoadManager.h"
 
@@ -45,7 +46,11 @@ void PlayerController::Update()
 
 	auto* cameraController = m_cameraController;
 
-	if (!playerStateMachine || !cameraController || !LoadManager::GetInstance()->LoadFadeInEnd())
+	if (!playerStateMachine ||
+		!cameraController ||
+		!LoadManager::GetInstance()->LoadFadeInEnd() ||
+		PouseMenuSceneManager::GetSceneManagerInstance()->IsPoseMenuActive()
+	)
 	{
 		return;
 	}
