@@ -206,7 +206,6 @@ void YakuzaGrabingState::OnEnter()
 	m_owner->SetIsGrab(true);
 	m_owner->SetGrabFlag(false);
 	m_owner->SetGrabingToAttackType(-1);
-	m_owner->SetGrabThrowPos(Vector3::Zero);
 
 	//近くの敵に向かって行くアシスト処理
 	Vector3 foward = m_owner->GetHasCharactarForward();
@@ -291,14 +290,14 @@ void YakuzaGrabingState::OnUpdate()
 				YakuzaAnimation::en_grabThrow
 			);
 
-			m_owner->SetGrabThrowPos(m_owner->GetHasCharactarPos());
-
 			//投げの位置調整を行う
 			m_owner->HasCharacterGrabingYakuzaThrowPositionAdjustment(
 				m_owner->GetHasCharactarForward() * -1.0f,
 				m_owner->GetHasCharactarForward() * -1.0f,
 				150.0f
  			);
+
+			m_owner->SetGrabThrowFoward(m_owner->GetHasCharactarForward() * -1.0f);
 
 			//掴み中は攻撃を受け付けないように
 			m_owner->HasCharacterSetIsInvincible(true);

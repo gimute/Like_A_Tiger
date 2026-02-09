@@ -389,13 +389,13 @@ void YakuzaStateMachine::HasCharacterToGrabBedThrownPositionUpdate()
 {
 	YakuzaCharacterDamageManager::GetInstance()->UpdateGrabBedYakuzaThrownPosition(
 		m_hasCharactar,
-		m_grabBedYakuza->GetYakuzaStateMachine().GetGrabThrowPos()
+		m_grabBedYakuza
 	);
 }
 
-void YakuzaStateMachine::HasCharacterGrabingYakuzaThrowPositionAdjustment(const Vector3& sweepDir, const Vector3& adjustDir,float sweepDis)
+bool YakuzaStateMachine::HasCharacterGrabingYakuzaThrowPositionAdjustment(const Vector3& sweepDir, const Vector3& adjustDir,float sweepDis)
 {
-	YakuzaCharacterDamageManager::GetInstance()->AdjustGrabBedYakuzaPositionOnThrow(
+	return YakuzaCharacterDamageManager::GetInstance()->AdjustGrabBedYakuzaPositionOnThrow(
 		m_grabingYakuza,
 		m_hasCharactar,
 		sweepDir,
