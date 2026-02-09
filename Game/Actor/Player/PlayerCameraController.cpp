@@ -2,6 +2,7 @@
 #include "PlayerCameraController.h"
 
 #include "Actor\Player\PlayerController.h"
+#include "UI/PouseMenuManager.h"
 
 ///カメラ初期化
 CameraUpdateData PlayerCameraController::EnterCamera()
@@ -19,14 +20,23 @@ CameraUpdateData PlayerCameraController::EnterCamera()
 ///カメラ更新
 CameraUpdateData PlayerCameraController::UpdateCamera()
 {
- 	CameraUpdateData cameraUpdateData;
-	
+	CameraUpdateData cameraUpdateData;
+
 	///注視点を計算
 	Vector3 target = m_targetPos;
 	//注視点を少し上げる
 	target.y += 70.0f;
 
 	Vector3 toCameraPosOld = m_toCameraPos;
+
+	if (PouseMenuSceneManager::GetSceneManagerInstance()->IsPoseMenuActive())
+	{
+		cameraUpdateData.m_cameraPos = target + toCameraPosOld;
+
+		cameraUpdateData.m_cameraTarget = target;
+
+		return cameraUpdateData;
+	}
 
 	float x = m_cameraMoveAmountXY.x;
 
@@ -103,5 +113,9 @@ CameraUpdateData PlayerCameraController::UpdateCamera()
 ///カメラ終了
 void PlayerCameraController::ExitCamera()
 {
+	m_toCameraPos = Vector3::Zero;
+	
+	m_targetPos = Vector3::Zero;
 
+	m_cameraMoveAmountXY = Vector2::Zero;
 }

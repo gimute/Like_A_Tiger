@@ -54,7 +54,7 @@ public:
 		AddState<YakuzaWalkState>(this);
 		AddState<YakuzaAimMoveState>(this);
 		AddState<YakuzaAttackState>(this);
-		AddState<YakuzaGrabState>(this);
+		AddState<YakuzaGrabingState>(this);
 		AddState<YakuzaSwayState>(this);
 		AddState<YakuzaDefenseState>(this);
 		AddState<YakuzaDamageState>(this);
@@ -71,7 +71,9 @@ private:
 	//移動方向
 	Vector3 m_moveVec = Vector3::Zero;
 	//移動速度 
-	float m_moveSpeed = 400.0f;
+	float m_moveSpeed = 0.0f;
+	//移動速度倍率
+	float m_aimMoveSpeedRate = 1.0f;
 	//回避速度
 	float m_swaySpeed = 600.0f;
 	//回避アニメーション速度
@@ -118,8 +120,8 @@ private:
 	YakuzaCharacter* m_grabingYakuza = nullptr;
 	//掴まれてるキャラクターポインタ
 	YakuzaCharacter* m_grabBedYakuza = nullptr;
-	//掴み投げをした際の位置
-	Vector3 m_grabThrowPos = Vector3::Zero;
+	//掴み投げをした際の投げ方向
+	Vector3 m_grabThrowFoward = Vector3::AxisZ;
 	//死んでしまったかどうか
 	bool m_isDead = false;
 	//狙い移動のキャラクターの位置
@@ -139,6 +141,10 @@ public:
 	inline void SetMoveSpeed(float speed) { m_moveSpeed = speed; }
 
 	inline float GetMoveSpeed() { return m_moveSpeed; }
+
+	inline void SetAimMoveSpeedRate(float speedRate) { m_aimMoveSpeedRate = speedRate; }
+
+	inline float GetAimMoveSpeedRate() { return m_aimMoveSpeedRate; }
 
 	inline void SetSwaySpeed(float speed, float animSpeed) { m_swaySpeed = speed; m_swayAnimSpeed = animSpeed; }
 
@@ -186,9 +192,9 @@ public:
 
 	inline float GetGrabBedWeenTime() { return m_grabBetWeenTime; }
 
-	inline void SetGrabThrowPos(const Vector3& setPos) { m_grabThrowPos = setPos; }
+	inline void SetGrabThrowFoward(const Vector3& setForward) { m_grabThrowFoward = setForward; }
 
-	inline const Vector3& GetGrabThrowPos() { return m_grabThrowPos; }
+	inline const Vector3& GetGrabThrowFoward() { return m_grabThrowFoward; }
 
 	inline void SetIsAttack(bool setIs) { m_isAttack = setIs; }
 
@@ -289,7 +295,7 @@ public:
 
 	void HasCharacterToGrabBedThrownPositionUpdate();
 
-	void HasCharacterGrabingYakuzaThrowPositionAdjustment(const Vector3& sweepDir,const Vector3& adjustDir,float sweepDis);
+	bool HasCharacterGrabingYakuzaThrowPositionAdjustment(const Vector3& sweepDir,const Vector3& adjustDir,float sweepDis);
 
 	void HasCharacterSendToGrabingOrGrabBedYakuzaData(int takeDamageType);
 

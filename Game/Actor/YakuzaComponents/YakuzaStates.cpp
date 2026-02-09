@@ -66,7 +66,9 @@ void YakuzaWalkState::OnExit()
 
 void YakuzaAimMoveState::OnEnter()
 {
-	m_owner->SetMoveSpeed(100.0f);
+	float moveSpeed = 100.0f * m_owner->GetAimMoveSpeedRate();
+
+	m_owner->SetMoveSpeed(moveSpeed);
 }
 
 void YakuzaAimMoveState::OnUpdate()
@@ -198,13 +200,12 @@ void YakuzaAttackState::OnExit()
 
 //GrabState
 
-void YakuzaGrabState::OnEnter()
+void YakuzaGrabingState::OnEnter()
 {
 	//処理前準備
 	m_owner->SetIsGrab(true);
 	m_owner->SetGrabFlag(false);
 	m_owner->SetGrabingToAttackType(-1);
-	m_owner->SetGrabThrowPos(Vector3::Zero);
 
 	//近くの敵に向かって行くアシスト処理
 	Vector3 foward = m_owner->GetHasCharactarForward();
@@ -227,11 +228,11 @@ void YakuzaGrabState::OnEnter()
 	m_state = en_goGrabMove;
 }
 
-void YakuzaGrabState::OnUpdate()
+void YakuzaGrabingState::OnUpdate()
 {
 	switch (m_state)
 	{
-	case YakuzaGrabState::en_goGrabMove:
+	case YakuzaGrabingState::en_goGrabMove:
 		//位置更新
 		MoveProcess();
 
@@ -257,7 +258,7 @@ void YakuzaGrabState::OnUpdate()
 		}
 
 		break;
-	case YakuzaGrabState::en_grabingMove:
+	case YakuzaGrabingState::en_grabingMove:
 		//位置更新
 		m_owner->HasCharacterGrabingProcces();
 		//掴んでいるアニメーション再生
@@ -289,14 +290,14 @@ void YakuzaGrabState::OnUpdate()
 				YakuzaAnimation::en_grabThrow
 			);
 
-			m_owner->SetGrabThrowPos(m_owner->GetHasCharactarPos());
-
 			//投げの位置調整を行う
 			m_owner->HasCharacterGrabingYakuzaThrowPositionAdjustment(
 				m_owner->GetHasCharactarForward() * -1.0f,
 				m_owner->GetHasCharactarForward() * -1.0f,
 				150.0f
  			);
+
+			m_owner->SetGrabThrowFoward(m_owner->GetHasCharactarForward() * -1.0f);
 
 			//掴み中は攻撃を受け付けないように
 			m_owner->HasCharacterSetIsInvincible(true);
@@ -320,7 +321,7 @@ void YakuzaGrabState::OnUpdate()
 		}
 
 		break;
-	case YakuzaGrabState::en_grabingAttackMove:
+	case YakuzaGrabingState::en_grabingAttackMove:
 
 		m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_grabAttack, 0.1f);
 
@@ -330,7 +331,7 @@ void YakuzaGrabState::OnUpdate()
 		}
 
 		break;
-	case YakuzaGrabState::en_grabingFinshMove:
+	case YakuzaGrabingState::en_grabingFinshMove:
 
 		m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_grabThrow, 0.1f);
 
@@ -342,7 +343,7 @@ void YakuzaGrabState::OnUpdate()
 		}
 
 		break;
-	case YakuzaGrabState::en_grabingEndProcess:
+	case YakuzaGrabingState::en_grabingEndProcess:
 
 		m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_grabBeCanceled, 0.1f);
 
@@ -355,7 +356,7 @@ void YakuzaGrabState::OnUpdate()
 	}
 }
 
-void YakuzaGrabState::MoveProcess()
+void YakuzaGrabingState::MoveProcess()
 {
 	if (m_owner->IsHasCharacterGrabCollisionActive() || !m_isGoGrabMoveing)
 	{
@@ -378,7 +379,7 @@ void YakuzaGrabState::MoveProcess()
 	m_owner->SetMoveVec(Vector3::Zero);
 }
 
-void YakuzaGrabState::OnExit()
+void YakuzaGrabingState::OnExit()
 {
 	if (m_owner->GetIsDamage() &&
 		m_state == GrabState::en_grabingMove ||

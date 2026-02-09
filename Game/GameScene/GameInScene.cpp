@@ -234,6 +234,8 @@ void GameInScene::ExitScene()
 {
 	//オブジェクト削除処理
 	DeleteGameObjects();
+	//BGMストップ
+	SoundManager::Get().StopBGM();
 }
 
 void GameInScene::DeleteGameObjects()
@@ -291,6 +293,7 @@ bool GameInScene::ReqestSceneState(uint32_t& nextState)
 		LoadManager::GetInstance()->LoadFadeOutEnd())
 	{
 		nextState = GameTitleScene::ID();
+
 		return true;
 	}
 

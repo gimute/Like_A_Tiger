@@ -52,6 +52,9 @@ public:
 		{
 			DeleteGO(m_cameraEntity);
 		}
+
+		m_currentCameraController->ExitCamera();
+		m_currentCameraController = nullptr;
 	}
 	///カメラコントローラー登録
 	template<typename ControllClass,typename... Args>
