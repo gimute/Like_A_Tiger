@@ -90,6 +90,8 @@ private:
 	bool m_isAttack = false;
 	//回避中か
 	bool m_isSway = false;
+	//回避クールタイム
+	float m_swayCoolTimer = 0.0f;
 	//次のコンボに以降可能かどうか
 	bool m_isComboTransition = false;
 	//移動方式、狙い移動
@@ -116,6 +118,8 @@ private:
 	float m_graspableRange = 100.0f;
 	//掴み有効時間
 	float m_grabBetWeenTime = 0.0f;
+	//掴まれた後の再度掴めるようになる時間
+	float m_grabBedCoolTimer = 0.0f;
 	//掴んでいるキャラクターポインタ
 	YakuzaCharacter* m_grabingYakuza = nullptr;
 	//掴まれてるキャラクターポインタ
@@ -164,6 +168,10 @@ public:
 
 	inline bool GetSwayFlag() { return m_swayFlag; }
 
+	inline void SetSwayCoolTimer(float time) { m_swayCoolTimer = time; }
+
+	inline float GetSwayCoolTimer() { return m_swayCoolTimer; }
+
 	inline void SetDefenseFlag(bool setIs) { m_defenseFlag = setIs; }
 
 	inline bool GetDefenseFlag() { return m_defenseFlag; }
@@ -179,6 +187,10 @@ public:
 	inline bool GetIsGrabing() { return m_isGrabing; }
 
 	inline bool GetIsGrabBed() { return m_isGrabbed; }
+
+	inline void SetGrabBedCoolTimer(float time) { m_grabBedCoolTimer = time; }
+
+	inline float GetGrabBedCoolTimer() { return m_grabBedCoolTimer; }
 
 	inline void SetGrabingToAttackType(int setType) { m_grabingToAttackType = setType; }
 
@@ -316,6 +328,8 @@ public:
 		return IsNowStateClassName<ClassName>();
 	}
 private:
+	//内部タイマー処理
+	void TimerUpdate();
 	//移動することができるかどうか
 	bool CanChangeWalk();
 	//格闘攻撃を行えるかどうか

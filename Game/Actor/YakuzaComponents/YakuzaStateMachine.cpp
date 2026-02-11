@@ -11,6 +11,8 @@
 
 IStateBase* YakuzaStateMachine::GetNextState()
 {
+	TimerUpdate();
+
 	if (CanChangeGrabBed())
 	{
 		return FindClassNameState<YakuzaGrabBedState>();
@@ -63,6 +65,19 @@ IStateBase* YakuzaStateMachine::GetNextState()
 	return FindClassNameState<YakuzaIdleState>();
 }
 
+void YakuzaStateMachine::TimerUpdate()
+{
+	if (m_swayCoolTimer > 0.0f)
+	{
+		m_swayCoolTimer -= g_gameTime->GetFrameDeltaTime();
+	}
+
+	if (m_grabBedCoolTimer > 0.0)
+	{
+		m_grabBedCoolTimer -= g_gameTime->GetFrameDeltaTime();
+	}
+}
+
 bool YakuzaStateMachine::CanChangeWalk()
 {
 	if (fabsf(m_moveVec.x) >= FLT_EPSILON ||
@@ -99,6 +114,7 @@ bool YakuzaStateMachine::CanChangeSway()
 	}
 
 	if (m_swayFlag &&
+		m_swayCoolTimer <= 0.0f && 
 		!m_isGrab && 
 		!m_isGrabing
 	)

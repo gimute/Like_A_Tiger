@@ -301,7 +301,10 @@ bool FastYakuzaAi::CanChangeDodge()
 		return true;
 	}
 
-	if (m_dodgeCoolTime > 0.0f)
+	//AI側の回避クールタイムが0以上だったら
+	//またはそもそもYakuzaStateMachineが回避クールタイム中で回避できない場合
+	if (m_dodgeCoolTime > 0.0f ||
+		m_hasStateMachine->GetSwayCoolTimer() > 0.0f)
 	{
 		return false;
 	}

@@ -201,6 +201,7 @@ void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(YakuzaDamageDatas send
 YakuzaCharacter* YakuzaCharacterDamageManager::SendPlayerGrabEnemyYakuza(YakuzaCharacter* grabYakuza)
 {
 	if (grabYakuza->IsCharacterHpDead() ||
+		grabYakuza->GetYakuzaStateMachine().GetGrabBedCoolTimer() > 0.0f ||
 		m_playerPtr->GetYakuzaStateMachine().GetIsGrabing())
 	{
 		return nullptr;
@@ -214,6 +215,7 @@ YakuzaCharacter* YakuzaCharacterDamageManager::SendPlayerGrabEnemyYakuza(YakuzaC
 YakuzaCharacter* YakuzaCharacterDamageManager::SendEnemyGrabPlayerYakuza(YakuzaCharacter* grabYakuza)
 {
 	if (m_playerPtr->IsCharacterHpDead() ||
+		grabYakuza->GetYakuzaStateMachine().GetGrabBedCoolTimer() > 0.0f ||
 		grabYakuza->GetYakuzaStateMachine().GetIsGrabing())
 	{
 		return nullptr;

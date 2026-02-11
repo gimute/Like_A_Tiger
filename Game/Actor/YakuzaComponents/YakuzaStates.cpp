@@ -7,6 +7,12 @@
 #include "Sound\SoundManager.h"
 #include "Sound\SoundId.h"
 
+namespace YakuzaStateConstant
+{
+	const float SWAY_COOL_TIME = 1.0f;
+	const float GRABBED_COOL_TIME = 1.0f;
+}
+
 ///IdleState
 
 void YakuzaIdleState::OnEnter()
@@ -493,6 +499,7 @@ void YakuzaSwayState::OnExit()
 	m_swayVec = Vector3::Zero;
 	m_owner->SetIsSway(false);
 	m_owner->SetSwayFlag(false);
+	m_owner->SetSwayCoolTimer(YakuzaStateConstant::SWAY_COOL_TIME);
 }
 
 //DefenseState
@@ -702,6 +709,7 @@ void YakuzaGrabBedState::OnExit()
 
 	m_owner->SetGrabBedToAttackType(-1);
 	m_owner->SetIsDamage(false, false);
+	m_owner->SetGrabBedCoolTimer(YakuzaStateConstant::GRABBED_COOL_TIME);
 }
 
 //DeadState
