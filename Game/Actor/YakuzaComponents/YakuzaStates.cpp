@@ -499,7 +499,22 @@ void YakuzaSwayState::OnExit()
 
 void YakuzaDefenseState::OnEnter()
 {
+	//“ü—Í•ûŒü‚É‘Ì‚ðŒü‚¯‚é
+	Vector3 defenseDir = m_owner->GetMoveVec();
 
+	//“ü—Í‚ª‚È‚©‚Á‚½ê‡‚Í³–Ê•ûŒü‚É–hŒä
+	if (defenseDir.x == 0.0f &&
+		defenseDir.z == 0.0f)
+	{
+		defenseDir = m_owner->GetHasCharactarForward();
+	}
+
+	m_owner->GetHasCharactarRot().SetRotationYFromDirectionXZ(defenseDir);
+
+	m_owner->SetHasCharactarForward(Vector3::AxisZ);
+	m_owner->GetHasCharactarRot().Apply(m_owner->GetHasCharactarForward());
+
+	m_owner->SetMoveVec(Vector3::Zero);
 }
 
 void YakuzaDefenseState::OnUpdate()
