@@ -200,6 +200,7 @@ void YakuzaAttackState::OnExit()
 {
 	m_owner->SetIsAttack(false);
 	m_owner->GetAttackStateMachine()->SetIsAttackEnds(true);
+	m_owner->HasCharacterAttackCollisionDelete();
 	auto* attackStateMachine = m_owner->GetAttackStateMachine();
 	attackStateMachine->ResetAttackStateMachine();
 }

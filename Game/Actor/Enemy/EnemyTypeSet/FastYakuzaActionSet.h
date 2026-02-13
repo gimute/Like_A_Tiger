@@ -179,7 +179,7 @@ public:
 			{ SoundId::se_cuttingWindLigthA });
 		AddAttackState<FastYakuzaFirstFinalBlowState>(
 			{ useAttackStateMachine,m_yakuzaCamp,0,0,en_Uppercut,250.0f,1.5f },
-			{ 60.0f,150.0f,SoundId::se_hittingHeavyB },
+			{ 25.0f,150.0f,SoundId::se_hittingHeavyB },
 			{ SoundId::se_cuttingWindHeavyA });
 		AddAttackState<FastYakuzaSecondFinalBlowState>(
 			{ useAttackStateMachine,m_yakuzaCamp,0,0,en_kick_R,250.0f,1.5f },

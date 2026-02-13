@@ -295,6 +295,8 @@ public:
 
 	bool IsHasCharacterAttackCollisionActive();
 
+	void HasCharacterAttackCollisionDelete();
+
 	bool IsHasCharacterGrabCollisionActive();
 
 	bool IsHasCharacterGrabBedEscape(bool isResistance);

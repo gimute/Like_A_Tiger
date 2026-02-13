@@ -320,6 +320,11 @@ bool YakuzaStateMachine::IsHasCharacterAttackCollisionActive()
 	return m_hasCharactar->IsAttackCollisionActive();
 }
 
+void YakuzaStateMachine::HasCharacterAttackCollisionDelete()
+{
+	m_hasCharactar->DeleteAttackCollision();
+}
+
 bool YakuzaStateMachine::IsHasCharacterGrabCollisionActive()
 {
 	return m_hasCharactar->IsGrabCollisionActive();

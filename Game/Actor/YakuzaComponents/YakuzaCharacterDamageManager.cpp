@@ -40,7 +40,7 @@ void YakuzaCharacterDamageManager::SendEnemyYakuzaDamage(Enemy* sendEnemy, Yakuz
 			sendEnemyPos,
 			sendEnemy->GetForward(),
 			m_playerPtr->GetPosition(),
-			0.3f//前側約140度は防御成功扱い
+			0.4f//前側約160度は防御成功扱い
 		))
 		{
 			isDefense = true;
@@ -131,7 +131,7 @@ void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(YakuzaDamageDatas send
 			m_playerPtr->GetPosition(),
 			m_playerPtr->GetForward(),
 			attackerPos,
-			0.3f//前側約140度は防御成功扱い
+			0.4f//前側約160度くらいは防御成功扱い
 		))
 		{
 			isDefense = true;
