@@ -7,6 +7,8 @@
 #include "Actor\YakuzaComponents\YakuzaStates.h"
 #include "UI/PouseMenuManager.h"
 
+#include "Battle\BattleManager.h"
+
 #include "Load\LoadManager.h"
 
 namespace{
@@ -32,11 +34,29 @@ namespace{
 		return false;
 	}
 
-	float KAMERA_NON_ASSIST_TIME = 0.5f;
+	float KAMERA_NON_ASSIST_TIME = 5.0f;
 }
 
 bool PlayerController::Start()
 {
+	BattleManager::GetInstance()->RegisterBattleStartCallBack(
+		[&](const BattleStartEventInfo& eventInfo)
+		{
+			m_inBattle = true;
+
+			m_inBattleEnemys = eventInfo.m_enemyGroupeInfo;
+		}
+	);
+
+	BattleManager::GetInstance()->RegisterBattleEndCallBack(
+		[&](const BattleEndEventInfo& eventInfo)
+		{
+			m_inBattle = false;
+
+			m_inBattleEnemys = nullptr;
+		}
+	);
+
 	return true;
 }
 
@@ -69,6 +89,12 @@ void PlayerController::Update()
 	//掴みの条件文
 	playerStateMachine->SetGrabFlag(g_pad[0]->IsTrigger(enButtonX));	
 
+	//ロックオンの条件文
+	if (g_pad[0]->IsTrigger(enButtonUp) && m_inBattle)
+	{
+		playerStateMachine->SetIsAimMove(!playerStateMachine->GetIsAimMove());
+	}
+
 	//ガードの条件文付けるならここ
 	playerStateMachine->SetDefenseFlag(
 		g_pad[0]->IsPress(enButtonLB1) ||
@@ -78,22 +104,18 @@ void PlayerController::Update()
 	//Lスティックの入力があれば
 	if (IsInputStickL())
 	{
-		playerStateMachine->SetMoveVec(CameraControllCalc());
-	}
-
-	if (IsInputStickR())
-	{
-		m_cameraNonAssistTimer = KAMERA_NON_ASSIST_TIME;
+		//移動入力
+		playerStateMachine->SetMoveVec(CameraInMoveCalc());
 	}
 
 	//Rスティックの入力量を設定
 	cameraController->SetCameraMoveAmountXY(
-		GetCameraXF(*playerStateMachine),
+		CameraXFCalc(*playerStateMachine),
 		g_pad[0]->GetRStickYF()
 	);
 }
 
-Vector3 PlayerController::CameraControllCalc()
+Vector3 PlayerController::CameraInMoveCalc()
 {
 	//左スティックの入力量を取得
 	Vector3 stickL;
@@ -121,6 +143,29 @@ Vector3 PlayerController::CameraControllCalc()
 	return newMoveVec;
 }
 
+float PlayerController::CameraXFCalc(YakuzaStateMachine& stateMachine)
+{
+	if (IsInputStickR())
+	{
+		m_cameraNonAssistTimer = KAMERA_NON_ASSIST_TIME;
+	}
+
+	if (m_cameraNonAssistTimer > 0.0f)
+	{
+		m_cameraNonAssistTimer -= g_gameTime->GetFrameDeltaTime();
+
+		return g_pad[0]->GetRStickXF();;
+	}
+	else if (stateMachine.GetIsAimMove())
+	{
+		return CameraDirectionToFowardMoveCalc(CameraEnemyLockOnCalc());
+	}
+	else if(stateMachine.GetIsAttack())
+	{
+		return CameraDirectionToFowardMoveCalc(stateMachine.GetHasCharactarForward());
+	}
+}
+
 Vector3 PlayerController::GetStickR() const
 {
 	//右スティックの入力量を取得
@@ -131,24 +176,11 @@ Vector3 PlayerController::GetStickR() const
 	return stickR;
 }
 
-float PlayerController::GetCameraXF(YakuzaStateMachine& stateMachine)
+float PlayerController::CameraDirectionToFowardMoveCalc(const Vector3& moveDir)
 {
-	if (m_cameraNonAssistTimer > 0.0f)
-	{
-		m_cameraNonAssistTimer -= g_gameTime->GetFrameDeltaTime();
-
-		return g_pad[0]->GetRStickXF();;
-	}
-
-	//攻撃中で無ければスティックの入力X値を返す
-	if (!stateMachine.GetIsAttack() || IsInputStickR())
-	{
-		return g_pad[0]->GetRStickXF();
-	}
-
 	// 方向取得
 	Vector3 camForward = g_camera3D->GetForward();
-	Vector3 moveForward = stateMachine.GetHasCharactarForward();
+	Vector3 moveForward = moveDir;
 
 	// Y成分カット
 	camForward.y = 0.0f;
@@ -236,3 +268,25 @@ float PlayerController::SmoothDamp(
 	return target + (change + temp) * exp;
 }
 
+Vector3 PlayerController::CameraEnemyLockOnCalc()
+{
+
+	YakuzaCharacter* bestEnemy = nullptr;
+	float bestDiff = FLT_MAX;
+
+
+	
+
+	return Vector3::Zero;
+}
+
+YakuzaCharacter* PlayerController::SearchLockOnEnemy(
+	YakuzaCharacter* current,
+	const Vector3& cameraFoward,
+	const Vector3& cameraRight,
+	const Vector3& cameraPos,
+	bool inputRight
+)
+{
+
+}
