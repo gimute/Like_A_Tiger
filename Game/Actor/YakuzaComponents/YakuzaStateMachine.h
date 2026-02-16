@@ -44,6 +44,8 @@ class Character;
 
 class YakuzaCharacter;
 
+class VolumeAdjustment;
+
 class YakuzaStateMachine : public IStateMachine
 {
 public:
@@ -118,6 +120,8 @@ private:
 	YakuzaCharacter* m_grabingYakuza = nullptr;
 	//掴まれてるキャラクターポインタ
 	YakuzaCharacter* m_grabBedYakuza = nullptr;
+	/** 音量調整のポインタ */
+	VolumeAdjustment* m_volumeAdjustment = nullptr;
 	//掴み投げをした際の位置
 	Vector3 m_grabThrowPos = Vector3::Zero;
 	//死んでしまったかどうか

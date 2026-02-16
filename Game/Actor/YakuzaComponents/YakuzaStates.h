@@ -9,12 +9,14 @@ public:\
 	static constexpr uint32_t ID() { return Hash32(#name); }
 
 class YakuzaStateMachine;
+class VolumeAdjustment;
 
 class YakuzaIdleState : public IStateBase
 {
 	appState(YakuzaIdleState)
 protected:
 	YakuzaStateMachine* m_owner = nullptr;
+	VolumeAdjustment* m_volumeAdjustment = nullptr;
 public:
 	//コンストラクタ
 	YakuzaIdleState(YakuzaStateMachine* stateMachine) : m_owner(stateMachine) {}
@@ -34,6 +36,7 @@ class YakuzaWalkState : public IStateBase
 	appState(YakuzaWalkState)
 protected:
 	YakuzaStateMachine* m_owner = nullptr;
+	VolumeAdjustment* m_volumeAdjustment = nullptr;
 public:
 	//コンストラクタ
 	YakuzaWalkState(YakuzaStateMachine* stateMachine) : m_owner(stateMachine) {}
@@ -53,6 +56,7 @@ class YakuzaAimMoveState : public IStateBase
 	appState(YakuzaAimMoveState)
 protected:
 	YakuzaStateMachine* m_owner = nullptr;
+	VolumeAdjustment* m_volumeAdjustment = nullptr;
 public:
 	//コンストラクタ
 	YakuzaAimMoveState(YakuzaStateMachine* stateMachine) : m_owner(stateMachine) {}
@@ -80,6 +84,7 @@ class YakuzaAttackState : public IStateBase
 	appState(YakuzaAttackState)
 protected:
 	YakuzaStateMachine* m_owner = nullptr;
+	VolumeAdjustment* m_volumeAdjustment = nullptr;
 public:
 	//コンストラクタ
 	YakuzaAttackState(YakuzaStateMachine* stateMachine) : m_owner(stateMachine) {}
@@ -99,6 +104,7 @@ class YakuzaGrabState : public IStateBase
 	appState(YakuzaGrabState)
 protected:
 	YakuzaStateMachine* m_owner = nullptr;
+	VolumeAdjustment* m_volumeAdjustment = nullptr;
 public:
 	//コンストラクタ
 	YakuzaGrabState(YakuzaStateMachine* stateMachine) : m_owner(stateMachine) {}
@@ -142,6 +148,7 @@ class YakuzaSwayState : public IStateBase
 	appState(YakuzaSwayState)
 protected:
 		YakuzaStateMachine* m_owner = nullptr;
+		VolumeAdjustment* m_volumeAdjustment = nullptr;
 public:
 	//コンストラクタ
 	YakuzaSwayState(YakuzaStateMachine* stateMachine) : m_owner(stateMachine) {}
@@ -174,6 +181,7 @@ class YakuzaDefenseState : public IStateBase
 	appState(YakuzaDefenseState)
 protected:
 	YakuzaStateMachine* m_owner = nullptr;
+	VolumeAdjustment* m_volumeAdjustment = nullptr;
 public:
 	//コンストラクタ
 	YakuzaDefenseState(YakuzaStateMachine* stateMachine) : m_owner(stateMachine) {}
@@ -193,6 +201,7 @@ class YakuzaDamageState : public IStateBase
 	appState(YakuzaDamageState)
 protected:
 	YakuzaStateMachine* m_owner = nullptr;
+	VolumeAdjustment* m_volumeAdjustment = nullptr;
 public:
 	//コンストラクタ
 	YakuzaDamageState(YakuzaStateMachine* stateMachine) : m_owner(stateMachine) {}
@@ -212,6 +221,7 @@ class YakuzaGrabBedState : public IStateBase
 	appState(YakuzaGrabBedState)
 protected:
 	YakuzaStateMachine* m_owner = nullptr;
+	VolumeAdjustment* m_volumeAdjustment = nullptr;
 public:
 	//コンストラクタ
 	YakuzaGrabBedState(YakuzaStateMachine* stateMachine) : m_owner(stateMachine) {}
@@ -244,6 +254,7 @@ class YakuzaDeadState : public IStateBase
 	appState(YakuzaDeadState)
 protected:
 	YakuzaStateMachine* m_owner = nullptr;
+	VolumeAdjustment* m_volumeAdjustment = nullptr;
 public:
 	//コンストラクタ
 	YakuzaDeadState(YakuzaStateMachine* stateMachine) : m_owner(stateMachine) {}

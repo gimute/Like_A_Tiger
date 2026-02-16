@@ -67,6 +67,21 @@ public:
 	{
 		return m_isCompleted;
 	}
+
+	//アニメーションを即座に完了状態にする
+	void Complete()
+	{
+		m_isPlay = false;
+		m_isCompleted = true;
+		m_elapsedTime = 0.0f;
+		m_targetIndex = static_cast<int>(m_animationTimeList.size());
+	}
+
+	//アニメーションが再生中かどうか
+	bool IsPlaying() const
+	{
+		return m_isPlay && !m_isCompleted;
+	}
 };
 
 

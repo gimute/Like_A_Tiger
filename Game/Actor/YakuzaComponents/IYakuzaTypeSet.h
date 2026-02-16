@@ -11,6 +11,7 @@
 #include "Actor\Character.h"
 
 #include "Sound\SoundId.h"
+#include "UI/PoseMenu.h"
 
 class YakuzaTypeSetFactory; 
 
@@ -25,6 +26,8 @@ struct AttackStateInitData
 {
 	//この攻撃ステートを扱うステートマシン
 	YakuzaAttackComboStateMachine* hasOwner = nullptr;
+	VolumeAdjustment* m_volumeAdjustment = nullptr;
+
 	//次の通常攻撃コンボハッシュ値
 	uint32_t nextAttackHash = 0;
 	//次のファイナルブロウ攻撃コンボハッシュ値
@@ -37,6 +40,8 @@ struct AttackStateInitData
 	float attackSpeed = 0.0f;
 	//攻撃モーションスピード
 	float attackAnimSpeed = 0.0f;
+
+	//m_volumeAdjustment = FindGO<VolumeAdjustment>("volumeadjustment");
 
 	AttackStateInitData() = default;
 

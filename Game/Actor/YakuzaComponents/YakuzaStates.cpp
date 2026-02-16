@@ -6,6 +6,7 @@
 
 #include "Sound\SoundManager.h"
 #include "Sound\SoundId.h"
+#include "UI/PoseMenu.h"
 
 ///IdleState
 
@@ -443,10 +444,16 @@ void YakuzaSwayState::OnEnter()
 			m_swayDir = SwayDir::en_leftDir;
 		}
 	}
-
-	//å¯â âπÇèoÇ∑
-	auto handle = SoundManager::Get().PlaySE(SoundId::se_kickingGroundA,false,false,0.5f);
-	SoundManager::Get().FindSE(handle);
+	
+	if(!m_volumeAdjustment) {
+		m_volumeAdjustment = FindGO<VolumeAdjustment>("volumeadjustment");
+	}
+	if (m_volumeAdjustment) {
+		//å¯â âπÇèoÇ∑
+		auto handle = SoundManager::Get().PlaySE(SoundId::se_kickingGroundA, false, false, m_volumeAdjustment->GetSEAmount());
+		SoundManager::Get().FindSE(handle);
+	}
+	
 
 	m_owner->SetIsSway(true);
 }
@@ -481,7 +488,14 @@ void YakuzaSwayState::OnUpdate()
 
 	if (!m_owner->IsHasCharactarPlayAnimation())
 	{
-		SoundManager::Get().PlaySE(SoundId::se_GroundFrictionA,false,false,0.5f);
+		if(!m_volumeAdjustment) {
+			m_volumeAdjustment = FindGO<VolumeAdjustment>("volumeadjustment");
+		}
+		if (m_volumeAdjustment) {
+			auto handle = SoundManager::Get().PlaySE(SoundId::se_GroundFrictionA, false, false, m_volumeAdjustment->GetSEAmount());
+			SoundManager::Get().FindSE(handle);
+		}
+		
 
 		m_owner->SetIsSway(false);
 	}
@@ -492,6 +506,11 @@ void YakuzaSwayState::OnExit()
 	m_swayVec = Vector3::Zero;
 	m_owner->SetIsSway(false);
 	m_owner->SetSwayFlag(false);
+
+	//if (m_volumeAdjustment) {
+	//	DeleteGO(m_volumeAdjustment);
+	//	m_volumeAdjustment = nullptr;
+	//}
 }
 
 //DefenseState
@@ -557,7 +576,10 @@ void YakuzaDamageState::OnUpdate()
 
 void YakuzaDamageState::OnExit()
 {
-
+	//  if (m_volumeAdjustment) {
+	//  	DeleteGO(m_volumeAdjustment);
+	//  	m_volumeAdjustment = nullptr;
+	//  }
 }
 
 //GrabBedState
@@ -642,7 +664,14 @@ void YakuzaGrabBedState::OnUpdate()
 
 		if (!m_owner->IsHasCharactarPlayAnimation())
 		{
-			SoundManager::Get().PlaySE(SoundId::se_hittingHeavyA, false, false, 0.5f);
+			
+			if(m_volumeAdjustment){
+				auto handle = SoundManager::Get().PlaySE(SoundId::se_hittingHeavyA, false, false, m_volumeAdjustment->GetSEAmount());
+				SoundManager::Get().FindSE(handle);
+			}
+			else {
+				m_volumeAdjustment = FindGO<VolumeAdjustment>("volumeadjustment");
+			}
 
 			m_owner->HasCharacterGrabBedTakeDamage(en_grabThrown);
 
@@ -686,6 +715,11 @@ void YakuzaGrabBedState::OnExit()
 
 	m_owner->SetGrabBedToAttackType(-1);
 	m_owner->SetIsDamage(false, false);
+
+	//  if (m_volumeAdjustment) {
+	//  	DeleteGO(m_volumeAdjustment);
+	//  	m_volumeAdjustment = nullptr;
+	//  }
 }
 
 //DeadState

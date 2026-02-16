@@ -6,8 +6,8 @@
 class Player;
 class PlayerController;
 class PoseMenu;
-class InSelect;
-class Setting;
+class RecoveryItem3DModel;
+class VolumeAdjustment;
 class ProtoStage;
 
 class EnemysHpGauge;
@@ -76,8 +76,8 @@ private:
     PlayerController* m_playerController = nullptr;
 
     PoseMenu* m_poseMenu = nullptr;
-    //InSelect* m_inSelect = nullptr;
-    //Setting* m_setting = nullptr;
+    RecoveryItem3DModel* m_recoveryItem3DModel = nullptr;
+    VolumeAdjustment* m_volumeAdjustment = nullptr;
 
     Inventory* m_inventory = nullptr;
     //プロトステージ

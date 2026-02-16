@@ -5,6 +5,8 @@
 
 #include "CRC32.h"
 
+class VolumeAdjustment;
+
 #define appState(name)	\
 public:\
 	static constexpr uint32_t ID() { return Hash32(#name); }
@@ -58,6 +60,7 @@ class NormalYakuzaFourthAttackState : public IStateBase
 	appState(NormalYakuzaFourthAttackState)
 protected:
 	YakuzaAttackComboStateMachine* m_owner = nullptr;
+	VolumeAdjustment* m_volumeAdjustment = nullptr;
 public:
 	NormalYakuzaFourthAttackState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
 
@@ -78,6 +81,7 @@ class NormalYakuzaFirstFinalBlowState : public IStateBase
 	appState(NormalYakuzaFirstFinalBlowState)
 protected:
 	YakuzaAttackComboStateMachine* m_owner = nullptr;
+	VolumeAdjustment* m_volumeAdjustment = nullptr;
 public:
 	NormalYakuzaFirstFinalBlowState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
 
@@ -98,6 +102,7 @@ class NormalYakuzaSecondFinalBlowState : public IStateBase
 	appState(NormalYakuzaSecondFinalBlowState)
 protected:
 	YakuzaAttackComboStateMachine* m_owner = nullptr;
+	VolumeAdjustment* m_volumeAdjustment = nullptr;
 public:
 	NormalYakuzaSecondFinalBlowState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
 
@@ -118,6 +123,7 @@ class NormalYakuzaThirdFinalBlowState : public IStateBase
 	appState(NormalYakuzaThirdFinalBlowState)
 protected:
 	YakuzaAttackComboStateMachine* m_owner = nullptr;
+	VolumeAdjustment* m_volumeAdjustment = nullptr;
 public:
 	NormalYakuzaThirdFinalBlowState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
 
@@ -138,6 +144,7 @@ class NormalYakuzaFourthFinalBlowState : public IStateBase
 	appState(NormalYakuzaFourthFinalBlowState)
 protected:
 	YakuzaAttackComboStateMachine* m_owner = nullptr;
+	VolumeAdjustment* m_volumeAdjustment = nullptr;
 public:
 	NormalYakuzaFourthFinalBlowState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
 
