@@ -13,7 +13,7 @@ public:
 private:
 	//ResultUI用のデータ
 	const ResultInitData defaultResult = {
-		"Assets/spriteData/Result/TestResult.DDS",
+		"Assets/spriteData/Result/TestResult_2.DDS",
 		1600.0f,
 		900.0f
 	};

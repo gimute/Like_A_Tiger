@@ -11,6 +11,10 @@
 
 #include "Load\LoadManager.h"
 
+#include "Actor\Enemy\EnemyManager.h"
+#include "Actor\Enemy\Enemy.h"
+#include "Actor\Enemy\EnemyAI\IEnemyAi.h"
+
 namespace{
 	inline bool IsInputStickL()
 	{
@@ -53,6 +57,8 @@ bool PlayerController::Start()
 		{
 			m_inBattle = false;
 
+			m_isLockOn = false;
+
 			m_inBattleEnemys = nullptr;
 		}
 	);
@@ -89,10 +95,29 @@ void PlayerController::Update()
 	//掴みの条件文
 	playerStateMachine->SetGrabFlag(g_pad[0]->IsTrigger(enButtonX));	
 
+	//入力ステート初期化
+	m_lockOnInputState = LockOnInputDir::enInputNone;
+
 	//ロックオンの条件文
+	//ロックオン入り
 	if (g_pad[0]->IsTrigger(enButtonUp) && m_inBattle)
 	{
-		playerStateMachine->SetIsAimMove(!playerStateMachine->GetIsAimMove());
+		m_isLockOn = !m_isLockOn;
+
+		if (m_isLockOn)
+		{
+			m_lockOnInputState = LockOnInputDir::enLockOnIn;
+		}
+	}
+	//対象変更 右
+	else if (m_isLockOn && g_pad[0]->IsTrigger(enButtonRight))
+	{
+		m_lockOnInputState = LockOnInputDir::enLockOnRight;
+	}
+	//対象変更 左
+	else if (m_isLockOn && g_pad[0]->IsTrigger(enButtonLeft))
+	{
+		m_lockOnInputState = LockOnInputDir::enLockOnLeft;
 	}
 
 	//ガードの条件文付けるならここ
@@ -145,22 +170,34 @@ Vector3 PlayerController::CameraInMoveCalc()
 
 float PlayerController::CameraXFCalc(YakuzaStateMachine& stateMachine)
 {
+	//左スティックが入力されていればアシスト無し時間を初期化
 	if (IsInputStickR())
 	{
 		m_cameraNonAssistTimer = KAMERA_NON_ASSIST_TIME;
-	}
 
+		m_isLockOn = false;
+	}
+	//アシスト無し時間が0以上であれば時間をフレームタイムで減少
+	//現在のRスティック値を返す
 	if (m_cameraNonAssistTimer > 0.0f)
 	{
 		m_cameraNonAssistTimer -= g_gameTime->GetFrameDeltaTime();
 
 		return g_pad[0]->GetRStickXF();;
 	}
-	else if (stateMachine.GetIsAimMove())
+
+	if (m_isLockOn)
 	{
-		return CameraDirectionToFowardMoveCalc(CameraEnemyLockOnCalc());
+		return CameraDirectionToFowardMoveCalc(
+			CameraEnemyLockOnCalc(
+				stateMachine.GetHasCharactarPos(),
+				m_lockOnInputState
+			)
+		);
 	}
-	else if(stateMachine.GetIsAttack())
+
+	//攻撃中であれば攻撃であればカメラをそちらに向ける
+	if(stateMachine.GetIsAttack())
 	{
 		return CameraDirectionToFowardMoveCalc(stateMachine.GetHasCharactarForward());
 	}
@@ -268,25 +305,135 @@ float PlayerController::SmoothDamp(
 	return target + (change + temp) * exp;
 }
 
-Vector3 PlayerController::CameraEnemyLockOnCalc()
+Vector3 PlayerController::CameraEnemyLockOnCalc(
+	const Vector3& PlayerPos,
+	LockOnInputDir inputDir
+)
 {
+	Vector3 finalCameraForward = Vector3::Zero;
 
-	YakuzaCharacter* bestEnemy = nullptr;
-	float bestDiff = FLT_MAX;
+	if (inputDir == LockOnInputDir::enLockOnIn)
+	{
+		m_lockOnCurrent = LockOnStart(
+			g_camera3D->GetPosition(),
+			g_camera3D->GetForward()
+		);
+	}
+	else if (inputDir == LockOnInputDir::enLockOnRight)
+	{
+		m_lockOnCurrent = LockOnSwitch(
+			g_camera3D->GetPosition(),
+			g_camera3D->GetRight(),
+			m_lockOnCurrent,
+			true
+		);
+	}
+	else if(inputDir == LockOnInputDir::enLockOnLeft)
+	{
+		m_lockOnCurrent = LockOnSwitch(
+			g_camera3D->GetPosition(),
+			g_camera3D->GetRight(),
+			m_lockOnCurrent,
+			false
+		);
+	}
 
+	//ロックオン対象が存在していればそのまま対象の方向にロックオン
+	if (m_lockOnCurrent)
+	{
+		//ロックオン中の敵の向きへカメラを向けるためにベクトル計算
+		finalCameraForward = m_lockOnCurrent->GetPosition() - PlayerPos;
+		finalCameraForward.Normalize();
 
-	
-
-	return Vector3::Zero;
+		return finalCameraForward;
+	}
 }
 
-YakuzaCharacter* PlayerController::SearchLockOnEnemy(
-	YakuzaCharacter* current,
-	const Vector3& cameraFoward,
-	const Vector3& cameraRight,
-	const Vector3& cameraPos,
+Enemy* PlayerController::SearchLockOnEnemy(
+	std::function<float(Enemy*)> scoringFunc
+)
+{
+	if (!m_inBattleEnemys)
+	{
+		return nullptr;
+	}
+
+	Enemy* bestEnemy = nullptr;
+	float bestScore = FLT_MAX;
+
+	for (auto& enemy : m_inBattleEnemys->m_enemyAiInfoList)
+	{
+		Enemy* loadEnemy = enemy.m_enemy;
+
+		if (loadEnemy->IsDead())
+		{
+			continue;
+		}
+
+		float score = scoringFunc(loadEnemy);
+
+		if (score > bestScore)
+		{
+			bestScore = score;
+			bestEnemy = loadEnemy;
+		}
+	}
+
+	return bestEnemy;
+}
+
+Enemy* PlayerController::LockOnStart(
+	const Vector3& camPos,
+	const Vector3& camForward
+)
+{
+	return SearchLockOnEnemy([&](Enemy* enemy)
+		{
+			Vector3 toEnemy = enemy->GetPosition() - camPos;
+			toEnemy.Normalize();
+
+			return toEnemy.Dot(camForward);
+		}
+	);
+}
+
+Enemy* PlayerController::LockOnSwitch(
+	const Vector3& camPos,
+	const Vector3& camRight,
+	Enemy* currentEnemy,
 	bool inputRight
 )
 {
+	return SearchLockOnEnemy([&](Enemy* enemy)
+		{
+			if (enemy == currentEnemy)
+			{
+				return -FLT_MAX;
+			}
 
+			Vector3 toEnemy = enemy->GetPosition() - camPos;
+			toEnemy.y = 0.0f;
+			toEnemy.Normalize();
+
+			float side = camRight.Dot(toEnemy);
+
+			Vector3 toCurrentEnemy = currentEnemy->GetPosition() - camPos;
+			toCurrentEnemy.y = 0.0f;
+			toCurrentEnemy.Normalize();
+
+			float currentSide = camRight.Dot(toCurrentEnemy);
+
+			if (inputRight && side <= currentSide)
+			{
+				return -FLT_MAX;
+			}
+
+			if (!inputRight && side >= currentSide)
+			{
+				return -FLT_MAX;
+			}
+
+			return -fabsf(side - currentSide);
+		}
+	);
 }
