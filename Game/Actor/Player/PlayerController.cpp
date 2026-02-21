@@ -97,28 +97,31 @@ void PlayerController::Update()
 
 	//ロックオンの条件文
 	//ロックオン入り
-	if (g_pad[0]->IsTrigger(enButtonUp) && m_inBattle)
+	if (m_inBattle)
 	{
-		m_isLockOn = !m_isLockOn;
+		if (g_pad[0]->IsTrigger(enButtonUp))
+		{
+			m_isLockOn = !m_isLockOn;
 
-		if (m_isLockOn)
-		{
-			m_lockOnInputState = LockOnInputDir::enLockOnIn;
+			if (m_isLockOn)
+			{
+				m_lockOnInputState = LockOnInputDir::enLockOnIn;
+			}
+			else
+			{
+				m_lockOnCurrent = nullptr;
+			}
 		}
-		else
+		//対象変更 右
+		else if (m_isLockOn && g_pad[0]->IsTrigger(enButtonRB2))
 		{
-			m_lockOnCurrent = nullptr;
+			m_lockOnInputState = LockOnInputDir::enLockOnRight;
 		}
-	}
-	//対象変更 右
-	else if (m_isLockOn && g_pad[0]->IsTrigger(enButtonRight))
-	{
-		m_lockOnInputState = LockOnInputDir::enLockOnRight;
-	}
-	//対象変更 左
-	else if (m_isLockOn && g_pad[0]->IsTrigger(enButtonLeft))
-	{
-		m_lockOnInputState = LockOnInputDir::enLockOnLeft;
+		//対象変更 左
+		else if (m_isLockOn && g_pad[0]->IsTrigger(enButtonLB2))
+		{
+			m_lockOnInputState = LockOnInputDir::enLockOnLeft;
+		}
 	}
 
 	//ガードの条件文付けるならここ
@@ -356,7 +359,7 @@ Vector3 PlayerController::CameraEnemyLockOnCalc(
 		m_lockOnInputState = LockOnInputDir::enInputNone;
 	}
 
-	if (m_lockOnCurrent && m_lockOnCurrent->IsDead())
+	if (m_lockOnCurrent && m_lockOnCurrent->GetYakuzaStateMachine().GetIsDead())
 	{
 		m_isLockOn = false;
 
@@ -394,7 +397,7 @@ Enemy* PlayerController::SearchLockOnEnemy(
 	{
 		Enemy* loadEnemy = enemy.m_enemy;
 
-		if (loadEnemy->IsDead())
+		if (loadEnemy->GetYakuzaStateMachine().GetIsDead())
 		{
 			continue;
 		}
