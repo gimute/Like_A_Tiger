@@ -38,7 +38,7 @@ namespace{
 		return false;
 	}
 
-	float KAMERA_NON_ASSIST_TIME = 5.0f;
+	float KAMERA_NON_ASSIST_TIME = 0.5f;
 }
 
 bool PlayerController::Start()
@@ -95,9 +95,6 @@ void PlayerController::Update()
 	//掴みの条件文
 	playerStateMachine->SetGrabFlag(g_pad[0]->IsTrigger(enButtonX));	
 
-	//入力ステート初期化
-	m_lockOnInputState = LockOnInputDir::enInputNone;
-
 	//ロックオンの条件文
 	//ロックオン入り
 	if (g_pad[0]->IsTrigger(enButtonUp) && m_inBattle)
@@ -107,6 +104,10 @@ void PlayerController::Update()
 		if (m_isLockOn)
 		{
 			m_lockOnInputState = LockOnInputDir::enLockOnIn;
+		}
+		else
+		{
+			m_lockOnCurrent = nullptr;
 		}
 	}
 	//対象変更 右
@@ -176,6 +177,8 @@ float PlayerController::CameraXFCalc(YakuzaStateMachine& stateMachine)
 		m_cameraNonAssistTimer = KAMERA_NON_ASSIST_TIME;
 
 		m_isLockOn = false;
+
+		m_lockOnCurrent = nullptr;
 	}
 	//アシスト無し時間が0以上であれば時間をフレームタイムで減少
 	//現在のRスティック値を返す
@@ -188,12 +191,18 @@ float PlayerController::CameraXFCalc(YakuzaStateMachine& stateMachine)
 
 	if (m_isLockOn)
 	{
-		return CameraDirectionToFowardMoveCalc(
-			CameraEnemyLockOnCalc(
-				stateMachine.GetHasCharactarPos(),
-				m_lockOnInputState
-			)
+		Vector3 lockDir = CameraEnemyLockOnCalc(
+			stateMachine.GetHasCharactarPos(),
+			m_lockOnInputState
 		);
+
+		//もしロック計算内部でロックオンが打ち切られたら
+		if (!m_isLockOn)
+		{
+			return g_pad[0]->GetRStickXF();
+		}
+
+		return CameraDirectionToFowardMoveCalc(lockDir);
 	}
 
 	//攻撃中であれば攻撃であればカメラをそちらに向ける
@@ -201,6 +210,8 @@ float PlayerController::CameraXFCalc(YakuzaStateMachine& stateMachine)
 	{
 		return CameraDirectionToFowardMoveCalc(stateMachine.GetHasCharactarForward());
 	}
+
+	return g_pad[0]->GetRStickXF();;
 }
 
 Vector3 PlayerController::GetStickR() const
@@ -280,7 +291,7 @@ float PlayerController::CameraDirectionToFowardMoveCalc(const Vector3& moveDir)
 		target,
 		velocity,
 		smoothTime,
-		g_gameTime->GetFrameDeltaTime());
+		g_gameTime->GetFrameDeltaTime() * 2.0f);
 
 	return current;
 }
@@ -311,42 +322,60 @@ Vector3 PlayerController::CameraEnemyLockOnCalc(
 )
 {
 	Vector3 finalCameraForward = Vector3::Zero;
+	Enemy* nextlockOnEnemy = nullptr;
 
 	if (inputDir == LockOnInputDir::enLockOnIn)
 	{
-		m_lockOnCurrent = LockOnStart(
+		nextlockOnEnemy = LockOnStart(
 			g_camera3D->GetPosition(),
 			g_camera3D->GetForward()
 		);
+
+		m_lockOnInputState = LockOnInputDir::enInputNone;
 	}
 	else if (inputDir == LockOnInputDir::enLockOnRight)
 	{
-		m_lockOnCurrent = LockOnSwitch(
+		nextlockOnEnemy = LockOnSwitch(
 			g_camera3D->GetPosition(),
 			g_camera3D->GetRight(),
 			m_lockOnCurrent,
 			true
 		);
+
+		m_lockOnInputState = LockOnInputDir::enInputNone;
 	}
 	else if(inputDir == LockOnInputDir::enLockOnLeft)
 	{
-		m_lockOnCurrent = LockOnSwitch(
+		nextlockOnEnemy = LockOnSwitch(
 			g_camera3D->GetPosition(),
 			g_camera3D->GetRight(),
 			m_lockOnCurrent,
 			false
 		);
+
+		m_lockOnInputState = LockOnInputDir::enInputNone;
 	}
 
+	if (m_lockOnCurrent && m_lockOnCurrent->IsDead())
+	{
+		m_isLockOn = false;
+
+		m_lockOnCurrent = nullptr;
+	}
+
+	if (nextlockOnEnemy && m_lockOnCurrent != nextlockOnEnemy)
+	{
+		m_lockOnCurrent = nextlockOnEnemy;
+	}
 	//ロックオン対象が存在していればそのまま対象の方向にロックオン
 	if (m_lockOnCurrent)
 	{
 		//ロックオン中の敵の向きへカメラを向けるためにベクトル計算
 		finalCameraForward = m_lockOnCurrent->GetPosition() - PlayerPos;
 		finalCameraForward.Normalize();
-
-		return finalCameraForward;
 	}
+
+	return finalCameraForward;
 }
 
 Enemy* PlayerController::SearchLockOnEnemy(
@@ -359,7 +388,7 @@ Enemy* PlayerController::SearchLockOnEnemy(
 	}
 
 	Enemy* bestEnemy = nullptr;
-	float bestScore = FLT_MAX;
+	float bestScore = -FLT_MAX;
 
 	for (auto& enemy : m_inBattleEnemys->m_enemyAiInfoList)
 	{
@@ -387,12 +416,30 @@ Enemy* PlayerController::LockOnStart(
 	const Vector3& camForward
 )
 {
+	const float fovHalfAngle = DirectX::XMConvertToRadians(45.0f);
+	const float minDot = cosf(fovHalfAngle);
+
 	return SearchLockOnEnemy([&](Enemy* enemy)
 		{
 			Vector3 toEnemy = enemy->GetPosition() - camPos;
+			toEnemy.y = 0.0f;
+
+			float lengthSq = toEnemy.LengthSq();
+			if (lengthSq < 0.0001f)
+			{
+				return -FLT_MAX;
+			}
+
 			toEnemy.Normalize();
 
-			return toEnemy.Dot(camForward);
+			float dot = toEnemy.Dot(camForward);
+
+			if (dot < minDot)
+			{
+				return -FLT_MAX;
+			}
+
+			return dot;
 		}
 	);
 }
