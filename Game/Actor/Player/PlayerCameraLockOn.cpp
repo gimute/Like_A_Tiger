@@ -4,6 +4,8 @@
 #include "Actor\Enemy\Enemy.h"
 #include "Actor\Enemy\EnemyManager.h"
 
+PlayerCameraLockOn* PlayerCameraLockOn::m_instance = nullptr;
+
 void PlayerCameraLockOn::InitPlayerLockOn()
 {
 
@@ -11,14 +13,13 @@ void PlayerCameraLockOn::InitPlayerLockOn()
 
 bool PlayerCameraLockOn::CalcCameraLockOn(
 	Vector3& outValue,
-	const Vector3& playerPos,
-	LockOnInputDir inputDir
+	const Vector3& playerPos
 )
 {
 	Vector3 finalCameraForward = Vector3::Zero;
 	Enemy* nextlockOnEnemy = nullptr;
 
-	if (inputDir == LockOnInputDir::enLockOnIn)
+	if (m_lockOnInputState == LockOnInputDir::enLockOnIn)
 	{
 		nextlockOnEnemy = LockOnStart(
 			g_camera3D->GetPosition(),
@@ -27,7 +28,7 @@ bool PlayerCameraLockOn::CalcCameraLockOn(
 
 		m_lockOnInputState = LockOnInputDir::enInputNone;
 	}
-	else if (inputDir == LockOnInputDir::enLockOnRight)
+	else if (m_lockOnInputState == LockOnInputDir::enLockOnRight)
 	{
 		nextlockOnEnemy = LockOnSwitch(
 			g_camera3D->GetPosition(),
@@ -38,7 +39,7 @@ bool PlayerCameraLockOn::CalcCameraLockOn(
 
 		m_lockOnInputState = LockOnInputDir::enInputNone;
 	}
-	else if (inputDir == LockOnInputDir::enLockOnLeft)
+	else if (m_lockOnInputState == LockOnInputDir::enLockOnLeft)
 	{
 		nextlockOnEnemy = LockOnSwitch(
 			g_camera3D->GetPosition(),

@@ -7,14 +7,6 @@ class YakuzaStateMachine;
 class Enemy;
 class EnemyInfoGroupe;
 
-enum LockOnInputDir
-{
-	enLockOnIn,
-	enLockOnRight,
-	enLockOnLeft,
-	enInputNone
-};
-
 class PlayerController : public IGameObject
 {
 public:
@@ -45,27 +37,6 @@ private:
 	Vector3 GetStickR() const;
 	//カメラのX値取得
 	float CameraDirectionToFowardMoveCalc(const Vector3& moveDir);
-	//ロックオン処理
-	Vector3 CameraEnemyLockOnCalc(
-		const Vector3& PlayerPos,
-		LockOnInputDir inputDir
-	);
-	
-	Enemy* SearchLockOnEnemy(
-		std::function<float(Enemy*)> scoringFunc
-	);
-
-	Enemy* LockOnStart(
-		const Vector3& camPos,
-		const Vector3& camForward
-	);
-
-	Enemy* LockOnSwitch(
-		const Vector3& camPos,
-		const Vector3& camRight,
-		Enemy* currentEnemy,
-		bool isRight
-	);
 
 	float SmoothDamp(
 		float current,
@@ -78,13 +49,5 @@ private:
 	float m_cameraNonAssistTimer = 0.0f;
 
 	bool m_inBattle = false;
-
-	bool m_isLockOn = false;
-
-	EnemyInfoGroupe* m_inBattleEnemys = nullptr;
-
-	Enemy* m_lockOnCurrent = nullptr;
-
-	LockOnInputDir m_lockOnInputState = LockOnInputDir::enInputNone;
 };
 

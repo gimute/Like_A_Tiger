@@ -85,8 +85,7 @@ public:
 	//ロックオン時カメラ向き計算
 	bool CalcCameraLockOn(
 		Vector3& outValue,
-		const Vector3& playerPos,
-		LockOnInputDir inputDir
+		const Vector3& playerPos
 	);
 
 private:
