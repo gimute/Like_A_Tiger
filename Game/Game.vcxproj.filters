@@ -85,6 +85,7 @@
     <ClCompile Include="Actor\Enemy\EnemyTypeSet\ToughYakuzaActionSet.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAis\ToughYakuzaAi.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyNameStorage.cpp" />
+    <ClCompile Include="Actor\Player\PlayerCameraLockOn.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -182,5 +183,6 @@
     <ClInclude Include="Actor\Enemy\EnemyTypeSet\ToughYakuzaActionSet.h" />
     <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAis\ToughYakuzaAi.h" />
     <ClInclude Include="Actor\Enemy\EnemyNameStorage.h" />
+    <ClInclude Include="Actor\Player\PlayerCameraLockOn.h" />
   </ItemGroup>
 </Project>
