@@ -3,6 +3,8 @@
 class EnemyInfoGroupe;
 class Enemy;
 
+#include "UI\LockOnCircle.h"
+
 enum LockOnInputDir
 {
 	enLockOnIn,
@@ -74,6 +76,8 @@ public:
 		m_lockOnInputState = LockOnInputDir::enInputNone;
 
 		m_lockOnCurrent = nullptr;
+
+		m_lockOnSircle->EndLockOnCircleDraw();
 	}
 
 	//現在ロックオン中かどうかを取得
@@ -109,6 +113,8 @@ private:
 	EnemyInfoGroupe* m_inBattleEnemys = nullptr;
 	//現在ロックオンしている敵
 	Enemy* m_lockOnCurrent = nullptr;
+	//ロックオン円スプライト
+	LockOnCircle* m_lockOnSircle = nullptr;
 	//現在の入力状態
 	LockOnInputDir m_lockOnInputState = LockOnInputDir::enInputNone;
 };

@@ -4,11 +4,15 @@
 #include "Actor\Enemy\Enemy.h"
 #include "Actor\Enemy\EnemyManager.h"
 
+#include "GameScene\UpdateOrder.h"
+
 PlayerCameraLockOn* PlayerCameraLockOn::m_instance = nullptr;
 
 void PlayerCameraLockOn::InitPlayerLockOn()
 {
+	m_lockOnSircle = NewGO<LockOnCircle>(UpdateOrder::UI, "player");
 
+	m_lockOnSircle->Init();
 }
 
 bool PlayerCameraLockOn::CalcCameraLockOn(
@@ -61,6 +65,11 @@ bool PlayerCameraLockOn::CalcCameraLockOn(
 	if (nextlockOnEnemy && m_lockOnCurrent != nextlockOnEnemy)
 	{
 		m_lockOnCurrent = nextlockOnEnemy;
+
+		if (m_lockOnCurrent)
+		{
+			m_lockOnSircle->StartLockOnCircleDraw(m_lockOnCurrent);
+		}
 	}
 	//ロックオン対象が存在していればそのまま対象の方向にロックオン
 	if (m_lockOnCurrent)

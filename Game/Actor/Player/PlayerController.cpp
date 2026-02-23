@@ -64,6 +64,8 @@ bool PlayerController::Start()
 		}
 	);
 
+	PlayerCameraLockOn::GetInstance()->InitPlayerLockOn();
+
 	return true;
 }
 
@@ -180,7 +182,10 @@ float PlayerController::CameraXFCalc(YakuzaStateMachine& stateMachine)
 	{
 		m_cameraNonAssistTimer = KAMERA_NON_ASSIST_TIME;
 
-		PlayerCameraLockOn::GetInstance()->EndLockOn();
+		if (PlayerCameraLockOn::GetInstance()->IsLockOn())
+		{
+			PlayerCameraLockOn::GetInstance()->EndLockOn();
+		}
 	}
 	//アシスト無し時間が0以上であれば時間をフレームタイムで減少
 	//現在のRスティック値を返す
