@@ -7,7 +7,15 @@
 #include "Actor\YakuzaComponents\YakuzaStates.h"
 #include "UI/PouseMenuManager.h"
 
+#include "Battle\BattleManager.h"
+
 #include "Load\LoadManager.h"
+
+#include "Actor\Enemy\EnemyManager.h"
+#include "Actor\Enemy\Enemy.h"
+#include "Actor\Enemy\EnemyAI\IEnemyAi.h"
+
+#include "Actor\Player\PlayerCameraLockOn.h"
 
 namespace{
 	inline bool IsInputStickL()
@@ -37,7 +45,33 @@ namespace{
 
 bool PlayerController::Start()
 {
+	BattleManager::GetInstance()->RegisterBattleStartCallBack(
+		[&](const BattleStartEventInfo& eventInfo)
+		{
+			m_inBattle = true;
+
+			PlayerCameraLockOn::GetInstance()->
+				RegisterLockOnEnemyGroupe(eventInfo.m_enemyGroupeInfo);
+		}
+	);
+
+	BattleManager::GetInstance()->RegisterBattleEndCallBack(
+		[&](const BattleEndEventInfo& eventInfo)
+		{
+			m_inBattle = false;
+
+			PlayerCameraLockOn::GetInstance()->EndLockOn();
+		}
+	);
+
+	PlayerCameraLockOn::GetInstance()->InitPlayerLockOn();
+
 	return true;
+}
+
+PlayerController::~PlayerController()
+{
+	PlayerCameraLockOn::GetInstance()->ResetLockOn();
 }
 
 void PlayerController::Update()
@@ -69,6 +103,35 @@ void PlayerController::Update()
 	//掴みの条件文
 	playerStateMachine->SetGrabFlag(g_pad[0]->IsTrigger(enButtonX));	
 
+	//ロックオンの条件文
+	//ロックオン入り
+	if (m_inBattle)
+	{
+		if (g_pad[0]->IsTrigger(enButtonUp))
+		{
+			if (PlayerCameraLockOn::GetInstance()->IsLockOn())
+			{
+				PlayerCameraLockOn::GetInstance()->EndLockOn();
+			}
+			else
+			{
+				PlayerCameraLockOn::GetInstance()->StartLockOn();
+			}
+		}
+		//対象変更 右
+		else if (PlayerCameraLockOn::GetInstance()->IsLockOn() && 
+			g_pad[0]->IsTrigger(enButtonRight))
+		{
+			PlayerCameraLockOn::GetInstance()->SwitchLockOn(true);
+		}
+		//対象変更 左
+		else if (PlayerCameraLockOn::GetInstance()->IsLockOn() &&
+			g_pad[0]->IsTrigger(enButtonLeft))
+		{
+			PlayerCameraLockOn::GetInstance()->SwitchLockOn(false);
+		}
+	}
+
 	//ガードの条件文付けるならここ
 	playerStateMachine->SetDefenseFlag(
 		g_pad[0]->IsPress(enButtonLB1) ||
@@ -78,22 +141,18 @@ void PlayerController::Update()
 	//Lスティックの入力があれば
 	if (IsInputStickL())
 	{
-		playerStateMachine->SetMoveVec(CameraControllCalc());
-	}
-
-	if (IsInputStickR())
-	{
-		m_cameraNonAssistTimer = KAMERA_NON_ASSIST_TIME;
+		//移動入力
+		playerStateMachine->SetMoveVec(CameraInMoveCalc());
 	}
 
 	//Rスティックの入力量を設定
 	cameraController->SetCameraMoveAmountXY(
-		GetCameraXF(*playerStateMachine),
+		CameraXFCalc(*playerStateMachine),
 		g_pad[0]->GetRStickYF()
 	);
 }
 
-Vector3 PlayerController::CameraControllCalc()
+Vector3 PlayerController::CameraInMoveCalc()
 {
 	//左スティックの入力量を取得
 	Vector3 stickL;
@@ -121,6 +180,54 @@ Vector3 PlayerController::CameraControllCalc()
 	return newMoveVec;
 }
 
+float PlayerController::CameraXFCalc(YakuzaStateMachine& stateMachine)
+{
+	//左スティックが入力されていればアシスト無し時間を初期化
+	if (IsInputStickR())
+	{
+		m_cameraNonAssistTimer = KAMERA_NON_ASSIST_TIME;
+
+		if (PlayerCameraLockOn::GetInstance()->IsLockOn())
+		{
+			PlayerCameraLockOn::GetInstance()->EndLockOn();
+		}
+	}
+	//アシスト無し時間が0以上であれば時間をフレームタイムで減少
+	//現在のRスティック値を返す
+	if (m_cameraNonAssistTimer > 0.0f)
+	{
+		m_cameraNonAssistTimer -= g_gameTime->GetFrameDeltaTime();
+
+		return g_pad[0]->GetRStickXF();;
+	}
+
+	if (PlayerCameraLockOn::GetInstance()->IsLockOn())
+	{
+		Vector3 lockDir = Vector3::Zero;
+
+		bool isCompleteLockOn = PlayerCameraLockOn::GetInstance()->CalcCameraLockOn(
+			lockDir,
+			stateMachine.GetHasCharactarPos()
+		);
+
+		//もしロック計算内部でロックオンが打ち切られたら
+		if (!isCompleteLockOn)
+		{
+			return g_pad[0]->GetRStickXF();
+		}
+
+		return CameraDirectionToFowardMoveCalc(lockDir);
+	}
+
+	//攻撃中であれば攻撃であればカメラをそちらに向ける
+	if(stateMachine.GetIsAttack())
+	{
+		return CameraDirectionToFowardMoveCalc(stateMachine.GetHasCharactarForward());
+	}
+
+	return g_pad[0]->GetRStickXF();;
+}
+
 Vector3 PlayerController::GetStickR() const
 {
 	//右スティックの入力量を取得
@@ -131,24 +238,11 @@ Vector3 PlayerController::GetStickR() const
 	return stickR;
 }
 
-float PlayerController::GetCameraXF(YakuzaStateMachine& stateMachine)
+float PlayerController::CameraDirectionToFowardMoveCalc(const Vector3& moveDir)
 {
-	if (m_cameraNonAssistTimer > 0.0f)
-	{
-		m_cameraNonAssistTimer -= g_gameTime->GetFrameDeltaTime();
-
-		return g_pad[0]->GetRStickXF();;
-	}
-
-	//攻撃中で無ければスティックの入力X値を返す
-	if (!stateMachine.GetIsAttack() || IsInputStickR())
-	{
-		return g_pad[0]->GetRStickXF();
-	}
-
 	// 方向取得
 	Vector3 camForward = g_camera3D->GetForward();
-	Vector3 moveForward = stateMachine.GetHasCharactarForward();
+	Vector3 moveForward = moveDir;
 
 	// Y成分カット
 	camForward.y = 0.0f;
@@ -211,7 +305,7 @@ float PlayerController::GetCameraXF(YakuzaStateMachine& stateMachine)
 		target,
 		velocity,
 		smoothTime,
-		g_gameTime->GetFrameDeltaTime());
+		g_gameTime->GetFrameDeltaTime() * 10.0f);
 
 	return current;
 }
@@ -235,4 +329,3 @@ float PlayerController::SmoothDamp(
 
 	return target + (change + temp) * exp;
 }
-

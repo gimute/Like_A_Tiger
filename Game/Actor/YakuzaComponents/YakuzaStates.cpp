@@ -7,6 +7,12 @@
 #include "Sound\SoundManager.h"
 #include "Sound\SoundId.h"
 
+namespace YakuzaStateConstant
+{
+	const float SWAY_COOL_TIME = 1.0f;
+	const float GRABBED_COOL_TIME = 1.0f;
+}
+
 ///IdleState
 
 void YakuzaIdleState::OnEnter()
@@ -194,6 +200,7 @@ void YakuzaAttackState::OnExit()
 {
 	m_owner->SetIsAttack(false);
 	m_owner->GetAttackStateMachine()->SetIsAttackEnds(true);
+	m_owner->HasCharacterAttackCollisionDelete();
 	auto* attackStateMachine = m_owner->GetAttackStateMachine();
 	attackStateMachine->ResetAttackStateMachine();
 }
@@ -493,13 +500,29 @@ void YakuzaSwayState::OnExit()
 	m_swayVec = Vector3::Zero;
 	m_owner->SetIsSway(false);
 	m_owner->SetSwayFlag(false);
+	m_owner->SetSwayCoolTimer(YakuzaStateConstant::SWAY_COOL_TIME);
 }
 
 //DefenseState
 
 void YakuzaDefenseState::OnEnter()
 {
+	//“ü—Í•ûŒü‚É‘Ì‚ðŒü‚¯‚é
+	Vector3 defenseDir = m_owner->GetMoveVec();
 
+	//“ü—Í‚ª‚È‚©‚Á‚½ê‡‚Í³–Ê•ûŒü‚É–hŒä
+	if (defenseDir.x == 0.0f &&
+		defenseDir.z == 0.0f)
+	{
+		defenseDir = m_owner->GetHasCharactarForward();
+	}
+
+	m_owner->GetHasCharactarRot().SetRotationYFromDirectionXZ(defenseDir);
+
+	m_owner->SetHasCharactarForward(Vector3::AxisZ);
+	m_owner->GetHasCharactarRot().Apply(m_owner->GetHasCharactarForward());
+
+	m_owner->SetMoveVec(Vector3::Zero);
 }
 
 void YakuzaDefenseState::OnUpdate()
@@ -687,6 +710,7 @@ void YakuzaGrabBedState::OnExit()
 
 	m_owner->SetGrabBedToAttackType(-1);
 	m_owner->SetIsDamage(false, false);
+	m_owner->SetGrabBedCoolTimer(YakuzaStateConstant::GRABBED_COOL_TIME);
 }
 
 //DeadState
