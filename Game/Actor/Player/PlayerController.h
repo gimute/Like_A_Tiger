@@ -13,7 +13,7 @@ public:
 	//コンストラクタ
 	PlayerController() = default;
 
-	~PlayerController() = default;
+	~PlayerController();
 
 	//スタート関数
 	bool Start() override;

@@ -57,9 +57,17 @@ bool PlayerCameraLockOn::CalcCameraLockOn(
 
 	if (m_lockOnCurrent && m_lockOnCurrent->GetYakuzaStateMachine().GetIsDead())
 	{
-		EndLockOn();
+	    nextlockOnEnemy = LockOnNear(
+			g_camera3D->GetPosition(),
+			g_camera3D->GetForward()
+		);
 
-		return false;
+		if (!nextlockOnEnemy)
+		{
+			EndLockOn();
+
+			return false;
+		}
 	}
 
 	if (nextlockOnEnemy && m_lockOnCurrent != nextlockOnEnemy)
@@ -111,6 +119,31 @@ Enemy* PlayerCameraLockOn::LockOnStart(
 			{
 				return -FLT_MAX;
 			}
+
+			return dot;
+		}
+	);
+}
+
+Enemy* PlayerCameraLockOn::LockOnNear(
+	const Vector3& camPos,
+	const Vector3& camForward
+)
+{
+	return SearchLockOnEnemy([&](Enemy* enemy)
+		{
+			Vector3 toEnemy = enemy->GetPosition() - camPos;
+			toEnemy.y = 0.0f;
+
+			float lengthSq = toEnemy.LengthSq();
+			if (lengthSq < 0.0001f)
+			{
+				return -FLT_MAX;
+			}
+
+			toEnemy.Normalize();
+
+			float dot = toEnemy.Dot(camForward);
 
 			return dot;
 		}

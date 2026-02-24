@@ -86,6 +86,17 @@ public:
 		return m_LockOnFlag;
 	}
 
+	inline void ResetLockOn()
+	{
+		m_LockOnFlag = false;
+
+		m_lockOnInputState = LockOnInputDir::enInputNone;
+
+		m_lockOnCurrent = nullptr;
+
+		DeleteGO(m_lockOnSircle);
+	}
+
 	//ロックオン時カメラ向き計算
 	bool CalcCameraLockOn(
 		Vector3& outValue,
@@ -95,6 +106,11 @@ public:
 private:
 	//ロックオン開始時のロックオン敵を取得
 	Enemy* LockOnStart(
+		const Vector3& camPos,
+		const Vector3& camForward
+	);
+	//近くの敵を判定しロックオン対象を取得
+	Enemy* LockOnNear(
 		const Vector3& camPos,
 		const Vector3& camForward
 	);

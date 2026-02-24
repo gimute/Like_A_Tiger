@@ -111,6 +111,20 @@ bool LockOnCircle::IsLockOnCicleInScreen()
 		return false;
 	}
 	//‚±‚±‚ÌŽÀ‘•—Ç‚­‚í‚©‚ç‚ñ‚Ì‚Å“¡Œ´ŒN‚É•·‚¢‚Ä‚Ý‚é
+
+	Vector3 camPos = g_camera3D->GetPosition();
+	camPos.y = 0.0f;
+
+	Vector3 toCurrent = m_lockOnCurrent->GetPosition() - camPos;
+	toCurrent.Normalize();
+
+	float dot = toCurrent.Dot(g_camera3D->GetForward());
+
+	if (dot <= 0.0f)
+	{
+		return false;
+	}
+
 	return true;
 }
 

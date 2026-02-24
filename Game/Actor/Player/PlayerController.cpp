@@ -69,6 +69,11 @@ bool PlayerController::Start()
 	return true;
 }
 
+PlayerController::~PlayerController()
+{
+	PlayerCameraLockOn::GetInstance()->ResetLockOn();
+}
+
 void PlayerController::Update()
 {
 	auto* playerStateMachine = &m_player->GetYakuzaStateMachine();
@@ -300,7 +305,7 @@ float PlayerController::CameraDirectionToFowardMoveCalc(const Vector3& moveDir)
 		target,
 		velocity,
 		smoothTime,
-		g_gameTime->GetFrameDeltaTime() * 2.0f);
+		g_gameTime->GetFrameDeltaTime() * 10.0f);
 
 	return current;
 }
