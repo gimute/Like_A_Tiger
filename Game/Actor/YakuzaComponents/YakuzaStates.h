@@ -99,17 +99,17 @@ public:
 	void OnExit() override;
 };
 
-class YakuzaGrabState : public IStateBase
+class YakuzaGrabingState : public IStateBase
 {
-	appState(YakuzaGrabState)
+	appState(YakuzaGrabingState)
 protected:
 	YakuzaStateMachine* m_owner = nullptr;
 	VolumeAdjustment* m_volumeAdjustment = nullptr;
 public:
 	//コンストラクタ
-	YakuzaGrabState(YakuzaStateMachine* stateMachine) : m_owner(stateMachine) {}
+	YakuzaGrabingState(YakuzaStateMachine* stateMachine) : m_owner(stateMachine) {}
 	//デストラクタ
-	~YakuzaGrabState() = default;
+	~YakuzaGrabingState() = default;
 
 	//ステートイン
 	void OnEnter() override;

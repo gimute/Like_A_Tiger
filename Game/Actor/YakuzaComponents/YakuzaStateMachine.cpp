@@ -13,6 +13,8 @@
 
 IStateBase* YakuzaStateMachine::GetNextState()
 {
+	TimerUpdate();
+
 	if (CanChangeGrabBed())
 	{
 		return FindClassNameState<YakuzaGrabBedState>();
@@ -32,7 +34,7 @@ IStateBase* YakuzaStateMachine::GetNextState()
 
 	if (CanChangeGrab())
 	{
-		return FindClassNameState<YakuzaGrabState>();
+		return FindClassNameState<YakuzaGrabingState>();
 	}
 
 	//攻撃中なら現在更新中のアタックステートを更新する
@@ -63,6 +65,19 @@ IStateBase* YakuzaStateMachine::GetNextState()
 	}
 
 	return FindClassNameState<YakuzaIdleState>();
+}
+
+void YakuzaStateMachine::TimerUpdate()
+{
+	if (m_swayCoolTimer > 0.0f)
+	{
+		m_swayCoolTimer -= g_gameTime->GetFrameDeltaTime();
+	}
+
+	if (m_grabBedCoolTimer > 0.0)
+	{
+		m_grabBedCoolTimer -= g_gameTime->GetFrameDeltaTime();
+	}
 }
 
 bool YakuzaStateMachine::CanChangeWalk()
@@ -101,6 +116,7 @@ bool YakuzaStateMachine::CanChangeSway()
 	}
 
 	if (m_swayFlag &&
+		m_swayCoolTimer <= 0.0f && 
 		!m_isGrab && 
 		!m_isGrabing
 	)
@@ -306,6 +322,11 @@ bool YakuzaStateMachine::IsHasCharacterAttackCollisionActive()
 	return m_hasCharactar->IsAttackCollisionActive();
 }
 
+void YakuzaStateMachine::HasCharacterAttackCollisionDelete()
+{
+	m_hasCharactar->DeleteAttackCollision();
+}
+
 bool YakuzaStateMachine::IsHasCharacterGrabCollisionActive()
 {
 	return m_hasCharactar->IsGrabCollisionActive();
@@ -366,7 +387,7 @@ void YakuzaStateMachine::HasCharacterGrabingProcces()
 
 void YakuzaStateMachine::HasCharacterSendToGrabingOrGrabBedYakuzaData(int sendDamageType)
 {
-	if (IsNowStateClassName<YakuzaGrabState>())
+	if (IsNowStateClassName<YakuzaGrabingState>())
 	{
 		YakuzaCharacterDamageManager::GetInstance()->SendGrabingToGrabBedYakuzaData(
 			m_grabingYakuza,
@@ -391,13 +412,13 @@ void YakuzaStateMachine::HasCharacterToGrabBedThrownPositionUpdate()
 {
 	YakuzaCharacterDamageManager::GetInstance()->UpdateGrabBedYakuzaThrownPosition(
 		m_hasCharactar,
-		m_grabBedYakuza->GetYakuzaStateMachine().GetGrabThrowPos()
+		m_grabBedYakuza
 	);
 }
 
-void YakuzaStateMachine::HasCharacterGrabingYakuzaThrowPositionAdjustment(const Vector3& sweepDir, const Vector3& adjustDir,float sweepDis)
+bool YakuzaStateMachine::HasCharacterGrabingYakuzaThrowPositionAdjustment(const Vector3& sweepDir, const Vector3& adjustDir,float sweepDis)
 {
-	YakuzaCharacterDamageManager::GetInstance()->AdjustGrabBedYakuzaPositionOnThrow(
+	return YakuzaCharacterDamageManager::GetInstance()->AdjustGrabBedYakuzaPositionOnThrow(
 		m_grabingYakuza,
 		m_hasCharactar,
 		sweepDir,
@@ -426,7 +447,7 @@ void YakuzaStateMachine::OnAnimationEvent(const wchar_t* clipName, const wchar_t
 				20.0f
 			);
 		}
-		else if(IsGetYakuzaStateMachineNowState<YakuzaGrabState>())
+		else if(IsGetYakuzaStateMachineNowState<YakuzaGrabingState>())
 		{
 			m_hasCharactar->SpawnGrabCollision(
 				m_hasCharactar,

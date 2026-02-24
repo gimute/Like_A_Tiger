@@ -42,7 +42,7 @@ void YakuzaCharacterDamageManager::SendEnemyYakuzaDamage(Enemy* sendEnemy, Yakuz
 			sendEnemyPos,
 			sendEnemy->GetForward(),
 			m_playerPtr->GetPosition(),
-			0.3f//‘O‘¤–ñ140“x‚Í–hŒä¬Œ÷ˆµ‚¢
+			0.4f//‘O‘¤–ñ160“x‚Í–hŒä¬Œ÷ˆµ‚¢
 		))
 		{
 			isDefense = true;
@@ -145,7 +145,7 @@ void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(YakuzaDamageDatas send
 			m_playerPtr->GetPosition(),
 			m_playerPtr->GetForward(),
 			attackerPos,
-			0.3f//‘O‘¤–ñ140“x‚Í–hŒä¬Œ÷ˆµ‚¢
+			0.4f//‘O‘¤–ñ160“x‚­‚ç‚¢‚Í–hŒä¬Œ÷ˆµ‚¢
 		))
 		{
 			isDefense = true;
@@ -228,6 +228,7 @@ void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(YakuzaDamageDatas send
 YakuzaCharacter* YakuzaCharacterDamageManager::SendPlayerGrabEnemyYakuza(YakuzaCharacter* grabYakuza)
 {
 	if (grabYakuza->IsCharacterHpDead() ||
+		grabYakuza->GetYakuzaStateMachine().GetGrabBedCoolTimer() > 0.0f ||
 		m_playerPtr->GetYakuzaStateMachine().GetIsGrabing())
 	{
 		return nullptr;
@@ -241,6 +242,7 @@ YakuzaCharacter* YakuzaCharacterDamageManager::SendPlayerGrabEnemyYakuza(YakuzaC
 YakuzaCharacter* YakuzaCharacterDamageManager::SendEnemyGrabPlayerYakuza(YakuzaCharacter* grabYakuza)
 {
 	if (m_playerPtr->IsCharacterHpDead() ||
+		grabYakuza->GetYakuzaStateMachine().GetGrabBedCoolTimer() > 0.0f ||
 		grabYakuza->GetYakuzaStateMachine().GetIsGrabing())
 	{
 		return nullptr;
@@ -278,7 +280,7 @@ bool YakuzaCharacterDamageManager::UpdateBothYakuzaGrabProcess(YakuzaCharacter* 
 	grabBedYakuza->GetRotation().Apply(grabBedYakuza->GetForward());
 }
 
-void YakuzaCharacterDamageManager::AdjustGrabBedYakuzaPositionOnThrow(
+bool YakuzaCharacterDamageManager::AdjustGrabBedYakuzaPositionOnThrow(
 	YakuzaCharacter* grabingYakuza,
 	YakuzaCharacter* grabBedYakuza,
 	const Vector3& sweepDir,
@@ -311,7 +313,7 @@ void YakuzaCharacterDamageManager::AdjustGrabBedYakuzaPositionOnThrow(
 	//•Ç‚ÉÚG‚µ‚Ä‚¢‚È‚©‚Á‚½‚ç‚±‚Ì‚Ü‚Ü‚ÌˆÊ’u‚Å“Š‚°‚Ä—Ç‚¢‚½‚ßreturn
 	if (!callback.m_isHit)
 	{
-		return;
+		return false;
 	}
 
 	//•Ç‚ÉÚG‚µ‚Ä‚¢‚½ê‡‚±‚Ì‚Ü‚Ü“Š‚°‚é‚Æ•Ç‚É‚ß‚èž‚Þ‚½‚ßA2ŽÒ‹¤‚É”½‘Î•ûŒü‚ÉŒü‚¯“Š‚°‚³‚¹‚é
@@ -337,14 +339,15 @@ void YakuzaCharacterDamageManager::AdjustGrabBedYakuzaPositionOnThrow(
 	grabingYakuza->GetYakuzaStateMachine().GetHasCharactarRot().Apply(
 		grabingYakuza->GetYakuzaStateMachine().GetHasCharactarForward()
 	);
+
+	return true;
 }
 
-void YakuzaCharacterDamageManager::UpdateGrabBedYakuzaThrownPosition(YakuzaCharacter* thrownYakuza, const Vector3& grabBedYakuzaPos)
+void YakuzaCharacterDamageManager::UpdateGrabBedYakuzaThrownPosition(YakuzaCharacter* thrownYakuza,YakuzaCharacter* throwYakuza)
 {
-	Vector3 toGrabBedYakuzaVec = grabBedYakuzaPos - thrownYakuza->GetPosition();
-	toGrabBedYakuzaVec.Normalize();
-	toGrabBedYakuzaVec *= 100.0f;
-	Vector3 movePos = grabBedYakuzaPos + toGrabBedYakuzaVec;
+	Vector3 thrownFoward = throwYakuza->GetYakuzaStateMachine().GetGrabThrowFoward();
+	thrownFoward *= 100.0f;
+	Vector3 movePos = throwYakuza->GetPosition() + thrownFoward;
 
 	Vector3 newPos = thrownYakuza->GetYakuzaStateMachine().GetHasCharactarCharaCon()->Execute(movePos, 0.0f);
 	

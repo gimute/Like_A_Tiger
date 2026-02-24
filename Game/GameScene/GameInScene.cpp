@@ -38,6 +38,9 @@
 //ステート侵入関数
 void GameInScene::EnterScene()
 {
+	//敵マネージャー初期化
+	EnemyManager::GetInstance()->InitEnemyManager();
+
 	//レベルで色々配置
 	m_level.Init("Assets/level/StageLevel.tkl",
 		[&](LevelObjectData_Render& objData)
@@ -98,9 +101,6 @@ void GameInScene::EnterScene()
 
 	//攻撃アシストを初期化
 	YakuzaAttackAssistSystem::GetIstance()->InitAttackAssistSystem(m_player);
-
-	//敵マネージャー初期化
-	EnemyManager::GetInstance()->InitEnemyManager();
 
 	//敵HPを生成
 	m_enemysHpGauge = NewGO<EnemysHpGauge>(UpdateOrder::UI, "enemy");
@@ -264,6 +264,8 @@ void GameInScene::ExitScene()
 {
 	//オブジェクト削除処理
 	DeleteGameObjects();
+	//BGMストップ
+	SoundManager::Get().StopBGM();
 }
 
 void GameInScene::DeleteGameObjects()
@@ -331,6 +333,7 @@ bool GameInScene::ReqestSceneState(uint32_t& nextState)
 		LoadManager::GetInstance()->LoadFadeOutEnd())
 	{
 		nextState = GameTitleScene::ID();
+
 		return true;
 	}
 

@@ -8,6 +8,12 @@
 #include "Sound\SoundId.h"
 #include "UI/PoseMenu.h"
 
+namespace YakuzaStateConstant
+{
+	const float SWAY_COOL_TIME = 1.0f;
+	const float GRABBED_COOL_TIME = 1.0f;
+}
+
 ///IdleState
 
 void YakuzaIdleState::OnEnter()
@@ -39,13 +45,13 @@ void YakuzaWalkState::OnUpdate()
 
 	Vector3 newMoveVec = m_owner->GetMoveVec() * m_owner->GetMoveSpeed();
 
-	//À•W‚ðˆÚ“®
+	//åº§æ¨™ã‚’ç§»å‹•
 	Vector3 newPos = m_owner->GetHasCharactarCharaCon()->Execute(newMoveVec, g_gameTime->GetFrameDeltaTime());
 
-	//•Ç‚É“Ë‚Áž‚ñ‚¾Žž‚É•‚‚©‚Ñã‚ª‚éŒ»Û‚ª”­¶‚·‚é‚±‚Æ‚ª‚ ‚é‚Ì‚ÅAyÀ•W‚ð0‚É‚·‚é
+	//å£ã«çªã£è¾¼ã‚“ã æ™‚ã«æµ®ã‹ã³ä¸ŠãŒã‚‹ç¾è±¡ãŒç™ºç”Ÿã™ã‚‹ã“ã¨ãŒã‚ã‚‹ã®ã§ã€yåº§æ¨™ã‚’0ã«ã™ã‚‹
 	newPos.y = 0.0f;
 
-	//À•W‚ðÝ’è
+	//åº§æ¨™ã‚’è¨­å®š
 	m_owner->SetHasCharactarPosition(newPos);
 
 	m_owner->GetHasCharactarRot().SetRotationYFromDirectionXZ(m_owner->GetMoveVec());
@@ -67,7 +73,9 @@ void YakuzaWalkState::OnExit()
 
 void YakuzaAimMoveState::OnEnter()
 {
-	m_owner->SetMoveSpeed(100.0f);
+	float moveSpeed = 100.0f * m_owner->GetAimMoveSpeedRate();
+
+	m_owner->SetMoveSpeed(moveSpeed);
 }
 
 void YakuzaAimMoveState::OnUpdate()
@@ -82,13 +90,13 @@ void YakuzaAimMoveState::OnUpdate()
 
 	Vector3 newMoveVec = moveVec * m_owner->GetMoveSpeed();
 
-	//À•W‚ðˆÚ“®
+	//åº§æ¨™ã‚’ç§»å‹•
 	Vector3 newPos = m_owner->GetHasCharactarCharaCon()->Execute(newMoveVec, g_gameTime->GetFrameDeltaTime());
 
-	//•Ç‚É“Ë‚Áž‚ñ‚¾Žž‚É•‚‚©‚Ñã‚ª‚éŒ»Û‚ª”­¶‚·‚é‚±‚Æ‚ª‚ ‚é‚Ì‚ÅAyÀ•W‚ð0‚É‚·‚é
+	//å£ã«çªã£è¾¼ã‚“ã æ™‚ã«æµ®ã‹ã³ä¸ŠãŒã‚‹ç¾è±¡ãŒç™ºç”Ÿã™ã‚‹ã“ã¨ãŒã‚ã‚‹ã®ã§ã€yåº§æ¨™ã‚’0ã«ã™ã‚‹
 	newPos.y = 0.0f;
 
-	//À•W‚ðÝ’è
+	//åº§æ¨™ã‚’è¨­å®š
 	m_owner->SetHasCharactarPosition(newPos);
 
 	Vector3 toTarget = m_owner->GetAimMoveTargetPos() - m_owner->GetHasCharactarPos();
@@ -154,10 +162,10 @@ void YakuzaAttackState::OnEnter()
 
 void YakuzaAttackState::OnUpdate()
 {
-	//ƒAƒ^ƒbƒNƒXƒe[ƒgƒ}ƒVƒ“‚ðŽæ“¾
+	//ã‚¢ã‚¿ãƒƒã‚¯ã‚¹ãƒ†ãƒ¼ãƒˆãƒžã‚·ãƒ³ã‚’å–å¾—
 	auto* attackStateMachine = m_owner->GetAttackStateMachine();
 
-	//Å‰‚ÌUŒ‚‚ªŽn‚Ü‚Á‚Ä‚¢‚È‚¢ê‡Å‰‚ÌUŒ‚‚ðs‚¤‚æ‚¤‚ÉÝ’è
+	//æœ€åˆã®æ”»æ’ƒãŒå§‹ã¾ã£ã¦ã„ãªã„å ´åˆæœ€åˆã®æ”»æ’ƒã‚’è¡Œã†ã‚ˆã†ã«è¨­å®š
 	if (attackStateMachine->GetIsAttackEnds())
 	{
 		if (m_owner->GetAttackFlag())
@@ -193,28 +201,28 @@ void YakuzaAttackState::OnExit()
 {
 	m_owner->SetIsAttack(false);
 	m_owner->GetAttackStateMachine()->SetIsAttackEnds(true);
+	m_owner->HasCharacterAttackCollisionDelete();
 	auto* attackStateMachine = m_owner->GetAttackStateMachine();
 	attackStateMachine->ResetAttackStateMachine();
 }
 
 //GrabState
 
-void YakuzaGrabState::OnEnter()
+void YakuzaGrabingState::OnEnter()
 {
-	//ˆ—‘O€”õ
+	//å‡¦ç†å‰æº–å‚™
 	m_owner->SetIsGrab(true);
 	m_owner->SetGrabFlag(false);
 	m_owner->SetGrabingToAttackType(-1);
-	m_owner->SetGrabThrowPos(Vector3::Zero);
 
-	//‹ß‚­‚Ì“G‚ÉŒü‚©‚Á‚Äs‚­ƒAƒVƒXƒgˆ—
+	//è¿‘ãã®æ•µã«å‘ã‹ã£ã¦è¡Œãã‚¢ã‚·ã‚¹ãƒˆå‡¦ç†
 	Vector3 foward = m_owner->GetHasCharactarForward();
 	Vector3 pos = m_owner->GetHasCharactarPos();
-	//ƒ^[ƒQƒbƒgÝ’è
+	//ã‚¿ãƒ¼ã‚²ãƒƒãƒˆè¨­å®š
 	TargetingParam param(400.0f, 0.5, 0.8f, 0.2f, pos, foward, m_owner->GetTypeSet().m_yakuzaCamp);
-	//ƒ^[ƒQƒbƒgŽæ“¾
+	//ã‚¿ãƒ¼ã‚²ãƒƒãƒˆå–å¾—
 	YakuzaCharacter* getYakuza = YakuzaAttackAssistSystem::GetIstance()->GetNearYakuza(param);
-	//•ûŒüŒˆ’è
+	//æ–¹å‘æ±ºå®š
 	if (getYakuza)
 	{
 		m_grabMoveVec = getYakuza->GetPosition() - pos;
@@ -228,15 +236,15 @@ void YakuzaGrabState::OnEnter()
 	m_state = en_goGrabMove;
 }
 
-void YakuzaGrabState::OnUpdate()
+void YakuzaGrabingState::OnUpdate()
 {
 	switch (m_state)
 	{
-	case YakuzaGrabState::en_goGrabMove:
-		//ˆÊ’uXV
+	case YakuzaGrabingState::en_goGrabMove:
+		//ä½ç½®æ›´æ–°
 		MoveProcess();
 
-		//ƒAƒjƒ[ƒVƒ‡ƒ“Ä¶
+		//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å†ç”Ÿ
 		m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_grabStart, 0.1f);
 
 		if (m_owner->GetIsGrabing())
@@ -258,70 +266,70 @@ void YakuzaGrabState::OnUpdate()
 		}
 
 		break;
-	case YakuzaGrabState::en_grabingMove:
-		//ˆÊ’uXV
+	case YakuzaGrabingState::en_grabingMove:
+		//ä½ç½®æ›´æ–°
 		m_owner->HasCharacterGrabingProcces();
-		//’Í‚ñ‚Å‚¢‚éƒAƒjƒ[ƒVƒ‡ƒ“Ä¶
+		//æŽ´ã‚“ã§ã„ã‚‹ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å†ç”Ÿ
 		m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_grabing, 0.1f);
 
-		//’Í‚Ý’†‚É’ÊíUŒ‚‚Ì“ü—Í‚ª‚ ‚Á‚½ê‡
+		//æŽ´ã¿ä¸­ã«é€šå¸¸æ”»æ’ƒã®å…¥åŠ›ãŒã‚ã£ãŸå ´åˆ
 		if (m_owner->GetAttackFlag() &&
-			//Œ»Ý’Í‚ñ‚Å‚¢‚éƒ„ƒNƒU‚ª‚à‚ª‚«ó‘Ô‚Å‚ ‚éŽ–‚ðŠm”F
+			//ç¾åœ¨æŽ´ã‚“ã§ã„ã‚‹ãƒ¤ã‚¯ã‚¶ãŒã‚‚ãŒãçŠ¶æ…‹ã§ã‚ã‚‹äº‹ã‚’ç¢ºèª
 			m_owner->GetGrabingToAttackType() == YakuzaAnimation::en_grabed)
 		{
-			//Œ»Ý’Í‚ñ‚Å‚¢‚éƒ„ƒNƒU‚ÉUŒ‚‚µ‚½Ž–‚ð“`‚¦‚é
+			//ç¾åœ¨æŽ´ã‚“ã§ã„ã‚‹ãƒ¤ã‚¯ã‚¶ã«æ”»æ’ƒã—ãŸäº‹ã‚’ä¼ãˆã‚‹
 			m_owner->HasCharacterSendToGrabingOrGrabBedYakuzaData(
 				YakuzaAnimation::en_grabAttack
 			);
 
-			//Ž©g‚Ì’Í‚ÝUŒ‚ƒ^ƒCƒv‚ðƒŠƒZƒbƒg
+			//è‡ªèº«ã®æŽ´ã¿æ”»æ’ƒã‚¿ã‚¤ãƒ—ã‚’ãƒªã‚»ãƒƒãƒˆ
 			m_owner->SetGrabingToAttackType(-1);
 
-			//’Í‚ÝUŒ‚‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚ÖˆÚs
+			//æŽ´ã¿æ”»æ’ƒã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã¸ç§»è¡Œ
 			m_state = en_grabingAttackMove;
 		}
-		//’Í‚Ý’†‚ÉƒtƒBƒjƒbƒVƒ…ƒuƒƒE‚Ì“ü—Í‚ª‚ ‚Á‚½ê‡
+		//æŽ´ã¿ä¸­ã«ãƒ•ã‚£ãƒ‹ãƒƒã‚·ãƒ¥ãƒ–ãƒ­ã‚¦ã®å…¥åŠ›ãŒã‚ã£ãŸå ´åˆ
 		else if (m_owner->GetFinishBrowFlag() &&			
-				//Œ»Ý’Í‚ñ‚Å‚¢‚éƒ„ƒNƒU‚ª‚à‚ª‚«ó‘Ô‚Å‚ ‚éŽ–‚ðŠm”F
+				//ç¾åœ¨æŽ´ã‚“ã§ã„ã‚‹ãƒ¤ã‚¯ã‚¶ãŒã‚‚ãŒãçŠ¶æ…‹ã§ã‚ã‚‹äº‹ã‚’ç¢ºèª
 				m_owner->GetGrabingToAttackType() == YakuzaAnimation::en_grabed)
 		{
-			//Œ»Ý’Í‚ñ‚Å‚¢‚éƒ„ƒNƒU‚ÉƒtƒBƒjƒbƒVƒ…ƒuƒƒE‚ð‚µ‚½Ž–‚ð“`‚¦‚é
+			//ç¾åœ¨æŽ´ã‚“ã§ã„ã‚‹ãƒ¤ã‚¯ã‚¶ã«ãƒ•ã‚£ãƒ‹ãƒƒã‚·ãƒ¥ãƒ–ãƒ­ã‚¦ã‚’ã—ãŸäº‹ã‚’ä¼ãˆã‚‹
 			m_owner->HasCharacterSendToGrabingOrGrabBedYakuzaData(
 				YakuzaAnimation::en_grabThrow
 			);
 
-			m_owner->SetGrabThrowPos(m_owner->GetHasCharactarPos());
-
-			//“Š‚°‚ÌˆÊ’u’²®‚ðs‚¤
+			//æŠ•ã’ã®ä½ç½®èª¿æ•´ã‚’è¡Œã†
 			m_owner->HasCharacterGrabingYakuzaThrowPositionAdjustment(
 				m_owner->GetHasCharactarForward() * -1.0f,
 				m_owner->GetHasCharactarForward() * -1.0f,
 				150.0f
  			);
 
-			//’Í‚Ý’†‚ÍUŒ‚‚ðŽó‚¯•t‚¯‚È‚¢‚æ‚¤‚É
+			m_owner->SetGrabThrowFoward(m_owner->GetHasCharactarForward() * -1.0f);
+
+			//æŽ´ã¿ä¸­ã¯æ”»æ’ƒã‚’å—ã‘ä»˜ã‘ãªã„ã‚ˆã†ã«
 			m_owner->HasCharacterSetIsInvincible(true);
 
-			//’Í‚Ý“Š‚°‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚ÖˆÚs
+			//æŽ´ã¿æŠ•ã’ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã¸ç§»è¡Œ
 			m_state = en_grabingFinshMove;
 		}
-		//’Í‚Ý’†‚É‚à‚¤ˆê“x’Í‚Ý‚Ì“ü—Í‚ª‚ ‚Á‚½ê‡
+		//æŽ´ã¿ä¸­ã«ã‚‚ã†ä¸€åº¦æŽ´ã¿ã®å…¥åŠ›ãŒã‚ã£ãŸå ´åˆ
 		else if (m_owner->GetGrabFlag() &&
-				//Œ»Ý’Í‚ñ‚Å‚¢‚éƒ„ƒNƒU‚ª‚à‚ª‚«ó‘Ô‚Å‚ ‚éŽ–‚ðŠm”F
+				//ç¾åœ¨æŽ´ã‚“ã§ã„ã‚‹ãƒ¤ã‚¯ã‚¶ãŒã‚‚ãŒãçŠ¶æ…‹ã§ã‚ã‚‹äº‹ã‚’ç¢ºèª
 				m_owner->GetGrabingToAttackType() == YakuzaAnimation::en_grabed ||
-				//‚Ü‚½‚Í’Í‚Ü‚ê‚Ä‚¢‚éƒ„ƒNƒU‚ªŽ©—Í‚Å‚Ì‰ð•ú‚ðŽŽ‚Ý‚½ê‡
+				//ã¾ãŸã¯æŽ´ã¾ã‚Œã¦ã„ã‚‹ãƒ¤ã‚¯ã‚¶ãŒè‡ªåŠ›ã§ã®è§£æ”¾ã‚’è©¦ã¿ãŸå ´åˆ
 				m_owner->GetGrabingToAttackType() == YakuzaAnimation::en_grabSelfRelease)
 		{
-			//Œ»Ý’Í‚ñ‚Å‚¢‚éƒ„ƒNƒU‚É’Í‚Ý‰ðœ‚ð‚µ‚½Ž–‚ð“`‚¦‚é
+			//ç¾åœ¨æŽ´ã‚“ã§ã„ã‚‹ãƒ¤ã‚¯ã‚¶ã«æŽ´ã¿è§£é™¤ã‚’ã—ãŸäº‹ã‚’ä¼ãˆã‚‹
 			m_owner->HasCharacterSendToGrabingOrGrabBedYakuzaData(
 				YakuzaAnimation::en_grabBeCanceled
 			);
-			//’Í‚ÝI—¹‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚ÖˆÚs
+			//æŽ´ã¿çµ‚äº†ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã¸ç§»è¡Œ
 			m_state = en_grabingEndProcess;
 		}
 
 		break;
-	case YakuzaGrabState::en_grabingAttackMove:
+	case YakuzaGrabingState::en_grabingAttackMove:
 
 		m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_grabAttack, 0.1f);
 
@@ -331,7 +339,7 @@ void YakuzaGrabState::OnUpdate()
 		}
 
 		break;
-	case YakuzaGrabState::en_grabingFinshMove:
+	case YakuzaGrabingState::en_grabingFinshMove:
 
 		m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_grabThrow, 0.1f);
 
@@ -343,7 +351,7 @@ void YakuzaGrabState::OnUpdate()
 		}
 
 		break;
-	case YakuzaGrabState::en_grabingEndProcess:
+	case YakuzaGrabingState::en_grabingEndProcess:
 
 		m_owner->HasCharactarPlayAnimation(YakuzaAnimation::en_grabBeCanceled, 0.1f);
 
@@ -356,7 +364,7 @@ void YakuzaGrabState::OnUpdate()
 	}
 }
 
-void YakuzaGrabState::MoveProcess()
+void YakuzaGrabingState::MoveProcess()
 {
 	if (m_owner->IsHasCharacterGrabCollisionActive() || !m_isGoGrabMoveing)
 	{
@@ -379,7 +387,7 @@ void YakuzaGrabState::MoveProcess()
 	m_owner->SetMoveVec(Vector3::Zero);
 }
 
-void YakuzaGrabState::OnExit()
+void YakuzaGrabingState::OnExit()
 {
 	if (m_owner->GetIsDamage() &&
 		m_state == GrabState::en_grabingMove ||
@@ -402,7 +410,7 @@ void YakuzaGrabState::OnExit()
 
 void YakuzaSwayState::OnEnter()
 {
-	//‰ñ”ð“ü—ÍŽž‚Ì“ü—Í•ûŒü‚ðŽæ“¾
+	//å›žé¿å…¥åŠ›æ™‚ã®å…¥åŠ›æ–¹å‘ã‚’å–å¾—
 	m_swayVec = m_owner->GetMoveVec();
 	
 	if (m_swayVec.x == 0.0f &&
@@ -411,7 +419,7 @@ void YakuzaSwayState::OnEnter()
 		m_swayVec = m_owner->GetHasCharactarForward() * -1.0f;
 	}
 
-	//³‹K‰»
+	//æ­£è¦åŒ–
 	m_swayVec.Normalize();
 
 	Vector3 modelForward = m_owner->GetHasCharactarForward();
@@ -449,7 +457,7 @@ void YakuzaSwayState::OnEnter()
 		m_volumeAdjustment = FindGO<VolumeAdjustment>("volumeadjustment");
 	}
 	if (m_volumeAdjustment) {
-		//Œø‰Ê‰¹‚ðo‚·
+		//åŠ¹æžœéŸ³ã‚’å‡ºã™
 		auto handle = SoundManager::Get().PlaySE(SoundId::se_kickingGroundA, false, false, m_volumeAdjustment->GetSEAmount());
 		SoundManager::Get().FindSE(handle);
 	}
@@ -511,13 +519,29 @@ void YakuzaSwayState::OnExit()
 	//	DeleteGO(m_volumeAdjustment);
 	//	m_volumeAdjustment = nullptr;
 	//}
+	m_owner->SetSwayCoolTimer(YakuzaStateConstant::SWAY_COOL_TIME);
 }
 
 //DefenseState
 
 void YakuzaDefenseState::OnEnter()
 {
+	//å…¥åŠ›æ–¹å‘ã«ä½“ã‚’å‘ã‘ã‚‹
+	Vector3 defenseDir = m_owner->GetMoveVec();
 
+	//å…¥åŠ›ãŒãªã‹ã£ãŸå ´åˆã¯æ­£é¢æ–¹å‘ã«é˜²å¾¡
+	if (defenseDir.x == 0.0f &&
+		defenseDir.z == 0.0f)
+	{
+		defenseDir = m_owner->GetHasCharactarForward();
+	}
+
+	m_owner->GetHasCharactarRot().SetRotationYFromDirectionXZ(defenseDir);
+
+	m_owner->SetHasCharactarForward(Vector3::AxisZ);
+	m_owner->GetHasCharactarRot().Apply(m_owner->GetHasCharactarForward());
+
+	m_owner->SetMoveVec(Vector3::Zero);
 }
 
 void YakuzaDefenseState::OnUpdate()
@@ -569,7 +593,7 @@ void YakuzaDamageState::OnUpdate()
 	if (!m_owner->IsHasCharactarPlayAnimation() && param->m_isEndKnockBack)
 	{
 		*param = KnockBackParam{};
-		//ƒmƒbƒNƒoƒbƒN‰Šú‰»ŠÜ‚ß‚Äƒ_ƒ[ƒWƒtƒ‰ƒO‚ðƒŠƒZƒbƒg
+		//ãƒŽãƒƒã‚¯ãƒãƒƒã‚¯åˆæœŸåŒ–å«ã‚ã¦ãƒ€ãƒ¡ãƒ¼ã‚¸ãƒ•ãƒ©ã‚°ã‚’ãƒªã‚»ãƒƒãƒˆ
 		m_owner->SetIsDamage(false,false,*param);
 	}
 }
@@ -720,6 +744,7 @@ void YakuzaGrabBedState::OnExit()
 	//  	DeleteGO(m_volumeAdjustment);
 	//  	m_volumeAdjustment = nullptr;
 	//  }
+	m_owner->SetGrabBedCoolTimer(YakuzaStateConstant::GRABBED_COOL_TIME);
 }
 
 //DeadState
@@ -731,7 +756,7 @@ void YakuzaDeadState::OnEnter()
 
 void YakuzaDeadState::OnUpdate()
 {
-	//UŒ‚’†’f
+	//æ”»æ’ƒä¸­æ–­
 	m_owner->SetIsAttack(false);
 
 	KnockBackParam* param = m_owner->GetKnockBackParam();

@@ -227,7 +227,7 @@ public:
 
 		useStateMachine.SetSwaySpeed(param->dadgeSpeed, param->dadgeAnimSpeed);
 
-		useStateMachine.SetMoveSpeed(param->moveSpeed);
+		useStateMachine.SetAimMoveSpeedRate(param->moveSpeed);
 	}
 
 	void CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) override

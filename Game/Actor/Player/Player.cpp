@@ -4,6 +4,7 @@
 #include "Actor\YakuzaComponents\YakuzaType.h"
 #include "Actor\YakuzaComponents\YakuzaTypeSetFactory.h"
 #include "Actor\YakuzaComponents\YakuzaCharacterDamageManager.h"
+#include "UI/PouseMenuManager.h"
 #include "GameScene\UpdateOrder.h"
 
 //スタート関数
@@ -59,6 +60,11 @@ bool Player::Start()
 //アップデート関数
 void Player::Update()
 {
+	if (PouseMenuSceneManager::GetSceneManagerInstance()->IsPoseMenuActive())
+	{
+		return;
+	}
+
 	//ステートマシン更新
 	GetYakuzaStateMachine().UpdateStateMachine();
 
