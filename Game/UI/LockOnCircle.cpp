@@ -9,7 +9,7 @@ namespace
 	float MAX_DIST = 20.0f;
 
 	float MAX_SCALE = 1.2;
-	float MIN_SCALE = 0.6;
+	float MIN_SCALE = 0.3;
 }
 
 LockOnCircle::LockOnCircle()
