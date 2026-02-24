@@ -8,6 +8,8 @@
 
 #include "Sound\SoundManager.h"
 
+#include "UI/PoseMenu.h"
+
 //インスタンス初期化
 YakuzaCharacterDamageManager* YakuzaCharacterDamageManager::m_instance = nullptr;
 
@@ -97,13 +99,25 @@ void YakuzaCharacterDamageManager::SendEnemyYakuzaDamage(Enemy* sendEnemy, Yakuz
 		{
 			sendEnemy->GetYakuzaStateMachine().SetIsDefense(true, param);
 			
-			SoundManager::Get().PlaySE(SoundId::se_hittingDefenseA);
+			if (!m_volumeAdjustment) {
+				m_volumeAdjustment = FindGO<VolumeAdjustment>("volumeadjustment");
+			}
+			if (m_volumeAdjustment) {
+				auto handle = SoundManager::Get().PlaySE(SoundId::se_hittingDefenseA, false, false, m_volumeAdjustment->GetSEAmount());
+				SoundManager::Get().FindSE(handle);
+			}
 
 			return;
 		}
 	}
 
-	SoundManager::Get().PlaySE(sendDamage.m_seId);
+	if (!m_volumeAdjustment) {
+		m_volumeAdjustment = FindGO<VolumeAdjustment>("volumeadjustment");
+	}
+	if (m_volumeAdjustment) {
+		auto handle = SoundManager::Get().PlaySE(sendDamage.m_seId, false, false, m_volumeAdjustment->GetSEAmount());
+		SoundManager::Get().FindSE(handle);
+	}
 }
 
 void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(YakuzaDamageDatas sendDamage, const Vector3& attackerPos)
@@ -189,13 +203,26 @@ void YakuzaCharacterDamageManager::SendPlayerYakuzaDamage(YakuzaDamageDatas send
 		{
 			m_playerPtr->GetYakuzaStateMachine().SetIsDefense(true, param);
 
-			SoundManager::Get().PlaySE(SoundId::se_hittingDefenseA);
+			if (!m_volumeAdjustment) {
+				m_volumeAdjustment = FindGO<VolumeAdjustment>("volumeadjustment");
+			}
+			if (m_volumeAdjustment)
+			{
+				auto handle = SoundManager::Get().PlaySE(SoundId::se_hittingDefenseA, false, false, m_volumeAdjustment->GetSEAmount());
+				SoundManager::Get().FindSE(handle);
+			}
 
 			return;
 		}
 	}	
 
-	SoundManager::Get().PlaySE(sendDamage.m_seId);
+	if (!m_volumeAdjustment) {
+		m_volumeAdjustment = FindGO<VolumeAdjustment>("volumeadjustment");
+	}
+	if (m_volumeAdjustment) {
+		auto handle = SoundManager::Get().PlaySE(sendDamage.m_seId, false, false, m_volumeAdjustment->GetSEAmount());
+		SoundManager::Get().FindSE(handle);
+	}
 }
 
 YakuzaCharacter* YakuzaCharacterDamageManager::SendPlayerGrabEnemyYakuza(YakuzaCharacter* grabYakuza)

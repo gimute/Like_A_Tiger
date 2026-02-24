@@ -4,6 +4,7 @@
 
 class PoseMenu;
 class IconCursol;
+class Player;
 /**
  * スロットを増やしたい
  * 継承して空っぽ用のクラスを作りたい
@@ -63,34 +64,113 @@ protected:
 //  
 //  	void Render(RenderContext& rc);
 //  
+//  	/** プレイヤーとの当たり判定を確認 */
+//  	void CheckPlayerCollision();
+//  
+//  	/** 縮むアニメーションを再生 */
+//  	void PlayShrinkAnimation();
+//  
+//  	/** 拡張するアニメーションを再生 */
+//  	void PlayExpandAnimation();
+//  
+//  	void UpdateScaleAnimation();
+//  	/** ランダムでアイテムを付与 */
+//  	void GrantRandomItem();
+//  
 //  	/** 座標設定 */
 //  	void SetPosition(Vector3& pos)
 //  	{
-//  		m_transform.m_position = pos;
+//  		m_transform.m_localPosition = pos;
 //  	}
 //  
 //  	/** 回転率設定 */
 //  	void SetRotation(Quaternion& rot)
 //  	{
-//  		m_transform.m_rotation = rot;
+//  		m_transform.m_localRotation = rot;
 //  	}
 //  
 //  	/** 拡大率設定 */
 //  	void SetScale(Vector3& scale)
 //  	{
-//  		m_transform.m_scale = scale;
+//  		m_transform.m_localScale = scale;
+//  	}
+//  
+//  	Vector3 GetLocalPosition() {
+//  		return m_transform.m_localPosition;
+//  	}
+//  
+//  	/**	アイテムが取得済みか */
+//  	bool IsItemCollected() const {
+//  		return m_collectedItem;
+//  	}
+//  
+//  	/** クールタイム中か */
+//  	bool IsOnCoolDown() const {
+//  		return m_coolDownTimer > 0.0f;
 //  	}
 //  
 //  private:
 //  	Transform m_transform;
 //  
 //  private:
-//  	/** 静的オブジェクトを付与 */
-//  	PhysicsStaticObject physicsStaticObject;
+//  	CollisionObject* m_collision;
 //  	ModelRender m_modelRender;
+//  
+//  	//Vector3 m_position = Vector3(0.0f, 50.0f, 200.0f);
+//  	Vector3 m_scale = Vector3(1.0f, 1.0f, 1.0f);
+//  	Quaternion m_rotation = Quaternion::Identity;
+//  
+//  	float m_radius = 50.0f;
+//  	/** 目標のスケール */
+//  	float m_targetScale = 1.0f;
+//  	/** アニメーション速度 */
+//  	float m_animationSpeed = 3.0f;
+//  	/** クールタイムタイマー */
+//  	float m_coolDownTimer = 0.0f;
+//  
 //  	bool isVisible = true;
+//  	bool m_isPlayerNear = false;
+//  	/** アニメーション中かどうか */
+//  	bool m_isAnimating = false;
+//  	/** アイテムが取得済みかどうか */
+//  	bool m_collectedItem = false;
 //  };
-
+//  
+//  
+//  
+//  class ItemCollisionManager {
+//  private:
+//  	ItemCollisionManager() = default;
+//  	~ItemCollisionManager() = default;
+//  
+//  public:
+//  	static ItemCollisionManager* GetInstance() {
+//  		if (!m_instance) {
+//  			m_instance = new ItemCollisionManager();
+//  		}
+//  		return m_instance;
+//  	}
+//  
+//  	static void DeleteInstance() {
+//  		delete m_instance;
+//  		m_instance = nullptr;
+//  	}
+//  
+//  	void SetPlayerPtr(Player* player) {
+//  		m_playerPtr = player;
+//  	}
+//  
+//  	Player* GetPlayerPtr() const {
+//  		return m_playerPtr;
+//  	}
+//  
+//  	/** アイテムとPlayerとの衝突判定 */
+//  	bool CheckItemPlayerCollision(Item3DModel* item3DModel,float radius);
+//  
+//  private:
+//  	static ItemCollisionManager* m_instance;
+//  	Player* m_playerPtr = nullptr;
+//  };
 
 
 
@@ -111,9 +191,9 @@ public:
 	ItemBase()
 	{
 		m_canvas = std::make_shared<UICanvas>();
-		//m_itemModel = std::make_shared<Item3DModel>();
-		//m_itemModel->Start();
-		//m_itemModel->Update();
+			//m_itemModel = std::make_shared<Item3DModel>();
+			//m_itemModel->Start();
+			//m_itemModel->Update();
 	}
 	virtual~ItemBase() {}
 
@@ -130,9 +210,11 @@ public:
 	virtual void PlayCloseAnimation() = 0;
 
 	/** スケールアニメーションを再生 */
-	virtual void PlayScaleAnimation(){}
+	virtual void PlayScaleItemAnimation() = 0;
 	/** スケールアニメーションを停止してリセット */
-	virtual void StopScaleAnimation() {}
+	virtual void StopScaleItemAnimation() = 0;
+	/** スロットのスケールアニメーション */
+	//virtual void PlayScaleSlotAnimation() = 0;
 	/** 選択状態を設定 */
 	void SetSelected(bool selected) { m_isSelected = selected; }
 
@@ -174,10 +256,6 @@ public:
 	/** 回復量を取得する処理 */
 	virtual float GetHealAmount() = 0;
 
-	//   int GetHealAmout() {
-	//   	return m_healAmount;
-	//   }
-
 	virtual void PlayOpenAnimation()  {
 		if (m_backGroundColorAnimation) {
 			m_backGroundColorAnimation->Play();
@@ -185,6 +263,10 @@ public:
 		if (m_imageColorAnimation) {
 			m_imageColorAnimation->Play();
 		}
+		if (m_scaleSlotAnimation) {
+			m_scaleSlotAnimation->Play();
+		}
+		
 		m_pauseedFullAlpha = false;
 	}
 
@@ -195,23 +277,32 @@ public:
 		if (m_closeImageColorAnimation) {
 			m_closeImageColorAnimation->Play();
 		}
-	}
-
-	void PlayScaleAnimation() override {
-		if (m_scaleAnimation) {
-			m_scaleAnimation->Play();
+		if (m_scaleSlotSmallAnimation) {
+			m_scaleSlotSmallAnimation->Play();
 		}
 	}
 
-	void StopScaleAnimation() override {
-		if (m_scaleAnimation) {
-			m_scaleAnimation->Stop();
+	void PlayScaleItemAnimation() override {
+		if (m_selectedItemScaleAnimation) {
+			m_selectedItemScaleAnimation->Play();
+		}
+	}
+
+	void StopScaleItemAnimation() override {
+		if (m_selectedItemScaleAnimation) {
+			m_selectedItemScaleAnimation->Stop();
 		}
 		/** スケールを元に戻す */
 		if (m_image) {
 			m_image->m_transform.m_localScale = Vector3::One;
 		}
 	}
+
+	//  void PlayScaleSlotAnimation() override {
+	//  	if (m_scaleSlotAnimation) {
+	//  		m_scaleSlotAnimation->Play();
+	//  	}
+	//  }
 protected:
 	/** 回復量を保持する変数 */
 	float m_healAmount = 0.0f;
@@ -221,8 +312,12 @@ protected:
 	/** 閉じる用カラーアニメーション */
 	std::unique_ptr<ColorUIAnimation> m_closeBackGoundColorAnimation = nullptr;
 	std::unique_ptr<ColorUIAnimation> m_closeImageColorAnimation = nullptr;
-	/** スケールアニメーション */
-	std::unique_ptr<ScaleUIAnimation> m_scaleAnimation = nullptr;
+	/** アイテム選択時のスケールアニメーション */
+	std::unique_ptr<ScaleUIAnimation> m_selectedItemScaleAnimation = nullptr;
+	/** スロットの拡大スケールアニメーション */
+	std::unique_ptr<ScaleUIAnimation> m_scaleSlotAnimation = nullptr;
+	/** スロットの縮小スケールアニメーション */
+	std::unique_ptr<ScaleUIAnimation> m_scaleSlotSmallAnimation = nullptr;
 
 	std::shared_ptr<UIImage> m_image;
 	std::shared_ptr<UIImage> m_backgroundImage;
@@ -345,13 +440,25 @@ public:
 		if (m_backGroundColorAnimation){
 			m_backGroundColorAnimation->Play();
 		}
+		if (m_scaleSlotAnimation) {
+			m_scaleSlotAnimation->Play();
+		}
 	}
 
 	void PlayCloseAnimation() override {
 		if (m_closeBackGoundColorAnimation) {
 			m_closeBackGoundColorAnimation->Play();
 		}
+		if (m_scaleSlotSmallAnimation) {
+			m_scaleSlotSmallAnimation->Play();
+		}
 	}
+	void PlayScaleItemAnimation() override {
+		if (m_scaleSlotAnimation) {
+			m_scaleSlotAnimation->Play();
+		}
+	}
+
 	float GetHealAmount() override {
 		return 0;
 	}
@@ -436,7 +543,7 @@ class ItemPosePanel : public PosePanelBase {
 private:
 	/** アイテムパネル用のデータ */
 	const PosePanelInitData defaultItemPosePanel{
-		"Assets/spriteData/PoseMenu/poseMenu_item.DDS",640,360,
+		"Assets/spriteData/PoseMenu/poseMenu_item.DDS",0,0,
 	};
 
 	/** フレーム用のデータ */
@@ -470,6 +577,9 @@ public:
 		if (m_colorAnimation) {
 			m_colorAnimation->Play();
 		}
+		if (m_openScaleAnimation) {
+			m_openScaleAnimation->Play();
+		}
 		// 各スロットのアイテムのアニメーションも開始
 		for (auto& slot : m_itemSlotList) {
 			if (slot && slot->GetItem()) {
@@ -482,25 +592,36 @@ public:
 		if (m_closeColorAnimation) {
 			m_closeColorAnimation->Play();
 		}
+		if (m_closeScaleAnimation) {
+			m_closeScaleAnimation->Play();
+		}
 		//各スロットのアイテムのアニメーションも開始
 		for (auto& slot : m_itemSlotList) {
 			if (slot && slot->GetItem()) {
 				slot->GetItem()->PlayCloseAnimation();
+				//slot->GetItem()->
 			}
 		}
 	}
 
 	/** カーソル位置が変更されたときに呼ぶ */
 	void OnCursolIndexChanged(int newIndex);
-
+	void SetUserManualVisible(bool visible) { m_isUserManualVisible = visible; }
 
 private:
 	ItemPosePanel::RefItemBasePtr MakeSharedItem(const EnItemType type);
 
 private:
 	std::shared_ptr<UIImage> m_image;
+	std::shared_ptr<UIImage> m_userManualImage;
+
+	/** UIアニメーション */
 	std::unique_ptr<ColorUIAnimation> m_colorAnimation = nullptr;
 	std::unique_ptr<ColorUIAnimation> m_closeColorAnimation = nullptr;
+	std::unique_ptr<ScaleUIAnimation> m_openScaleAnimation = nullptr;
+	std::unique_ptr<ScaleUIAnimation> m_closeScaleAnimation = nullptr;
+	std::unique_ptr<ScaleUIAnimation> m_scaleitemAnimation = nullptr;
+
 	std::vector<RefItemBasePtr> m_itemList;	//マスターアイテムリスト
 	UILayout m_uiLayout;
 
@@ -512,6 +633,8 @@ private:
 	int m_previousCursorIndex = -1;
 
 	int m_testIndex = 0;
+
+	bool m_isUserManualVisible = false;
 
 
 	std::vector<std::shared_ptr<ItemIconInformation>> m_itemInfoList;
@@ -534,9 +657,23 @@ class ManualControlPosePanel : public PosePanelBase {
 private:
 	/** 操作説明パネル用のデータ */
 	const PosePanelInitData defaultManualControlPosePanel{
-		"Assets/spriteData/PoseMenu/Controller.DDS",
+		"Assets/spriteData/PoseMenu/Controller/ControllerBase.DDS",
 		640,
 		400,
+	};
+
+public:
+	/** ボタンの種類 */
+	enum class ButtonType {
+		L1,
+		R1,
+		LStick,
+		RStick,
+		A,
+		B,
+		X,
+		Y,
+		Count	//総数
 	};
 
 public:
@@ -549,23 +686,160 @@ public:
 
 	void Init(const PosePanelInitData* initData = nullptr) override;
 
+	std::shared_ptr<UIImage> GetUserManualImage() const { return m_userManual; }
+
 	void PlayOpenAnimation() override {
 		if (m_openImageColorAnimation) {
 			m_openImageColorAnimation->Play();
+		}
+		if (m_openScaleAnimation) {
+			m_openScaleAnimation->Play();
+		}
+		if (m_openControllerColorAnimation) {
+			m_openControllerColorAnimation->Play();
+		}
+		if (m_openControllerScaleAnimation) {
+			m_openControllerScaleAnimation->Play();
 		}
 	}
 	void PlayCloseAnimation() override {
 		if (m_closeImageColorAnimation) {
 			m_closeImageColorAnimation->Play();
 		}
+		if (m_closeScaleAnimation) {
+			m_closeScaleAnimation->Play();
+		}
+		if (m_closeControllerColorAnimation) {
+			m_closeControllerColorAnimation->Play();
+		}
+		if (m_closeControllerScaleAnimation) {
+			m_closeControllerScaleAnimation->Play();
+		}
+	}
+
+	/** 指定ボタンの押下アニメーション開始 */
+	void PlayPushButton(ButtonType type) {
+		int index = static_cast<int>(type);
+		if (m_buttonAnimations[index]
+			&& !m_buttonPlaying[index]) {
+			m_buttonAnimations[index]->Play();
+			//TODO: フラグを変数ではないようにしたい
+			m_buttonPlaying[index] = true;
+		}
+
+
+		//  if (m_buttonL1_OpenColorAnimation
+		//  	&&!m_isTest) {
+		//  	m_buttonL1_OpenColorAnimation->Play();
+		//  	m_isTest = true;
+		//  }
+		
+		
+	}
+
+	//  void PlayPushRBButton() {
+	//  	if (m_buttonR1_OpenColorAnimation
+	//  		&& !m_isTest2) {
+	//  		m_buttonR1_OpenColorAnimation->Play();
+	//  		m_isTest2 = true;
+	//  	}
+	//  }
+
+	void PlayReleseButton(ButtonType type) {
+		int index = static_cast<int>(type);
+		if (m_buttonPlaying[index]) {
+			if (m_buttonImages[index]) {
+				m_buttonAnimations[index]->Stop();
+				m_buttonImages[index]->SetColor(Vector4(1.0f, 1.0f, 1.0f, 0.0f));
+			}
+			//アニメーションを再作成
+			m_buttonPlaying[index] = false;
+		}
+	}
+
+private:
+	/** ボタンアニメーションを再作成 */
+	void ResetButtonAnimation(ButtonType type) {
+		int index = static_cast<int>(type);
+		std::vector<float> timeList = { 1.0f,1.0f };
+		std::vector<Vector4> colorList = { Vector4(1.0f,1.0f,1.0f,0.0f),Vector4::White,Vector4(1.0f,1.0f,1.0f,0.0f) };
+
+		m_buttonAnimations[index] = std::make_unique<ColorUIAnimation>(
+			m_buttonImages[index], true, EasingType::EaseInOut, timeList, colorList);
 	}
 
 private:
 	std::shared_ptr<UIImage> m_image;
+	std::shared_ptr<UIImage> m_userManual;
+	std::shared_ptr<UIImage> m_buttonL1;
+	std::shared_ptr<UIImage> m_buttonR1;
+	std::shared_ptr<UIImage> m_buttonRStick;
+	std::shared_ptr<UIImage> m_buttonLStick;
+	std::shared_ptr<UIImage> m_buttonA;
+	std::shared_ptr<UIImage> m_buttonB;
+	std::shared_ptr<UIImage> m_buttonX;
+	std::shared_ptr<UIImage> m_buttonY;
+	std::shared_ptr<UIImage> m_controllerButton;
+
+	/** UIアニメーション */
 	std::unique_ptr<ColorUIAnimation> m_openImageColorAnimation;
+	std::unique_ptr<ColorUIAnimation> m_openControllerColorAnimation;
 	std::unique_ptr<ColorUIAnimation> m_closeImageColorAnimation;
+	std::unique_ptr<ColorUIAnimation> m_closeControllerColorAnimation;
+	std::unique_ptr<ScaleUIAnimation> m_openScaleAnimation = nullptr;
+	std::unique_ptr<ScaleUIAnimation> m_openControllerScaleAnimation = nullptr;
+	std::unique_ptr<ScaleUIAnimation> m_closeScaleAnimation = nullptr;
+	std::unique_ptr<ScaleUIAnimation> m_closeControllerScaleAnimation = nullptr;
+
+
+	/** ボタンUIアニメーション */
+	std::unique_ptr<ColorUIAnimation> m_buttonL1_OpenColorAnimation = nullptr;
+	//std::unique_ptr<ColorUIAnimation> m_buttonL1_CloseColorAnimation = nullptr;
+	std::unique_ptr<ColorUIAnimation> m_buttonR1_OpenColorAnimation = nullptr;
+	//std::unique_ptr<ColorUIAnimation> m_buttonR1_CloseColorAnimation = nullptr;
+	std::unique_ptr<ColorUIAnimation> m_buttonRStick_OpenColorAnimation = nullptr;
+	//std::unique_ptr<ColorUIAnimation> m_buttonRStick_CloseColorAnimation = nullptr;
+	std::unique_ptr<ColorUIAnimation> m_buttonLStick_OpenColorAnimation = nullptr;
+	//std::unique_ptr<ColorUIAnimation> m_buttonLStick_CloseColorAnimation = nullptr;
+	std::unique_ptr<ColorUIAnimation> m_buttonA_OpenColorAnimation = nullptr;
+	//std::unique_ptr<ColorUIAnimation> m_buttonA_CloaseColorAnimation = nullptr;
+	std::unique_ptr<ColorUIAnimation> m_buttonB_OpenColorAnimation = nullptr;
+	//std::unique_ptr<ColorUIAnimation> m_buttonB_CloseColorAnimation = nullptr;
+	std::unique_ptr<ColorUIAnimation> m_buttonX_OpenColorAnimation = nullptr;
+	//std::unique_ptr<ColorUIAnimation> m_buttonX_CloseColorAnimation = nullptr;
+	std::unique_ptr<ColorUIAnimation> m_buttonY_OpenColorAnimation = nullptr;
+	//std::unique_ptr<ColorUIAnimation> m_buttonY_CloseColorAnimation = nullptr;
+
+
+	/** ボタンUIを配列で管理 */
+	std::array<std::shared_ptr<UIImage>, static_cast<size_t>(ButtonType::Count)> m_buttonImages;
+	/** ボタンUIアニメーションを配列で管理 */
+	std::array < std::unique_ptr<ColorUIAnimation>, static_cast<size_t>(ButtonType::Count)> m_buttonAnimations;
+	/** ボタン再生中フラグを配列で管理 */
+	std::array<bool, static_cast<size_t>(ButtonType::Count)> m_buttonPlaying = {};
 };
 
+
+
+//  class ManualControlButtonUI : public IGameObject{
+//  public:
+//  	ManualControlButtonUI();
+//  	~ManualControlButtonUI();
+//  	bool Start();
+//  	void Update();
+//  	void Render(RenderContext& rc);
+//  
+//  private:
+//  	std::shared_ptr<UIImage> m_pushUI_L1;
+//  	std::shared_ptr<UIImage> m_pushUI_R1;
+//  	std::shared_ptr<UIImage> m_pushUI_RStick;
+//  	std::shared_ptr<UIImage> m_pushUI_LStick;
+//  	std::shared_ptr<UIImage> m_pushUI_A;
+//  	std::shared_ptr<UIImage> m_pushUI_B;
+//  	std::shared_ptr<UIImage> m_pushUI_X;
+//  	std::shared_ptr<UIImage> m_pushUI_Y;
+//  	
+//  };
 
 
 
@@ -578,8 +852,8 @@ private:
 	/** 設定パネル用のデータ */
 	const PosePanelInitData defaultSettingPosePanel{
 		"Assets/spriteData/PoseMenu/poseMenu_setting.DDS",
-		640,
-		360,
+		0,
+		0,
 	};
 
 public:
@@ -592,10 +866,17 @@ public:
 
 	void Init(const PosePanelInitData* initData = nullptr) override;
 
+	std::shared_ptr<UIImage> GetUserManualImage() const { return m_userManualImage; }
+
+	void SetUserManualVisible(bool visible) { m_isUserManualVisible = visible; }
+
 
 	void PlayOpenAnimation() override {
 		if (m_openImageColorAnimation) {
 			m_openImageColorAnimation->Play();
+		}
+		if (m_openScaleAnimation) {
+			m_openScaleAnimation->Play();
 		}
 	}
 
@@ -603,13 +884,21 @@ public:
 		if (m_closeImageColorAnimation) {
 			m_closeImageColorAnimation->Play();
 		}
+		if (m_closeScaleAnimation) {
+			m_closeScaleAnimation->Play();
+		}
 	}
 
 private:
 	std::shared_ptr<UIImage> m_image;
+	std::shared_ptr<UIImage> m_userManualImage;
 
 	std::unique_ptr<ColorUIAnimation> m_openImageColorAnimation = nullptr;
 	std::unique_ptr<ColorUIAnimation> m_closeImageColorAnimation = nullptr;
+	std::unique_ptr<ScaleUIAnimation> m_openScaleAnimation = nullptr;
+	std::unique_ptr<ScaleUIAnimation> m_closeScaleAnimation = nullptr;
+
+	bool m_isUserManualVisible = false;
 };
 
 
@@ -652,16 +941,13 @@ public:
 	/** 選択した時の点滅処理 */
 	void PushAlphaCursol();
 
-	void PlayOpenAnimation() override {
-		if (m_imageColorAnimation){
-			m_imageColorAnimation->Play();
-		}
-	}
+	void SetAlphaVisible(){ if (m_image) { m_image->SetColor(Vector4::White);}}
 
+	void SetAlphaInvisible() { if (m_image) { m_image->SetColor(Vector4(1.0f,1.0f,1.0f,0.0f)); } }
+	void PlayOpenAnimation() override {
+	}
+	
 	void PlayCloseAnimation() override {
-		if (m_closeImageColorAnimation) {
-			m_closeImageColorAnimation->Play();
-		}
 	}
 
 	/** カーソル位置をリセット */
@@ -672,8 +958,11 @@ public:
 
 private:
 	std::shared_ptr<UIImage> m_image;
+	/** UIアニメーション */
 	std::unique_ptr<ColorUIAnimation> m_imageColorAnimation;
 	std::unique_ptr<ColorUIAnimation> m_closeImageColorAnimation;
+	std::unique_ptr<ScaleUIAnimation> m_openScaleAnimation = nullptr;
+	std::unique_ptr<ScaleUIAnimation> m_closeScaleAnimation = nullptr;
 
 	int m_currentCursolIndex = 0;
 	const int m_maxCursolIndex = 2;
@@ -728,11 +1017,17 @@ public:
 		if (m_imageColorAnimation) {
 			m_imageColorAnimation->Play();
 		}
+		if (m_openScaleAnimation) {
+			m_openScaleAnimation->Play();
+		}
 	}
 
 	void PlayCloseAnimation() override {
 		if (m_closeImageColorAnimation) {
 			m_closeImageColorAnimation->Play();
+		}
+		if (m_closeScaleAnimation) {
+			m_closeScaleAnimation->Play();
 		}
 	}
 
@@ -740,6 +1035,8 @@ private:
 	std::shared_ptr<UIImage> m_image;
 	std::unique_ptr<ColorUIAnimation> m_imageColorAnimation = nullptr;
 	std::unique_ptr<ColorUIAnimation> m_closeImageColorAnimation = nullptr;
+	std::unique_ptr<ScaleUIAnimation> m_openScaleAnimation = nullptr;
+	std::unique_ptr<ScaleUIAnimation> m_closeScaleAnimation = nullptr;
 
 	Vector3 pos = Vector3::Zero;
 	int m_currentCursolIndex = 0;
@@ -781,11 +1078,17 @@ public:
 		if (m_colorAnimation) {
 			m_colorAnimation->Play();
 		}
+		if (m_openScaleAnimation) {
+			m_openScaleAnimation->Play();
+		}
 	}
 
 	void PlayCloseAnimation() override {
 		if (m_closeImageColorAnimation) {
 			m_closeImageColorAnimation->Play();
+		}
+		if (m_closeScaleAnimation) {
+			m_closeScaleAnimation->Play();
 		}
 	}
 
@@ -793,6 +1096,8 @@ private:
 	std::shared_ptr<UIImage> m_image;
 	std::unique_ptr<ColorUIAnimation> m_colorAnimation = nullptr;
 	std::unique_ptr<ColorUIAnimation> m_closeImageColorAnimation = nullptr;
+	std::unique_ptr<ScaleUIAnimation> m_openScaleAnimation = nullptr;
+	std::unique_ptr<ScaleUIAnimation> m_closeScaleAnimation = nullptr;
 };
 
 
@@ -826,18 +1131,35 @@ public:
 		if (m_colorAnimation) {
 			m_colorAnimation->Play();
 		}
+		if (m_openScaleAnimation) {
+			m_openScaleAnimation->Play();
+		}
 	}
 
 	void PlayCloseAnimation() override {
 		if (m_closeColorAnimation) {
 			m_closeColorAnimation->Play();
 		}
+		if (m_closeScaleAnimation) {
+			m_closeScaleAnimation->Play();
+		}
+	}
+	/** 開くスケールアニメーションが完了したか */
+	bool IsOpenScaleCompleted() const {
+		return m_openScaleAnimation && m_openScaleAnimation->IsCompleted();
+	}
+
+	/** 閉じるスケールアニメーションが完了したか */
+	bool IsCloseScaleCompleted() const {
+		return m_closeScaleAnimation && m_closeScaleAnimation->IsCompleted();
 	}
 
 private:
 	std::shared_ptr<UIImage> m_image;
 	std::unique_ptr<ColorUIAnimation> m_colorAnimation = nullptr;
 	std::unique_ptr<ColorUIAnimation> m_closeColorAnimation = nullptr;
+	std::unique_ptr<ScaleUIAnimation> m_openScaleAnimation = nullptr;
+	std::unique_ptr<ScaleUIAnimation> m_closeScaleAnimation = nullptr;
 };
 
 
@@ -873,14 +1195,18 @@ public:
 private:
 	std::shared_ptr<UICanvas> m_canvas;
 	std::shared_ptr<UIImage> m_cursolUI;
+	std::shared_ptr<UIImage> m_userManualUI;
 
 	std::unique_ptr<PositionUIAnimation> m_cursolPositionAnimation = nullptr;
 	std::unique_ptr<ColorUIAnimation> m_cursolColorAnimaiton = nullptr;
+	std::unique_ptr<ScaleUIAnimation> m_openScaleAnimation = nullptr;
+	std::unique_ptr<ScaleUIAnimation> m_closeScaleAnimation = nullptr;
 
 	int m_currentCursolIndex = 0;
 
 	PoseMenu* m_owner = nullptr;
 
+	bool m_isActived = false;
 public:
 	InSelect();
 	~InSelect();
@@ -889,6 +1215,20 @@ public:
 	void Render(RenderContext& rc) override;
 
 	void SetOwner(PoseMenu* owner) { m_owner = owner; }
+
+	bool IsActived() const { return m_isActived; }
+
+	void SetActived(bool isActived) {
+		m_isActived = isActived;
+		if (!isActived) {
+			m_result = SelectResult::None;
+			m_currentCursolIndex = 0;
+			//カーソル位置も初期位置に戻す
+			if (m_cursolUI) {
+				m_cursolUI->m_transform.m_localPosition = Vector3(0.0f, -10.0f, 0.0f);
+			}
+		}
+	}
 };
 
 
@@ -939,6 +1279,8 @@ private:
 
 	std::vector<std::shared_ptr<UIImage>> m_baseUIList;
 
+	std::unique_ptr<ScaleUIAnimation> m_openScaleAnimation = nullptr;
+	std::unique_ptr<ScaleUIAnimation> m_closeScaleAnimation = nullptr;
 
 	/** baseUI */
 	std::unique_ptr<ColorUIAnimation> m_openBaseUIColorAnimation = nullptr;
@@ -962,12 +1304,17 @@ private:
 	std::unique_ptr<ColorUIAnimation> m_openTextVolumeUIColorAnimation = nullptr;
 	std::unique_ptr<ColorUIAnimation> m_closeTextVolumeUIColorAnimation = nullptr;
 	
+	/** canvas用拡縮アニメーション */
+	std::unique_ptr<ScaleUIAnimation> m_openScaleCanvasAnimation = nullptr;
+	std::unique_ptr<ScaleUIAnimation> m_closeScaleCanvasAnimation = nullptr;
 
 	int m_currentSettingCursolIndex = 0;
 
 	bool m_isVisible = false;
 
 	PoseMenu* m_owner = nullptr;
+
+	bool m_isActived = false;
 
 public:
 	Setting();
@@ -980,11 +1327,24 @@ public:
 
 	void SetOwner(PoseMenu* owner) { m_owner = owner; }
 
+	bool IsActived() const { return m_isActived; }
+	void SetActived(bool isActived);
+
+	/** アニメーションなしで即座にアクティブ状態を変更 */
+	void SetActivedImmediate(bool isActived) {
+		m_isActived = isActived;
+		if (!isActived) {
+			m_result = SelectResult::None;
+		}
+	}
 	void PlayOpenAnimation() {
 		for (auto& anim : m_openBaseUIColorAnimationList) {
 			if (anim) {
 				anim->Play();
 			}
+		}
+		if (m_openScaleAnimation) {
+			m_openScaleAnimation->Play();
 		}
 
 		if (m_openBaseUIColorAnimation) {
@@ -999,12 +1359,21 @@ public:
 		if (m_openTextVolumeUIColorAnimation) {
 			m_openTextVolumeUIColorAnimation->Play();
 		}
+		if (m_openScaleCanvasAnimation) {
+			m_openScaleCanvasAnimation->Play();
+		}
+		if (m_openScaleCanvasAnimation) {
+			m_openScaleCanvasAnimation->Play();
+		}
 	}
 	void PlayCloseAnimation() {
 		for (auto& anim : m_closeBaseUIColorAnimationList) {
 			if (anim) {
 				anim->Play();
 			}
+		}
+		if (m_closeScaleAnimation) {
+			m_closeScaleAnimation->Play();
 		}
 
 		if (m_closeBaseUIColorAnimation) {
@@ -1018,6 +1387,12 @@ public:
 		}
 		if (m_closeTextVolumeUIColorAnimation) {
 			m_closeTextVolumeUIColorAnimation->Play();
+		}
+		if (m_closeScaleCanvasAnimation) {
+			m_closeScaleCanvasAnimation->Play();
+		}
+		if (m_closeScaleCanvasAnimation) {
+			m_closeScaleCanvasAnimation->Play();
 		}
 	}
 };
@@ -1059,15 +1434,102 @@ public:
 	bool IsYes() const { return m_currentCursolIndex == enNextType_Yes; }
 	bool IsNo() const { return m_currentCursolIndex == enNextType_No; }
 
+	bool IsActived() const { return m_isActived; }
+	void SetActived(bool isActived) {
+		m_isActived = isActived;
+		// アクティブにしたときは結果をリセット
+		if (isActived) {
+			m_result = EnNextType::enNextType_None;
+			m_currentCursolIndex = 0;
+		}
+	}
+
 private:
 	std::shared_ptr<UICanvas> m_canvas;
 	std::shared_ptr<UIImage> m_cursolUI;
+	std::shared_ptr<UIImage> m_userManualUI;
 
 	std::unique_ptr<ColorUIAnimation> m_cursolUIColorAnimation = nullptr;
 
 	int m_currentCursolIndex = 0;
 
 	PoseMenu* m_owner = nullptr;
+
+	bool m_isActived = false;
+};
+
+
+
+
+/*************************************************/
+
+
+class VolumeAdjustment : public IGameObject{
+public:
+	enum EnNextType {
+		enNextType_BGM,
+		enNextType_SE,
+		enNextType_None,
+	};
+
+	EnNextType m_volumeResult = EnNextType::enNextType_BGM;
+
+	struct PosXData
+	{
+		float m_positionX;
+	};
+
+public:
+	VolumeAdjustment();
+	~VolumeAdjustment();
+
+	bool Start() override;
+	void Update() override;
+	void Render(RenderContext& rc) override;
+
+	void SetOwner(PoseMenu* owner) { m_owner = owner; }
+	EnNextType GetResult() const { return m_volumeResult; }
+	
+	bool IsActived() const { return m_isActived; }
+	void SetActived(bool isActived) {
+		m_isActived = isActived; 
+		// アクティブにしたときは結果をリセット
+		if (isActived) { 
+			m_volumeResult = enNextType_BGM; 
+			m_currentResultIndex = 0;
+		}
+	}
+
+	float GetBGMAmount() { return m_bgmAmount;}
+	float GetSEAmount() { return m_seAmount;}
+	void SetBGMAmout(float bgmAmount) { m_bgmAmount = bgmAmount; }
+	void SetSEAmout(float seAmount) { m_seAmount = seAmount; }
+
+private:
+	/** UI */
+	std::shared_ptr<UICanvas> m_canvas;
+	std::shared_ptr<UIImage> m_baseUI;
+	std::shared_ptr<UIImage> m_bgmAmountUI;
+	std::shared_ptr<UIImage> m_bgmKnobUI;
+	std::shared_ptr<UIImage> m_seAmountUI;
+	std::shared_ptr<UIImage> m_seKnobUI;
+	std::shared_ptr<UIImage> m_listCursolUI;
+	std::shared_ptr<UIImage> m_frameBarUI;
+	std::shared_ptr<UIImage> m_userManualUI;
+	/** UIアニメーション */
+	std::unique_ptr < ColorUIAnimation> m_listCursolUIColorAnimation;
+
+	PoseMenu* m_owner = nullptr;
+
+	float m_bgmAmount = 0.5f;
+	float m_seAmount = 0.5f;
+
+	int m_currentVolumeIndex = 5;
+	int m_currentSEVolumeIndex = 5;
+	int m_currentResultIndex = 0;
+	int m_cursolIndex = 0;
+
+	bool m_isActived = false;
 };
 
 
@@ -1097,6 +1559,13 @@ private:
 		"Assets/spriteData/PoseMenu/poseMenu_base.DDS",1280,720,
 	};
 
+
+	enum class StickType
+	{
+		L,
+		R,
+	};
+
 public:
 	PoseMenu();
 	virtual ~PoseMenu() override;
@@ -1119,6 +1588,10 @@ public:
 private:
 	/** タイトル遷移リクエストを設定 */
 	bool SetRequestReturnToTitle(bool request) { m_isRequestReturnToTitle = request; }
+
+	// @todo for test
+	void UpdateCallbackButton(const EnButton inputButtonType, const ManualControlPosePanel::ButtonType uiButtonType);
+	void UpdateCallbackStick(const StickType stickType, const ManualControlPosePanel::ButtonType uiButtonType);
 
 public:
 	void AddItemInfo(ItemIconInformation* info){
@@ -1177,22 +1650,31 @@ private:
 
 private:
 	std::shared_ptr<UICanvas> m_canvas = nullptr;
+	/** カラーアニメーション */
 	std::unique_ptr<ColorUIAnimation> m_canvasColorOpenAnimation = nullptr;
 	std::unique_ptr<ColorUIAnimation> m_canvasColorCloseAnimation = nullptr;
+	/** スケールアニメーション */
+	std::unique_ptr<ScaleUIAnimation> m_canvasScaleOpenAnimation = nullptr;
+	std::unique_ptr<ScaleUIAnimation> m_canvasScaleCloseAnimation = nullptr;
 
 	std::shared_ptr<UIImage> m_image = nullptr;
+	std::shared_ptr<UIImage> m_userManualUI = nullptr;
 	std::vector<RefPosePanelBasePtr> m_posePanelList;
 	std::shared_ptr<ItemSlot> m_itemSlot = nullptr;
 	std::shared_ptr<CursolPosePanel> m_cursolPanel = nullptr;
+	std::shared_ptr<ManualControlPosePanel> m_manualControlPanel = nullptr;
 
 	int m_currentListIndex = 0;
 	const int m_maxListIndex = 2;
-
+	/** 前回のリストインデックス */
+	int m_previousListIndex = -1;
 	/** アイテムパネルで使用する情報 */
 	std::vector<std::shared_ptr<ItemIconInformation>> m_itemPanelInfoList;
 	/** カーソルを操作・参照するためにメンバ変数として保持 */
 	std::shared_ptr<IconCursol> m_iconCursol = nullptr;
 	std::shared_ptr<CursolPosePanel> m_cursol = nullptr;
+	/** 参照を保持 */
+	std::shared_ptr<NameListBasePosePanel> m_nameListBase = nullptr;
 
 	bool m_isVisible = false;
 	bool m_isContentfCursolEnable = false;
@@ -1204,24 +1686,37 @@ private:
 
 	/** タイトル遷移リクエスト */
 	bool m_isRequestReturnToTitle = false;
+	bool m_waitingForOpenColor = false;
+	bool m_waitingForCloseColor = false;
+
+	/** 選択中のアイテムインデックス */
+	int m_selectedItemIndex = -1;
+	/** InSelectの入力が消費されたフレームか */
+	bool m_inSelectInputConsumed = false;
 
 private:
 	/** アイテム使用確認UI */
 	InSelect* m_inSelect = nullptr;
 	/** 選択中のアイテムインデックス */
-	int m_selectedItemIndex = -1;
+	//int m_selectedItemIndex = -1;
 	/** 設定用 */
 	Setting* m_setting = nullptr;
 	/** 設定内の使用確認UI */
 	SettingInSelect* m_settingInSelect = nullptr;
+	/** ランダムアイテムモデル */
+	//Item3DModel* m_item3DModel = nullptr;
+	/** 音量調整UI */
+	VolumeAdjustment* m_volumeAdjusutment = nullptr;
 
 public:
 	/** 確認UIが表示中か */
-	bool IsInSelectActive() const { return m_inSelect != nullptr; }
+	bool IsInSelectActive() const { return m_inSelect != nullptr && m_inSelect->IsActived(); }
 	/** 選択結果を取得 */
 	int GetSelectedItemIndex() const { return m_selectedItemIndex; }
 	/** 設定UIがアクティブか */
-	bool IsSettingActive() const { return m_setting != nullptr; }
+	bool IsSettingActive() const { return m_setting != nullptr && m_setting->IsActived(); }
 	/** 設定内の使用確認UIがアクティブか */
-	bool IsSettingInSelectActive() const { return m_settingInSelect != nullptr; }
+	bool IsSettingInSelectActive() const { return m_settingInSelect != nullptr && m_settingInSelect->IsActived(); }
+	/** 設定内の音量調整UIがアクティブか */
+	bool IsActivedVolumeAdjustment() const { return m_volumeAdjusutment != nullptr && m_volumeAdjusutment->IsActived(); }
 };

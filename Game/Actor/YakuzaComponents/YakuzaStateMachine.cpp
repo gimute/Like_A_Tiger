@@ -9,6 +9,8 @@
 #include "Sound\SoundManager.h"
 #include "Sound\SoundId.h"
 
+#include "UI/PoseMenu.h"
+
 IStateBase* YakuzaStateMachine::GetNextState()
 {
 	TimerUpdate();
@@ -463,13 +465,25 @@ void YakuzaStateMachine::OnAnimationEvent(const wchar_t* clipName, const wchar_t
 	//掴み時の攻撃判定イベント
 	if (wcscmp(eventName, L"Attack") == 0)
 	{
-		SoundManager::Get().PlaySE(SoundId::se_hittingLightA, false, false, 0.5f);
+		if (!m_volumeAdjustment) {
+			m_volumeAdjustment = FindGO<VolumeAdjustment>("volumeadjustment");
+		}
+		if (m_volumeAdjustment) {
+			auto handle = SoundManager::Get().PlaySE(SoundId::se_hittingLightA, false, false, m_volumeAdjustment->GetSEAmount());
+			SoundManager::Get().FindSE(handle);
+		}
 
 		YakuzaCharacterDamageManager::GetInstance()->TakeGrabBedYakuzaDamage(m_grabingYakuza, en_grabDamage);
 	}
 	if (wcscmp(eventName, L"footsteps") == 0)
 	{
-		SoundManager::Get().PlaySE(SoundId::se_FootstepsA,false,false,0.3f);
+		if (!m_volumeAdjustment) {
+			m_volumeAdjustment = FindGO<VolumeAdjustment>("volumeadjustment");
+		}
+		if (m_volumeAdjustment) {
+			auto handle = SoundManager::Get().PlaySE(SoundId::se_FootstepsA, false, false, m_volumeAdjustment->GetSEAmount());
+			SoundManager::Get().FindSE(handle);
+		}
 	}
 }
 

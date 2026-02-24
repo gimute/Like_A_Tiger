@@ -33,6 +33,8 @@
 
 #include "UI/MiniMap.h"
 
+#include "Sound/SoundManager.h"
+
 //ステート侵入関数
 void GameInScene::EnterScene()
 {
@@ -55,6 +57,14 @@ void GameInScene::EnterScene()
 				EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4, objData.position, true);
 				return true;
 			}
+			else if (objData.ForwardMatchName(L"ItemBox") == true)
+			{
+				//アイテムボックス
+				m_recoveryItem3DModel = NewGO<RecoveryItem3DModel>(0, "item3dmodel");
+				m_recoveryItem3DModel->SetPosition(objData.position);
+
+				return true;
+			}
 
 			return true;
 		});
@@ -64,7 +74,8 @@ void GameInScene::EnterScene()
 	BattleManager::GetInstance()->RegisterBattleStartCallBack(
 		[&](const BattleStartEventInfo& eventInfo)
 		{
-			BgmManager::GetInstance()->RequestPlayBgm(bgm_inGame_battle, 0.5f);
+			float volume = m_volumeAdjustment->GetBGMAmount();
+			BgmManager::GetInstance()->RequestPlayBgm(bgm_inGame_battle, volume);
 		}
 	);
 
@@ -72,8 +83,8 @@ void GameInScene::EnterScene()
 		[&](const BattleEndEventInfo& eventInfo)
 		{
 			BgmManager::GetInstance()->RequestStopBgm();
-
-			BgmManager::GetInstance()->RequestPlayBgm(bgm_inGame_Explore, 0.5f);
+			float volume = m_volumeAdjustment->GetBGMAmount();
+			BgmManager::GetInstance()->RequestPlayBgm(bgm_inGame_Explore, volume);
 		}
 	);
 
@@ -112,23 +123,23 @@ void GameInScene::EnterScene()
 	m_poseMenu = NewGO<PoseMenu>(0, "posemenu");
 	m_poseMenu->Init();
 
-
-	/** マネージャーの起動セットアップ */
-	auto* manager = PouseMenuSceneManager::GetSceneManagerInstance();
-	manager->InitPouseMenuSceneManager();
-	/** 操作対象のUIをマネージャーに登録 */
-	manager->SetMenuOwner(m_poseMenu);
-	/** 最初のステートを開く演出に設定 */
-	//manager->RequestInitSceneState<PouseMenuOutSideScene>();
+	/** アイテムコリジョンマネージャー */
+	ItemCollisionManager::GetInstance()->SetPlayerPtr(m_player);
 
 
-	/** デバッグテスト */
-	//m_inSelect = NewGO<InSelect>(0);
+   /** マネージャーの起動セットアップ */
+   auto* manager = PouseMenuSceneManager::GetSceneManagerInstance();
+   manager->InitPouseMenuSceneManager();
+   /** 操作対象のUIをマネージャーに登録 */
+   manager->SetMenuOwner(m_poseMenu);
+   /** 最初のステートを開く演出に設定 */
+   //manager->RequestInitSceneState<PouseMenuOutSideScene>();
+
 
 	//セーブマネージャー生成
-	SaveManager::GetInstance().Load();
+   SaveManager::GetInstance().Load();
 	
-	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+   //PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 
    m_gameState = GameState::en_gameLoad;
 
@@ -136,7 +147,17 @@ void GameInScene::EnterScene()
 
    m_skyCube->SetLuminance(0.9f);
 
-   BgmManager::GetInstance()->RequestPlayBgm(bgm_inGame_Explore, 0.5f);
+   if (!m_volumeAdjustment) {
+	   m_volumeAdjustment = FindGO<VolumeAdjustment>("volumeadjustment");
+   }
+
+   float initialVolume = 0.5f;
+   if (m_volumeAdjustment) {
+	   m_volumeAdjustment->SetBGMAmout(initialVolume);
+	   m_volumeAdjustment->SetSEAmout(initialVolume);
+   }
+   SoundManager::Get().SetBGMVolume(initialVolume);
+   BgmManager::GetInstance()->RequestPlayBgm(bgm_inGame_Explore, initialVolume);
 }
 
 //ステート更新関数
@@ -181,6 +202,15 @@ void GameInScene::UpdateScene()
 	if (EnemyManager::GetInstance()->GetCurrentEnemyGroupeNum() != m_miniMap->GetBattleAreaNum())
 	{
 		m_miniMap->ButtleAreaDataUpdate();
+	}
+
+	if (m_volumeAdjustment) {
+		float initialVolume = m_volumeAdjustment->GetBGMAmount();
+		SoundManager::Get().SetBGMVolume(initialVolume);
+	}
+
+	if (m_recoveryItem3DModel) {
+		m_recoveryItem3DModel->Update();
 	}
 }
 
@@ -270,6 +300,16 @@ void GameInScene::DeleteGameObjects()
 		DeleteGO(m_poseMenu);
 		m_poseMenu = nullptr;
 	}
+	/** アイテムボックス削除 */
+	if (m_recoveryItem3DModel) {
+		DeleteGO(m_recoveryItem3DModel);
+		m_recoveryItem3DModel = nullptr;
+	}
+	//アイテムコリジョンマネージャー削除
+	ItemCollisionManager::DeleteInstance();
+	
+	
+	m_volumeAdjustment = nullptr;
 }
 
 //ステート変更要求関数

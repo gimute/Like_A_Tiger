@@ -9,12 +9,16 @@ namespace
 	constexpr float HIT_EFFECT_PLAY_POS_Y = 50.0f;	//エフェクト再生する高さ
 }
 
+class VolumeAdjustment;
+
 class YakuzaCharacterDamageManager
 {
 private:
 	//シングルトーンパターンを採用するため、コンストラクタをprivateにする
 	//インスタンス
 	static YakuzaCharacterDamageManager* m_instance;
+
+	VolumeAdjustment* m_volumeAdjustment = nullptr;
 	//コンストラクタ
 	YakuzaCharacterDamageManager()
 	{

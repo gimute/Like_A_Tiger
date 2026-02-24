@@ -4,12 +4,14 @@
 
 class YakuzaStateMachine;
 class YakuzaAttackComboStateMachine;
+class VolumeAdjustment;
 
 class AttackEndState : public IStateBase
 {
 	appState(AttackEndState)
 protected:
 	YakuzaAttackComboStateMachine* m_owner = nullptr;
+	VolumeAdjustment* m_volumeAdjustment = nullptr;
 public:
 	AttackEndState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
 

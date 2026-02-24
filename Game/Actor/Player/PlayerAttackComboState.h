@@ -8,6 +8,8 @@
 public:\
 	static constexpr uint32_t ID() { return Hash32(#name); }
 
+class VolumeAdjustment;
+
 class PlayerFirstAttackState : public YakuzaGenericAttackState
 {
 	appState(PlayerFirstAttackState)
@@ -28,6 +30,7 @@ class PlayerSecondAttackState : public YakuzaGenericAttackState
 	appState(PlayerSecondAttackState)
 protected:
 	YakuzaAttackComboStateMachine* m_owner = nullptr;
+	VolumeAdjustment* m_volumeAdjustment = nullptr;
 public:
 	PlayerSecondAttackState(
 		AttackStateInitData initData
@@ -61,6 +64,7 @@ class PlayerFourthAttackState : public IStateBase
 	appState(PlayerFourthAttackState)
 protected:
 	YakuzaAttackComboStateMachine* m_owner = nullptr;
+	VolumeAdjustment* m_volumeAdjustment = nullptr;
 public:
 	PlayerFourthAttackState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
 
@@ -96,6 +100,7 @@ class PlayerFirstFinalBlowState : public IStateBase
 	appState(PlayerFirstFinalBlowState)
 protected:
 	YakuzaAttackComboStateMachine* m_owner = nullptr;
+	VolumeAdjustment* m_volumeAdjustment = nullptr;
 public:
 	PlayerFirstFinalBlowState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
 
@@ -114,6 +119,7 @@ class PlayerSecondFinalBlowState : public IStateBase
 	appState(PlayerSecondFinalBlowState)
 protected:
 	YakuzaAttackComboStateMachine* m_owner = nullptr;
+	VolumeAdjustment* m_volumeAdjustment = nullptr;
 public:
 	PlayerSecondFinalBlowState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
 
@@ -132,6 +138,7 @@ class PlayerThirdFinalBlowState : public IStateBase
 	appState(PlayerThirdFinalBlowState)
 protected:
 	YakuzaAttackComboStateMachine* m_owner = nullptr;
+	VolumeAdjustment* m_volumeAdjustment = nullptr;
 public:
 	PlayerThirdFinalBlowState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
 
@@ -150,6 +157,7 @@ class PlayerFourthFinalBlowState : public IStateBase
 	appState(PlayerFourthFinalBlowState)
 protected:
 	YakuzaAttackComboStateMachine* m_owner = nullptr;
+	VolumeAdjustment* m_volumeAdjustment = nullptr;
 public:
 	PlayerFourthFinalBlowState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
 

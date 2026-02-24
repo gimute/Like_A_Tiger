@@ -9,20 +9,20 @@
 
 #include "gameObject\IGameobject.h"
 
-//ŠO•”—p‚ÌƒmƒbƒNƒoƒbƒN\‘¢‘Ì
+//å¤–éƒ¨ç”¨ã®ãƒãƒƒã‚¯ãƒãƒƒã‚¯æ§‹é€ ä½“
 struct KnockBackParam
 {
-	//‚«”ò‚Ô•ûŒü
+	//å¹ãé£›ã¶æ–¹å‘
 	Vector3 m_direction = Vector3::Zero;
-	//‚«”ò‚Ô—Í
+	//å¹ãé£›ã¶åŠ›
 	float m_power = 0.0f;
-	//‚«”ò‚ÔŠÔ
+	//å¹ãé£›ã¶æ™‚é–“
 	float m_duration = 0.0f;
 
-	//ƒXƒe[ƒgƒ}ƒVƒ““à—p‚Ì•Ï”
-	//ƒmƒbƒNƒoƒbƒN‚ªI—¹‚µ‚½‚©‚Ç‚¤‚©
+	//ã‚¹ãƒ†ãƒ¼ãƒˆãƒã‚·ãƒ³å†…ç”¨ã®å¤‰æ•°
+	//ãƒãƒƒã‚¯ãƒãƒƒã‚¯ãŒçµ‚äº†ã—ãŸã‹ã©ã†ã‹
 	bool m_isEndKnockBack = false;
-	//Œo‰ßŠÔ
+	//çµŒéæ™‚é–“
 	float m_knockElapsed = 0.0f;
 
 
@@ -44,10 +44,12 @@ class Character;
 
 class YakuzaCharacter;
 
+class VolumeAdjustment;
+
 class YakuzaStateMachine : public IStateMachine
 {
 public:
-	//ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	//ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	YakuzaStateMachine(YakuzaCharacter* charactarPtr) : m_hasCharactar(charactarPtr)
 	{
 		AddState<YakuzaIdleState>(this);
@@ -64,80 +66,84 @@ public:
 		InitStateMachineClassName<YakuzaIdleState>();
 	}
 
-	//Ÿ‚ÌƒXƒe[ƒg’l‚ğæ“¾‚·‚éŠÖ”
+	//æ¬¡ã®ã‚¹ãƒ†ãƒ¼ãƒˆå€¤ã‚’å–å¾—ã™ã‚‹é–¢æ•°
 	IStateBase* GetNextState() override;
 
 private:
-	//ˆÚ“®•ûŒü
+	//ç§»å‹•æ–¹å‘
 	Vector3 m_moveVec = Vector3::Zero;
-	//ˆÚ“®‘¬“x 
+	//ç§»å‹•é€Ÿåº¦ 
 	float m_moveSpeed = 0.0f;
-	//ˆÚ“®‘¬“x”{—¦
+	//ç§»å‹•é€Ÿåº¦å€ç‡
 	float m_aimMoveSpeedRate = 1.0f;
-	//‰ñ”ğ‘¬“x
+	//å›é¿é€Ÿåº¦
 	float m_swaySpeed = 600.0f;
-	//‰ñ”ğƒAƒjƒ[ƒVƒ‡ƒ“‘¬“x
+	//å›é¿ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³é€Ÿåº¦
 	float m_swayAnimSpeed = 3.0f;
-	//Aƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚©
+	//Aãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸã‹
 	bool m_attackFlag = false;
-	//Yƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚©
+	//Yãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸã‹
 	bool m_finishBrowFlag = false;
-	//Aƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚©
+	//Aãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸã‹
 	bool m_swayFlag = false;
-	//RT‚Ü‚½‚ÍLT‚ª‰Ÿ‚³‚ê‚½‚©
+	//RTã¾ãŸã¯LTãŒæŠ¼ã•ã‚ŒãŸã‹
 	bool m_defenseFlag = false;
-	//UŒ‚‚ª’†‚©
+	//æ”»æ’ƒãŒä¸­ã‹
 	bool m_isAttack = false;
-	//‰ñ”ğ’†‚©
+	//å›é¿ä¸­ã‹
 	bool m_isSway = false;
-	//‰ñ”ğƒN[ƒ‹ƒ^ƒCƒ€
+	//å›é¿ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ 
 	float m_swayCoolTimer = 0.0f;
-	//Ÿ‚ÌƒRƒ“ƒ{‚ÉˆÈ~‰Â”\‚©‚Ç‚¤‚©
+	//æ¬¡ã®ã‚³ãƒ³ãƒœã«ä»¥é™å¯èƒ½ã‹ã©ã†ã‹
 	bool m_isComboTransition = false;
-	//ˆÚ“®•û®A‘_‚¢ˆÚ“®
+	//ç§»å‹•æ–¹å¼ã€ç‹™ã„ç§»å‹•
 	bool m_isAimMove = false;
-	//ƒ_ƒ[ƒW‚ğó‚¯‚½‚©‚Ç‚¤‚©
+	//ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ãŸã‹ã©ã†ã‹
 	bool m_isDamage = false;
-	//ƒ_ƒ[ƒW‚ğó‚¯‚ÄƒmƒbƒNƒoƒbƒN‚ª”­¶‚·‚é‚©‚Ç‚¤‚©
+	//ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã¦ãƒãƒƒã‚¯ãƒãƒƒã‚¯ãŒç™ºç”Ÿã™ã‚‹ã‹ã©ã†ã‹
 	bool m_isDamageKnockBack = false;
-	//ƒmƒbƒNƒoƒbƒN‚Ìƒpƒ‰ƒ[ƒ^[
+	//ãƒãƒƒã‚¯ãƒãƒƒã‚¯ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼
 	KnockBackParam m_knockBackParam;
-	//’Í‚İˆ—’†‚©
+	//æ´ã¿å‡¦ç†ä¸­ã‹
 	bool m_grabFlag = false;
-	//’Í‚İ’†‚©
+	//æ´ã¿ä¸­ã‹
 	bool m_isGrab = false;
-	//’Í‚ñ‚¾‚©
+	//æ´ã‚“ã ã‹
 	bool m_isGrabing = false;
-	//’Í‚Ü‚ê‚Ä‚¢‚é‚©
+	//æ´ã¾ã‚Œã¦ã„ã‚‹ã‹
 	bool m_isGrabbed = false;
-	//’Í‚İÅ’†‚Ì’Í‚ñ‚Å‚¢‚é‘Šè‚Ìs“®í—Ş
+	//æ´ã¿æœ€ä¸­ã®æ´ã‚“ã§ã„ã‚‹ç›¸æ‰‹ã®è¡Œå‹•ç¨®é¡
 	int m_grabingToAttackType = 0;
-	//’Í‚İÅ’†‚ÉUŒ‚‚ğó‚¯‚½Û‚ÌUŒ‚í—Ş
+	//æ´ã¿æœ€ä¸­ã«æ”»æ’ƒã‚’å—ã‘ãŸéš›ã®æ”»æ’ƒç¨®é¡
 	int m_grabBedToAttackType = 0;
-	//’Í‚İ—LŒø”ÍˆÍ
+	//æ´ã¿æœ‰åŠ¹ç¯„å›²
 	float m_graspableRange = 100.0f;
-	//’Í‚İ—LŒøŠÔ
+	//æ´ã¿æœ‰åŠ¹æ™‚é–“
 	float m_grabBetWeenTime = 0.0f;
-	//’Í‚Ü‚ê‚½Œã‚ÌÄ“x’Í‚ß‚é‚æ‚¤‚É‚È‚éŠÔ
+	//æ´ã¾ã‚ŒãŸå¾Œã®å†åº¦æ´ã‚ã‚‹ã‚ˆã†ã«ãªã‚‹æ™‚é–“
 	float m_grabBedCoolTimer = 0.0f;
-	//’Í‚ñ‚Å‚¢‚éƒLƒƒƒ‰ƒNƒ^[ƒ|ƒCƒ“ƒ^
+	//æ´ã‚“ã§ã„ã‚‹ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ãƒã‚¤ãƒ³ã‚¿
 	YakuzaCharacter* m_grabingYakuza = nullptr;
-	//’Í‚Ü‚ê‚Ä‚éƒLƒƒƒ‰ƒNƒ^[ƒ|ƒCƒ“ƒ^
+	//æ´ã¾ã‚Œã¦ã‚‹ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ãƒã‚¤ãƒ³ã‚¿
 	YakuzaCharacter* m_grabBedYakuza = nullptr;
-	//’Í‚İ“Š‚°‚ğ‚µ‚½Û‚Ì“Š‚°•ûŒü
+	/** éŸ³é‡èª¿æ•´ã®ãƒã‚¤ãƒ³ã‚¿ */
+	VolumeAdjustment* m_volumeAdjustment = nullptr;
+	//æ´ã¿æŠ•ã’ã‚’ã—ãŸéš›ã®ä½ç½®
+	Vector3 m_grabThrowPos = Vector3::Zero;
+	//æ´ã¿æŠ•ã’ã‚’ã—ãŸéš›ã®æŠ•ã’æ–¹å‘
 	Vector3 m_grabThrowFoward = Vector3::AxisZ;
-	//€‚ñ‚Å‚µ‚Ü‚Á‚½‚©‚Ç‚¤‚©
+	//æ­»ã‚“ã§ã—ã¾ã£ãŸã‹ã©ã†ã‹
 	bool m_isDead = false;
-	//‘_‚¢ˆÚ“®‚ÌƒLƒƒƒ‰ƒNƒ^[‚ÌˆÊ’u
+	//ç‹™ã„ç§»å‹•ã®ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã®ä½ç½®
 	Vector3 m_aimMoveTargetPos = Vector3::Zero;
-	//‚±‚ÌƒXƒe[ƒg‚ğˆµ‚¤Character‚Ìƒ|ƒCƒ“ƒ^
+	//ã“ã®ã‚¹ãƒ†ãƒ¼ãƒˆã‚’æ‰±ã†Characterã®ãƒã‚¤ãƒ³ã‚¿
 	YakuzaCharacter* m_hasCharactar = nullptr;
-	//UŒ‚ê—pƒXƒe[ƒgƒ}ƒVƒ“
+	//æ”»æ’ƒå°‚ç”¨ã‚¹ãƒ†ãƒ¼ãƒˆãƒã‚·ãƒ³
 	std::unique_ptr<YakuzaAttackComboStateMachine> m_attackStateMachine = nullptr;
-	//“GíƒZƒbƒg
+	//æ•µç¨®ã‚»ãƒƒãƒˆ
 	std::unique_ptr<IYakuzaTypeSet> m_typeSet;
 public:
-	///•Ï”Œn‚ÌƒQƒbƒ^[•ƒZƒbƒ^[
+	///å¤‰æ•°ç³»ã®ã‚²ãƒƒã‚¿ãƒ¼ï¼†ã‚»ãƒƒã‚¿ãƒ¼
 	inline void SetMoveVec(const Vector3& vec) { m_moveVec = vec; }
 
 	inline const Vector3& GetMoveVec() { return m_moveVec; }
@@ -265,9 +271,9 @@ public:
 	inline YakuzaAttackSEDatas GetAttackSEDatas(uint32_t stateID) { return m_typeSet.get()->GetAttackSEDatas(stateID); }
 
 	/// <summary>
-	/// ƒLƒƒƒ‰ƒNƒ^[‚Ìƒ{[ƒ“‚ğæ“¾
+	/// ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã®ãƒœãƒ¼ãƒ³ã‚’å–å¾—
 	/// </summary>
-	/// <param name="boneName">ƒ{[ƒ“‚Ì–¼‘O</param>
+	/// <param name="boneName">ãƒœãƒ¼ãƒ³ã®åå‰</param>
 	/// <returns></returns>
 	Bone* GetCharacterBone(const wchar_t* boneName);
 
@@ -323,29 +329,29 @@ public:
 
 	YakuzaAttackComboStateMachine* GetAttackStateMachine();
 
-	//YakuzaStateMachine‚ªŒ»İ‚È‚ñ‚ÌƒXƒe[ƒg‚Å‚ ‚é‚©‚ğæ“¾
+	//YakuzaStateMachineãŒç¾åœ¨ãªã‚“ã®ã‚¹ãƒ†ãƒ¼ãƒˆã§ã‚ã‚‹ã‹ã‚’å–å¾—
 	template<typename ClassName>
 	inline bool IsGetYakuzaStateMachineNowState()
 	{
 		return IsNowStateClassName<ClassName>();
 	}
 private:
-	//“à•”ƒ^ƒCƒ}[ˆ—
+	//å†…éƒ¨ã‚¿ã‚¤ãƒãƒ¼å‡¦ç†
 	void TimerUpdate();
-	//ˆÚ“®‚·‚é‚±‚Æ‚ª‚Å‚«‚é‚©‚Ç‚¤‚©
+	//ç§»å‹•ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã‹ã©ã†ã‹
 	bool CanChangeWalk();
-	//Ši“¬UŒ‚‚ğs‚¦‚é‚©‚Ç‚¤‚©
+	//æ ¼é—˜æ”»æ’ƒã‚’è¡Œãˆã‚‹ã‹ã©ã†ã‹
 	bool CanChangeAttack();
-	//‰ñ”ğs“®‚ğs‚¦‚é‚©‚Ç‚¤‚©
+	//å›é¿è¡Œå‹•ã‚’è¡Œãˆã‚‹ã‹ã©ã†ã‹
 	bool CanChangeSway();
-	//–hŒäs“®‚ğs‚¦‚é‚©‚Ç‚¤‚©
+	//é˜²å¾¡è¡Œå‹•ã‚’è¡Œãˆã‚‹ã‹ã©ã†ã‹
 	bool CanChangeDefense();
-	//ƒ_ƒ[ƒW‚ğó‚¯‚½‚©‚Ç‚¤‚©
+	//ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ãŸã‹ã©ã†ã‹
 	bool CanChangeDamage();
-	//€–S‚µ‚½‚©‚Ç‚¤‚©
+	//æ­»äº¡ã—ãŸã‹ã©ã†ã‹
 	bool CanChangeDead();
-	//’Í‚ß‚é‚©‚Ç‚¤‚©
+	//æ´ã‚ã‚‹ã‹ã©ã†ã‹
 	bool CanChangeGrab();
-	//’Í‚Ü‚ê‚Ä‚¢‚é‚©‚Ç‚¤‚©
+	//æ´ã¾ã‚Œã¦ã„ã‚‹ã‹ã©ã†ã‹
 	bool CanChangeGrabBed();
 };

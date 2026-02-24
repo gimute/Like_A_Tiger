@@ -6,7 +6,9 @@
 bool PouseMenuSceneBase::CheckCommonTransition(uint32_t& nextState)
 {
 	/** 設定系UIがアクティブな場合はメニュー閉じを無効化 */
-	if (m_owner->IsSettingInSelectActive()) {
+	if (m_owner->IsSettingInSelectActive()
+		||m_owner->IsActivedVolumeAdjustment()
+		||m_owner->IsInSelectActive()) {
 		return false;
 	}
 
@@ -124,7 +126,9 @@ void PouseMenuListScene::UpdateScene()
 	if (!m_owner) return;
 
 	/** SettingInSelectがアクティブな場合のみリスト操作を無効化 */
-	if (m_owner->IsSettingInSelectActive()) {
+	if (m_owner->IsSettingInSelectActive()
+		|| m_owner->IsActivedVolumeAdjustment()
+		|| m_owner->IsInSelectActive()) {
 		return;
 	}
 
@@ -364,11 +368,11 @@ bool PouseMenuSceneManager::UpdatePouseMenuSceneManager()
 		m_isActive = false;
 		return false;
 	}
-	/** 確認UIが表示中の場合は、ステート遷移・更新を停止 */
-	if (m_menuOwner && m_menuOwner->IsInSelectActive()) {
-		m_isActive = true;
-		return true;
-	}
+	//  /** 確認UIが表示中の場合は、ステート遷移・更新を停止 */
+	//  if (m_menuOwner && m_menuOwner->IsInSelectActive()) {
+	//  	m_isActive = true;
+	//  	return true;
+	//  }
 
 	// ハッシュ値、リクエストされたステート
 	uint32_t requestState = 0;

@@ -3,6 +3,7 @@
 
 #include "CRC32.h"
 
+class VolumeAdjustment;
 #define appState(name)	\
 public:\
 	static constexpr uint32_t ID() { return Hash32(#name); }
@@ -11,6 +12,7 @@ class YakuzaGenericAttackState : public IStateBase
 {
 protected:
 	YakuzaAttackComboStateMachine* m_owner = nullptr;
+	VolumeAdjustment* m_volumeAdjustment = nullptr;
 
 	uint32_t m_hasAttackStateHash = 0;
 public:

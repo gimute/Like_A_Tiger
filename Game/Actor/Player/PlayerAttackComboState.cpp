@@ -4,6 +4,8 @@
 #include "Actor\YakuzaComponents\YakuzaStateMachine.h"
 #include "Actor\YakuzaComponents\YakuzaAttackAssistSystem.h"
 
+#include "UI/PoseMenu.h"
+
 TypeSetAutoRegister<PlayerYakuzaTypeSet> PlayerYakuzaTypeSet::typeSet{ OthersYakuzaType::en_playerYakuza };
 
 namespace 
@@ -19,7 +21,13 @@ void PlayerFourthAttackState::OnEnter()
 
 	YakuzaAttackSEDatas seData = m_owner->GetYakuzaStateMachine()->GetAttackSEDatas(PlayerFirstAttackState::ID());
 
-	SoundManager::Get().PlaySE(seData.m_cuttingWindId);
+	if (!m_volumeAdjustment) {
+		m_volumeAdjustment = FindGO<VolumeAdjustment>("volumeadjustment");
+	}
+	if (m_volumeAdjustment) {
+		auto handle = SoundManager::Get().PlaySE(seData.m_cuttingWindId, false, false, m_volumeAdjustment->GetSEAmount());
+		SoundManager::Get().FindSE(handle);
+	}
 }
 
 void PlayerFourthAttackState::OnUpdate()
@@ -101,7 +109,14 @@ void PlayerFirstFinalBlowState::OnEnter()
 {
 	YakuzaAttackSEDatas seData = m_owner->GetYakuzaStateMachine()->GetAttackSEDatas(PlayerFirstAttackState::ID());
 
-	SoundManager::Get().PlaySE(seData.m_cuttingWindId);
+	if (!m_volumeAdjustment) {
+		m_volumeAdjustment = FindGO<VolumeAdjustment>("volumeadjustment");
+	}
+	if (m_volumeAdjustment) {
+		auto handle = SoundManager::Get().PlaySE(seData.m_cuttingWindId, false, false, m_volumeAdjustment->GetSEAmount());
+		SoundManager::Get().FindSE(handle);
+	}
+	
 }
 
 void PlayerFirstFinalBlowState::OnUpdate()
@@ -167,7 +182,13 @@ void PlayerSecondFinalBlowState::OnEnter()
 {
 	YakuzaAttackSEDatas seData = m_owner->GetYakuzaStateMachine()->GetAttackSEDatas(PlayerFirstAttackState::ID());
 
-	SoundManager::Get().PlaySE(seData.m_cuttingWindId);
+	if (!m_volumeAdjustment) {
+		m_volumeAdjustment = FindGO<VolumeAdjustment>("volumeadjustment");
+	}
+	if (m_volumeAdjustment) {
+		auto handle = SoundManager::Get().PlaySE(seData.m_cuttingWindId, false, false, m_volumeAdjustment->GetSEAmount());
+		SoundManager::Get().FindSE(handle);
+	}
 }
 
 void PlayerSecondFinalBlowState::OnUpdate()
@@ -233,7 +254,13 @@ void PlayerThirdFinalBlowState::OnEnter()
 {
 	YakuzaAttackSEDatas seData = m_owner->GetYakuzaStateMachine()->GetAttackSEDatas(PlayerFirstAttackState::ID());
 
-	SoundManager::Get().PlaySE(seData.m_cuttingWindId);
+	if (!m_volumeAdjustment) {
+		m_volumeAdjustment = FindGO<VolumeAdjustment>("volumeadjustment");
+	}
+	if (m_volumeAdjustment) {
+		auto handle = SoundManager::Get().PlaySE(seData.m_cuttingWindId, false, false, m_volumeAdjustment->GetSEAmount());
+		SoundManager::Get().FindSE(handle);
+	}
 }
 
 void PlayerThirdFinalBlowState::OnUpdate()
@@ -299,7 +326,13 @@ void PlayerFourthFinalBlowState::OnEnter()
 {
 	YakuzaAttackSEDatas seData = m_owner->GetYakuzaStateMachine()->GetAttackSEDatas(PlayerFirstAttackState::ID());
 
-	SoundManager::Get().PlaySE(seData.m_cuttingWindId);
+	if (!m_volumeAdjustment) {
+		m_volumeAdjustment = FindGO<VolumeAdjustment>("volumeadjustment");
+	}
+	if (m_volumeAdjustment) {
+		auto handle = SoundManager::Get().PlaySE(seData.m_cuttingWindId, false, false, m_volumeAdjustment->GetSEAmount());
+		SoundManager::Get().FindSE(handle);
+	}
 }
 
 void PlayerFourthFinalBlowState::OnUpdate()

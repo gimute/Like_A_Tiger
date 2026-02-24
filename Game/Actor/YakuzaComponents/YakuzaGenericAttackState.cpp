@@ -16,7 +16,13 @@ void YakuzaGenericAttackState::OnEnter()
 
 	YakuzaAttackSEDatas seData = m_owner->GetYakuzaStateMachine()->GetAttackSEDatas(m_hasAttackStateHash);
 
-	SoundManager::Get().PlaySE(seData.m_cuttingWindId);
+	if (!m_volumeAdjustment) {
+		m_volumeAdjustment = FindGO<VolumeAdjustment>("volumeadjustment");
+	}
+	if (m_volumeAdjustment) {
+		auto handle = SoundManager::Get().PlaySE(seData.m_cuttingWindId, false, false, m_volumeAdjustment->GetSEAmount());
+		SoundManager::Get().FindSE(handle);
+	}
 }
 
 void YakuzaGenericAttackState::OnUpdate()
