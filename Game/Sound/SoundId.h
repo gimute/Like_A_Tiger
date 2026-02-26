@@ -22,5 +22,6 @@ enum BGMid
 {
 	bgm_inGame_Explore = SoundId::register_number,
 	bgm_inGame_battle,
+	bgm_inGame_battleBossHirota,
 };
 

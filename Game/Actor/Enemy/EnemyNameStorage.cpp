@@ -2,6 +2,8 @@
 #include "EnemyNameStorage.h"
 #include "Random.h"
 
+EnemyNameStorage* EnemyNameStorage::m_instance = nullptr;
+
 std::string EnemyNameStorage::GetName()
 {
 	//もしも有効な名前がストレージになかったら

@@ -1,6 +1,8 @@
 #pragma once
 class EnemyIntroduction;
 
+#include "Actor\YakuzaComponents\YakuzaType.h"
+
 //戦闘エリア構造体
 struct BattleArea
 {
@@ -10,6 +12,8 @@ struct BattleArea
 	Vector3 m_areaCenter = Vector3::Zero;
 	//戦闘エリア半径
 	float m_areaRadius = 0.0f;
+	
+	EnemyYakuzaType m_battleMainYakuza;
 
 	//この戦闘エリアに入っているかどうか
 	bool IsBattleAreaInside(const Vector3& pos)
@@ -32,11 +36,13 @@ struct BattleArea
 	BattleArea(
 		int id,
 		Vector3 position,
-		float radius
+		float radius,
+		EnemyYakuzaType type
 	)
 		: m_id(id)
 		, m_areaCenter(position)
 		, m_areaRadius(radius)
+		, m_battleMainYakuza(type)
 	{ }
 
 	BattleArea() = default;
@@ -71,7 +77,7 @@ public:
 	}
 
 	//エリア生成
-	int CreateArea(const Vector3& center, float radius);
+	int CreateArea(const Vector3& center, float radius,EnemyYakuzaType type);
 	//エリア削除
 	void RemoveArea(int id);
 	//エリアマネージャーリセット

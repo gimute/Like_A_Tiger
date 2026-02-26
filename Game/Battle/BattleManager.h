@@ -40,14 +40,18 @@ struct BattleStartEventInfo
 
 	Vector3 m_battleAreaCenter = Vector3::Zero;
 
+	EnemyYakuzaType m_battleMainYakuza;
+
 	BattleStartEventInfo() = default;
 
 	BattleStartEventInfo(
 		EnemyInfoGroupe* enemyGroupeInfo,
-		Vector3 battleAreaCenter
+		Vector3 battleAreaCenter,
+		EnemyYakuzaType type
 	)
 		: m_enemyGroupeInfo(enemyGroupeInfo)
 		, m_battleAreaCenter(battleAreaCenter)
+		, m_battleMainYakuza(type)
 	{
 	}
 };

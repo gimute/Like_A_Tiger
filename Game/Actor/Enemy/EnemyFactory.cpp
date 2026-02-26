@@ -6,8 +6,10 @@
 
 #include "GameScene\UpdateOrder.h"
 
-Enemy* EnemyFactory::CreateEnemy(EnemyYakuzaType type)
+EnemyFactoryReturnValue EnemyFactory::CreateEnemy(EnemyYakuzaType type)
 {
+	EnemyFactoryReturnValue returnValue;
+
 	Enemy* newEnemy = NewGO<Enemy>(UpdateOrder::Charactar,"enemy");
 	//TypeSet取得
 	auto typeSet = YakuzaTypeSetFactory::GetInstance().Create(type);
@@ -22,6 +24,10 @@ Enemy* EnemyFactory::CreateEnemy(EnemyYakuzaType type)
 	//ステートマシンのパラメータを初期化
 	newEnemy->GetYakuzaStateMachine().InitStateMachineParam();
 
-	return newEnemy;
+	returnValue.enemyPtr = newEnemy;
+
+	returnValue.enemyName = newEnemy->GetYakuzaStateMachine().GetTypeSet().GetYakuzaName();
+
+	return returnValue;
 }
 

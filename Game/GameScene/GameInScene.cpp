@@ -75,7 +75,10 @@ void GameInScene::EnterScene()
 		[&](const BattleStartEventInfo& eventInfo)
 		{
 			float volume = m_volumeAdjustment->GetBGMAmount();
-			BgmManager::GetInstance()->RequestPlayBgm(bgm_inGame_battle, volume);
+
+			int playBgmId = GetEnemyTypeBattleBgm(eventInfo.m_battleMainYakuza);
+
+			BgmManager::GetInstance()->RequestPlayBgm(playBgmId, volume);
 		}
 	);
 
@@ -338,4 +341,32 @@ bool GameInScene::ReqestSceneState(uint32_t& nextState)
 	}
 
 	return false;
+}
+
+int GameInScene::GetEnemyTypeBattleBgm(EnemyYakuzaType enemyType)
+{
+	int returnValue = 0;
+
+	switch (enemyType)
+	{
+	case en_normalYakuza:
+	case en_fastYakuza:
+	case en_toughYakuza:
+
+		returnValue = BGMid::bgm_inGame_battle;
+
+		break;
+	case en_bossHirotaYakuza:
+
+		returnValue = BGMid::bgm_inGame_battleBossHirota;
+
+		break;
+	default:
+
+		returnValue = BGMid::bgm_inGame_battle;
+
+		break;
+	}
+
+	return returnValue;
 }

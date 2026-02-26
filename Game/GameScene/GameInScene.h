@@ -70,6 +70,8 @@ public:
     /// </summary>
     void DeleteGameObjects();
 private:
+
+    int GetEnemyTypeBattleBgm(EnemyYakuzaType enemyType);
     ///プレイヤーのポインタ
     Player* m_player = nullptr;
     ///プレイヤーコントローラーのポインタ

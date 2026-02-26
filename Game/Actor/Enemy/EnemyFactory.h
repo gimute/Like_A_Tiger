@@ -4,6 +4,14 @@
 
 class Enemy;
 
+struct EnemyFactoryReturnValue
+{
+	//生成したエネミーのポインタ
+	Enemy* enemyPtr = nullptr;
+	//生成した敵名
+	std::string enemyName;
+};
+
 class EnemyFactory
 {
 public:
@@ -14,6 +22,6 @@ public:
 	~EnemyFactory() = default;
 
 	//エネミー制作
-	Enemy* CreateEnemy(EnemyYakuzaType type);
+	EnemyFactoryReturnValue CreateEnemy(EnemyYakuzaType type);
 };
 

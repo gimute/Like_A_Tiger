@@ -11,6 +11,8 @@
 
 #include "Actor\Enemy\EnemySystem.h"
 
+#include "Actor\Enemy\EnemyNameStorage.h"
+
 #include "Random.h"
 
 //インスタンス初期化
@@ -27,28 +29,13 @@ void EnemyManager::InitEnemyManager()
 	);
 
 	//名前ストレージ初期化
-	m_enemyNameStorage.Initialize(
+	EnemyNameStorage::GetInstance()->Initialize(
 		{ "TAKEDA", "SATAKE", "HUJIWARA", "ABE", "MIYAMOTO", "MARUYAMA" , "IMAI", "HUJIMOTO" , "NISHIDA" , "TANAKA" , "KAWADA" , "HUKUMI",
 		  "MATSUSHITA" , "KONDOU"}
 	);
 
 	m_enemyMetaAi = NewGO<EnemyMetaAi>(UpdateOrder::AI, "enemymetaai");
 	m_enemyAiSystem = NewGO<EnemySystem>(UpdateOrder::AI, "enemy");
-}
-
-void EnemyManager::RequestSpawnEnemy(EnemyYakuzaType type, const Vector3& spawnPoint)
-{	
-	EnemyPair pair;
-
-	auto newEnemy = m_enemyFactory.CreateEnemy(type);
-
-	pair.m_enemy = newEnemy;
-
-	pair.m_enemyAi = m_enemyAiFactory.GetInstance().Create(type, &newEnemy->GetYakuzaStateMachine());
-
-	newEnemy->SetPosition(spawnPoint);
-
-	m_enemyPairList.push_back(std::move(pair));
 }
 
 void EnemyManager::RequestSpawnEnemyGroup(int spawnNum, const Vector3& spawnPoint,bool inSpYakuza)
@@ -78,19 +65,19 @@ void EnemyManager::RequestSpawnEnemyGroup(int spawnNum, const Vector3& spawnPoin
 
 		auto newEnemy = m_enemyFactory.CreateEnemy(type);
 
-		pair.m_enemy = newEnemy;
+		pair.m_enemy = newEnemy.enemyPtr;
 
-		pair.m_enemyAi = m_enemyAiFactory.GetInstance().Create(type, &newEnemy->GetYakuzaStateMachine());
+		pair.m_enemyAi = m_enemyAiFactory.GetInstance().Create(type, &newEnemy.enemyPtr->GetYakuzaStateMachine());
 
 		pair.m_enemyID = m_enemyIDCounter;
 
 		//仮名なので注意
-		pair.m_enemyName = m_enemyNameStorage.GetName();
+		pair.m_enemyName = newEnemy.enemyName;
 
 		//スポーン位置をランダム選定
 		Vector3	randomSpawnPoint = GetRandomPointInRadius(spawnPoint, 100.0f);
 	
-		newEnemy->SetPosition(randomSpawnPoint);
+		newEnemy.enemyPtr->SetPosition(randomSpawnPoint);
 
 		m_enemyPairList.push_back(std::move(pair));
 
@@ -100,13 +87,69 @@ void EnemyManager::RequestSpawnEnemyGroup(int spawnNum, const Vector3& spawnPoin
 	}
 
 	//戦闘エリア生成
-	int areaId = BattleAreaManager::GetInstance()->CreateArea(spawnPoint, 400.0f);
+	int areaId = BattleAreaManager::GetInstance()->CreateArea(spawnPoint, 400.0f,EnemyYakuzaType::en_normalYakuza);
 
 	newGroup.m_battleAreaId = areaId;
 
 	newGroup.m_groupeId = m_enemyGroupIDCounter++;
 
 	m_enemyGroupList.push_back(std::move(newGroup));
+}
+
+void EnemyManager::RequestSpawnBossEnemyGroup(int spawnNum, const Vector3& spawnPoint, EnemyYakuzaType spawnBossType)
+{
+	EnemyGroup newGroup;
+
+	for (int i = 0; i < spawnNum; i++)
+	{
+		EnemyPair pair;
+
+		EnemyYakuzaType type;
+		int  randomType = -1;
+
+		if (i >= spawnNum - 1)
+		{
+			//タイプをランダム選定
+			type = EnemyYakuzaType::en_normalYakuza;
+		}
+		else
+		{
+			//タイプをランダム選定
+			type = spawnBossType;
+		}
+
+		auto newEnemy = m_enemyFactory.CreateEnemy(type);
+
+		pair.m_enemy = newEnemy.enemyPtr;
+
+		pair.m_enemyAi = m_enemyAiFactory.GetInstance().Create(type, &newEnemy.enemyPtr->GetYakuzaStateMachine());
+
+		pair.m_enemyID = m_enemyIDCounter;
+
+		//仮名なので注意
+		pair.m_enemyName = newEnemy.enemyName;
+
+		//スポーン位置をランダム選定
+		Vector3	randomSpawnPoint = GetRandomPointInRadius(spawnPoint, 100.0f);
+
+		newEnemy.enemyPtr->SetPosition(randomSpawnPoint);
+
+		m_enemyPairList.push_back(std::move(pair));
+
+		newGroup.m_enemyID.push_back(m_enemyIDCounter);
+
+		m_enemyIDCounter++;
+	}
+
+	//戦闘エリア生成
+	int areaId = BattleAreaManager::GetInstance()->CreateArea(spawnPoint, 500.0, spawnBossType);
+
+	newGroup.m_battleAreaId = areaId;
+
+	newGroup.m_groupeId = m_enemyGroupIDCounter++;
+
+	m_enemyGroupList.push_back(std::move(newGroup));
+
 }
 
 void EnemyManager::RequestDeadEnemyProcces(const Enemy& deadEnemyAddress)
