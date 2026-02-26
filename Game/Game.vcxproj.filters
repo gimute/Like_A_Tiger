@@ -88,6 +88,7 @@
     <ClCompile Include="Actor\Player\PlayerCameraLockOn.cpp" />
     <ClCompile Include="UI\LockOnCircle.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyTypeSet\HirotaYakuzaActionSet.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAis\HirotaYakuzaAi.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -188,5 +189,6 @@
     <ClInclude Include="Actor\Player\PlayerCameraLockOn.h" />
     <ClInclude Include="UI\LockOnCircle.h" />
     <ClInclude Include="Actor\Enemy\EnemyTypeSet\HirotaYakuzaActionSet.h" />
+    <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAis\HirotaYakuzaAi.h" />
   </ItemGroup>
 </Project>

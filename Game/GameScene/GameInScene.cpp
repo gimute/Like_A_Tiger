@@ -48,13 +48,13 @@ void GameInScene::EnterScene()
 			if (objData.ForwardMatchName(L"BattleArea_N") == true)
 			{
 				//SpYakuzaが出ないグループ
-				EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4, objData.position, false);
+				//EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4, objData.position, false);
 				return true;
 			}
 			else if(objData.ForwardMatchName(L"BattleArea_Sp") == true)
 			{
 				//SpYakuzaが出るグループ
-				EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4, objData.position, true);
+				//EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4, objData.position, true);
 				return true;
 			}
 			else if (objData.ForwardMatchName(L"ItemBox") == true)
@@ -68,6 +68,8 @@ void GameInScene::EnterScene()
 
 			return true;
 		});
+
+	EnemyManager::GetInstance()->RequestSpawnBossEnemyGroup(3, Vector3(1000.0f, 0.0f, 0.0f), en_bossHirotaYakuza);
 
 
 	//戦闘開始でBGMを変えるコールバック登録

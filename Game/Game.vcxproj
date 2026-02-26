@@ -252,6 +252,7 @@
     <ClCompile Include="Actor\Enemy\EnemyNameStorage.cpp" />
     <ClCompile Include="Actor\Player\PlayerCameraLockOn.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyTypeSet\HirotaYakuzaActionSet.cpp" />
+    <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAis\HirotaYakuzaAi.cpp" />
     <ClCompile Include="UI\LockOnCircle.cpp" />
     <ClCompile Include="UI\EnemyIntroduction.cpp" />
     <ClCompile Include="GameScene\GameOver\GameOver.cpp" />
@@ -342,6 +343,7 @@
     <ClInclude Include="Actor\Enemy\EnemyNameStorage.h" />
     <ClInclude Include="Actor\Player\PlayerCameraLockOn.h" />
     <ClInclude Include="Actor\Enemy\EnemyTypeSet\HirotaYakuzaActionSet.h" />
+    <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAis\HirotaYakuzaAi.h" />
     <ClInclude Include="UI\LockOnCircle.h" />
     <ClInclude Include="UI\EnemyIntroduction.h" />
     <ClInclude Include="GameScene\GameOver\GameOver.h" />
