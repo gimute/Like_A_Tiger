@@ -69,7 +69,7 @@ void GameInScene::EnterScene()
 			return true;
 		});
 
-	EnemyManager::GetInstance()->RequestSpawnBossEnemyGroup(3, Vector3(1000.0f, 0.0f, 0.0f), en_bossHirotaYakuza);
+	EnemyManager::GetInstance()->RequestSpawnBossEnemyGroup(1, Vector3(1000.0f, 0.0f, 0.0f), en_bossHirotaYakuza);
 
 
 	//戦闘開始でBGMを変えるコールバック登録

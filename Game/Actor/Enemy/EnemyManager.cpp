@@ -110,12 +110,12 @@ void EnemyManager::RequestSpawnBossEnemyGroup(int spawnNum, const Vector3& spawn
 		if (i >= spawnNum - 1)
 		{
 			//タイプをランダム選定
-			type = EnemyYakuzaType::en_normalYakuza;
+			type = spawnBossType;
 		}
 		else
 		{
 			//タイプをランダム選定
-			type = spawnBossType;
+			type = EnemyYakuzaType::en_normalYakuza;
 		}
 
 		auto newEnemy = m_enemyFactory.CreateEnemy(type);

@@ -180,11 +180,6 @@ public:
 			{ useAttackStateMachine,m_yakuzaCamp,0,0,en_kickHigh_1_R,60.0f,1.0f },
 			{ 10.0f,150.0f,SoundId::se_hittingHeavyA },
 			{ SoundId::se_cuttingWindLigthA });
-
-		
-
-
-
 	}
 private:
 	static TypeSetAutoRegister<HirotaYakuzaActionSet> typeSet;
