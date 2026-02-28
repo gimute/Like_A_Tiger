@@ -94,6 +94,16 @@ struct ToughYakuzaParamater : public IParameter
 	float dadgeAnimSpeed; //回避アニメーション速度
 };
 
+struct HirotaYakuzaParamater : public IParameter
+{
+	appParameter(HirotaYakuzaParamater);
+
+	float maxHP;	//最大HP
+	float moveSpeed; //移動速度
+	float dadgeSpeed; //回避速度
+	float dadgeAnimSpeed; //回避アニメーション速度
+};
+
 //ミニマップに使用する画像情報
 struct MiniMapImageParameter : public IParameter
 {

@@ -21,6 +21,9 @@ public:
 	//次のステートを取得
 	IStateBase* GetNextState() override;
 private:
+	//攻撃待機状態に移行できるかどうか
+	bool CanChangeWaitingAttack();
+
 	static AiAutoRegister<HirotaYakuzaAi> aiSet;
 };
 

@@ -3,6 +3,76 @@
 #include "Actor\YakuzaComponents\YakuzaStateMachine.h"
 #include "Actor\YakuzaComponents\YakuzaGenericAttackState.h"
 
+class HirotaYakuzaFirstAttackState : public YakuzaGenericAttackState
+{
+	appState(HirotaYakuzaFirstAttackState)
+public:
+	HirotaYakuzaFirstAttackState(
+		AttackStateInitData initData
+	)
+		: YakuzaGenericAttackState(initData)
+	{
+		m_hasAttackStateHash = HirotaYakuzaFirstAttackState::ID();
+	}
+	~HirotaYakuzaFirstAttackState() = default;
+};
+
+class HirotaYakuzaSecondAttackState : public YakuzaGenericAttackState
+{
+	appState(HirotaYakuzaSecondAttackState)
+public:
+	HirotaYakuzaSecondAttackState(
+		AttackStateInitData initData
+	)
+		: YakuzaGenericAttackState(initData)
+	{
+		m_hasAttackStateHash = HirotaYakuzaSecondAttackState::ID();
+	}
+	~HirotaYakuzaSecondAttackState() = default;
+};
+
+class HirotaYakuzaThirdAttackState : public YakuzaGenericAttackState
+{
+	appState(HirotaYakuzaThirdAttackState)
+public:
+	HirotaYakuzaThirdAttackState(
+		AttackStateInitData initData
+	)
+		: YakuzaGenericAttackState(initData)
+	{
+		m_hasAttackStateHash = HirotaYakuzaThirdAttackState::ID();
+	}
+	~HirotaYakuzaThirdAttackState() = default;
+};
+
+class HirotaYakuzaFirstFinalBlowState : public YakuzaGenericAttackState
+{
+	appState(HirotaYakuzaFirstFinalBlowState)
+public:
+	HirotaYakuzaFirstFinalBlowState(
+		AttackStateInitData initData
+	)
+		: YakuzaGenericAttackState(initData)
+	{
+		m_hasAttackStateHash = HirotaYakuzaFirstFinalBlowState::ID();
+	}
+	~HirotaYakuzaFirstFinalBlowState() = default;
+};
+
+class HirotaYakuzaSecondFinalBlowState : public YakuzaGenericAttackState
+{
+	appState(HirotaYakuzaSecondFinalBlowState)
+public:
+	HirotaYakuzaSecondFinalBlowState(
+		AttackStateInitData initData
+	)
+		: YakuzaGenericAttackState(initData)
+	{
+		m_hasAttackStateHash = HirotaYakuzaSecondFinalBlowState::ID();
+	}
+	~HirotaYakuzaSecondFinalBlowState() = default;
+};
+
 class HirotaYakuzaActionSet : public IYakuzaTypeSet
 {
 	appState(HirotaYakuzaActionSet)
@@ -10,16 +80,24 @@ public:
 
 	enum HirotaYakuzaAnimation
 	{
-
+		en_hookPunch_1_R = YakuzaAnimation::en_num,
+		en_punching_1_R,
+		en_punching_1_L,
+		en_kickLow_1_L,
+		en_kickHigh_1_R,
+		en_charge_1,
+		en_punchRush_1,
 	};
 
 	HirotaYakuzaActionSet() : IYakuzaTypeSet(en_campEnemy)
 	{
-		m_firstAttackID = 0;
+		m_firstAttackID = HirotaYakuzaFirstAttackState::ID();
 
 		m_firstFinishBrowID = 0;
 
 		m_modelFilePath = "C:Assets/modelData/Character/Crypto/Crypto.tkm";
+
+		m_yakuzaName = "Hirota";
 
 		m_animationDataList.push_back({ "Assets/modelData/Character/Crypto/Animation/Idle.tka",true });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Crypto/Animation/Walking.tka",true });
@@ -39,21 +117,73 @@ public:
 		m_animationDataList.push_back({ "Assets/modelData/Character/Crypto/Animation/Idle.tka",true });//この敵は掴み動作をしないため、仮のモーションを入れておく
 		m_animationDataList.push_back({ "Assets/modelData/Character/Crypto/Animation/Idle.tka",true });//この敵は掴み動作をしないため、仮のモーションを入れておく
 		m_animationDataList.push_back({ "Assets/modelData/Character/Crypto/Animation/Idle.tka",true });//この敵は掴み動作をしないため、仮のモーションを入れておく
-		m_animationDataList.push_back({ "Assets/modelData/Character/Crypto/Animation/Idle.tka",true });//掴まれは一旦待ち
-		m_animationDataList.push_back({ "Assets/modelData/Character/Crypto/Animation/Idle.tka",true });//掴まれは一旦待ち
-		m_animationDataList.push_back({ "Assets/modelData/Character/Crypto/Animation/Idle.tka",true });//掴まれは一旦待ち
-		m_animationDataList.push_back({ "Assets/modelData/Character/Crypto/Animation/Idle.tka",true });//掴まれは一旦待ち
+		m_animationDataList.push_back({ "Assets/modelData/Character/Crypto/Animation/Grab_Idle_B.tka",true });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Crypto/Animation/Grab_Throw_B.tka",false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Crypto/Animation/Grab_Break_B.tka",false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Crypto/Animation/Grab_Atk_B.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Crypto/Animation/BodyHit.tka",false });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Crypto/Animation/BackDeath_E.tka",false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Crypto/Animation/Punch_Hook_R_1.tka",false });//ここから攻撃モーション
+		m_animationDataList.push_back({ "Assets/modelData/Character/Crypto/Animation/Punch_R_1.tka",false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Crypto/Animation/Punch_L_1.tka",false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Crypto/Animation/Kick_Low_L_1.tka",false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Crypto/Animation/Kick_High_R_1.tka",false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Crypto/Animation/Charge.tka",false });
+		m_animationDataList.push_back({ "Assets/modelData/Character/Crypto/Animation/Punch_Rush_1.tka",false });
+
+		//パラメーター初期化
+		ParameterManager::GetInstance().LoadParameter<HirotaYakuzaParamater>("Assets/Json/HirotaYakuzaStatus.json", [](const nlohmann::json& j, HirotaYakuzaParamater& p)
+			{
+				p.maxHP = j["hp"].get<int>();
+				p.moveSpeed = j["moveSpeed"].get<float>();
+				p.dadgeSpeed = j["dodgeSpeed"].get<float>();
+				p.dadgeAnimSpeed = j["dodgeAnimSpeed"].get<float>();
+			}
+		);
 	}
 
 	void InitStateMachineParam(YakuzaCharacter& useCharacter, YakuzaStateMachine& useStateMachine) override
 	{
+		auto param = ParameterManager::GetInstance().GetParameter<HirotaYakuzaParamater>();
 
+		useCharacter.SetHP(param->maxHP);
+
+		useStateMachine.SetSwaySpeed(param->dadgeSpeed, param->dadgeAnimSpeed);
+
+		useStateMachine.SetAimMoveSpeedRate(param->moveSpeed);
 	}
 
 	void CreateActions(YakuzaAttackComboStateMachine* useAttackStateMachine) override
 	{
+		//ここに攻撃ステート追加処理を記述
+		AddAttackState<HirotaYakuzaFirstAttackState>(
+			{ useAttackStateMachine,m_yakuzaCamp,HirotaYakuzaSecondAttackState::ID(),HirotaYakuzaFirstFinalBlowState::ID(),en_punching_1_L,60.0f,1.0f},
+			{ 10.0f,150.0f,SoundId::se_hittingLightA },
+			{ SoundId::se_cuttingWindLigthA });
+
+		AddAttackState<HirotaYakuzaSecondAttackState>(
+			{ useAttackStateMachine,m_yakuzaCamp,HirotaYakuzaThirdAttackState::ID(),0,en_punching_1_R,60.0f,1.0f },
+			{ 10.0f,150.0f,SoundId::se_hittingLightA },
+			{ SoundId::se_cuttingWindLigthA });
+
+		AddAttackState<HirotaYakuzaThirdAttackState>(
+			{ useAttackStateMachine,m_yakuzaCamp,0,0,en_hookPunch_1_R,60.0f,1.0f },
+			{ 10.0f,150.0f,SoundId::se_hittingHeavyA },
+			{ SoundId::se_cuttingWindHeavyA });
+
+		AddAttackState<HirotaYakuzaFirstFinalBlowState>(
+			{ useAttackStateMachine,m_yakuzaCamp,0,HirotaYakuzaSecondFinalBlowState::ID(),en_kickLow_1_L,60.0f,1.0f},
+			{ 10.0f,150.0f,SoundId::se_hittingLightA },
+			{ SoundId::se_cuttingWindLigthA });
+
+		AddAttackState<HirotaYakuzaSecondFinalBlowState>(
+			{ useAttackStateMachine,m_yakuzaCamp,0,0,en_kickHigh_1_R,60.0f,1.0f },
+			{ 10.0f,150.0f,SoundId::se_hittingHeavyA },
+			{ SoundId::se_cuttingWindLigthA });
+
+		
+
+
 
 	}
 private:
