@@ -238,6 +238,12 @@ AiAutoRegister<HirotaYakuzaAi> HirotaYakuzaAi::aiSet{ EnemyYakuzaType::en_bossHi
 
 IStateBase* HirotaYakuzaAi::GetNextState()
 {
+	//特殊攻撃
+	if (CanChangeSpecialAttack())
+	{
+		return FindClassNameState<HirotaYakuzaAiSpecialAttackState>();
+	}
+
 	//掴まれている最中は操作不可
 	if (m_hasStateMachine->GetIsGrabBed())
 	{
@@ -246,11 +252,6 @@ IStateBase* HirotaYakuzaAi::GetNextState()
 		m_aiState = YakuzaAiState::en_YakuzaAiState_WaitMove;
 		//とりあえず掴み終了まで待機
 		return FindClassNameState<HirotaYakuzaAiDamageState>();
-	}
-
-	if (CanChangeSpecialAttack())
-	{
-		return FindClassNameState<HirotaYakuzaAiSpecialAttackState>();
 	}
 
 	//ダメージを受けている最中は操作不可
@@ -330,7 +331,8 @@ bool HirotaYakuzaAi::CanChangeSpecialAttack()
 	}
 
 	if (m_specialAttackCounter >= HirotaYakuzaAiAttackConstant::SPECIAL_ATTACK_COUNTER_MAX &&
-		!m_hasStateMachine->GetIsDamage())
+		!m_hasStateMachine->GetIsDamage() &&
+		!m_hasStateMachine->GetIsGrabBed())
 	{
 		return true;
 	}

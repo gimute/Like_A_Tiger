@@ -233,7 +233,7 @@ public:
 			{ SoundId::se_cuttingWindHeavyA });
 
 		AddAttackState<HirotaYakuzaSpecialAttackRushState>(useAttackStateMachine,
-			{ 0.0f,0.0f,SoundId::se_hittingHeavyB },
+			{ 100.0f,500.0f,SoundId::se_hittingHeavyB },
 			{ SoundId::se_cuttingWindHeavyA });
 	}
 private:
