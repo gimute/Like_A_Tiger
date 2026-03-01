@@ -73,6 +73,53 @@ public:
 	~HirotaYakuzaSecondFinalBlowState() = default;
 };
 
+class HirotaYakuzaSpecialChargeState : public IStateBase
+{
+	appState(HirotaYakuzaSpecialChargeState)
+protected:
+	YakuzaAttackComboStateMachine* m_owner = nullptr;
+	VolumeAdjustment* m_volumeAdjustment = nullptr;
+public:
+	HirotaYakuzaSpecialChargeState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
+
+	~HirotaYakuzaSpecialChargeState() = default;
+
+	uint32_t m_nextComboHash = 0;
+
+	//チャージ時間
+	float m_chargeTimer = 0.0f;
+	//対象のポインタ
+	YakuzaCharacter* m_targetCharacter = nullptr;
+
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+};
+
+class HirotaYakuzaSpecialAttackRushState : public IStateBase
+{
+	appState(HirotaYakuzaSpecialAttackRushState)
+protected:
+	YakuzaAttackComboStateMachine* m_owner = nullptr;
+	VolumeAdjustment* m_volumeAdjustment = nullptr;
+public:
+	HirotaYakuzaSpecialAttackRushState(YakuzaAttackComboStateMachine* hasStateMachine) : m_owner(hasStateMachine) {}
+
+	~HirotaYakuzaSpecialAttackRushState() = default;
+
+	Vector3 m_rushDirection = Vector3::Zero;
+
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+};
+
 class HirotaYakuzaActionSet : public IYakuzaTypeSet
 {
 	appState(HirotaYakuzaActionSet)
@@ -93,7 +140,7 @@ public:
 	{
 		m_firstAttackID = HirotaYakuzaFirstAttackState::ID();
 
-		m_firstFinishBrowID = 0;
+		m_firstFinishBrowID = HirotaYakuzaSpecialChargeState::ID();
 
 		m_modelFilePath = "C:Assets/modelData/Character/Crypto/Crypto.tkm";
 
@@ -180,6 +227,14 @@ public:
 			{ useAttackStateMachine,m_yakuzaCamp,0,0,en_kickHigh_1_R,60.0f,1.0f },
 			{ 10.0f,150.0f,SoundId::se_hittingHeavyA },
 			{ SoundId::se_cuttingWindLigthA });
+
+		AddAttackState<HirotaYakuzaSpecialChargeState>(useAttackStateMachine,
+			{ 0.0f,0.0f,SoundId::se_hittingHeavyB },
+			{ SoundId::se_cuttingWindHeavyA });
+
+		AddAttackState<HirotaYakuzaSpecialAttackRushState>(useAttackStateMachine,
+			{ 0.0f,0.0f,SoundId::se_hittingHeavyB },
+			{ SoundId::se_cuttingWindHeavyA });
 	}
 private:
 	static TypeSetAutoRegister<HirotaYakuzaActionSet> typeSet;

@@ -10,6 +10,8 @@ struct TargetingParam
 	float m_maxDistance = 0.0f;
 	//視野角(cos値)
 	float m_fovCos = 0.0f;
+	//視野角を考慮するか？
+	bool m_isUseFov = true;
 	//距離優先の重み(1に近いほど近くにいる敵を選定)
 	float m_distanceWeight = 0.0f;
 	//前方優先の重み(1に近いほど真正面にいる敵を選定)
@@ -31,14 +33,16 @@ struct TargetingParam
 		float forwardWeight,
 		Vector3 pos,
 		Vector3 foward,
-		YakuzaCamp yakuzaCamp
+		YakuzaCamp yakuzaCamp,
+		bool isUseFov = true
 	) : m_maxDistance(maxDistance),
 		m_fovCos(fovCos),
 		m_distanceWeight(distanceWeight),
 		m_forwardWeight(forwardWeight),
 		m_yakuzaPos(pos),
 		m_yakuzaForward(foward),
-		m_yakuzaCamp(yakuzaCamp)
+		m_yakuzaCamp(yakuzaCamp),
+		m_isUseFov(isUseFov)
 	{}
 };
 
