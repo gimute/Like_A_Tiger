@@ -41,6 +41,8 @@ void GameInScene::EnterScene()
 	//敵マネージャー初期化
 	EnemyManager::GetInstance()->InitEnemyManager();
 
+	m_gameInUpdateState = GameInUpdateState::en_firstEnemys;
+
 	//レベルで色々配置
 	m_level.Init("Assets/level/StageLevel.tkl",
 		[&](LevelObjectData_Render& objData)
@@ -48,13 +50,19 @@ void GameInScene::EnterScene()
 			if (objData.ForwardMatchName(L"BattleArea_N") == true)
 			{
 				//SpYakuzaが出ないグループ
-				//EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4, objData.position, false);
+				EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4, objData.position, false);
 				return true;
 			}
 			else if(objData.ForwardMatchName(L"BattleArea_Sp") == true)
 			{
 				//SpYakuzaが出るグループ
-				//EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4, objData.position, true);
+				EnemyManager::GetInstance()->RequestSpawnEnemyGroup(4, objData.position, true);
+				return true;
+			}
+			else if (objData.ForwardMatchName(L"BattleArea_Boss") == true)
+			{
+				//BossYakuzaが出る場所を設定
+				m_bossAreaCenter = objData.position;
 				return true;
 			}
 			else if (objData.ForwardMatchName(L"ItemBox") == true)
@@ -68,9 +76,6 @@ void GameInScene::EnterScene()
 
 			return true;
 		});
-
-	EnemyManager::GetInstance()->RequestSpawnBossEnemyGroup(3, Vector3(1000.0f, 0.0f, 0.0f), en_bossHirotaYakuza);
-
 
 	//戦闘開始でBGMを変えるコールバック登録
 	BattleManager::GetInstance()->RegisterBattleStartCallBack(
@@ -235,11 +240,7 @@ void GameInScene::GameStateUpdate()
 		break;
 	case en_gameUpdate:
 
-		//敵残りグループ数による処理テスト
-		if (0 >= EnemyManager::GetInstance()->GetCurrentEnemyGroupeNum())
-		{
-			m_gameState = GameState::en_gameClear;
-		}
+		GameInStateUpdate();
 
 		if (0 >= m_player->GetYakuzaCurrentHp())
 		{
@@ -260,6 +261,35 @@ void GameInScene::GameStateUpdate()
 
 		LoadManager::GetInstance()->LoadStart(3.0f);
 
+		break;
+	}
+}
+
+void GameInScene::GameInStateUpdate()
+{
+	switch (m_gameInUpdateState)
+	{
+	case en_firstEnemys:
+
+		//敵残りグループ数による処理テスト
+		if (0 >= EnemyManager::GetInstance()->GetCurrentEnemyGroupeNum())
+		{
+			EnemyManager::GetInstance()->RequestSpawnBossEnemyGroup(3, m_bossAreaCenter, en_bossHirotaYakuza);
+
+			m_gameInUpdateState = GameInUpdateState::en_firstBoss;
+		}
+
+		break;
+	case en_firstBoss:
+
+		//敵残りグループ数による処理テスト
+		if (0 >= EnemyManager::GetInstance()->GetCurrentEnemyGroupeNum())
+		{
+			m_gameState = GameState::en_gameClear;
+		}
+
+		break;
+	default:
 		break;
 	}
 }

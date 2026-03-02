@@ -1,8 +1,8 @@
 {
     "inventoy": [
-        3,
+        0,
         2,
-        2,
+        0,
         0,
         0,
         0,
@@ -22,8 +22,8 @@
         0
     ],
     "summary": {
-        "Bento": 2,
+        "Bento": 1,
         "Onigiri": 0,
-        "Sushi": 1
+        "Sushi": 0
     }
 }
