@@ -32,6 +32,8 @@ void Enemy::Update()
 
 	GetYakuzaStateMachine().UpdateStateMachine();
 
+	UpdateAttackCollision();
+
 	m_characterController.SetPosition(m_position);;
 
 	GetModelRender()->SetPosition(m_position);

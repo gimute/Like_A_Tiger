@@ -1,6 +1,6 @@
 [
     {
-        "hp": 200,
+        "hp": 150,
         "moveSpeed" : 1.0,
         "dodgeSpeed" : 500.0,
         "dodgeAnimSpeed" : 2.0

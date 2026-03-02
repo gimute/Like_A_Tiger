@@ -4,12 +4,14 @@
 #include "Actor\Enemy\EnemyManager.h"
 #include "Battle\BattleManager.h"
 #include "UI/EnemyIntroduction.h"
+#include "Sound\SoundId.h"
 
 BattleAreaManager* BattleAreaManager::m_instance = nullptr;
 
 int BattleAreaManager::CreateArea(
 	const Vector3& center,
-	float radius
+	float radius,
+	EnemyYakuzaType type
 )
 {
 	m_enemyIntroduction = NewGO<EnemyIntroduction>(0, "enemyIntroducation");
@@ -18,13 +20,14 @@ int BattleAreaManager::CreateArea(
 	BattleArea newBattleArea(
 		m_areaCountNum++,
 		center,
-		radius
+		radius,
+		type
 	);
 	//新しい戦闘エリア情報
 	AreaState newAreaState(
 		newBattleArea
 	);
-
+	
 	//リスト登録
 	m_areas.push_back(newAreaState);
 
@@ -116,3 +119,4 @@ void BattleAreaManager::NotifyOnBattleManagerEnter(AreaState areaState)
 		BattleInfo(enemyGroupeInfoPtr,&areaState.m_battleArea)
 	);
 }
+

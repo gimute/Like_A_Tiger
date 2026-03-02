@@ -1,0 +1,153 @@
+#pragma once
+#include "Actor\Enemy\EnemyAI\IEnemyAi.h"
+#include "Actor\Enemy\EnemyAI\EnemyAiState\IEnemyAttackAiState.h"
+
+class HirotaYakuzaAi;
+
+class HirotaYakuzaAiAttackState : public IEnemyAttackAiState
+{
+protected:
+	HirotaYakuzaAi* m_owner = nullptr;
+public:
+	//コンストラクタ
+	HirotaYakuzaAiAttackState(YakuzaStateMachine* stateMachine, HirotaYakuzaAi* hasAi)
+		: IEnemyAttackAiState(stateMachine)
+		, m_owner(hasAi)
+	{
+		m_attackCombos.push_back({ en_normalAttack,en_normalAttack,en_normalAttack });
+		m_attackCombos.push_back({ en_normalAttack,en_finishBrow,en_finishBrow });
+		//m_attackCombos.push_back({en_finishBrow});
+	}
+
+	//デストラクタ
+	~HirotaYakuzaAiAttackState() = default;
+
+	//攻撃接近処理
+	bool ShouldApproachForAttack();
+	//攻撃処理
+	void PerformAttack();
+
+	//攻撃範囲内に入っているかどうか
+	bool m_isInAttackDis = false;
+	//攻撃終了フラグ
+	bool m_attackEndFlag = true;
+
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+};
+
+class HirotaYakuzaAiSpecialAttackState : public IEnemyAiState
+{
+	appState(HirotaYakuzaAiSpecialAttackState)
+protected:
+	HirotaYakuzaAi* m_owner = nullptr;
+public:
+	//コンストラクタ
+	HirotaYakuzaAiSpecialAttackState(YakuzaStateMachine* stateMachine, HirotaYakuzaAi* hasEnemyAi)
+		: IEnemyAiState(stateMachine)
+		, m_owner(hasEnemyAi)
+	{
+	}
+	//デストラクタ
+	~HirotaYakuzaAiSpecialAttackState() = default;
+
+	bool m_specialAttackEndFlag = true;
+
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+private:
+};
+
+class HirotaYakuzaAiDamageState : public IEnemyAiState
+{
+	appState(HirotaYakuzaAiDamageState)
+protected:
+	HirotaYakuzaAi* m_owner = nullptr;
+public:
+	//コンストラクタ
+	HirotaYakuzaAiDamageState(YakuzaStateMachine* stateMachine, HirotaYakuzaAi* hasEnemyAi)
+		: IEnemyAiState(stateMachine)
+		, m_owner(hasEnemyAi)
+	{
+	}
+	//デストラクタ
+	~HirotaYakuzaAiDamageState() = default;
+
+	//ステートイン
+	void OnEnter() override;
+	//ステートアップデート
+	void OnUpdate() override;
+	//ステートアウト
+	void OnExit() override;
+};
+
+class EnemyAiIdleState;
+class EnemyAiTrackingState;
+class EnemyAiWaitingAttackState;
+
+namespace HirotaYakuzaAiAttackConstant
+{
+	const float ATTACK_START_RADIUS = 50.0f;
+
+	const float SPECIAL_ATTACK_COUNTER_DEC_TIME = 5.0f;
+
+	const int SPECIAL_ATTACK_COUNTER_MAX = 3;
+}
+
+enum HirotaYakuzaUniqueState
+{
+	en_specialAttack = YakuzaAiState::en_YakuzaAIState_UniqueStateNum
+};
+
+class HirotaYakuzaAi : public IEnemyAi
+{
+public:
+
+	HirotaYakuzaAi(YakuzaStateMachine* controllStateMachine) : IEnemyAi(controllStateMachine)
+	{
+		AddState<EnemyAiIdleState>(controllStateMachine, this);
+		AddState<EnemyAiTrackingState>(controllStateMachine, this);
+		AddState<EnemyAiWaitingAttackState>(controllStateMachine, this);
+		AddState<HirotaYakuzaAiAttackState>(controllStateMachine, this);
+		AddState<HirotaYakuzaAiSpecialAttackState>(controllStateMachine, this);
+		AddState<HirotaYakuzaAiDamageState>(controllStateMachine, this);
+
+		InitStateMachineClassName<EnemyAiIdleState>();
+	}
+	//次のステートを取得
+	IStateBase* GetNextState() override;
+
+	//特殊攻撃までのカウンター
+	inline void SetSpecialAttackCounter(int counter) { m_specialAttackCounter = counter; }
+
+	inline void AddSpecialAttackCounter(int add) { m_specialAttackCounter += add; }
+
+	inline void SetSpecialAttackCounterTimer(float timer) { m_specialAttackCounterTimer = timer; }
+
+private:
+	//攻撃に移行できるかどうか
+	bool CanChangeAttack();
+	//攻撃待機状態に移行できるかどうか
+	bool CanChangeWaitingAttack();
+	//特殊攻撃に移行できるかどうか
+	bool CanChangeSpecialAttack();
+	//特殊攻撃までのカウンターを時間経過で減らす処理
+	void DecreaseSpecialAttackCounter();
+
+
+	//特殊攻撃までのカウンター
+	int m_specialAttackCounter = 0;
+	//カウンター減少までの時間
+	float m_specialAttackCounterTimer = HirotaYakuzaAiAttackConstant::SPECIAL_ATTACK_COUNTER_DEC_TIME;
+
+	static AiAutoRegister<HirotaYakuzaAi> aiSet;
+};
+

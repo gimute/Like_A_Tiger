@@ -15,6 +15,9 @@ enum SoundId
 	se_FootstepsA,
 	se_kickingGroundA,
 	se_GroundFrictionA,
+	se_ChargeA,
+	se_ChargeB,
+	se_BigWindA,
 	register_number,
 };
 
@@ -22,5 +25,6 @@ enum BGMid
 {
 	bgm_inGame_Explore = SoundId::register_number,
 	bgm_inGame_battle,
+	bgm_inGame_battleBossHirota,
 };
 

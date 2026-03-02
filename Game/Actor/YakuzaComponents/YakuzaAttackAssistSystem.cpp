@@ -60,6 +60,12 @@ YakuzaCharacter* YakuzaAttackAssistSystem::GetPlayerYakuzaPointer(const Targetin
 		return nullptr;
 	}
 
+	//視野角を考慮しないならプレイヤーのポインタを返す
+	if (!param.m_isUseFov)
+	{
+		return m_playerYakuzaCharacterPtr;
+	}
+
 	//正規化
 	Vector3 toPlayerN = toPlayer;
 	toPlayerN.Normalize();
@@ -134,6 +140,20 @@ YakuzaCharacter* YakuzaAttackAssistSystem::GetEnemyYakuzaPointer(const Targeting
 
 			//スコア計算
 			float distanceScore = 1.0f - (distSq / maxDistanceSq);
+
+			//視野角を考慮しないなら距離スコアだけで判定
+			if (!param.m_isUseFov)
+			{
+				float noneFovDistanceScore = distanceScore;
+
+				if (noneFovDistanceScore > bestScore)
+				{
+					bestScore = noneFovDistanceScore;
+					bestEnemy = enemy;
+				}
+
+				continue;
+			}
 
 			//前を向いているほど高得点にする
 			float fowardScore = dot;

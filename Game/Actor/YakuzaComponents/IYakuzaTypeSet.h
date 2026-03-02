@@ -13,6 +13,8 @@
 #include "Sound\SoundId.h"
 #include "UI/PoseMenu.h"
 
+#include "Actor\Enemy\EnemyNameStorage.h"
+
 class YakuzaTypeSetFactory; 
 
 enum YakuzaCamp
@@ -144,6 +146,8 @@ protected:
 
 	const char* m_modelFilePath = nullptr;
 
+	std::string m_yakuzaName;
+
 	std::vector<Character::AnimationData> m_animationDataList;
 
 	std::unordered_map<uint32_t,YakuzaDamageDatas> m_yakuzaDamageDataList;
@@ -194,6 +198,17 @@ public:
 	inline const char* GetModelFilePath() { return m_modelFilePath; }
 
 	inline std::vector<Character::AnimationData>& GetAnimationDataList() { return m_animationDataList; }
+
+	std::string GetYakuzaName() 
+	{
+		//すでに名前が設定されている場合はそれを返す
+		if (!m_yakuzaName.empty())
+		{
+			return m_yakuzaName;
+		}
+		//設定されていない場合は名前ストレージから名前を取得して返す
+		return EnemyNameStorage::GetInstance()->GetName();
+	}
 
 	//攻撃力取得関数
 	inline YakuzaDamageDatas GetAttackPower(YakuzaAttackComboStateMachine* useAttackStateMachine)

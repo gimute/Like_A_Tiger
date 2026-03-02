@@ -12,5 +12,7 @@ enum EnemyYakuzaType
 	en_normalYakuza,
 	en_fastYakuza,
 	en_toughYakuza,
+	en_bossLineNum,
+	en_bossHirotaYakuza = en_bossLineNum,
 	enemyNum
 };

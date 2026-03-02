@@ -96,6 +96,18 @@ public:
 		m_attackCollision->SetIsEnableAutoDelete(false);
 	}
 
+	inline void UpdateAttackCollision()
+	{
+		if (!m_attackCollision)
+		{
+			return;
+		}
+		Vector3 iPos = GetPosition();
+		Vector3 collisionPos = iPos + GetForward() * 20.0f;
+		collisionPos.y = 60.0f;
+		m_attackCollision->SetPosition(collisionPos);
+	}
+
 	inline void DeleteAttackCollision()
 	{
 		if (!m_attackCollision)

@@ -23,7 +23,8 @@ void BattleManager::StartBattle(BattleInfo battleInfo)
 	//戦闘開始イベント情報作成
 	BattleStartEventInfo eventInfo(
 		battleInfo.m_enemyGroupeInfo,
-		battleInfo.m_battleArea->m_areaCenter
+		battleInfo.m_battleArea->m_areaCenter,
+		battleInfo.m_battleArea->m_battleMainYakuza
 	);
 
 	//現在戦闘中の敵グループ情報を保存

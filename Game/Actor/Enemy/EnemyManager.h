@@ -121,10 +121,10 @@ public:
 	}
 	//メタAI生成依頼
 	void InitEnemyManager();
-	//スポーン依頼
-	void RequestSpawnEnemy(EnemyYakuzaType type,const Vector3& spawnPoint);
 	//グループスポーン依頼
 	void RequestSpawnEnemyGroup(int spawnNum,const Vector3& spawnPoint,bool inSpYakuza);
+	//ボスグループスポーン依頼
+	void RequestSpawnBossEnemyGroup(int spawnNum, const Vector3& spawnPoint,EnemyYakuzaType spawnBossType);
 	//死亡処理依頼
 	void RequestDeadEnemyProcces(const Enemy& deadEnemyAddress);
 	//全体リセット依頼
@@ -146,8 +146,6 @@ private:
 	TargetCharacterView m_targetView;
 	//メタAI
 	EnemyMetaAi* m_enemyMetaAi = nullptr;
-	//敵名ストレージ
-	EnemyNameStorage m_enemyNameStorage;
 	//AI制御
 	EnemySystem* m_enemyAiSystem = nullptr;
 	//敵のIDカウンター
