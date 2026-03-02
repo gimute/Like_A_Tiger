@@ -5,13 +5,6 @@
 #include "Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiTrackingState.h"
 #include "Actor\Enemy\EnemyAI\EnemyAiState\EnemyAiWaitingAttackState.h"
 
-namespace HirotaYakuzaAiAttackConstant
-{
-	const float ATTACK_START_RADIUS = 50.0f;
-
-	const int SPECIAL_ATTACK_COUNTER_MAX = 3;
-}
-
 //AttackState
 
 void HirotaYakuzaAiAttackState::OnEnter()
@@ -220,6 +213,8 @@ void HirotaYakuzaAiSpecialAttackState::OnExit()
 void HirotaYakuzaAiDamageState::OnEnter()
 {
 	m_owner->AddSpecialAttackCounter(1);
+
+	m_owner->SetSpecialAttackCounterTimer(HirotaYakuzaAiAttackConstant::SPECIAL_ATTACK_COUNTER_DEC_TIME);
 }
 
 void HirotaYakuzaAiDamageState::OnUpdate()
@@ -238,6 +233,9 @@ AiAutoRegister<HirotaYakuzaAi> HirotaYakuzaAi::aiSet{ EnemyYakuzaType::en_bossHi
 
 IStateBase* HirotaYakuzaAi::GetNextState()
 {
+	//カウンター時間減少
+	DecreaseSpecialAttackCounter();
+
 	//特殊攻撃
 	if (CanChangeSpecialAttack())
 	{
@@ -338,4 +336,26 @@ bool HirotaYakuzaAi::CanChangeSpecialAttack()
 	}
 
 	return false;
+}
+
+void HirotaYakuzaAi::DecreaseSpecialAttackCounter()
+{
+	if (!m_isInBattle || 
+		m_aiState == YakuzaAiState::en_YakuzaAiState_Attacking ||
+		m_specialAttackCounter >= HirotaYakuzaAiAttackConstant::SPECIAL_ATTACK_COUNTER_MAX)
+	{
+		return;
+	}
+
+	//タイマーが0以下になったら特殊攻撃カウンターを追加
+	if (m_specialAttackCounterTimer <= 0.0f)
+	{
+		AddSpecialAttackCounter(1);
+
+		m_specialAttackCounterTimer = HirotaYakuzaAiAttackConstant::SPECIAL_ATTACK_COUNTER_DEC_TIME;
+	}
+	else
+	{
+		m_specialAttackCounterTimer -= g_gameTime->GetFrameDeltaTime();
+	}
 }

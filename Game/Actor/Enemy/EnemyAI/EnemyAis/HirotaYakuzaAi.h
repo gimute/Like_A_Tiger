@@ -93,6 +93,15 @@ class EnemyAiIdleState;
 class EnemyAiTrackingState;
 class EnemyAiWaitingAttackState;
 
+namespace HirotaYakuzaAiAttackConstant
+{
+	const float ATTACK_START_RADIUS = 50.0f;
+
+	const float SPECIAL_ATTACK_COUNTER_DEC_TIME = 5.0f;
+
+	const int SPECIAL_ATTACK_COUNTER_MAX = 3;
+}
+
 enum HirotaYakuzaUniqueState
 {
 	en_specialAttack = YakuzaAiState::en_YakuzaAIState_UniqueStateNum
@@ -121,6 +130,8 @@ public:
 
 	inline void AddSpecialAttackCounter(int add) { m_specialAttackCounter += add; }
 
+	inline void SetSpecialAttackCounterTimer(float timer) { m_specialAttackCounterTimer = timer; }
+
 private:
 	//攻撃に移行できるかどうか
 	bool CanChangeAttack();
@@ -128,9 +139,14 @@ private:
 	bool CanChangeWaitingAttack();
 	//特殊攻撃に移行できるかどうか
 	bool CanChangeSpecialAttack();
+	//特殊攻撃までのカウンターを時間経過で減らす処理
+	void DecreaseSpecialAttackCounter();
+
 
 	//特殊攻撃までのカウンター
 	int m_specialAttackCounter = 0;
+	//カウンター減少までの時間
+	float m_specialAttackCounterTimer = HirotaYakuzaAiAttackConstant::SPECIAL_ATTACK_COUNTER_DEC_TIME;
 
 	static AiAutoRegister<HirotaYakuzaAi> aiSet;
 };

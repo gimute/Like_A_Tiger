@@ -91,6 +91,9 @@ public:
 	//対象のポインタ
 	YakuzaCharacter* m_targetCharacter = nullptr;
 
+	//チャージ音のポインタ
+	SoundHandle m_chargeSEHandle;
+
 	//ステートイン
 	void OnEnter() override;
 	//ステートアップデート
@@ -144,7 +147,7 @@ public:
 
 		m_modelFilePath = "C:Assets/modelData/Character/Crypto/Crypto.tkm";
 
-		m_yakuzaName = "Hirota";
+		m_yakuzaName = "HIROTA";
 
 		m_animationDataList.push_back({ "Assets/modelData/Character/Crypto/Animation/Idle.tka",true });
 		m_animationDataList.push_back({ "Assets/modelData/Character/Crypto/Animation/Walking.tka",true });

@@ -15,6 +15,9 @@ enum SoundId
 	se_FootstepsA,
 	se_kickingGroundA,
 	se_GroundFrictionA,
+	se_ChargeA,
+	se_ChargeB,
+	se_BigWindA,
 	register_number,
 };
 

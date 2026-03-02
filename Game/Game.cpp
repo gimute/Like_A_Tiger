@@ -79,6 +79,9 @@ void Game::InitSound()
 	g_soundEngine->ResistWaveFileBank(se_FootstepsA, "Assets/Sound/YakuzaMoveingSound/Footsteps_A.wav");	//足音
 	g_soundEngine->ResistWaveFileBank(se_kickingGroundA, "Assets/Sound/YakuzaMoveingSound/KickingGround_A.wav");	//地面を蹴る音
 	g_soundEngine->ResistWaveFileBank(se_GroundFrictionA, "Assets/Sound/YakuzaMoveingSound/GroundFriction_A.wav");	//地面をこする音
+	g_soundEngine->ResistWaveFileBank(se_ChargeA, "Assets/Sound/YakuzaMoveingSound/Charge_A.wav");
+	g_soundEngine->ResistWaveFileBank(se_ChargeB, "Assets/Sound/YakuzaMoveingSound/Charge_B.wav");
+	g_soundEngine->ResistWaveFileBank(se_BigWindA, "Assets/Sound/YakuzaMoveingSound/BigWind_A.wav");
 	//ここからBGM
 	g_soundEngine->ResistWaveFileBank(bgm_inGame_battle, "Assets/Sound/Bgm/battle_bgm.wav");	//戦闘用BGM
 	g_soundEngine->ResistWaveFileBank(bgm_inGame_battleBossHirota, "Assets/Sound/Bgm/boss_bgm.wav");	//戦闘用BGM Boss1

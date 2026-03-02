@@ -44,6 +44,15 @@ void HirotaYakuzaSpecialChargeState::OnEnter()
 	);
 
 	m_targetCharacter = YakuzaAttackAssistSystem::GetIstance()->GetNearYakuza(param);
+
+
+	if (!m_volumeAdjustment) {
+		m_volumeAdjustment = FindGO<VolumeAdjustment>("volumeadjustment");
+	}
+	if (m_volumeAdjustment) {
+		m_chargeSEHandle = SoundManager::Get().PlaySE(SoundId::se_ChargeB, false, false, m_volumeAdjustment->GetSEAmount());
+		SoundManager::Get().FindSE(m_chargeSEHandle);
+	}
 }
 
 void HirotaYakuzaSpecialChargeState::OnUpdate()
@@ -91,6 +100,7 @@ void HirotaYakuzaSpecialChargeState::OnUpdate()
 
 void HirotaYakuzaSpecialChargeState::OnExit()
 {
+	SoundManager::Get().StopSE(m_chargeSEHandle);
 }
 
 //特殊攻撃ラッシュステート
@@ -103,6 +113,19 @@ void HirotaYakuzaSpecialAttackRushState::OnEnter()
 	Vector3 foward = stateMachine->GetHasCharactarForward();
 
 	m_rushDirection = foward * HirotaYakuzaActionSetConstant::RUSH_MOVE_SPEED;
+
+	YakuzaAttackSEDatas seData = m_owner->GetYakuzaStateMachine()->GetAttackSEDatas(HirotaYakuzaSpecialAttackRushState::ID());
+
+	if (!m_volumeAdjustment) {
+		m_volumeAdjustment = FindGO<VolumeAdjustment>("volumeadjustment");
+	}
+	if (m_volumeAdjustment) {
+		auto cuttingWindhandle = SoundManager::Get().PlaySE(seData.m_cuttingWindId, false, false, m_volumeAdjustment->GetSEAmount());
+		SoundManager::Get().FindSE(cuttingWindhandle);
+
+		auto bigWindhandle = SoundManager::Get().PlaySE(SoundId::se_BigWindA, false, false, m_volumeAdjustment->GetSEAmount());
+		SoundManager::Get().FindSE(bigWindhandle);
+	}
 }
 
 void HirotaYakuzaSpecialAttackRushState::OnUpdate()
