@@ -2306,11 +2306,8 @@ void PoseMenu::Update() {
 
 			if (result == InSelect::SelectResult::Yes) {
 				//アイテムを使用
-				UseSelectedItem();
+				ProcessInSelectResult();
 				Inventory::GetInstance()->RemoveItem(m_selectedItemIndex);
-				m_inSelect->SetActived(false);
-				m_selectedItemIndex = -1;
-				m_inSelectInputConsumed = true;
 			}
 			else if (result == InSelect::SelectResult::No) {
 				if (m_inSelect) {
@@ -2707,16 +2704,15 @@ void PoseMenu::ProcessInSelectResult()
 	}
 
 	/** Yes/No どちらでも確認UI削除 */
-	//DeleteGO(m_inSelect);
-	//m_inSelect = nullptr;
 	m_inSelect->SetActived(false);
 	m_selectedItemIndex = -1;
+	m_inSelectInputConsumed = true;
 }
 
 void PoseMenu::UseSelectedItem()
 {
-	Player* player = FindGO<Player>("player");
-	if (!player) { return;}
+	//Player* player = FindGO<Player>("player");
+	if (!m_player) { return;}
 
 	auto itemPanel = std::dynamic_pointer_cast<ItemPosePanel>(m_posePanelList[0]);
 	if (!itemPanel) { return; }
@@ -2730,6 +2726,6 @@ void PoseMenu::UseSelectedItem()
 
 	float healAmount = recoveryItem->GetHealAmount();
 	if (healAmount > 0.0f) {
-		player->HealPlayerHP(healAmount);
+		m_player->HealPlayerHP(healAmount);
 	}
 }

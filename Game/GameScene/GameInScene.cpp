@@ -122,6 +122,7 @@ void GameInScene::EnterScene()
 
 	m_poseMenu = NewGO<PoseMenu>(0, "posemenu");
 	m_poseMenu->Init();
+	m_poseMenu->SetPlayer(m_player);
 
 	/** アイテムコリジョンマネージャー */
 	ItemCollisionManager::GetInstance()->SetPlayerPtr(m_player);

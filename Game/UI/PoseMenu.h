@@ -1594,6 +1594,8 @@ private:
 	void UpdateCallbackStick(const StickType stickType, const ManualControlPosePanel::ButtonType uiButtonType);
 
 public:
+	void SetPlayer(Player* player) { m_player = player; }
+
 	void AddItemInfo(ItemIconInformation* info){
 		m_itemPanelInfoList.push_back(std::shared_ptr<ItemIconInformation>(info));
 	}
@@ -1649,6 +1651,8 @@ private:
 	void UseSelectedItem();
 
 private:
+	Player* m_player = nullptr;
+
 	std::shared_ptr<UICanvas> m_canvas = nullptr;
 	/** カラーアニメーション */
 	std::unique_ptr<ColorUIAnimation> m_canvasColorOpenAnimation = nullptr;
