@@ -74,7 +74,7 @@ public:
     /// <summary>
     /// ゲームイン更新
     /// </summary>
-    void GameInStateUpdate();
+    bool GameInStateUpdate();
     /// <summary>
     /// ゲームオブジェクト削除
     /// </summary>

@@ -252,7 +252,10 @@ void GameInScene::GameStateUpdate()
 		break;
 	case en_gameUpdate:
 
-		GameInStateUpdate();
+		if (GameInStateUpdate())
+		{
+			return;
+		}
 
 		if (0 >= m_player->GetYakuzaCurrentHp() ||
 			GameTimer::GetInstance()->GetEndTimer())
@@ -287,7 +290,7 @@ void GameInScene::GameStateUpdate()
 	}
 }
 
-void GameInScene::GameInStateUpdate()
+bool GameInScene::GameInStateUpdate()
 {
 	switch (m_gameInUpdateState)
 	{
@@ -299,6 +302,8 @@ void GameInScene::GameInStateUpdate()
 			EnemyManager::GetInstance()->RequestSpawnBossEnemyGroup(3, m_bossAreaCenter, en_bossHirotaYakuza);
 
 			m_gameInUpdateState = GameInUpdateState::en_firstBoss;
+
+			return true;
 		}
 
 		break;
@@ -308,12 +313,16 @@ void GameInScene::GameInStateUpdate()
 		if (0 >= EnemyManager::GetInstance()->GetCurrentEnemyGroupeNum())
 		{
 			m_gameState = GameState::en_gameClear;
+
+			return true;
 		}
 
 		break;
 	default:
 		break;
 	}
+
+	return false;
 }
 
 //ステート退出関数
