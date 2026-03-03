@@ -3,7 +3,7 @@
 
 namespace TimeUiConstant
 {
-	const Vector3 TIMER_UI_POS = Vector3(0.0f, -480, 0.0f);
+	const Vector3 TIMER_UI_POS = Vector3(-600.0f, -465, 0.0f);
 }
 
 TimerUi::TimerUi()
