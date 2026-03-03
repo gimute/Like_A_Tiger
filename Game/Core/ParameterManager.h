@@ -117,6 +117,13 @@ struct MiniMapImageParameter : public IParameter
 	float iconSize;
 };
 
+struct GameTimeParam : public IParameter
+{
+	appParameter(GameTimeParam);
+
+	float gameTime;
+};
+
 #undef appParameter
 
 /// <summary>

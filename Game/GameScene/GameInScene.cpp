@@ -35,6 +35,8 @@
 
 #include "Sound/SoundManager.h"
 
+#include "GameScene\GameTimer.h"
+
 //ステート侵入関数
 void GameInScene::EnterScene()
 {
@@ -132,6 +134,16 @@ void GameInScene::EnterScene()
 
 	m_poseMenu = NewGO<PoseMenu>(0, "posemenu");
 	m_poseMenu->Init();
+
+	//パラメータ初期化
+	ParameterManager::GetInstance().LoadParameter<GameTimeParam>("Assets/Json/GameTime.json", [](const nlohmann::json& j, GameTimeParam& p)
+		{
+			p.gameTime = j["gameTime"].get<float>();
+		}
+	);
+	auto param = ParameterManager::GetInstance().GetParameter<GameTimeParam>();
+	GameTimer::GetInstance()->InitGameTimer();
+	GameTimer::GetInstance()->TimerStart(param->gameTime);
 
 	/** アイテムコリジョンマネージャー */
 	ItemCollisionManager::GetInstance()->SetPlayerPtr(m_player);
@@ -242,10 +254,20 @@ void GameInScene::GameStateUpdate()
 
 		GameInStateUpdate();
 
-		if (0 >= m_player->GetYakuzaCurrentHp())
+		if (0 >= m_player->GetYakuzaCurrentHp() ||
+			GameTimer::GetInstance()->GetEndTimer())
 		{
 			m_gameState = GameState::en_gameOver;
 		}
+
+		if (!LoadManager::GetInstance()->LoadFadeInEnd() ||
+			PouseMenuSceneManager::GetSceneManagerInstance()->IsPoseMenuActive()
+			)
+		{
+			return;
+		}
+
+		GameTimer::GetInstance()->TimerUpdate();
 
 		break;
 	case en_gameOver:
@@ -340,6 +362,7 @@ void GameInScene::DeleteGameObjects()
 		DeleteGO(m_recoveryItem3DModel);
 		m_recoveryItem3DModel = nullptr;
 	}
+	GameTimer::GetInstance()->ResetTimer();
 	//アイテムコリジョンマネージャー削除
 	ItemCollisionManager::DeleteInstance();
 	
