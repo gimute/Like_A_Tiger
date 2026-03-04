@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Actor\YakuzaComponents\YakuzaType.h"
+
 class EnemyIntroduction : public IGameObject
 {
 public:
@@ -25,7 +27,13 @@ public:
 		}
 	}
 
+	inline void SetEnemyType(EnemyYakuzaType yakuzaType) { m_enemyType = yakuzaType; }
+
 private:
+	EnemyYakuzaType m_enemyType = EnemyYakuzaType::en_normalYakuza;
+
+	const char* m_introductionFilePath = nullptr;
+
 	std::shared_ptr<UICanvas> m_canvas;
 	std::shared_ptr<UIImage> m_circleUI;
 	std::shared_ptr<UIImage> m_textCityPunkUI;

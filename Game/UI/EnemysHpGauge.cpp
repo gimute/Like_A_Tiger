@@ -167,6 +167,8 @@ void EnemysHpGauge::RemoveDeadEnemyHpUI()
 	{
 		bool isEnemyAlive = it->m_proccesEnemyPtr->IsDead();
 
+		//‚±‚±‚ÅƒoƒO‹N‚«‚½‚Á‚Û‚¢
+
 		if (isEnemyAlive)
 		{
 			HPGauge* deleteUi = it->m_hpGaugePtr;

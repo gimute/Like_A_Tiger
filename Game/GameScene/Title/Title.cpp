@@ -8,7 +8,7 @@ namespace
 	constexpr const char* CIRCLE_PATH = "Assets/spriteData/Title/Title_Circle.DDS";
 	constexpr const char* ICON_A_PATH = "Assets/spriteData/Title/Title_A_Icon.DDS";
 	constexpr const char* LOGO_PATH = "Assets/spriteData/Title/Title_LikeTiger.DDS";
-	constexpr const char* ICON_BUTTON_PATH = "Assets/spriteData/Title/Title_PressAnyButton.DDS";
+	constexpr const char* ICON_BUTTON_PATH = "Assets/spriteData/Title/Title_PressBButton.DDS";
 	constexpr const char* ICON_BUTTON_BASE_PATH = "Assets/spriteData/Title/Title_PressAnyButton_Base.DDS";
 
 
