@@ -54,7 +54,7 @@ void GameTitleScene::UpdateScene()
 		case en_TitleWaitButtonTrigger:
 		{
 			//ボタンが押されたら
-			if (g_pad[0]->IsTrigger(enButtonA))
+			if (g_pad[0]->IsTrigger(enButtonB))
 			{
 				//ロード暗転待機に
 				m_titleState = TitleState::en_TitleProceesEnd;
