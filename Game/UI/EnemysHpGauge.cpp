@@ -165,31 +165,33 @@ void EnemysHpGauge::RemoveDeadEnemyHpUI()
 	//生存しているかどうかを判定
 	for (auto it = m_enemyHpList.begin();it != m_enemyHpList.end();)
 	{
-		bool isEnemyAlive = it->m_proccesEnemyPtr->IsDead();
+		//bool isEnemyAlive = it->m_proccesEnemyPtr->GetYakuzaStateMachine().GetIsDead();
 
-		//ここでバグ起きたっぽい
-
-		if (isEnemyAlive)
+		if (it->m_isEnemyDead && it->m_hpGaugePtr->GetIsFinishEasing())
 		{
 			HPGauge* deleteUi = it->m_hpGaugePtr;
-
-			//削除だと生成しなおさないといけないので別案を考える
 
 			DeleteGO(deleteUi);
 
 			it = m_enemyHpList.erase(it);
-		}
-		else
-		{
-			it++;
+
+			continue;
 		}
 
-		//全てのHPが削除されたら
-		if (m_enemyHpList.empty())
+		if (!it->m_isEnemyDead && it->m_proccesEnemyPtr
+			->GetYakuzaStateMachine().GetIsDead())
 		{
-			//フラグをfalseに
-			m_isCreateHpUi = false;
+			it->m_isEnemyDead = true;
 		}
+
+		it++;
+	}
+
+	//全てのHPが削除されたら
+	if (m_enemyHpList.empty())
+	{
+		//フラグをfalseに
+		m_isCreateHpUi = false;
 	}
 }
 
@@ -198,7 +200,12 @@ void EnemysHpGauge::UpdateEnemyGroupeHpInfo()
 	//敵のHPの変化を監視する
 	for (auto & hpPtr : m_enemyHpList)
 	{
-		int currentEnemyHp = hpPtr.m_proccesEnemyPtr->GetYakuzaCurrentHp();
+		int currentEnemyHp = 0;
+
+		if (!hpPtr.m_isEnemyDead)
+		{
+			currentEnemyHp = hpPtr.m_proccesEnemyPtr->GetYakuzaCurrentHp();
+		}
 
 		if (currentEnemyHp < hpPtr.m_hasEnemyHp)
 		{

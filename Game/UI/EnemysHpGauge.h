@@ -14,6 +14,8 @@ struct EnemyHpInfo
 	wchar_t m_enemyNameBuffer[256];
 	//HPUI‚ª•Û‚µ‚Ä‚¢‚é‚Ì“G‚ÌHP
 	int m_hasEnemyHp = 0;
+	//HPUI‚ª•Û‚µ‚Ä‚¢‚é“G‚ª€–S‚µ‚½‚©‚Ç‚¤‚©
+	bool m_isEnemyDead = false;
 };
 
 class EnemysHpGauge : public IGameObject

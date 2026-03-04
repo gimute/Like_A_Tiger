@@ -28,6 +28,15 @@ void HPGauge::Update()
 {
 	DelaydHPBarUpdate();
 
+	if (m_delayedHPBar->GetValue() > m_HPBar->GetValue())
+	{
+		m_isLerpEnd = false;
+	}
+	else
+	{
+		m_isLerpEnd = true;
+	}
+
 	m_canvas->Update();
 
 	if (m_isUseName)
