@@ -13,7 +13,7 @@ namespace EnemyHpGaugeConstant
 	const int ENEMY_HPUI_MAX = 4;
 
 	//HPUIの座標
-	const Vector3 HPUI_POSITION = Vector3{550.0f,-400.0f,0.0f};
+	const Vector3 HPUI_POSITION = Vector3{550.0f,230.0f,0.0f};
 	//名前表示位置の加算値
 	const Vector3 HPUI_NAME_POSITION_ADDVALUE;
 }
@@ -113,7 +113,7 @@ bool EnemysHpGauge::CreateEnemyHpUI(EnemyInfoGroupe* enemyGroupeInfoPtr)
 		Vector3 fontPosition = hpUiPosition;
 
 		fontPosition.x += 110.0f;
-		fontPosition.y += -50.0f;
+		fontPosition.y += 70.0f;
 		fontPosition.y += 10.0f * hpNo;
 
 		newHpUi->SetNamePosition(fontPosition);
