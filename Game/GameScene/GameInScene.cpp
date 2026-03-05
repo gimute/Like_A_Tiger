@@ -367,11 +367,12 @@ void GameInScene::DeleteGameObjects()
 		DeleteGO(m_poseMenu);
 		m_poseMenu = nullptr;
 	}
-	/** アイテムボックス削除 */
-	if (m_recoveryItem3DModel) {
-		DeleteGO(m_recoveryItem3DModel);
-		m_recoveryItem3DModel = nullptr;
-	}
+	QueryGOs<RecoveryItem3DModel>("item3dmodel", [&](RecoveryItem3DModel* item)
+		{
+			DeleteGO(item);
+			return true;
+		}
+	);
 	GameTimer::GetInstance()->ResetTimer();
 	//アイテムコリジョンマネージャー削除
 	ItemCollisionManager::DeleteInstance();
