@@ -89,6 +89,8 @@
     <ClCompile Include="UI\LockOnCircle.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyTypeSet\HirotaYakuzaActionSet.cpp" />
     <ClCompile Include="Actor\Enemy\EnemyAI\EnemyAis\HirotaYakuzaAi.cpp" />
+    <ClCompile Include="GameScene\GameTimer.cpp" />
+    <ClCompile Include="UI\TimerUi.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -190,5 +192,7 @@
     <ClInclude Include="UI\LockOnCircle.h" />
     <ClInclude Include="Actor\Enemy\EnemyTypeSet\HirotaYakuzaActionSet.h" />
     <ClInclude Include="Actor\Enemy\EnemyAI\EnemyAis\HirotaYakuzaAi.h" />
+    <ClInclude Include="GameScene\GameTimer.h" />
+    <ClInclude Include="UI\TimerUi.h" />
   </ItemGroup>
 </Project>
