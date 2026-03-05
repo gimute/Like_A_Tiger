@@ -6,6 +6,10 @@ namespace
 	//ロード背景サイズ
 	static const float LOADBACKSIDE_SPRITE_W_SIZE = 1600.0f;
 	static const float LOADBACKSIDE_SPRITE_H_SIZE = 900.0f;
+	//ロード回るやつサイズ
+	static const float LOADTRUN_SPRITE_W_SIZE = 150.0f;
+	static const float LOADTRUN_SPRITE_H_SIZE = 150.0f;
+	static Vector3 LOADTRUN_SPRITE_POSITION = Vector3(700.0f, -350.0f, 0.0f);
 	//通常ロードフェードイージング数値
 	static const float ORDINARYLOAD_EASING_MAX = 1.0f;
 	static const float ORDINARYLOAD_EASING_MIN = 0.0f;
@@ -17,6 +21,9 @@ LoadScreenSprite::LoadScreenSprite()
 
 	//現在は黒画面のみ
 	m_loadScreenSprite = m_canvas->CreateUI<UIImage>();
+
+	//ロード中に回るやつ
+	m_loadScreenTrunSprite = m_canvas->CreateUI<UIImage>();
 }
 
 void LoadScreenSprite::FadeOutExecuting(float fadeSpeed)
@@ -71,6 +78,14 @@ bool LoadScreenSprite::Start()
 		LOADBACKSIDE_SPRITE_W_SIZE,
 		LOADBACKSIDE_SPRITE_H_SIZE
 	);
+
+	m_loadScreenTrunSprite->Init(
+		"Assets/spriteData/Title/Title_Circle.DDS",
+		LOADTRUN_SPRITE_W_SIZE,
+		LOADTRUN_SPRITE_H_SIZE
+	);
+
+	m_loadScreenTrunSprite->m_transform.m_localPosition = LOADTRUN_SPRITE_POSITION;
 	
 	//ピボット設定
 	m_loadScreenSprite->SetPivot(0.5f,0.5f);
@@ -106,6 +121,8 @@ void LoadScreenSprite::Update()
 
 			//フェードイン実行まで待機中
 			m_isFadeOutEnd = false;
+
+			LoadScreenTrunUpdate();
 
 			break;
 		}
@@ -160,7 +177,17 @@ float LoadScreenSprite::EasingCalc()
 	return Leap(m_fadeEasingMax, m_fadeEasingMin, m_fadeEasingRatio);
 }
 
+void LoadScreenSprite::LoadScreenTrunUpdate()
+{
+	m_loadScreenTrunSprite->m_transform.m_localRotation.AddRotationDegZ(10.0f);
+}
+
 void LoadScreenSprite::Render(RenderContext& rc)
 {
 	m_canvas->Render(rc);
+
+	if (m_screenProcessState == LoadScreenProcees::en_fadeOutStandby)
+	{
+		m_loadScreenTrunSprite->Render(rc);
+	}
 }

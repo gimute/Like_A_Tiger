@@ -47,6 +47,8 @@ private:
 	float m_delayTimer = 0.2f;	//ディレイHPバーがHPバーに追従開始するまでのタイマー
 	float m_lerpVal = 0.0f;		//ディレイHPバーがHPバーにラープで追従する時用
 
+	bool m_isLerpEnd = true;	//ディレイHPバーがHPバーに追従するのが終わったかどうか
+
 public:
 	HPGauge();
 	~HPGauge();
@@ -75,6 +77,12 @@ public:
 	/// </summary>
 	/// <param name="visible"></param>
 	void SetVisible(bool visible);
+
+	//HPゲージのイージングが後追いバー含めて終わったかどうか(削除処理に使用)
+	inline bool GetIsFinishEasing() const
+	{
+		return m_isLerpEnd;
+	}
 
 private:
 	/// <summary>

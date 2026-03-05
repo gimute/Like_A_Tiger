@@ -58,6 +58,8 @@ public:
 private:
 	//イージング計算
 	float EasingCalc();
+	//ロード中に回るやるの更新
+	void LoadScreenTrunUpdate();
 	//スクリーンの現在の状態
 	LoadScreenProcees m_screenProcessState = LoadScreenProcees::en_ScreenStandby;
 	//フェード割合
@@ -74,6 +76,8 @@ private:
 	std::shared_ptr<UICanvas> m_canvas;
 	//ロード画面のスプライト
 	std::shared_ptr<UIImage> m_loadScreenSprite;
+	//ロード中に回るやつ
+	std::shared_ptr<UIImage> m_loadScreenTrunSprite;
 	/// <summary>
 	/// flaot用線形補間
 	/// </summary>

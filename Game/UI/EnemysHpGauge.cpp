@@ -13,7 +13,7 @@ namespace EnemyHpGaugeConstant
 	const int ENEMY_HPUI_MAX = 4;
 
 	//HPUIの座標
-	const Vector3 HPUI_POSITION = Vector3{550.0f,-400.0f,0.0f};
+	const Vector3 HPUI_POSITION = Vector3{550.0f,230.0f,0.0f};
 	//名前表示位置の加算値
 	const Vector3 HPUI_NAME_POSITION_ADDVALUE;
 }
@@ -113,7 +113,7 @@ bool EnemysHpGauge::CreateEnemyHpUI(EnemyInfoGroupe* enemyGroupeInfoPtr)
 		Vector3 fontPosition = hpUiPosition;
 
 		fontPosition.x += 110.0f;
-		fontPosition.y += -50.0f;
+		fontPosition.y += 70.0f;
 		fontPosition.y += 10.0f * hpNo;
 
 		newHpUi->SetNamePosition(fontPosition);
@@ -165,29 +165,33 @@ void EnemysHpGauge::RemoveDeadEnemyHpUI()
 	//生存しているかどうかを判定
 	for (auto it = m_enemyHpList.begin();it != m_enemyHpList.end();)
 	{
-		bool isEnemyAlive = it->m_proccesEnemyPtr->IsDead();
+		//bool isEnemyAlive = it->m_proccesEnemyPtr->GetYakuzaStateMachine().GetIsDead();
 
-		if (isEnemyAlive)
+		if (it->m_isEnemyDead && it->m_hpGaugePtr->GetIsFinishEasing())
 		{
 			HPGauge* deleteUi = it->m_hpGaugePtr;
-
-			//削除だと生成しなおさないといけないので別案を考える
 
 			DeleteGO(deleteUi);
 
 			it = m_enemyHpList.erase(it);
-		}
-		else
-		{
-			it++;
+
+			continue;
 		}
 
-		//全てのHPが削除されたら
-		if (m_enemyHpList.empty())
+		if (!it->m_isEnemyDead && it->m_proccesEnemyPtr
+			->GetYakuzaStateMachine().GetIsDead())
 		{
-			//フラグをfalseに
-			m_isCreateHpUi = false;
+			it->m_isEnemyDead = true;
 		}
+
+		it++;
+	}
+
+	//全てのHPが削除されたら
+	if (m_enemyHpList.empty())
+	{
+		//フラグをfalseに
+		m_isCreateHpUi = false;
 	}
 }
 
@@ -196,7 +200,12 @@ void EnemysHpGauge::UpdateEnemyGroupeHpInfo()
 	//敵のHPの変化を監視する
 	for (auto & hpPtr : m_enemyHpList)
 	{
-		int currentEnemyHp = hpPtr.m_proccesEnemyPtr->GetYakuzaCurrentHp();
+		int currentEnemyHp = 0;
+
+		if (!hpPtr.m_isEnemyDead)
+		{
+			currentEnemyHp = hpPtr.m_proccesEnemyPtr->GetYakuzaCurrentHp();
+		}
 
 		if (currentEnemyHp < hpPtr.m_hasEnemyHp)
 		{

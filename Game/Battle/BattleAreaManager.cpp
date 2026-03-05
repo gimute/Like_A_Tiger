@@ -16,6 +16,8 @@ int BattleAreaManager::CreateArea(
 {
 	m_enemyIntroduction = NewGO<EnemyIntroduction>(0, "enemyIntroducation");
 
+	m_enemyIntroduction->SetEnemyType(type);
+
 	//V‚µ‚¢í“¬ƒGƒŠƒA
 	BattleArea newBattleArea(
 		m_areaCountNum++,

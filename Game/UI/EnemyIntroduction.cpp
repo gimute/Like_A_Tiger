@@ -4,6 +4,7 @@
 namespace {
 	constexpr const char* BLUE_CIRCLE_PATH = "Assets/spriteData/EnemyIntroduction/blueCircle.DDS";
 	constexpr const char* TEXT_CITY_PUNK_PATH = "Assets/spriteData/EnemyIntroduction/text_CiryPunk.DDS";
+	constexpr const char* TEXT_CITY_PUNK_PATH_BOSS2 = "Assets/spriteData/EnemyIntroduction/Boss2.DDS";
 }
 
 EnemyIntroduction::EnemyIntroduction()
@@ -36,9 +37,24 @@ bool EnemyIntroduction::Start()
 		m_colorCircleUIAnimation = std::make_unique<ColorUIAnimation>(m_circleUI, false, EasingType::EaseIn, timeList, colorList);
 	}
 
+	switch (m_enemyType)
+	{
+	case en_normalYakuza:
+	case en_fastYakuza:
+	case en_toughYakuza:
+
+		m_introductionFilePath = TEXT_CITY_PUNK_PATH;
+
+		break;
+	case en_bossHirotaYakuza:
+
+		m_introductionFilePath = TEXT_CITY_PUNK_PATH_BOSS2;
+
+		break;
+	}
 
 	m_textCityPunkUI = m_canvas->CreateUI<UIImage>();
-	m_textCityPunkUI->Init(TEXT_CITY_PUNK_PATH, 1024.0f, 576.0f);
+	m_textCityPunkUI->Init(m_introductionFilePath, 1024.0f, 576.0f);
 	m_textCityPunkUI->m_transform.m_localPosition = Vector3(0.0f, 0.0f, 0.0f);
 	m_textCityPunkUI->SetColor(Vector4(1.0f, 1.0f, 1.0f, 0.0f));
 	/** 拡縮のアニメーション */
